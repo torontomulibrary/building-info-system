@@ -1,0 +1,35 @@
+@import "@material/drawer/mdc-drawer";
+@import "@material/theme/mixins";
+@import "@material/theme/variables";
+
+.mdc-drawer--temporary {
+  z-index: 10;
+}
+
+.rula-drawer__header {
+  @include mdc-theme-prop(background-color, $rula-theme-primary);
+
+  position: relative;
+  height: $rula-top-bar-height;
+  color: mdc-theme-accessible-ink-color($rula-theme-primary);
+
+  @media (max-width: $grid-mobile-bp) {
+    height: $rula-top-bar-mobile-height;
+  }
+
+  &-content {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 12px;
+  }
+}
+
+.mdc-drawer__header-content {
+  background-color: $rula-theme-primary;
+}

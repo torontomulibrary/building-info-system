@@ -1,0 +1,59 @@
+@import "@material/typography/variables";
+
+$rula-divider-color-on-light-bg: rgba(0, 0, 0, 0.12) !default;
+$rula-divider-color-on-dark-bg: rgba(255, 255, 255, 0.2) !default;
+
+@mixin rula-divider($color) {
+  .rula-list-divider {
+    @include mdc-theme-prop(border-bottom-color, $color);
+  }
+}
+
+.rula-list {
+  margin: 0;
+  padding: 8px 0;
+  line-height: map-get(map-get($mdc-typography-styles, body1), line-height);
+  list-style-type: none;
+
+  &__item {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+    height: 48px;
+    padding: 0 16px;
+    overflow: hidden;
+
+    &:focus {
+      outline: none;
+    }
+
+    &--caption {
+      @include mdc-typography(caption);
+
+      display: block;
+      height: 20px;
+      margin-bottom: -12px;
+      padding-top: 8px;
+      color: $rula-theme-primary;
+    }
+  }
+}
+
+.rula-list-divider {
+  height: 0;
+  margin: 0;
+  border: none;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+@at-root {
+  $rula-divider-color: if(
+    mdc-theme-tone($rula-theme-background) == "dark",
+    $rula-divider-color-on-dark-bg,
+    $rula-divider-color-on-light-bg
+  );
+
+  @include rula-divider($rula-divider-color);
+}

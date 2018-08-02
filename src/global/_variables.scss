@@ -1,0 +1,58 @@
+// stylelint-disable scss/dollar-variable-pattern, color-hex-length
+
+$mdc-theme-primary: #002d72;
+$mdc-theme-secondary: #ffdc00;
+$mdc-theme-background: #ffffff;
+$mdc-theme-surface: #ffffff;
+$mdc-theme-on-primary: #ffffff;
+$mdc-theme-on-secondary: #000000;
+$mdc-theme-on-surface: #000000;
+
+$rula-theme-primary: $mdc-theme-primary;
+$rula-theme-secondary: $mdc-theme-secondary;
+$rula-theme-background: $mdc-theme-background;
+$rula-theme-surface: $mdc-theme-surface;
+$rula-theme-on-primary: $mdc-theme-on-primary;
+$rula-theme-on-secondary: $mdc-theme-on-secondary;
+$rula-theme-on-surface: $mdc-theme-on-surface;
+
+// High contrast colours
+$hot-pink:			#cc66ca;
+$charcoal:			#333333;
+$night-sky:			#0d3d56;
+$bright-sky:		#009df0;
+$sour-apple:		#1bcc4a;
+$goldenrod:			#f2da2f;
+$coral:					#fa9d1d;
+$ruby:					#c02f1d;
+
+$ui-fixed-increment: 64px;
+
+/* TOP-BAR */
+$rula-top-bar-height: 64px;
+$rula-top-bar-mobile-height: 56px;
+
+/* GRID */
+
+$grid-desktop-columns: 12;
+$grid-desktop-gutter: 24px;
+$grid-desktop-margin: 24px;
+
+$grid-tablet-columns: 8;
+$grid-tablet-gutter: 16px;
+$grid-tablet-margin: 16px;
+
+$grid-phone-columns: 4;
+$grid-phone-gutter: $grid-tablet-gutter;
+$grid-phone-margin: $grid-tablet-margin;
+
+$grid-mobile-bp: 480px;
+$grid-medium-bp: 840px;
+$grid-large-bp: 1280px;
+$grid-xlarge-bp: 1850px;
+
+$grid-cell-default-columns: $grid-phone-columns;
+$grid-max-columns: $grid-desktop-columns;
+
+$rula-building-list-icon-padding: 12px;
+$rula-building-list-icon-size: 24px;

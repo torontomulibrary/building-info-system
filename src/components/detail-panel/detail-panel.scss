@@ -1,0 +1,108 @@
+@import "@material/animation/functions";
+@import "@material/elevation/mixins";
+@import "@material/rtl/mixins";
+@import "@material/theme/mixins";
+@import "@material/drawer/variables";
+@import "@material/typography/mixins";
+@import "rula-list";
+
+$rula-detail-panel-close-time: 200ms;
+$rula-detail-panel-open-time: 250ms;
+$rula-detail-panel-transition-close: mdc-animation-standard(transform, $rula-detail-panel-close-time);
+$rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-detail-panel-open-time);
+
+@mixin rula-slidable-panel {
+  transform: translateX(107%);
+  transform: translateX(calc(100% + 20px));
+  will-change: transform;
+
+  @include mdc-rtl {
+    transform: translate(-107%);
+    transform: translate(calc(-100% - 20px));
+  }
+}
+
+@mixin rula-slidable-panel-open {
+  transform: none;
+}
+
+@mixin rula-panel-fill-color($color) {
+  &.rula-drawer--permanent,
+  .rula-drawer__drawer {
+    @include mdc-theme-prop(background-color, $color);
+  }
+}
+
+@mixin rula-panel-ink-color($color) {
+  @include mdc-theme-prop(color, $color);
+}
+
+.rula-detail-panel {
+  @include mdc-elevation(4);
+  @include mdc-theme-prop(background-color, $mdc-temporary-drawer-fill-color);
+  @include mdc-theme-prop(color, text-secondary-on-light);
+  @include mdc-rtl-reflexive-position(right, 0);
+  @include rula-slidable-panel;
+
+  display: flex;
+  position: fixed;
+  top: 64px;
+  right: 0;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: calc(100% - 64px);
+  height: calc(100vh - 124px);
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+  touch-action: none;
+  z-index: 5;
+
+  @media (min-width: 600px) {
+    max-width: 320px;
+  }
+
+  &__header {
+    position: relative;
+
+    .rula-detail-panel__header-content {
+      display: flex;
+      align-items: flex-end;
+      box-sizing: border-box;
+      padding: 20px 16px;
+
+      .mdc-typography--headline6 {
+        line-height: 1.25rem;
+      }
+    }
+  }
+
+  &__content {
+    flex-grow: 1;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  &.rula-detail-panel--open {
+    @include rula-slidable-panel-open;
+
+    pointer-events: auto;
+
+    @include mdc-rtl {
+      @include rula-slidable-panel-open;
+    }
+  }
+
+  &.rula-detail-panel--animated {
+    transition: $rula-detail-panel-transition-close;
+
+    &.rula-detail-panel--open {
+      transition: $rula-detail-panel-transition-open;
+    }
+  }
+}

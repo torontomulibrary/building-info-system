@@ -1,0 +1,42 @@
+// @import "@material/layout-grid/mixins";
+// @import "@material/card/mdc-card";
+@import "@material/elevation/mixins";
+
+.rula-view-faq {
+  display: block;
+  box-sizing: border-box;
+
+  *:focus {
+    outline: none;
+  }
+
+  &__container {
+    display: block;
+    justify-content: space-between;
+    width: 70%;
+    margin: 0 auto;
+    padding-top: 32px;
+
+    @media (max-width: $grid-mobile-bp - 1) {
+      width: calc(100% - 24px);
+    }
+
+    @media (min-width: $grid-mobile-bp) and (max-width: $grid-medium-bp - 1) {
+      width: calc(100% - 64px);
+    }
+
+    @media (min-width: $grid-medium-bp) and (max-width: $grid-large-bp - 1) {
+      width: 85%;
+    }
+
+    .mdc-list {
+      @include mdc-elevation(4);
+
+      padding: 0;
+    }
+
+    .mdc-list-item {
+      border-bottom: 1px solid rgba(0,0,0,0.17);
+    }
+  }
+}

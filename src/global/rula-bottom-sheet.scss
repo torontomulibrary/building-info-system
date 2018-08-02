@@ -1,0 +1,92 @@
+$rula-two-line-header-caption-baseline-height_: 24px;
+$rula-two-line-header-baseline-height_: 20px;
+
+$rula-bottom-sheet-vertical-padding: 8px;
+$rula-bottom-sheet-horizontal-padding: 12px;
+
+.rula-bottom-sheet {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  transform: translateY(calc(100% - 64px));
+  border-radius: 4px 4px 0 0;
+  background: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  z-index: 8;
+
+  &--open {
+    transform: translateY(0);
+  }
+
+  &__header {
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    padding: $rula-bottom-sheet-vertical-padding $rula-bottom-sheet-horizontal-padding;
+  }
+
+  &__section {
+    display: inline-flex;
+    flex: 1 1 auto;
+    align-items: center;
+    min-width: 0;
+    z-index: 1;
+
+    &--align-start {
+      justify-content: flex-start;
+      order: -1;
+    }
+
+    &--align-end {
+      justify-content: flex-end;
+      order: 1;
+    }
+  }
+
+  &__icon {
+    @include mdc-ripple-surface;
+    @include mdc-ripple-radius-unbounded;
+
+    display: flex;
+    position: relative;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: $rula-building-list-icon-size + $rula-building-list-icon-padding * 2;
+    height: $rula-building-list-icon-size + $rula-building-list-icon-padding * 2;
+    padding: $rula-building-list-icon-padding;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    fill: currentColor;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.rula-two-line-header {
+  align-self: flex-start;
+
+  &__caption {
+    @include mdc-typography(caption);
+    @include mdc-typography-baseline-top($rula-two-line-header-caption-baseline-height_);
+    @include mdc-typography-baseline-bottom($rula-two-line-header-baseline-height_);
+
+    display: block;
+    margin-top: -6px;
+    color: $rula-theme-primary;
+  }
+
+  &__text {
+    @include mdc-typography-baseline-top($rula-two-line-header-baseline-height_);
+
+    display: block;
+  }
+}
+

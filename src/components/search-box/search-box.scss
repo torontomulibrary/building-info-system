@@ -1,0 +1,32 @@
+@import '@material/textfield/mixins';
+
+rula-search-box {
+  user-select: none;
+  width: 100%;
+
+  .mdc-text-field {
+    @include mdc-text-field-label-color($mdc-theme-on-primary);
+    @include mdc-text-field-icon-color($mdc-theme-on-primary);
+    @include mdc-text-field-box-corner-radius(4px);
+    @include mdc-text-field-box-fill-color(rgba(255, 255, 255, 0.1));
+    @include mdc-text-field-ink-color($mdc-theme-on-primary);
+
+    .material-icons {
+      font-size: 30px;
+    }
+  }
+
+  .mdc-text-field--with-leading-icon {
+    .mdc-text-field__icon {
+      left: 24px;
+      bottom: 12px;
+    }
+  }
+
+  .mdc-text-field--fullwidth:not(.mdc-text-field--textarea) .mdc-text-field__input {
+    padding-left: 72px;
+    font-size: 1.3rem;
+    user-select: none;
+  }
+}
+

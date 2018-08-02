@@ -1,0 +1,96 @@
+@import "@material/elevation/mixins";
+@import "@material/ripple/mdc-ripple";
+
+.rula-expandable-card {
+  @include mdc-elevation(2);
+
+  display: inline-block;
+  position: static;
+  width: var(--rula-expandable-card-width, 100%);
+  padding-top: var(--rula-expandable-card-padding-top, 70%);
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  overflow: hidden;
+  will-change: opacity;
+
+  &[duration] {
+    transition-duration: 0.28s;
+  }
+
+  &[fade-in] {
+    opacity: 0;
+    will-change: contents;
+  }
+
+  &:hover,
+  &:focus {
+    @include mdc-elevation(4);
+
+    transition-duration: 0.28s;
+    transition-property: box-shadow;
+  }
+
+  &[open] {
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &__scrim {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateZ(0);
+    transition-duration: 200ms;
+    transition-property: opacity;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    will-change: opacity;
+    z-index: 999;
+
+    &[hidden] {
+      visibility: hidden;
+    }
+
+    &[open] {
+      opacity: 1;
+    }
+  }
+
+  &__wrapper {
+    position: relative;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0;
+    border-radius: 2px;
+    background-color: white;
+    overflow: hidden;
+    will-change: transform;
+
+    &[open] {
+      @include mdc-elevation(8);
+
+      margin-top: var(--rula-expandable-card-wrapper-open-margin, 0);
+    }
+
+    &[visible] {
+      display: flex;
+      position: absolute;
+      z-index: 1000;
+    }
+
+    &[transition] {
+      position: fixed;
+      transition-delay: 0s, 0s, 0.06s, 0.06s, 0s, 0s;
+      transition-duration: 0.28s;
+      transition-property: left, width, top, height, box-shadow, margin;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+}

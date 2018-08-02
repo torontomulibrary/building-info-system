@@ -1,0 +1,13 @@
+{
+  "name": "RULA Builing Info System",
+  "short_name": "RULA BIS",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/icon/icon.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "background_color": "#002d72",
+  "theme_color": "#002d72"
+}

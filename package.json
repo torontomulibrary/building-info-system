@@ -1,0 +1,92 @@
+{
+  "name": "@rula/building-info-system",
+  "version": "0.1.0",
+  "description": "An information and wayfinding web application for buildings.",
+  "keywords": [
+    "rula",
+    "wayfinding",
+    "information",
+    "web",
+    "application",
+    "pwa",
+    "progressive",
+    "web",
+    "app"
+  ],
+  "module": "dist/esm/index.js",
+  "main": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "unpkg": "dist/rula.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "stencil build",
+    "dev": "stencil build --dev --watch --serve",
+    "lint:css": "stylelint \"src/**/*.scss\"",
+    "serve": "stencil --serve",
+    "start": "npm run dev",
+    "test": "jest --no-cache",
+    "test.watch": "jest --watch --no-cache"
+  },
+  "devDependencies": {
+    "@material/animation": "^0.34.0",
+    "@material/drawer": "^0.38.0",
+    "@material/elevation": "^0.38.0",
+    "@material/layout-grid": "^0.34.0",
+    "@material/ripple": "^0.38.0",
+    "@material/rtl": "^0.36.0",
+    "@material/select": "^0.38.0",
+    "@material/tabs": "^0.38.0",
+    "@material/textfield": "^0.38.0",
+    "@material/top-app-bar": "^0.38.0",
+    "@rula/web-components": "^1.2.0",
+    "@stencil/core": "^0.11.0",
+    "@stencil/postcss": "0.1.0",
+    "@stencil/redux": "0.0.4",
+    "@stencil/router": "^0.2.5",
+    "@stencil/sass": "0.1.0",
+    "@stencil/utils": "0.0.4",
+    "@types/autoprefixer": "^6.7.3",
+    "@types/jest": "^23.3.1",
+    "@types/material-components-web": "^0.35.0",
+    "@types/node-sass": "^3.10.32",
+    "autoprefixer": "^9.0.2",
+    "jest": "^23.4.2",
+    "pwa-helpers": "^0.8.3",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "stylelint": "^9.4.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-order": "^0.8.1",
+    "stylelint-scss": "^3.2.0",
+    "stylelint-selector-bem-pattern": "^2.0.0"
+  },
+  "author": "Ryerson University Library",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryersonlibrary/building-info-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ryersonlibrary/building-info-system/issues"
+  },
+  "homepage": "https://github.com/ryersonlibrary/building-info-system#readme",
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx"
+    ]
+  },
+  "dependencies": {
+    "@material/list": "^0.38.0"
+  }
+}
