@@ -1,5 +1,5 @@
 import { Component, Prop, State } from '@stencil/core';
-// import { sanitize } from '../../utils/sanitize';
+import { sanitize } from '../../utils/sanitize';
 
 import {
   LazyStore,
@@ -68,14 +68,15 @@ export class ViewFaq {
     return (
       <div id="container" class="rula-view-faq__container" role="list">
         <h2 class="mdc-typography--headline2">Frequently asked questions</h2>
-        <ul class="mdc-list mdc-list--two-line" aria-orientation="vertical">
-        {Object.values(this._allFaqs).map((faq) =>
-          <li class="mdc-list-item" tabindex="0">
-            <span class="mdc-list-item__graphic material-icons" aria-hidden="true">keyboard_arrow_down</span>
-            {faq.question}
-          </li>
-        )}
-        </ul>
+        <rula-accordion>
+          {Object.values(this._allFaqs).map((faq, idx) =>
+            <rula-accordion-item class="rula-accordion-item--fade-in"
+              index={idx} delay={idx * 30}>
+              <div slot="header">{faq.question}</div>
+              <div slot="content">{sanitize(faq.answer)}</div>
+            </rula-accordion-item>
+          )}
+        </rula-accordion>
       </div>
     );
   }
