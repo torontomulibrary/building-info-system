@@ -4,9 +4,14 @@ import { Component, Event, EventEmitter, Element, Prop, State, Watch } from '@st
 import {
   LazyStore,
   MapElementDetail,
+  // MapElement,
 } from '../../interface';
 
 import map from '../../reducers/map-reducer';
+
+import {
+  updateActiveElement,
+} from '../../actions/map-actions';
 
 @Component({
   tag: 'rula-detail-panel',
@@ -57,6 +62,8 @@ export class DetailPanel {
     this._storeUnsubscribe();
   }
 
+  _create
+
   _stateChanged(state) {
     if (state.activeElement && state.activeElement.details) {
       this._details = Object.values(state.activeElement.details);
@@ -70,24 +77,24 @@ export class DetailPanel {
   }
 
   render() {
+    let detailName = this._details.map((detail:MapElementDetail) => {
+      return detail.name;
+    }).join(', ');
+
     return ([
         <header class='rula-detail-panel__header'>
-          <div class='rula-detail-panel__header-content'>
-            <span class='mdc-typography--headline6'>Location Details</span>
-          </div>
+          <span class="rula-detail-panel__title">
+            <div class='mdc-typography--body2'>{this._details[0].code}</div>
+            <div class='mdc-typography--headline6'>{detailName}</div>
+          </span>
+          <button class='material-icons rula-detail-panel__close' onClick={_ => {this.lazyStore.dispatch(updateActiveElement(undefined));}}>close</button>
         </header>,
-        <ul class='rula-detail-panel__content rula-list'>
-          <li role='separator' class='mdc-list-divider'></li>
-        {this._details.map((detail:MapElementDetail) => ([
-          <li class='rula-list__item'>
-            {detail.name}
-          </li>,
-          <li class='rula-list__item'>
-            {detail.description}
-          </li>,
-          <li role='separator' class='mdc-list-divider'></li>
-        ]))}
-        </ul>
+        <div class='rula-detail-panel__content'>
+          <div class="rula-detail-panel__section">
+            <div class="rula-detail-panel__subtitle mdc-typography--subtitle2">Description</div>
+            {this._details[0].description}
+          </div>
+        </div>
     ]);
   }
 }

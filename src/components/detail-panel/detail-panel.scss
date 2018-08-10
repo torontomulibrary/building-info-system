@@ -4,6 +4,8 @@
 @import "@material/theme/mixins";
 @import "@material/drawer/variables";
 @import "@material/typography/mixins";
+@import "@material/layout-grid/mixins";
+@import "@material/top-app-bar/mixins";
 @import "rula-list";
 
 $rula-detail-panel-close-time: 200ms;
@@ -14,11 +16,16 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
 @mixin rula-slidable-panel {
   transform: translateX(107%);
   transform: translateX(calc(100% + 20px));
-  will-change: transform;
 
   @include mdc-rtl {
-    transform: translate(-107%);
-    transform: translate(calc(-100% - 20px));
+    transform: translateX(-107%);
+    transform: translateX(calc(-100% - 20px));
+  }
+
+  @include mdc-layout-grid-media-query_(phone) {
+    transform: translateY(107%);
+    transform: translateY(calc(100% + 20px));
+    will-change: transform;
   }
 }
 
@@ -46,30 +53,41 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
 
   display: flex;
   position: fixed;
-  top: 64px;
+  top: 72px;
   right: 0;
   flex-direction: column;
   box-sizing: border-box;
-  width: calc(100% - 64px);
-  height: calc(100vh - 124px);
+  width: calc(100% - 128px);
+  max-width: 320px;
+  height: calc(100vh - 144px);
+  border-radius: 4px 0 0 4px;
   pointer-events: none;
   overflow: hidden;
   contain: strict;
   touch-action: none;
-  z-index: 5;
+  z-index: 3;
 
-  @media (min-width: 600px) {
-    max-width: 320px;
+  @include mdc-layout-grid-media-query_(phone) {
+    top: unset;
+    right: unset;
+    bottom: 0;
+    left: 8px;
+    width: calc(100% - 16px);
+    max-width: unset;
+    height: 30vh;
+    border-radius: 4px 4px 0 0;
   }
 
   &__header {
+    display: flex;
     position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
 
     .rula-detail-panel__header-content {
-      display: flex;
-      align-items: flex-end;
       box-sizing: border-box;
-      padding: 20px 16px;
 
       .mdc-typography--headline6 {
         line-height: 1.25rem;
@@ -77,15 +95,33 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
     }
   }
 
+  &__close {
+    @include mdc-top-app-bar-icon_;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   &__content {
     flex-grow: 1;
     box-sizing: border-box;
     margin: 0;
-    padding: 0;
+    padding: 0 16px;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
+  }
+
+  &__section {
+    padding: 16px 0;
+  }
+
+  &__subtitle {
+    @include mdc-theme-prop(color, text-hint-on-background);
   }
 
   &.rula-detail-panel--open {

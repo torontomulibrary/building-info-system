@@ -28,6 +28,7 @@ import {
 
 export class ViewMap {
   private _storeUnsubscribe: Function;
+  private _map: HTMLRulaMapElement;
 
   @Element() root: HTMLElement;
 
@@ -67,6 +68,10 @@ export class ViewMap {
     }
   }
 
+  componentDidLoad() {
+    this._map = this.root.querySelector('rula-map');
+  }
+
   componentDidUnload() {
     this._storeUnsubscribe();
   }
@@ -83,6 +88,10 @@ export class ViewMap {
     }
     this._elements = state.activeElements;
     this._activeElement = state.activeElement;
+
+    if (!this._activeElement && this._map) {
+      this._map.clearActiveElement()
+    }
   }
 
   _onElementSelected(e) {
