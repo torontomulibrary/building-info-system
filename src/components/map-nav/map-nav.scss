@@ -25,7 +25,7 @@
     margin-left: 0;
     font-size: 1rem;
 
-    &.buildings {
+    &--buildings {
       min-width: 224px;
 
       @media (min-width: $grid-medium-bp) {
@@ -33,7 +33,7 @@
       }
     }
 
-    &.floors {
+    &--floors {
       min-width: 92px;
 
       @media (min-width: $grid-medium-bp - 1) {
