@@ -21,30 +21,60 @@ import {
 })
 
 export class DetailPanel {
-  private _storeUnsubscribe: Function;
+  /**
+   * The first tabbable child element of this detail panel.
+   */
+  private firstTabStop: HTMLElement;
 
-  private _firstTabStop: HTMLElement;
-  private _lastTabStop: HTMLElement;
+  /**
+   * The last tabbable child element of this detail panel.
+   */
+  private lastTabStop: HTMLElement;
 
-  private _oldTabStop: HTMLElement;
+  /**
+   * The element that has focus when this detail panel is opened.
+   */
+  private oldTabStop: HTMLElement;
+  
+  /**
+   * Callback function used to unsubscribe from the Redux store.
+   */
+  private storeUnsubscribe: Function;
 
+  /**
+   * Root element of this component.
+   */
   @Element() root: HTMLStencilElement;
 
-  @State() _animated = false;
-  @State() _details: MapElementDetail[] = [];
-  @Prop({ mutable: true }) open: boolean;
+  /**
+   * Flag indicating if an animation is taking place.
+   */
+  @State() animated = false;
 
+  /**
+   * The list of ElementDetails to be displayed.
+   */
+  @State() details: MapElementDetail[] = [];
+
+  /**
+   * The global Redux store.
+   */
   @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
+
+  /**
+   * A flag indicating if this detail panel is open.
+   */
+  @Prop({ mutable: true }) open: boolean;
 
   async componentWillLoad() {
     this.lazyStore.addReducers({map});
-    this._storeUnsubscribe = this.lazyStore.subscribe(() =>
-      this._stateChanged(this.lazyStore.getState().map)
+    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
+      this.stateChanged(this.lazyStore.getState().map)
     );
   }
 
   componentDidUnload() {
-    this._storeUnsubscribe();
+    this.storeUnsubscribe();
   }
 
   @Listen('keydown.tab')
@@ -53,58 +83,58 @@ export class DetailPanel {
 
     if (this.open && evt.keyCode === TAB_KEYCODE) {
       if (evt.shiftKey) {
-        if (this._firstTabStop && evt.target === this._firstTabStop) {
+        if (this.firstTabStop && evt.target === this.firstTabStop) {
           evt.preventDefault();
-          this._lastTabStop.focus();
+          this.lastTabStop.focus();
         }
       } else {
-        if (this._lastTabStop && evt.target === this._lastTabStop) {
+        if (this.lastTabStop && evt.target === this.lastTabStop) {
           evt.preventDefault();
-          this._firstTabStop.focus();
+          this.firstTabStop.focus();
         }
       }
     }
   }
 
-  _setFocusTrap() {
+  setFocusTrap() {
     var focusableElements = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
 
     if (focusableElements.length > 0) {
-      this._firstTabStop = focusableElements[0] as HTMLElement;
-      this._lastTabStop = focusableElements[focusableElements.length - 1] as HTMLElement;
+      this.firstTabStop = focusableElements[0] as HTMLElement;
+      this.lastTabStop = focusableElements[focusableElements.length - 1] as HTMLElement;
     } else {
       // Reset saved tab stops when there are no focusable elements in the card.
-      this._firstTabStop = null;
-      this._lastTabStop = null;
+      this.firstTabStop = null;
+      this.lastTabStop = null;
     }
 
-    this._oldTabStop = document.activeElement as HTMLElement;
+    this.oldTabStop = document.activeElement as HTMLElement;
   }
 
-  _stateChanged(state) {
+  stateChanged(state) {
     if (state.activeElement && state.activeElement.details) {
-      this._details = Object.values(state.activeElement.details);
-      this.root.addEventListener('transitionend', this._handleTransitionEnd);
-      this._animated = true;
+      this.details = Object.values(state.activeElement.details);
+      this.root.addEventListener('transitionend', this.handleTransitionEnd);
+      this.animated = true;
       this.open = true;
-      this._setFocusTrap();
+      this.setFocusTrap();
 
-      this._firstTabStop.focus();
+      this.firstTabStop.focus();
     } else {
-      this.root.addEventListener('transitionend', this._handleTransitionEnd);
-      this._animated = true;
+      this.root.addEventListener('transitionend', this.handleTransitionEnd);
+      this.animated = true;
       this.open = false;
 
-      if (this._oldTabStop) {
-        this._oldTabStop.focus();
+      if (this.oldTabStop) {
+        this.oldTabStop.focus();
       }
     }
   }
 
-  _handleTransitionEnd(evt) {
+  handleTransitionEnd(evt) {
     if (this.root === evt.target) {
-      this._animated = false;
-      this.root.removeEventListener('transitionend', this._handleTransitionEnd);
+      this.animated = false;
+      this.root.removeEventListener('transitionend', this.handleTransitionEnd);
     }
   }
 
@@ -112,13 +142,13 @@ export class DetailPanel {
     return {
       class: {
         'rula-detail-panel--open': this.open,
-        'rula-detail-panel--animated': this._animated
+        'rula-detail-panel--animated': this.animated
       }
     }
   }
 
   render() {
-    let detail = this._details[0];
+    let detail = this.details[0];
     // For now assume that a MapElement has only one detail.  While it is
     // possible for an element to have more than one detail, for now it's not
     // supported from the front-end display.

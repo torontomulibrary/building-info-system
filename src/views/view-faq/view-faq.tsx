@@ -1,6 +1,8 @@
 import { Component, Prop, State } from '@stencil/core';
 import { sanitize } from '../../utils/sanitize';
 
+import { APP_TITLE } from '../../global/constants';
+
 import {
   LazyStore,
   Faq,
@@ -21,17 +23,34 @@ import {
 })
 
 export class ViewFaq {
-  private _storeUnsubscribe: Function;
+  /**
+   * Callback function used to unsubscribe from the Redux store.
+   */
+  private storeUnsubscribe: Function;
 
-  @State() _activeFaq: Faq;
-  @State() _allFaqs: FaqMap;
+  /**
+   * The currently active FAQ.
+   */
+  @State() activeFaq: Faq;
 
+  /**
+   * A list of all the FAQs that will be displayed.
+   */
+  @State() allFaqs: FaqMap;
+
+  /**
+   * The global Redux store.
+   */
   @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
+
+  /**
+   * A URL used to access when loading data.
+   */
   @Prop() apiUrl: string;
 
   async componentWillLoad() {
     this.lazyStore.addReducers({faq});
-    this._storeUnsubscribe = this.lazyStore.subscribe(() =>
+    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this._stateChanged(this.lazyStore.getState().faq)
     );
     
@@ -41,17 +60,17 @@ export class ViewFaq {
       // Fail preloading with 'Unable to load map data!'
     }
 
-    document.title = 'FAQs - RULA Finder';
+    document.title = `FAQs | ${APP_TITLE}`;
   }
 
   componentDidUnload() {
-    this._storeUnsubscribe();
-    document.title = 'RULA Finder'
+    this.storeUnsubscribe();
+    document.title = APP_TITLE;
   }
 
   _stateChanged(state) {
-    this._allFaqs = this._renameKeys(state.allFaqs, {"questiion": "header", "answer": "content"});
-    this._activeFaq = state.activeFaq;
+    this.allFaqs = this._renameKeys(state.allFaqs, {"questiion": "header", "answer": "content"});
+    this.activeFaq = state.activeFaq;
   }
 
   _renameKeys(obj, newKeys) {
@@ -63,13 +82,13 @@ export class ViewFaq {
   }
 
   render() {
-    if (!this._allFaqs) return;
+    if (!this.allFaqs) return;
 
     return (
       <div id="container" class="rula-view-faq__container" role="list">
         <h2 class="mdc-typography--headline2">Frequently asked questions</h2>
         <rula-accordion>
-          {Object.values(this._allFaqs).map((faq, idx) =>
+          {Object.values(this.allFaqs).map((faq, idx) =>
             <rula-accordion-item class="rula-accordion-item--fade-in"
               index={idx} delay={idx * 30}>
               <div slot="header">{faq.question}</div>

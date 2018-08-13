@@ -1,4 +1,5 @@
 {
+  "extends": "tslint-ionic-rules/strict",
   "rules": {
     "array-type": [true, "array-simple"],
     "arrow-return-shorthand": true,

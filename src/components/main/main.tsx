@@ -1,6 +1,6 @@
 import { Component, Element, Prop, State } from '@stencil/core';
 import { MDCTopAppBar } from '@material/top-app-bar';
-import { MDCTextField } from '@material/textfield';
+// import { MDCTextField } from '@material/textfield';
 import { LazyStore } from '../../interface';
 import '@rula/web-components';
 
@@ -13,41 +13,54 @@ import app from '../../reducers/app';
   styleUrl: 'main.scss'
 })
 export class Main {
-  _topBar: MDCTopAppBar;
-  _search: MDCTextField;
+  /**
+   * Callback function used to unsubscribe from the Redux store.
+   */
+  private storeUnsubscribe: Function;
+  // private topBar: MDCTopAppBar;
+  // private search: MDCTextField;
 
-  private _storeUnsubscribe: Function;
-
+  /**
+   * Root element of this component.
+   */
   @Element() root: HTMLStencilElement;
 
-  @State() _drawerOpened: boolean;
-  @State() _page: string;
+  /**
+   * Flag indicating if the side drawer is open.
+   */
+  @State() drawerOpened: boolean;
+  // @State() _page: string;
 
+  /**
+   * The global Redux store.
+   */
   @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
 
+  /**
+   * A URL used to access when loading data.
+   */
   @Prop() apiUrl: string;
 
   componentWillLoad() {
     this.lazyStore.addReducers({app});
-    this._storeUnsubscribe = this.lazyStore.subscribe(() => 
-      this._stateChanged(this.lazyStore.getState())
+    this.storeUnsubscribe = this.lazyStore.subscribe(() => 
+      this.stateChanged(this.lazyStore.getState())
     );
   }
 
   componentDidLoad() {
-    this._topBar = new MDCTopAppBar(this.root.querySelector('.rula-app-bar'));
-    //this._search = new MDCTextField(this.root.querySelector('.mdc-text-field'));
+    // For now, nothing is done with TopAppBar, don't need to save it.
+    // this.topBar = 
+    new MDCTopAppBar(this.root.querySelector('.rula-app-bar'));
+    //this.search = new MDCTextField(this.root.querySelector('.mdc-text-field'));
   }
 
   componentDidUnload() {
-    this._storeUnsubscribe();
+    this.storeUnsubscribe();
   }
 
-  _openDrawer() {
-  }
-
-  _stateChanged(state) {
-    this._drawerOpened = state.app.drawerOpened;
+  stateChanged(state) {
+    this.drawerOpened = state.app.drawerOpened;
   }
 
   render() {
@@ -61,7 +74,7 @@ export class Main {
         </div>
       </header>,
 
-      <rula-drawer open={this._drawerOpened} onDrawerClose={_ => this.lazyStore.dispatch(updateDrawerState(false))}>
+      <rula-drawer open={this.drawerOpened} onDrawerClose={_ => this.lazyStore.dispatch(updateDrawerState(false))}>
         <header class='rula-drawer__header'>
           <div class='rula-drawer__header-content'>
             <button class='material-icons rula-app-bar__navigation-icon'>close</button>

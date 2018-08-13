@@ -42,10 +42,16 @@ declare global {
   namespace StencilComponents {
 
     interface RulaDetailPanel {
+      /**
+       * A flag indicating if this detail panel is open.
+       */
       'open': boolean;
     }
 
     interface RulaDrawer {
+      /**
+       * Flag indicating if the drawer is open.
+       */
       'open': boolean;
     }
 
@@ -59,13 +65,28 @@ declare global {
     }
 
     interface RulaBis {
+      /**
+       * A URL used to access when loading data.
+       */
       'apiUrl': string;
     }
 
     interface RulaMapNav {
+      /**
+       * The currently active Building.
+       */
       'activeBuilding': Building;
+      /**
+       * The currently active Floor.
+       */
       'activeFloor': Floor;
+      /**
+       * A list of all the Floors of the currenly active Building
+       */
       'activeFloors': FloorMap;
+      /**
+       * A list of all the buildings.
+       */
       'allBuildings': BuildingMap;
     }
 
@@ -75,6 +96,9 @@ declare global {
     }
 
     interface ViewFaq {
+      /**
+       * A URL used to access when loading data.
+       */
       'apiUrl': string;
     }
 
@@ -83,7 +107,13 @@ declare global {
     }
 
     interface ViewMap {
+      /**
+       * A URL used to access when loading data.
+       */
       'apiUrl': string;
+      /**
+       * The results coming from `stencil-router` that contain any URL matches.
+       */
       'match': MatchResults;
     }
   }
@@ -188,12 +218,20 @@ declare global {
   namespace JSXElements {
 
     export interface RulaDetailPanelAttributes extends HTMLAttributes {
-      'onDrawerClose'?: (event: CustomEvent) => void;
+      /**
+       * A flag indicating if this detail panel is open.
+       */
       'open'?: boolean;
     }
 
     export interface RulaDrawerAttributes extends HTMLAttributes {
+      /**
+       * An event emitted when this drawer closes.
+       */
       'onDrawerClose'?: (event: CustomEvent) => void;
+      /**
+       * Flag indicating if the drawer is open.
+       */
       'open'?: boolean;
     }
 
@@ -207,15 +245,36 @@ declare global {
     }
 
     export interface RulaBisAttributes extends HTMLAttributes {
+      /**
+       * A URL used to access when loading data.
+       */
       'apiUrl'?: string;
     }
 
     export interface RulaMapNavAttributes extends HTMLAttributes {
+      /**
+       * The currently active Building.
+       */
       'activeBuilding'?: Building;
+      /**
+       * The currently active Floor.
+       */
       'activeFloor'?: Floor;
+      /**
+       * A list of all the Floors of the currenly active Building
+       */
       'activeFloors'?: FloorMap;
+      /**
+       * A list of all the buildings.
+       */
       'allBuildings'?: BuildingMap;
+      /**
+       * An event emitted when the selected Building changes.
+       */
       'onActiveBuildingChanged'?: (event: CustomEvent) => void;
+      /**
+       * An event emitted when the selected Floor changes.
+       */
       'onActiveFloorChanged'?: (event: CustomEvent) => void;
     }
 
@@ -225,6 +284,9 @@ declare global {
     }
 
     export interface ViewFaqAttributes extends HTMLAttributes {
+      /**
+       * A URL used to access when loading data.
+       */
       'apiUrl'?: string;
     }
 
@@ -233,7 +295,13 @@ declare global {
     }
 
     export interface ViewMapAttributes extends HTMLAttributes {
+      /**
+       * A URL used to access when loading data.
+       */
       'apiUrl'?: string;
+      /**
+       * The results coming from `stencil-router` that contain any URL matches.
+       */
       'match'?: MatchResults;
     }
   }
