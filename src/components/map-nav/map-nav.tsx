@@ -28,7 +28,7 @@ export class MapNav {
    * The MDCSelect component used to pick and display the current Floor on
    * small (mobile) screens.
    */
-  // private _floorSelect: MDCSelect;
+  private _floorSelect: MDCSelect;
 
   /**
    * The MDCTabBar component used to pick and display the current Floor on
@@ -47,13 +47,6 @@ export class MapNav {
    * The currently active Building.
    */
   @Prop() activeBuilding: Building;
-  @Watch('activeBuilding')
-  onActiveBuildingChanged(newActiveBuilding) {
-    if (newActiveBuilding && newActiveBuilding > 0) {
-      //this.floors = {...this.buildings[newActiveBuilding].floors};
-      //this.activeFloorChanged.emit(this.floors[Object.keys(this.floors)[0]].id);
-    }
-  }
 
   /**
    * The currently active Floor.
@@ -90,18 +83,18 @@ export class MapNav {
 
   componentDidUpdate() {
     if (!this.bldSelect && this.root.querySelectorAll('option').length > 0) {
-      this.bldSelect = new MDCSelect(this.root.querySelector('.mdc-select'));
+      this.bldSelect = new MDCSelect(this.root.querySelector('.mdc-select--buildings'));
       this.bldSelect.listen('change', _ => {
         this.activeBuildingChanged.emit(this.allBuildings[this.bldSelect.value]);
       });
     }
 
-    // if (!this._floorSelect && this.root.querySelectorAll('option').length > 0) {
-    //   this._floorSelect = new MDCSelect(this.root.querySelector('.mdc-select'));
-    //   this._floorSelect.listen('change', _ => {
-    //     this.activeFloorChanged.emit(this.activeFloors[this._floorSelect.value]);
-    //   });
-    // }
+    if (!this._floorSelect && this.root.querySelectorAll('option').length > 0) {
+      this._floorSelect = new MDCSelect(this.root.querySelector('.mdc-select--floors'));
+      this._floorSelect.listen('change', _ => {
+        this.activeFloorChanged.emit(this.activeFloors[this._floorSelect.value]);
+      });
+    }
 
     if (!this.floorTabs && this.root.querySelectorAll('#scrollable-tab-bar > a').length > 0) {
       const scroller = new MDCTabBarScroller(
@@ -125,7 +118,7 @@ export class MapNav {
     let floors = Object.values(this.activeFloors);
 
     return ([
-      <div class="mdc-select buildings">
+      <div class="mdc-select mdc-select--buildings">
         <select class="mdc-select__native-control">
           {buildings.map(b => 
             <option value={b.id}
@@ -191,7 +184,7 @@ export class MapNav {
           </a>
         </div>
       </div>,
-      <div class="mdc-select floors">
+      <div class="mdc-select mdc-select--floors">
         <select class="mdc-select__native-control">
           {floors.reverse().map(f => 
             <option value={f.id}
