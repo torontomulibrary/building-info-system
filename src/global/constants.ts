@@ -1,5 +1,7 @@
-let FOCUSABLE_ELEMENTS = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]';
+const APP_TITLE = 'RULA Building Info System';
+const FOCUSABLE_ELEMENTS = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]';
 
 export {
-  FOCUSABLE_ELEMENTS
+  APP_TITLE,
+  FOCUSABLE_ELEMENTS,
 };

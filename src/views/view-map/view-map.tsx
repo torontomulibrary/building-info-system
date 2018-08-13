@@ -1,6 +1,8 @@
 import { Component, Element, Prop, State } from '@stencil/core';
 import { MatchResults } from '@stencil/router';
 
+import { APP_TITLE } from '../../global/constants';
+
 import {
   LazyStore,
   Building,
@@ -27,27 +29,83 @@ import {
 })
 
 export class ViewMap {
-  private _storeUnsubscribe: Function;
-  private _map: HTMLRulaMapElement;
+  /**
+   * Internal reference to the `rula-map` component element.
+   */
+  private mapEl: HTMLRulaMapElement;
 
+  /**
+   * Callback function used to unsubscribe from the Redux store.
+   */
+  private storeUnsubscribe: Function;
+
+  /**
+   * Root element of this component.
+   */
   @Element() root: HTMLElement;
 
-  @State() _activeBuilding: Building;
-  @State() _activeFloor: Floor;
-  @State() _activeElement: MapElement;
-  @State() _activeFloorplan: any;
+  /**
+   * The currently active Building.
+   */
+  @State() activeBuilding: Building;
 
-  @Prop() match: MatchResults;
-  @State() _elements: Object[];
+  /**
+   * The currently active MapElement.
+   */
+  @State() activeElement: MapElement;
+
+  /**
+   * The currently active Floor.
+   */
+  @State() activeFloor: Floor;
+
+  /**
+   * Reference to the floorplan image currently being displayed.
+   */
+  @State() activeFloorplan: any;
+
+  /**
+   * A list of all the floors of the current Building.
+   */
+  @State() activeFloors: FloorMap;
+
+  /**
+   * A list of all the Buildings.
+   */
+  @State() allBuildings: BuildingMap;
+
+  /**
+   * A list of all the Elements currently displayed on the Map.
+   */
+  @State() elements: Object[];
+
+  /**
+   * A string matched from the URL that should be used to pre-select a specific
+   * building, building and floor, or building, floor and element.
+   */
   @State() query = '';
 
-  @State() _allBuildings: BuildingMap;
-  @State() _activeFloors: FloorMap;
-
+  /**
+   * The global Redux store.
+   */
   @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
+
+  /**
+   * A URL used to access when loading data.
+   */
   @Prop() apiUrl: string;
 
+  /**
+   * The results coming from `stencil-router` that contain any URL matches.
+   */
+  @Prop() match: MatchResults;
+
   async componentWillLoad() {
+    // Check the URL value to see if any Building, Floor and or Location was
+    // provided.  Must be in the form BLD[FLR][RM].
+    // Where BLD is the three letter building code, FLR is the floor number,
+    // and RM is the 'room number'.  The `room number` is actually the full
+    // location code (e.g. SLC508)
     let match;
     if (this.match && this.match.params) {
       const query = this.match.params.query;
@@ -56,50 +114,61 @@ export class ViewMap {
       match = match || [];
     }
 
+    // Add in the `map` recuder to the Store.
     this.lazyStore.addReducers({map});
-    this._storeUnsubscribe = this.lazyStore.subscribe(() =>
-      this._stateChanged(this.lazyStore.getState().map)
+    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
+      this.stateChanged(this.lazyStore.getState().map)
     );
     
+    // Load Map data.
     if (this.apiUrl) {
       this.lazyStore.dispatch(getMapData(this.apiUrl, match[1], parseInt(match[2])));
     } else {
       // Fail preloading with 'Unable to load map data!'
     }
+
+    document.title = `Directory | ${APP_TITLE}`;
   }
 
   componentDidLoad() {
-    this._map = this.root.querySelector('rula-map');
+    this.mapEl = this.root.querySelector('rula-map');
   }
 
   componentDidUnload() {
-    this._storeUnsubscribe();
+    this.storeUnsubscribe();
+    document.title = APP_TITLE;
   }
 
-  _stateChanged(state) {
-    this._activeBuilding = state.activeBuilding;
-    this._activeFloor = state.activeFloor;
-    this._allBuildings = state.allBuildings;
-    this._activeFloors = state.activeFloors;
+  /**
+   * This handles when the state changes.
+   * 
+   * @param state A copy of the new Redux state.
+   */
+  stateChanged(state) {
+    this.activeBuilding = state.activeBuilding;
+    this.activeFloor = state.activeFloor;
+    this.allBuildings = state.allBuildings;
+    this.activeFloors = state.activeFloors;
     if (typeof state.activeFloorplan == 'string') {
       let i = new Image();
       i.src = state.activeFloorplan;
-      this._activeFloorplan = i;
+      this.activeFloorplan = i;
     }
-    this._elements = state.activeElements;
-    this._activeElement = state.activeElement;
+    this.elements = state.activeElements;
+    this.activeElement = state.activeElement;
 
-    if (!this._activeElement && this._map) {
-      this._map.clearActiveElement()
+    if (!this.activeElement && this.mapEl) {
+      this.mapEl.clearActiveElement()
     }
   }
 
-  _onElementSelected(e) {
+  onElementSelected(e) {
     // Update the state with the clicked element.
-    this.lazyStore.dispatch(updateActiveElement(this._elements[e.detail.id]));
+    this.lazyStore.dispatch(updateActiveElement(this.elements[e.detail.id]));
   }
 
-  _onElementDeSelected() {
+  onElementDeSelected() {
+    // Update the store by 'clearing' the selected element.
     this.lazyStore.dispatch(updateActiveElement(undefined));
   }
 
@@ -107,20 +176,20 @@ export class ViewMap {
     return ([
       <rula-map
         class='rula-map'
-        elements={this._elements}
-        mapImage={this._activeFloorplan}
-        onElementSelected={e => this._onElementSelected(e)}
-        onElementDeselected={_ => this._onElementDeSelected()}>
+        elements={this.elements}
+        mapImage={this.activeFloorplan}
+        onElementSelected={e => this.onElementSelected(e)}
+        onElementDeselected={_ => this.onElementDeSelected()}>
       </rula-map>,
 
       <rula-detail-panel></rula-detail-panel>,
 
       <rula-map-nav
         class='rula-map-nav'
-        activeFloors={this._activeFloors}
-        allBuildings={this._allBuildings}
-        activeBuilding={this._activeBuilding}
-        activeFloor={this._activeFloor}
+        activeFloors={this.activeFloors}
+        allBuildings={this.allBuildings}
+        activeBuilding={this.activeBuilding}
+        activeFloor={this.activeFloor}
         onActiveFloorChanged={e => this.lazyStore.dispatch(updateActiveFloor(e.detail))}
         onActiveBuildingChanged={e => this.lazyStore.dispatch(updateActiveBuilding(e.detail))}>
       </rula-map-nav>
