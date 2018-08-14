@@ -46,6 +46,7 @@ interface Building extends DescribedObject {
   code: string;
   shortName: string;
   floors: FloorMap;
+  image: string;
 }
 
 interface MapElement {

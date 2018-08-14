@@ -111,7 +111,8 @@ export class Main {
             <stencil-route url="/" component='view-home' exact={true}></stencil-route>
             <stencil-route
               url={['/building', '/building/']}
-              component='view-building'>
+              component='view-building'
+              componentProps={{apiUrl: this.apiUrl}}>
             </stencil-route>
             <stencil-route
               url={['/event', '/event/']}

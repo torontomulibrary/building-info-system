@@ -135,8 +135,10 @@ export class ViewEvent {
   }
 
   /**
+   * Returns a readable string consisting of the start and end time of the
+   * event.
    * 
-   * @param event The event
+   * @param event The event to get the time from
    */
   eventDuration(event: CalEvent) {
     let s = [

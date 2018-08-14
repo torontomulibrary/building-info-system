@@ -1,0 +1,104 @@
+@import "rula-view";
+@import "@material/card/mixins";
+@import "@material/elevation/mixins";
+@import "@material/rtl/mixins";
+@import "@material/layout-grid/mdc-layout-grid";
+
+.rula-card {
+  @include mdc-card-corner-radius(2px);
+  @include mdc-elevation(2);
+  @include mdc-card-container-layout_;
+
+  &__header {
+    @include mdc-card-media-aspect-ratio-base_;
+
+    position: relative;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    &--16-9::before {
+      padding-top: 56.25%;
+    }
+
+    &:first-child {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
+  }
+
+  &__text-protection {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to top, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.1));
+  }
+
+  &__header-content {
+    display: flex;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+  }
+
+  &__content {
+    padding: 20px 16px;
+  }
+
+  &__content-expandable {
+
+  }
+
+  &__actions {
+    @include mdc-card-actions-layout_;
+
+    min-height: 52px;
+    margin-top: auto;
+    padding: 8px;
+  }
+
+  &__action {
+    @include mdc-card-actions-layout_(inline-flex);
+
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__action--button {
+    @include mdc-rtl-reflexive-box(margin, right, 8px);
+
+    padding: 0 8px;
+
+    &:last-child {
+      @include mdc-rtl-reflexive-box(margin, right, 0);
+    }
+  }
+}
+
+.rula-building {
+  &__title {
+    @include mdc-typography(headline4);
+  }
+
+  &__description {
+    @include mdc-typography(body1);
+  }
+}
