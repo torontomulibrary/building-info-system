@@ -18,7 +18,7 @@ import {
   tag: 'view-faq',
   styleUrl: 'view-faq.scss',
   host: {
-    theme: 'rula-view-faq'
+    theme: 'rula-view rula-view--faq'
   }
 })
 
@@ -84,9 +84,9 @@ export class ViewFaq {
   render() {
     if (!this.allFaqs) return;
 
-    return (
+    return ([
+      <h2 class="rula-view__heading">Frequently asked questions</h2>,
       <div id="container" class="rula-view-faq__container" role="list">
-        <h2 class="mdc-typography--headline2">Frequently asked questions</h2>
         <rula-accordion>
           {Object.values(this.allFaqs).map((faq, idx) =>
             <rula-accordion-item class="rula-accordion-item--fade-in"
@@ -97,6 +97,6 @@ export class ViewFaq {
           )}
         </rula-accordion>
       </div>
-    );
+    ]);
   }
 }

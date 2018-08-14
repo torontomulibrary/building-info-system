@@ -69,6 +69,10 @@ declare global {
        * A URL used to access when loading data.
        */
       'apiUrl': string;
+      /**
+       * A URL used to load ICAL event information.
+       */
+      'icalUrl': string;
     }
 
     interface RulaMapNav {
@@ -93,6 +97,13 @@ declare global {
     interface RulaSearchBox {
       'id': string;
       'searchResults': Array<SearchResult | SearchResultGroup>;
+    }
+
+    interface ViewEvent {
+      /**
+       * The URL from which to load calendar events (ical file).
+       */
+      'icalUrl': string;
     }
 
     interface ViewFaq {
@@ -175,6 +186,14 @@ declare global {
     };
     
 
+    interface HTMLViewEventElement extends StencilComponents.ViewEvent, HTMLStencilElement {}
+
+    var HTMLViewEventElement: {
+      prototype: HTMLViewEventElement;
+      new (): HTMLViewEventElement;
+    };
+    
+
     interface HTMLViewFaqElement extends StencilComponents.ViewFaq, HTMLStencilElement {}
 
     var HTMLViewFaqElement: {
@@ -209,6 +228,7 @@ declare global {
     'rula-bis': JSXElements.RulaBisAttributes;
     'rula-map-nav': JSXElements.RulaMapNavAttributes;
     'rula-search-box': JSXElements.RulaSearchBoxAttributes;
+    'view-event': JSXElements.ViewEventAttributes;
     'view-faq': JSXElements.ViewFaqAttributes;
     'view-home': JSXElements.ViewHomeAttributes;
     'view-map': JSXElements.ViewMapAttributes;
@@ -249,6 +269,10 @@ declare global {
        * A URL used to access when loading data.
        */
       'apiUrl'?: string;
+      /**
+       * A URL used to load ICAL event information.
+       */
+      'icalUrl'?: string;
     }
 
     export interface RulaMapNavAttributes extends HTMLAttributes {
@@ -283,6 +307,13 @@ declare global {
       'searchResults'?: Array<SearchResult | SearchResultGroup>;
     }
 
+    export interface ViewEventAttributes extends HTMLAttributes {
+      /**
+       * The URL from which to load calendar events (ical file).
+       */
+      'icalUrl'?: string;
+    }
+
     export interface ViewFaqAttributes extends HTMLAttributes {
       /**
        * A URL used to access when loading data.
@@ -314,6 +345,7 @@ declare global {
     'rula-bis': HTMLRulaBisElement
     'rula-map-nav': HTMLRulaMapNavElement
     'rula-search-box': HTMLRulaSearchBoxElement
+    'view-event': HTMLViewEventElement
     'view-faq': HTMLViewFaqElement
     'view-home': HTMLViewHomeElement
     'view-map': HTMLViewMapElement
@@ -327,6 +359,7 @@ declare global {
     'rula-bis': HTMLRulaBisElement;
     'rula-map-nav': HTMLRulaMapNavElement;
     'rula-search-box': HTMLRulaSearchBoxElement;
+    'view-event': HTMLViewEventElement;
     'view-faq': HTMLViewFaqElement;
     'view-home': HTMLViewHomeElement;
     'view-map': HTMLViewMapElement;
