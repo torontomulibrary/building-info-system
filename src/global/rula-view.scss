@@ -1,6 +1,37 @@
+@import "@material/layout-grid/mixins";
+@import "@material/typography/mixins";
+
 .rula-view {
   display: block;
   position: relative;
   box-sizing: border-box;
   height: 100%;
+  margin: 0 10%;
+  padding-top: 32px;
+
+  &__heading {
+    @include mdc-typography(headline3);
+
+    margin: 0;
+  }
+
+  @include mdc-layout-grid-media-query_(phone) {
+    margin: 0 8px;
+
+    &__heading {
+      @include mdc-typography(headline5);
+    }
+  }
+
+  @include mdc-layout-grid-media-query_(tablet) {
+    margin: 0 5%;
+
+    &__heading {
+      @include mdc-typography(headline4);
+    }
+  }
+
+  &__container {
+    padding-top: 32px;
+  }
 }

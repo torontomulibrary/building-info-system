@@ -95,6 +95,13 @@ declare global {
       'searchResults': Array<SearchResult | SearchResultGroup>;
     }
 
+    interface ViewBuilding {
+      /**
+       * A URL used to access when loading data.
+       */
+      'apiUrl': string;
+    }
+
     interface ViewFaq {
       /**
        * A URL used to access when loading data.
@@ -175,6 +182,14 @@ declare global {
     };
     
 
+    interface HTMLViewBuildingElement extends StencilComponents.ViewBuilding, HTMLStencilElement {}
+
+    var HTMLViewBuildingElement: {
+      prototype: HTMLViewBuildingElement;
+      new (): HTMLViewBuildingElement;
+    };
+    
+
     interface HTMLViewFaqElement extends StencilComponents.ViewFaq, HTMLStencilElement {}
 
     var HTMLViewFaqElement: {
@@ -209,6 +224,7 @@ declare global {
     'rula-bis': JSXElements.RulaBisAttributes;
     'rula-map-nav': JSXElements.RulaMapNavAttributes;
     'rula-search-box': JSXElements.RulaSearchBoxAttributes;
+    'view-building': JSXElements.ViewBuildingAttributes;
     'view-faq': JSXElements.ViewFaqAttributes;
     'view-home': JSXElements.ViewHomeAttributes;
     'view-map': JSXElements.ViewMapAttributes;
@@ -283,6 +299,13 @@ declare global {
       'searchResults'?: Array<SearchResult | SearchResultGroup>;
     }
 
+    export interface ViewBuildingAttributes extends HTMLAttributes {
+      /**
+       * A URL used to access when loading data.
+       */
+      'apiUrl'?: string;
+    }
+
     export interface ViewFaqAttributes extends HTMLAttributes {
       /**
        * A URL used to access when loading data.
@@ -314,6 +337,7 @@ declare global {
     'rula-bis': HTMLRulaBisElement
     'rula-map-nav': HTMLRulaMapNavElement
     'rula-search-box': HTMLRulaSearchBoxElement
+    'view-building': HTMLViewBuildingElement
     'view-faq': HTMLViewFaqElement
     'view-home': HTMLViewHomeElement
     'view-map': HTMLViewMapElement
@@ -327,6 +351,7 @@ declare global {
     'rula-bis': HTMLRulaBisElement;
     'rula-map-nav': HTMLRulaMapNavElement;
     'rula-search-box': HTMLRulaSearchBoxElement;
+    'view-building': HTMLViewBuildingElement;
     'view-faq': HTMLViewFaqElement;
     'view-home': HTMLViewHomeElement;
     'view-map': HTMLViewMapElement;

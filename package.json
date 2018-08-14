@@ -33,6 +33,7 @@
   "devDependencies": {
     "@material/animation": "^0.34.0",
     "@material/button": "^0.38.0",
+    "@material/card": "^0.38.1",
     "@material/drawer": "^0.38.0",
     "@material/elevation": "^0.38.0",
     "@material/layout-grid": "^0.34.0",
@@ -42,6 +43,7 @@
     "@material/tabs": "^0.38.0",
     "@material/textfield": "^0.38.0",
     "@material/top-app-bar": "^0.38.0",
+    "@material/typography": "^0.38.0",
     "@rula/web-components": "^1.5.1",
     "@stencil/core": "^0.11.3",
     "@stencil/postcss": "0.1.0",
