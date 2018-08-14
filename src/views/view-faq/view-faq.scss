@@ -1,8 +1,9 @@
 // @import "@material/layout-grid/mixins";
 // @import "@material/card/mdc-card";
 @import "@material/elevation/mixins";
+@import "rula-view";
 
-.rula-view-faq {
+.rula-view--faq {
   display: block;
   box-sizing: border-box;
 

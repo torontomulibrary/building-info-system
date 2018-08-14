@@ -24,7 +24,7 @@ import {
   tag: 'view-map',
   styleUrl: 'view-map.scss',
   host: {
-    theme: 'rula-view rula-view__map'
+    theme: 'rula-view rula-view--map'
   }
 })
 
