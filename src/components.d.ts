@@ -99,6 +99,12 @@ declare global {
       'searchResults': Array<SearchResult | SearchResultGroup>;
     }
 
+    interface ViewBuilding {
+      /**
+       * A URL used to access when loading data.
+       */
+      'apiUrl': string;
+                                     }
     interface ViewEvent {
       /**
        * The URL from which to load calendar events (ical file).
@@ -185,7 +191,13 @@ declare global {
       new (): HTMLRulaSearchBoxElement;
     };
     
+    interface HTMLViewBuildingElement extends StencilComponents.ViewBuilding, HTMLStencilElement {}
 
+    var HTMLViewBuildingElement: {
+      prototype: HTMLViewBuildingElement;
+      new (): HTMLViewBuildingElement;
+    };
+                                     
     interface HTMLViewEventElement extends StencilComponents.ViewEvent, HTMLStencilElement {}
 
     var HTMLViewEventElement: {
@@ -228,6 +240,7 @@ declare global {
     'rula-bis': JSXElements.RulaBisAttributes;
     'rula-map-nav': JSXElements.RulaMapNavAttributes;
     'rula-search-box': JSXElements.RulaSearchBoxAttributes;
+    'view-building': JSXElements.ViewBuildingAttributes;
     'view-event': JSXElements.ViewEventAttributes;
     'view-faq': JSXElements.ViewFaqAttributes;
     'view-home': JSXElements.ViewHomeAttributes;
@@ -307,6 +320,13 @@ declare global {
       'searchResults'?: Array<SearchResult | SearchResultGroup>;
     }
 
+    export interface ViewBuildingAttributes extends HTMLAttributes {
+      /**
+       * A URL used to access when loading data.
+       */
+      'apiUrl'?: string;
+    }
+
     export interface ViewEventAttributes extends HTMLAttributes {
       /**
        * The URL from which to load calendar events (ical file).
@@ -345,6 +365,7 @@ declare global {
     'rula-bis': HTMLRulaBisElement
     'rula-map-nav': HTMLRulaMapNavElement
     'rula-search-box': HTMLRulaSearchBoxElement
+    'view-building': HTMLViewBuildingElement
     'view-event': HTMLViewEventElement
     'view-faq': HTMLViewFaqElement
     'view-home': HTMLViewHomeElement
@@ -359,6 +380,7 @@ declare global {
     'rula-bis': HTMLRulaBisElement;
     'rula-map-nav': HTMLRulaMapNavElement;
     'rula-search-box': HTMLRulaSearchBoxElement;
+    'view-building': HTMLViewBuildingElement;
     'view-event': HTMLViewEventElement;
     'view-faq': HTMLViewFaqElement;
     'view-home': HTMLViewHomeElement;
