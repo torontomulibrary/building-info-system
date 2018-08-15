@@ -1,8 +1,8 @@
-@import '@material/textfield/mixins';
+@import "@material/textfield/mixins";
 
-rula-search-box {
-  user-select: none;
+.rula-search-box {
   width: 100%;
+  user-select: none;
 
   .mdc-text-field {
     @include mdc-text-field-label-color($mdc-theme-on-primary);
@@ -18,8 +18,8 @@ rula-search-box {
 
   .mdc-text-field--with-leading-icon {
     .mdc-text-field__icon {
-      left: 24px;
       bottom: 12px;
+      left: 24px;
     }
   }
 
@@ -29,4 +29,3 @@ rula-search-box {
     user-select: none;
   }
 }
-

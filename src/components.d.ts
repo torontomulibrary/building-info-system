@@ -6,9 +6,9 @@
 
 import '@stencil/core';
 
-import '@rula/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
+import '@rula/web-components';
 
 
 import {
@@ -104,7 +104,8 @@ declare global {
        * A URL used to access when loading data.
        */
       'apiUrl': string;
-                                     }
+    }
+
     interface ViewEvent {
       /**
        * The URL from which to load calendar events (ical file).
@@ -191,13 +192,15 @@ declare global {
       new (): HTMLRulaSearchBoxElement;
     };
     
+
     interface HTMLViewBuildingElement extends StencilComponents.ViewBuilding, HTMLStencilElement {}
 
     var HTMLViewBuildingElement: {
       prototype: HTMLViewBuildingElement;
       new (): HTMLViewBuildingElement;
     };
-                                     
+    
+
     interface HTMLViewEventElement extends StencilComponents.ViewEvent, HTMLStencilElement {}
 
     var HTMLViewEventElement: {

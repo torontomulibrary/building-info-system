@@ -1,13 +1,14 @@
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
-import { RenderStatus } from '../../utils/render-status';
 import { MDCRipple } from '@material/ripple';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
+
+import { afterNextRender } from '../../utils/render-status';
 
 @Component({
   tag: 'rula-expandable-card',
   styleUrl: 'expandable-card.scss',
   host: {
-    theme: 'rula-expandable-card'
-  }
+    theme: 'rula-expandable-card',
+  },
 })
 
 export class ExpandableCard {
@@ -26,17 +27,14 @@ export class ExpandableCard {
 
   render() {
     return ([
-      <div id='scrim' class='rula-expandable-card__scrim'
+      <div id="scrim" class="rula-expandable-card__scrim"
           onClick={() => this.close_()}
           onScroll={e => e.preventDefault()}></div>,
-      <div id='wrapper' class='rula-expandable-card__wrapper'
+      <div id="wrapper" class="rula-expandable-card__wrapper"
           onClick={() => this.toggle_()}>
         <slot />
-      </div>
+      </div>,
     ]);
-  }
-
-  componentWillLoad() {
   }
 
   componentDidLoad() {
@@ -46,20 +44,20 @@ export class ExpandableCard {
     this.scrim.setAttribute('hidden', '');
 
     // Add opacity transition to the content element.
-    const content:HTMLElement = this.root.querySelector('[extra-content]');
+    const content: HTMLElement = this.root.querySelector('[extra-content]');
     content.style.transitionDuration = '0.2s';
     content.style.transitionDelay = '0.1s';
     content.style.transitionProperty = 'opacity';
 
-    RenderStatus.afterNextRender(this, () => {
+    afterNextRender(this, () => {
       this.wrapper.style.top = '0';
       this.wrapper.style.left = '0';
       this.wrapper.style.width = '100%';
       this.wrapper.style.height = '100%';
 
-      let styles = window.getComputedStyle(this.wrapper);
+      const styles = window.getComputedStyle(this.wrapper);
 
-      const mc:HTMLElement = this.root.querySelector('[main-content]');
+      const mc: HTMLElement = this.root.querySelector('[main-content]');
       mc.style.height = styles.height;
       mc.style.minHeight = styles.height;
     });
@@ -82,14 +80,14 @@ export class ExpandableCard {
     w.style.width = rect.width + 'px';
     w.style.height = rect.height + 'px';
 
-    const mc:HTMLElement = this.root.querySelector('[main-content]');
+    const mc: HTMLElement = this.root.querySelector('[main-content]');
     mc.style.height = rect.height + 'px';
     mc.style.minHeight = rect.height + 'px';
   }
 
   @Listen('keydown.tab')
   handleTab(ev: KeyboardEvent) {
-    var TAB_KEYCODE = 9;
+    const TAB_KEYCODE = 9;
     if (this.open && ev.keyCode === TAB_KEYCODE) {
       if (ev.shiftKey) {
         if (this.firstTabStop && ev.target === this.firstTabStop) {
@@ -139,7 +137,7 @@ export class ExpandableCard {
     w.style.width = rect.width + 'px';
     w.style.height = rect.height + 'px';
 
-    const content:HTMLElement = this.root.querySelector('[extra-content]');
+    const content: HTMLElement = this.root.querySelector('[extra-content]');
     content.style.opacity = '0';
 
     // Begin the close transition for the scrim and wrapper.
@@ -148,7 +146,7 @@ export class ExpandableCard {
 
     w.addEventListener('transitionend', (e: TransitionEvent) => this.onTransitionEnd_(e));
 
-    //this.root.querySelector('[main-content]').removeAttribute('tabindex');
+    // this.root.querySelector('[main-content]').removeAttribute('tabindex');
     content.removeAttribute('tabindex');
     this.root.setAttribute('aria-expanded', 'false');
     this.oldTabStop.focus();
@@ -173,10 +171,10 @@ export class ExpandableCard {
 
     // Ensure the content of the wrapper is transparent, it will be faded in
     // as part of expanding the wrapper.
-    const content:HTMLElement = this.root.querySelector('[extra-content]');
+    const content: HTMLElement = this.root.querySelector('[extra-content]');
     content.style.opacity = '0';
 
-    RenderStatus.afterNextRender(this, () => {
+    afterNextRender(this, () => {
       w.setAttribute('transition', '');
       w.setAttribute('open', '');
       this.scrim.setAttribute('open', '');
@@ -189,7 +187,7 @@ export class ExpandableCard {
       content.style.opacity = '1';
     });
 
-    //this.root.querySelector('[main-content]').setAttribute('tabindex', '0');
+    // this.root.querySelector('[main-content]').setAttribute('tabindex', '0');
     content.setAttribute('tabindex', '0');
     this.root.setAttribute('aria-expanded', '');
     this.setFocusTrap_();
@@ -222,7 +220,7 @@ export class ExpandableCard {
   }
 
   setFocusTrap_() {
-    var focusableElementsSelector = [
+    const focusableElementsSelector = [
       'a[href]:not([tabindex="-1"])',
       'area[href]:not([tabindex="-1"])',
       'input:not([disabled]):not([tabindex="-1"])',
@@ -231,17 +229,17 @@ export class ExpandableCard {
       'button:not([disabled]):not([tabindex="-1"])',
       'iframe:not([tabindex="-1"])',
       '[tabindex]:not([tabindex="-1"])',
-      '[contentEditable=true]:not([tabindex="-1"])'
+      '[contentEditable=true]:not([tabindex="-1"])',
     ].join(',');
-    var focusableElements = this.root.querySelectorAll(focusableElementsSelector);
+    const focusableElements = this.root.querySelectorAll(focusableElementsSelector);
 
     if (focusableElements.length > 0) {
       this.firstTabStop = focusableElements[0] as HTMLElement;
       this.lastTabStop = focusableElements[focusableElements.length - 1] as HTMLElement;
     } else {
       // Reset saved tab stops when there are no focusable elements in the card.
-      this.firstTabStop = null;
-      this.lastTabStop = null;
+      this.firstTabStop = undefined;
+      this.lastTabStop = undefined;
     }
 
     this.oldTabStop = document.activeElement as HTMLElement;
@@ -249,11 +247,11 @@ export class ExpandableCard {
     // Focus on app-drawer if it has non-zero tabindex. Otherwise, focus the first focusable
     // element in the drawer, if it exists. Use the tabindex attribute since the this.tabIndex
     // property in IE/Edge returns 0 (instead of -1) when the attribute is not set.
-    var tabindex = this.root.getAttribute('tabindex');
-    if (tabindex && parseInt(tabindex, 10) > -1) {
+    const tabindex = Number(this.root.getAttribute('tabindex')) - 0;
+    if (tabindex && tabindex > -1) {
       this.root.focus();
     } else if (this.firstTabStop) {
+      this.firstTabStop.focus();
     }
-    this.firstTabStop.focus();
   }
 }

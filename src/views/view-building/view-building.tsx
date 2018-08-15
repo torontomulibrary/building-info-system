@@ -1,16 +1,16 @@
 import { Component, Element, Prop, State } from '@stencil/core';
-import { APP_TITLE } from '../../global/constants';
-import { LazyStore, Building, BuildingMap } from '../../interface';
 
-import building from '../../reducers/building-reducer';
 import { getBuildingData } from '../../actions/building-actions';
+import { APP_TITLE } from '../../global/constants';
+import { Building, BuildingMap, LazyStore } from '../../interface';
+import { buildingReducer } from '../../reducers/building-reducer';
 
 @Component({
   tag: 'view-building',
   styleUrl: 'view-building.scss',
   host: {
-    theme: 'rula-view rula-view--buildings'
-  }
+    theme: 'rula-view rula-view--buildings',
+  },
 })
 
 export class ViewBuilding {
@@ -41,11 +41,11 @@ export class ViewBuilding {
 
   async componentWillLoad() {
     // Add in the `map` recuder to the Store.
-    this.lazyStore.addReducers({building});
+    this.lazyStore.addReducers({ buildingReducer });
     this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this.stateChanged(this.lazyStore.getState().building)
     );
-    
+
     // Load Map data.
     if (this.apiUrl) {
       this.lazyStore.dispatch(getBuildingData(this.apiUrl));
@@ -63,7 +63,7 @@ export class ViewBuilding {
 
   /**
    * This handles when the state changes.
-   * 
+   *
    * @param state A copy of the new Redux state.
    */
   stateChanged(state) {
@@ -77,10 +77,10 @@ export class ViewBuilding {
       <h2 class="rula-view__heading">Building Information</h2>,
       <div class="rula-view__container mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
-          {Object.values(this.allBuildings).map((building: Building) => 
+          {Object.values(this.allBuildings).map((building: Building) =>
             <div class="rula-card mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop">
               <div class="rula-card__header rula-card__header--16-9"
-                style={{backgroundImage: `url("${building.image}")`}}>
+                style={{ backgroundImage: `url("${building.image}")` }}>
                 <div class="rula-card__text-protection"></div>
                 <div class="rula-card__header-content">
                   <div class="rula-building__title">{building.name}</div>
@@ -100,7 +100,7 @@ export class ViewBuilding {
             </div>
           )}
         </div>
-      </div>
+      </div>,
     ]);
   }
 }

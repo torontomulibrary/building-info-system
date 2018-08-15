@@ -29,6 +29,7 @@ const FULL_MONTHS = [
   'November',
   'December',
 ];
+
 export {
   APP_TITLE,
   FOCUSABLE_ELEMENTS,

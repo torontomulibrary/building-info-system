@@ -1,25 +1,23 @@
 import { Component, Prop, State } from '@stencil/core';
-import { sanitize } from '../../utils/sanitize';
 
-import { APP_TITLE } from '../../global/constants';
-
-import {
-  LazyStore,
-  Faq,
-  FaqMap,
-} from '../../interface';
-
-import faq from '../../reducers/faq-reducer';
 import {
   getFaqData,
 } from '../../actions/faq-actions';
+import { APP_TITLE } from '../../global/constants';
+import {
+  Faq,
+  FaqMap,
+  LazyStore,
+} from '../../interface';
+import { faqReducer } from '../../reducers/faq-reducer';
+import { sanitize } from '../../utils/sanitize';
 
 @Component({
   tag: 'view-faq',
   styleUrl: 'view-faq.scss',
   host: {
-    theme: 'rula-view rula-view--faq'
-  }
+    theme: 'rula-view rula-view--faq',
+  },
 })
 
 export class ViewFaq {
@@ -49,11 +47,11 @@ export class ViewFaq {
   @Prop() apiUrl: string;
 
   async componentWillLoad() {
-    this.lazyStore.addReducers({faq});
+    this.lazyStore.addReducers({ faqReducer });
     this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this._stateChanged(this.lazyStore.getState().faq)
     );
-    
+
     if (this.apiUrl) {
       this.lazyStore.dispatch(getFaqData(this.apiUrl));
     } else {
@@ -69,7 +67,7 @@ export class ViewFaq {
   }
 
   _stateChanged(state) {
-    this.allFaqs = this._renameKeys(state.allFaqs, {"questiion": "header", "answer": "content"});
+    this.allFaqs = this._renameKeys(state.allFaqs, { 'questiion': 'header', 'answer': 'content' });
     this.activeFaq = state.activeFaq;
   }
 
@@ -89,14 +87,14 @@ export class ViewFaq {
       <div id="container" class="rula-view-faq__container" role="list">
         <rula-accordion>
           {Object.values(this.allFaqs).map((faq, idx) =>
-            <rula-accordion-item class="rula-accordion-item--fade-in"
+            <rula-accordion-item class="rula-accordion-item rula-accordion-item--fade-in"
               index={idx} delay={idx * 30}>
               <div slot="header">{faq.question}</div>
               <div slot="content">{sanitize(faq.answer)}</div>
             </rula-accordion-item>
           )}
         </rula-accordion>
-      </div>
+      </div>,
     ]);
   }
 }
