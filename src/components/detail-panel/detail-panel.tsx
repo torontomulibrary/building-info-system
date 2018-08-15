@@ -8,7 +8,7 @@ import {
   LazyStore,
   MapElementDetail,
 } from '../../interface';
-import { map } from '../../reducers/map-reducer';
+import { mapReducer } from '../../reducers/map-reducer';
 
 @Component({
   tag: 'rula-detail-panel',
@@ -65,7 +65,7 @@ export class DetailPanel {
   @Prop({ mutable: true }) open: boolean;
 
   async componentWillLoad() {
-    this.lazyStore.addReducers({ map });
+    this.lazyStore.addReducers({ mapReducer });
     this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this.stateChanged(this.lazyStore.getState().map)
     );
