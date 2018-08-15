@@ -93,11 +93,9 @@ export class ViewBuilding {
 
               </div>
               <div class="rula-card__actions">
-                <a href={`/map/${building.code}`}>
-                  <button class="mdc-button rula-event__action">
-                    Map it!
-                  </button>
-                </a>
+                <button class="mdc-button rula-event__action">
+                  Map it!
+                </button>
               </div>
             </div>
           )}
