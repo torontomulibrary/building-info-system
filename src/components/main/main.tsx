@@ -40,6 +40,11 @@ export class Main {
    * A URL used to access when loading data.
    */
   @Prop() apiUrl: string;
+  
+  /**
+   * A URL used to load ICAL event information.
+   */
+  @Prop() icalUrl: string;
 
   componentWillLoad() {
     this.lazyStore.addReducers({app});
@@ -108,7 +113,11 @@ export class Main {
               url={['/building', '/building/']}
               component='view-building'>
             </stencil-route>
-            <stencil-route url={['/event', '/event/']} component='view-event'></stencil-route>
+            <stencil-route
+              url={['/event', '/event/']}
+              component='view-event'
+              componentProps={{icalUrl: this.icalUrl}}>
+            </stencil-route>
             <stencil-route
               url={['/faq', '/faq/']}
               component='view-faq'

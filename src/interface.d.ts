@@ -8,10 +8,19 @@ interface LazyStore {
 }
 
 interface Faq {
-  question: string;
-  answer: string;
+  question?: string;
+  answer?: string;
 }
 interface FaqMap { [keys: number]: Faq }
+
+interface CalEvent {
+  group?: string,
+  location?: string,
+  title?: string,
+  description?: string,
+  startTime?: Date,
+  endTime?: Date,
+}
 
 // Base type for objects that have name/description/altText
 interface DescribedObject {
@@ -75,6 +84,7 @@ export {
   Building,
   BuildingMap,
   LazyStore,
+  CalEvent,
   Faq,
   FaqMap,
   Floor,
