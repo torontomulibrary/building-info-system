@@ -1,23 +1,21 @@
-import { Component, Element, Prop, State, Listen } from '@stencil/core';
-import {
-  LazyStore,
-  MapElementDetail,
-} from '../../interface';
-
-import { FOCUSABLE_ELEMENTS } from '../../global/constants';
-
-import map from '../../reducers/map-reducer';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
 
 import {
   updateActiveElement,
 } from '../../actions/map-actions';
+import { FOCUSABLE_ELEMENTS } from '../../global/constants';
+import {
+  LazyStore,
+  MapElementDetail,
+} from '../../interface';
+import { map } from '../../reducers/map-reducer';
 
 @Component({
   tag: 'rula-detail-panel',
   styleUrl: 'detail-panel.scss',
   host: {
-    theme: 'rula-detail-panel'
-  }
+    theme: 'rula-detail-panel',
+  },
 })
 
 export class DetailPanel {
@@ -35,7 +33,7 @@ export class DetailPanel {
    * The element that has focus when this detail panel is opened.
    */
   private oldTabStop: HTMLElement;
-  
+
   /**
    * Callback function used to unsubscribe from the Redux store.
    */
@@ -67,7 +65,7 @@ export class DetailPanel {
   @Prop({ mutable: true }) open: boolean;
 
   async componentWillLoad() {
-    this.lazyStore.addReducers({map});
+    this.lazyStore.addReducers({ map });
     this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this.stateChanged(this.lazyStore.getState().map)
     );
@@ -79,7 +77,7 @@ export class DetailPanel {
 
   @Listen('keydown.tab')
   handleTab(evt: KeyboardEvent) {
-    var TAB_KEYCODE = 9;
+    const TAB_KEYCODE = 9;
 
     if (this.open && evt.keyCode === TAB_KEYCODE) {
       if (evt.shiftKey) {
@@ -97,15 +95,15 @@ export class DetailPanel {
   }
 
   setFocusTrap() {
-    var focusableElements = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
+    const focusableElements = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
 
     if (focusableElements.length > 0) {
       this.firstTabStop = focusableElements[0] as HTMLElement;
       this.lastTabStop = focusableElements[focusableElements.length - 1] as HTMLElement;
     } else {
       // Reset saved tab stops when there are no focusable elements in the card.
-      this.firstTabStop = null;
-      this.lastTabStop = null;
+      this.firstTabStop = undefined;
+      this.lastTabStop = undefined;
     }
 
     this.oldTabStop = document.activeElement as HTMLElement;
@@ -142,13 +140,13 @@ export class DetailPanel {
     return {
       class: {
         'rula-detail-panel--open': this.open,
-        'rula-detail-panel--animated': this.animated
-      }
-    }
+        'rula-detail-panel--animated': this.animated,
+      },
+    };
   }
 
   render() {
-    let detail = this.details[0];
+    const detail = this.details[0];
     // For now assume that a MapElement has only one detail.  While it is
     // possible for an element to have more than one detail, for now it's not
     // supported from the front-end display.
@@ -161,7 +159,7 @@ export class DetailPanel {
           </span>
           <button
               class="material-icons rula-detail-panel__close"
-              onClick={_ => {this.lazyStore.dispatch(updateActiveElement(undefined));}}
+              onClick={_ => {this.lazyStore.dispatch(updateActiveElement(undefined)); }}
               aria-label="Close detail panel.">
             close
           </button>
@@ -181,7 +179,7 @@ export class DetailPanel {
               Directions
             </button>
           </div> */}
-        </div>
+        </div>,
     ]);
   }
 }

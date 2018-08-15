@@ -1,11 +1,11 @@
+import { lazyReducerEnhancer } from 'pwa-helpers/lazy-reducer-enhancer.js';
 import {
   applyMiddleware,
-  createStore,
   combineReducers,
   compose as origCompose,
+  createStore,
 } from 'redux';
 import thunk from 'redux-thunk';
-import { lazyReducerEnhancer } from 'pwa-helpers/lazy-reducer-enhancer.js';
 
 // Sets up a Chrome extension for time travel debugging.
 // See https://github.com/zalmoxisus/redux-devtools-extension for more information.

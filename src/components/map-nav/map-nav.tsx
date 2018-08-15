@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 
 import { MDCSelect } from '@material/select';
-import { MDCTabBarScroller, MDCTabBar } from '@material/tabs';
+import { MDCTabBar, MDCTabBarScroller } from '@material/tabs';
 
 import {
   Building,
@@ -14,8 +14,8 @@ import {
   tag: 'rula-map-nav',
   styleUrl: 'map-nav.scss',
   host: {
-    theme: 'rula-map-nav'
-  }
+    theme: 'rula-map-nav',
+  },
 })
 
 export class MapNav {
@@ -35,7 +35,7 @@ export class MapNav {
    * wide (non-mobile) screens.
    */
   private floorTabs: MDCTabBar;
-  
+
   /**
    * Root element of this component.
    */
@@ -57,7 +57,7 @@ export class MapNav {
     if (this.floorTabs && newActiveFloor) {
       // Update the active (selected) floor tab.
       this.floorTabs.activeTabIndex =
-        Object.values(this.activeFloors).findIndex(f => f.id == newActiveFloor.id);
+        Object.values(this.activeFloors).findIndex(f => f.id === newActiveFloor.id);
     }
   }
 
@@ -102,7 +102,7 @@ export class MapNav {
       this.floorTabs = scroller.tabBar;
       this.floorTabs.listen('MDCTabBar:change', _ => {
         this.activeFloorChanged.emit(
-          this.activeFloors[parseInt(Object.keys(this.activeFloors)[this.floorTabs.activeTabIndex])]);
+          this.activeFloors[Number(Object.keys(this.activeFloors)[this.floorTabs.activeTabIndex])]);
       });
     }
   }
@@ -113,16 +113,16 @@ export class MapNav {
 
   render() {
     if (!(this.allBuildings && this.activeFloors)) return;
-    
-    let buildings = Object.values(this.allBuildings);
-    let floors = Object.values(this.activeFloors);
+
+    const buildings = Object.values(this.allBuildings);
+    const floors = Object.values(this.activeFloors);
 
     return ([
       <div class="mdc-select mdc-select--buildings">
         <select class="mdc-select__native-control">
-          {buildings.map(b => 
+          {buildings.map(b =>
             <option value={b.id}
-                selected={this.activeBuilding.id == b.id}>
+                selected={this.activeBuilding.id === b.id}>
               {b.name}
             </option>
           )}
@@ -173,7 +173,7 @@ export class MapNav {
         <div class="mdc-tab-bar-scroller__scroll-frame">
           <nav id="scrollable-tab-bar" class="mdc-tab-bar mdc-tab-bar-scroller__scroll-frame__tabs">
             {floors.map(f =>
-              <a class={`mdc-tab ${f.id == this.activeFloor.id ? "mdc-tab--active" : ""}`}>{f.name}</a>
+              <a class={`mdc-tab ${f.id === this.activeFloor.id ? 'mdc-tab--active' : ''}`}>{f.name}</a>
             )}
             <span class="mdc-tab-bar__indicator"></span>
           </nav>
@@ -186,16 +186,16 @@ export class MapNav {
       </div>,
       <div class="mdc-select mdc-select--floors">
         <select class="mdc-select__native-control">
-          {floors.reverse().map(f => 
+          {floors.reverse().map(f =>
             <option value={f.id}
-                selected={this.activeFloor.id == f.id}>
+                selected={this.activeFloor.id === f.id}>
               {f.name}
             </option>
           )}
         </select>
         <div class="mdc-floating-label mdc-floating-label--float-above">Current Floor</div>
         <div class="mdc-line-ripple"></div>
-      </div>
+      </div>,
     ]);
   }
 }

@@ -4,28 +4,28 @@ import { MatchResults } from '@stencil/router';
 import { APP_TITLE } from '../../global/constants';
 
 import {
-  LazyStore,
   Building,
   BuildingMap,
   Floor,
   FloorMap,
+  LazyStore,
   MapElement,
 } from '../../interface';
 
-import map from '../../reducers/map-reducer';
 import {
   getMapData,
   updateActiveBuilding,
-  updateActiveFloor,
   updateActiveElement,
+  updateActiveFloor,
 } from '../../actions/map-actions';
+import { mapReducer } from '../../reducers/map-reducer';
 
 @Component({
   tag: 'view-map',
   styleUrl: 'view-map.scss',
   host: {
-    theme: 'rula-view rula-view--map'
-  }
+    theme: 'rula-view rula-view--map',
+  },
 })
 
 export class ViewMap {
@@ -62,7 +62,7 @@ export class ViewMap {
   /**
    * Reference to the floorplan image currently being displayed.
    */
-  @State() activeFloorplan: any;
+  @State() activeFloorplan: HTMLImageElement;
 
   /**
    * A list of all the floors of the current Building.
@@ -77,7 +77,7 @@ export class ViewMap {
   /**
    * A list of all the Elements currently displayed on the Map.
    */
-  @State() elements: Object[];
+  @State() elements: Array<{}>;
 
   /**
    * A string matched from the URL that should be used to pre-select a specific
@@ -115,14 +115,14 @@ export class ViewMap {
     }
 
     // Add in the `map` recuder to the Store.
-    this.lazyStore.addReducers({map});
+    this.lazyStore.addReducers({ mapReducer });
     this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this.stateChanged(this.lazyStore.getState().map)
     );
-    
+
     // Load Map data.
     if (this.apiUrl) {
-      this.lazyStore.dispatch(getMapData(this.apiUrl, match[1], parseInt(match[2])));
+      this.lazyStore.dispatch(getMapData(this.apiUrl, match[1], Number(match[2])));
     } else {
       // Fail preloading with 'Unable to load map data!'
     }
@@ -141,7 +141,7 @@ export class ViewMap {
 
   /**
    * This handles when the state changes.
-   * 
+   *
    * @param state A copy of the new Redux state.
    */
   stateChanged(state) {
@@ -149,8 +149,8 @@ export class ViewMap {
     this.activeFloor = state.activeFloor;
     this.allBuildings = state.allBuildings;
     this.activeFloors = state.activeFloors;
-    if (typeof state.activeFloorplan == 'string') {
-      let i = new Image();
+    if (typeof state.activeFloorplan === 'string') {
+      const i = new Image();
       i.src = state.activeFloorplan;
       this.activeFloorplan = i;
     }
@@ -158,7 +158,7 @@ export class ViewMap {
     this.activeElement = state.activeElement;
 
     if (!this.activeElement && this.mapEl) {
-      this.mapEl.clearActiveElement()
+      this.mapEl.clearActiveElement();
     }
   }
 
@@ -175,7 +175,7 @@ export class ViewMap {
   render() {
     return ([
       <rula-map
-        class='rula-map'
+        class="rula-map"
         elements={this.elements}
         mapImage={this.activeFloorplan}
         onElementSelected={e => this.onElementSelected(e)}
@@ -185,14 +185,14 @@ export class ViewMap {
       <rula-detail-panel></rula-detail-panel>,
 
       <rula-map-nav
-        class='rula-map-nav'
+        class="rula-map-nav"
         activeFloors={this.activeFloors}
         allBuildings={this.allBuildings}
         activeBuilding={this.activeBuilding}
         activeFloor={this.activeFloor}
         onActiveFloorChanged={e => this.lazyStore.dispatch(updateActiveFloor(e.detail))}
         onActiveBuildingChanged={e => this.lazyStore.dispatch(updateActiveBuilding(e.detail))}>
-      </rula-map-nav>
+      </rula-map-nav>,
     ]);
   }
 }

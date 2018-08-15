@@ -4,8 +4,8 @@ export function fetchJSON(input: string, init?: any): Promise<any> {
       return res.json();
     }
     throw new Error('Network response was not OK.');
-  }).catch((err) => {
-    console.log('Fetch json error: ' + err.message);
+  }).catch(err => {
+    throw new Error('Fetch json error: ' + err.message);
   });
 }
 
@@ -18,14 +18,14 @@ export function fetchJSON(input: string, init?: any): Promise<any> {
  * @return The results of loading the URL, as a blob
  */
 export function fetchIMG(url: string): Promise<any> {
-  return fetch(url).then((response) => {
+  return fetch(url).then(response => {
     if (response.ok) {
       return response.blob();
     }
     throw new Error('Network response was not OK.');
-  }).then((blob) => {
+  }).then(blob => {
     return URL.createObjectURL(blob);
-  }).catch((error) => {
-    console.log('Fetch image error: ' + error.message);
+  }).catch(error => {
+    throw new Error('Fetch image error: ' + error.message);
   });
 }

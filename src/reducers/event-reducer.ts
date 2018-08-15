@@ -7,29 +7,27 @@ import {
 const defaultState = {
   activeEvent: {},
   allEvents: {},
-}
+};
 
 /**
  * Reducer for the `map` slice of the store.
  * @param state The current state.
  * @param action The performed action.
  */
-const event = (state = defaultState, action) => {
+export const eventReducer = (state = defaultState, action) => {
   switch (action.type) {
     case GET_EVENT_DATA:
       return {
         ...state,
         allEvents: action.events,
-        loaded: true
-      }
+        loaded: true,
+      };
     case UPDATE_ACTIVE_EVENT:
       return {
         ...state,
         activeEvent: action.event,
-      }
+      };
     default:
       return state;
   }
-}
-
-export default event;
+};

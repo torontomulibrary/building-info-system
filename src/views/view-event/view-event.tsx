@@ -1,17 +1,18 @@
 import { Component, Element, Prop, State } from '@stencil/core';
-import { APP_TITLE, MONTHS, FULL_MONTHS } from '../../global/constants';
+
+import { getEventData } from '../../actions/event-actions';
+import { APP_TITLE, FULL_MONTHS, MONTHS } from '../../global/constants';
+import { CalEvent, LazyStore } from '../../interface';
+import { eventReducer } from '../../reducers/event-reducer';
 import { formatTime } from '../../utils/event-parser';
 import { sanitize } from '../../utils/sanitize';
-import { LazyStore, CalEvent } from '../../interface';
-import event from '../../reducers/event-reducer';
-import { getEventData } from '../../actions/event-actions';
 
 @Component({
   tag: 'view-event',
   styleUrl: 'view-event.scss',
   host: {
-    theme: 'rula-view rula-view--events'
-  }
+    theme: 'rula-view rula-view--events',
+  },
 })
 
 export class ViewEvent {
@@ -51,7 +52,7 @@ export class ViewEvent {
    */
   componentWillLoad() {
     // Add in the `map` recuder to the Store.
-    this.lazyStore.addReducers({event});
+    this.lazyStore.addReducers({ eventReducer });
     this.storeUnsubscribe = this.lazyStore.subscribe(() =>
       this.stateChanged(this.lazyStore.getState().event)
     );
@@ -78,7 +79,7 @@ export class ViewEvent {
 
   /**
    * Handle when the Redux state changes.
-   * 
+   *
    * @param state The new Redux state
    */
   stateChanged(state) {
@@ -86,16 +87,16 @@ export class ViewEvent {
   }
 
   /**
-   * Generates a string of text that describes an event usable for the 
+   * Generates a string of text that describes an event usable for the
    * `aria-label` attribute.
-   * 
+   *
    * @param event The event to create a label from
    */
   eventLabel(event: CalEvent) {
     return 'Event: ' + event.title +
       ' ' + this.eventDate(event, true) +
       ' at ' + this.eventDuration(event) +
-      (event.location ? ' in ' + event.location : '') + 
+      (event.location ? ' in ' + event.location : '') +
       '. ' + event.description;
   }
 
@@ -104,30 +105,30 @@ export class ViewEvent {
    * starts either today or tomorrow, that will be returned, otherwise the
    * month followed by the date will be returned.  If the `forAria` flag is set,
    * full month names (rather than three letter abbreviations) will be used.
-   * 
+   *
    * @param event The calendar event to use
    * @param forAria A flag indicating if the date will be used in an aria label.
    */
-  eventDate(event: CalEvent, forAria: boolean = false) {
-    let sM = event.startTime.getMonth();
-    let sD = event.startTime.getDate();
-    let c = new Date();
+  eventDate(event: CalEvent, forAria = false) {
+    const sM = event.startTime.getMonth();
+    const sD = event.startTime.getDate();
+    const c = new Date();
     let cM = c.getMonth();
     let cD = c.getDate();
 
-    if (sM == cM && sD == cD) {
+    if (sM === cM && sD === cD) {
       return 'Today';
     }
 
     c.setTime(c.getTime() + 86400000);
     cM = c.getMonth(); cD = c.getDate();
 
-    if (sM == cM && sD == cD) {
+    if (sM === cM && sD === cD) {
       return 'Tomorrow';
     }
 
     if (forAria) {
-      return ' on ' + FULL_MONTHS[event.startTime.getMonth()] + 
+      return ' on ' + FULL_MONTHS[event.startTime.getMonth()] +
           ' ' + this.ordinalSuffix(event.startTime.getDate());
     } else {
       return MONTHS[event.startTime.getMonth()] + ' ' + event.startTime.getDate();
@@ -135,13 +136,13 @@ export class ViewEvent {
   }
 
   /**
-   * 
+   *
    * @param event The event
    */
   eventDuration(event: CalEvent) {
-    let s = [
+    const s = [
       formatTime(event.startTime),
-      (event.endTime ? ' to ' + formatTime(event.endTime) : '')
+      (event.endTime ? ' to ' + formatTime(event.endTime) : ''),
     ];
     return s.join('');
   }
@@ -149,14 +150,15 @@ export class ViewEvent {
   /**
    * Adds the two letter suffix to a given number.  E.g. `st`, `nd`, `rd` to `1`
    * `2`, and `3`, respectively.
-   * 
+   *
    * @param num The number to get the suffix for.
    */
   ordinalSuffix(num) {
-    let j = num % 10, k = num % 100;
-    if (j == 1 && k != 11) { return num + 'st'; }
-    if (j == 2 && k != 12) { return num + 'nd'; }
-    if (j == 3 && k != 13) { return num + 'rd'; }
+    const j = num % 10;
+    const k = num % 100;
+    if (j === 1 && k !== 11) { return num + 'st'; }
+    if (j === 2 && k !== 12) { return num + 'nd'; }
+    if (j === 3 && k !== 13) { return num + 'rd'; }
     return num + 'th';
   }
 
@@ -174,7 +176,7 @@ export class ViewEvent {
       <h2 class="rula-view__heading">Upcoming events</h2>,
       <div class="rula-view__container mdc-layout-grid">
         <div class="mdc-layout-grid__inner" role="list">
-          {this.allEvents.map((event, index) => 
+          {this.allEvents.map((event, index) =>
             <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
                 data-fade-delay={(index + 1) * 20} fade-in
                 aria-label={this.eventLabel(event)}>
@@ -199,8 +201,7 @@ export class ViewEvent {
             </div>
           )}
         </div>
-      </div>
+      </div>,
     ]);
   }
 }
-

@@ -1,5 +1,5 @@
-import { Element, Event, EventEmitter, Prop, Listen, Watch, Component } from '@stencil/core';
 import { MDCTemporaryDrawer } from '@material/drawer';
+import { Component, Element, Event, EventEmitter, Listen, Prop, Watch } from '@stencil/core';
 
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
 
@@ -7,8 +7,8 @@ import { FOCUSABLE_ELEMENTS } from '../../global/constants';
   tag: 'rula-drawer',
   styleUrl: 'drawer.scss',
   host: {
-    theme: 'mdc-drawer mdc-drawer--temporary'
-  }
+    theme: 'mdc-drawer mdc-drawer--temporary',
+  },
 })
 
 export class RulaDrawer {
@@ -68,7 +68,7 @@ export class RulaDrawer {
       }
     });
 
-    let links = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
+    const links = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
     Object.keys(links).map(key => {
       links[key].addEventListener('click', () => {
         this.drawer.open = false;
@@ -78,7 +78,7 @@ export class RulaDrawer {
 
   @Listen('keydown.tab')
   handleTab(ev: KeyboardEvent) {
-    var TAB_KEYCODE = 9;
+    const TAB_KEYCODE = 9;
     if (this.drawer.open && ev.keyCode === TAB_KEYCODE) {
       if (ev.shiftKey) {
         if (this.firstTabStop && ev.target === this.firstTabStop) {
@@ -95,15 +95,15 @@ export class RulaDrawer {
   }
 
   setFocusTrap() {
-    var focusableElements = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
+    const focusableElements = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
 
     if (focusableElements.length > 0) {
       this.firstTabStop = focusableElements[0] as HTMLElement;
       this.lastTabStop = focusableElements[focusableElements.length - 1] as HTMLElement;
     } else {
       // Reset saved tab stops when there are no focusable elements in the card.
-      this.firstTabStop = null;
-      this.lastTabStop = null;
+      this.firstTabStop = undefined;
+      this.lastTabStop = undefined;
     }
 
     this.oldTabStop = document.activeElement as HTMLElement;
@@ -111,7 +111,7 @@ export class RulaDrawer {
 
   render() {
     return (
-      <nav class='mdc-drawer__drawer'>
+      <nav class="mdc-drawer__drawer">
         <slot />
       </nav>
     );

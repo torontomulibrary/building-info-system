@@ -1,7 +1,7 @@
 export function sanitize(html) {
-  let tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
+  const tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
 
-  let tagOrComment = new RegExp(
+  const tagOrComment = new RegExp(
       '<(?:'
       // Comment body.
       + '!--(?:(?:-*[^->])*--+|-?)'
@@ -14,7 +14,7 @@ export function sanitize(html) {
       + ')>',
       'gi');
 
-  var oldHtml;
+  let oldHtml;
   do {
     oldHtml = html;
     html = html.replace(tagOrComment, '');

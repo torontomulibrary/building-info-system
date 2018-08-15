@@ -14,7 +14,7 @@ string
 
 #### searchResults
 
-
+Array<SearchResult | SearchResultGroup>
 
 
 ## Attributes
