@@ -1,4 +1,4 @@
-export function sanitize(html) {
+export function sanitize(html: string) {
   const tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
 
   const tagOrComment = new RegExp(

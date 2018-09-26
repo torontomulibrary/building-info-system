@@ -1,0 +1,28 @@
+// @import "variables";
+
+//@import "@material/drawer/mdc-drawer";
+@import "@material/list/mdc-list";
+@import "@material/select/mdc-select";
+@import "@material/tab-bar/mdc-tab-bar";
+@import "@material/tab-scroller/mdc-tab-scroller";
+@import "@material/tab-indicator/mdc-tab-indicator";
+@import "@material/tab/mdc-tab";
+@import "@material/layout-grid/mixins";
+@import "@material/elevation/mixins";
+@import "@material/textfield/mdc-text-field";
+@import "@material/textfield/icon/mdc-text-field-icon";
+@import "@material/typography/mdc-typography";
+
+.rula-main-content {
+  position: relative;
+  top: $rula-top-bar-height;
+  box-sizing: border-box;
+  height: calc(100vh - #{$rula-top-bar-height});
+  user-select: none;
+
+  @media (max-width: $grid-mobile-bp - 1) {
+    top: $rula-top-bar-mobile-height;
+    height: calc(100vh - #{$rula-top-bar-mobile-height});
+  }
+  //stencil-router > div { display: inline; }
+}

@@ -3,6 +3,10 @@
 @import "@material/elevation/mixins";
 @import "rula-view";
 
+:root {
+  --rula-accordion-item-ripple-color: #002d72;
+}
+
 .rula-view--faq {
   display: block;
   box-sizing: border-box;

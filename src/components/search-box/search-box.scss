@@ -1,31 +1,95 @@
+@import "@material/layout-grid/mixins";
+@import "@material/elevation/mixins";
 @import "@material/textfield/mixins";
 
-.rula-search-box {
-  width: 100%;
-  user-select: none;
+.rula-search {
+  display: block;
+  position: relative;
+  transition: all, 0.2s ease;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  z-index: 1;
 
-  .mdc-text-field {
-    @include mdc-text-field-label-color($mdc-theme-on-primary);
-    @include mdc-text-field-icon-color($mdc-theme-on-primary);
-    @include mdc-text-field-box-corner-radius(4px);
-    @include mdc-text-field-box-fill-color(rgba(255, 255, 255, 0.1));
-    @include mdc-text-field-ink-color($mdc-theme-on-primary);
+  &__input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    margin-left: 48px;
+    padding: 0;
+    padding-right: 72px;
+    transition: border 0.1s ease-out;
+    border: 1px solid transparent;
+    outline: none;
+    background: transparent;
+    color: $mdc-theme-on-primary;
+    font-size: 16px;
+    font-weight: normal;
 
-    .material-icons {
-      font-size: 30px;
+    &::placeholder {
+      color: $mdc-theme-on-primary;
     }
   }
 
-  .mdc-text-field--with-leading-icon {
-    .mdc-text-field__icon {
+  &__icon {
+    position: absolute;
+    top: 0;
+    height: 24px;
+    padding: 12px;
+    cursor: pointer;
+
+    @include mdc-layout-grid-media-query_(phone) {
       bottom: 12px;
-      left: 24px;
     }
   }
 
-  .mdc-text-field--fullwidth:not(.mdc-text-field--textarea) .mdc-text-field__input {
-    padding-left: 72px;
-    font-size: 1.3rem;
-    user-select: none;
+  &__results {
+    display: none;
+    width: 100%;
+    height: 0;
+    transition: height 0.2s ease;
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
+  }
+
+  &--open {
+    @include mdc-elevation(4);
+
+    background-color: $mdc-theme-surface;
+
+    .rula-search {
+      &__input,
+      &__input::placeholder,
+      &__icon {
+        color: $mdc-theme-on-surface;
+      }
+
+      &__results {
+        display: block;
+      }
+    }
+  }
+
+  &__icon:not([tabindex]),
+  &__icon[tabindex="-1"] {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &[show-menu] {
+    .rula-search__icon {
+      cursor: pointer;
+      pointer-events: all;
+    }
+  }
+
+  &__no-results {
+    display: block;
+    padding: 12px 16px;
+    color: $mdc-theme-on-surface;
+  }
+
+  &__result-item {
+    cursor: pointer;
   }
 }

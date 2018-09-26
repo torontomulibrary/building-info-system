@@ -1,12 +1,3 @@
-import { Store, Action } from '@stencil/redux';
-
-interface LazyStore {
-  addReducers: (any) => any;
-  subscribe: (callback: Function) => Function;
-  dispatch: (detail: object) => void;
-  getState: () => any;
-}
-
 interface Faq {
   question?: string;
   answer?: string;
@@ -14,20 +5,39 @@ interface Faq {
 interface FaqMap { [keys: number]: Faq }
 
 interface CalEvent {
-  group?: string,
-  location?: string,
-  title?: string,
-  description?: string,
-  startTime?: Date,
-  endTime?: Date,
+  group: string,
+  location: string,
+  title: string,
+  description: string,
+  startTime: Date,
+  endTime: Date,
 }
 
-// Base type for objects that have name/description/altText
+/**
+ * Base type for any object that has a name and description.  Also includes
+ * alt-text for an additional accessibility-oriented description.
+ */
 interface DescribedObject {
-  id: number;
-  name: string;
-  description: string;
+  /**
+   * Additional text describing the object in a way that is appropriate for
+   * accessibility purposes.
+   */
   altText: string;
+
+  /**
+   * A description of the object.
+   */
+  description: string;
+
+  /**
+   * An identifier for the object.
+   */
+  id: number;
+
+  /**
+   * The name of the object.
+   */
+  name: string;
 }
 
 interface Floor extends DescribedObject {
@@ -49,13 +59,12 @@ interface Building extends DescribedObject {
   image: string;
 }
 
-interface MapElement {
-  id: number;
-  floorId: number;
-  coordinates: string;
+interface MapElement extends DescribedObject {
   details: MapElementDetailMap;
-  icon: string;
-  iconImg: string;
+  floorId: number;
+  iconPath: string;
+  iconSrc: string;
+  points: string;
 }
 
 interface MapElementDetail extends DescribedObject {
@@ -81,15 +90,23 @@ interface MapElementMap { [keys: number]: MapElement }
 interface MapElementDetailMap { [keys: number]: MapElementDetail }
 interface MapElementDetailTypeMap { [keys: number]: MapElementDetailType }
 
+interface MapData {
+  buildings: BuildingMap,
+  details: MapElementDetailMap,
+  elements: MapElementMap,
+  floors: FloorMap,
+}
+
 export {
   Building,
   BuildingMap,
-  LazyStore,
+  // LazyStore,
   CalEvent,
   Faq,
   FaqMap,
   Floor,
   FloorMap,
+  MapData,
   MapElement,
   MapElementMap,
   MapElementDetail,

@@ -46,7 +46,7 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
 
 .rula-detail-panel {
   @include mdc-elevation(4);
-  @include mdc-theme-prop(background-color, $mdc-temporary-drawer-fill-color);
+  @include mdc-theme-prop(background-color, $mdc-drawer-surface-fill-color);
   @include mdc-theme-prop(color, text-secondary-on-light);
   @include mdc-rtl-reflexive-position(right, 0);
   @include rula-slidable-panel;
@@ -134,7 +134,7 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
     }
   }
 
-  &.rula-detail-panel--animated {
+  &--animated {
     transition: $rula-detail-panel-transition-close;
 
     &.rula-detail-panel--open {

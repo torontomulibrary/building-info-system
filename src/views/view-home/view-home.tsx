@@ -1,6 +1,5 @@
 import { Component } from '@stencil/core';
 
-import { APP_TITLE } from '../../global/constants';
 
 @Component({
   tag: 'view-home',
@@ -9,17 +8,14 @@ import { APP_TITLE } from '../../global/constants';
 
 export class ViewHome {
 
-  componentDidLoad() {
-    document.title = APP_TITLE;
-  }
-
   render() {
-    return (
+    return ([
+      <stencil-route-title title="Home" />,
       <div>
         Welcome to the home screen.
         <a href="#">Tabbable link</a>
         <slot />
-      </div>
-    );
+      </div>,
+    ]);
   }
 }

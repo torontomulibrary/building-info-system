@@ -1,0 +1,106 @@
+@import "@material/top-app-bar/mixins";
+@import "@material/top-app-bar/variables";
+@import "@material/top-app-bar/mdc-top-app-bar";
+@import "@material/elevation/mixins";
+@import "@material/layout-grid/mixins";
+@import "@material/rtl/mixins";
+@import "@material/typography/mixins";
+
+.mdc-top-app-bar__section {
+  &--align-start {
+    flex: 1;
+    justify-content: flex-start;
+    order: -1;
+  }
+
+  &--align-middle {
+    display: block;
+    flex: 2;
+    justify-content: center;
+    order: 0;
+    max-width: 800px;
+  }
+
+  &--align-end {
+    justify-content: flex-end;
+    order: 1;
+  }
+}
+
+// .rula-app-bar {
+//   @include mdc-top-app-bar-fill-color-accessible(primary);
+//   @include mdc-top-app-bar-icon-ink-color(on-primary);
+//   @include mdc-elevation(4);
+
+//   display: flex;
+//   position: fixed;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   box-sizing: border-box;
+//   width: 100%;
+//   user-select: none;
+//   z-index: 4;
+
+//   &__row {
+//     display: flex;
+//     position: relative;
+//     box-sizing: border-box;
+//     width: 100%;
+//     height: $mdc-top-app-bar-row-height;
+//   }
+
+//   &__section {
+//     display: inline-block;
+//     flex: 1 1 auto;
+//     align-items: center;
+//     min-width: 0;
+//     padding: $mdc-top-app-bar-section-vertical-padding $mdc-top-app-bar-section-horizontal-padding;
+//     z-index: 1;
+
+//     &--align-start {
+//       flex: 1;
+//       justify-content: flex-start;
+//       order: -1;
+//     }
+
+//     &--align-middle {
+//       display: block;
+//       flex: 2;
+//       justify-content: center;
+//       order: 0;
+//       max-width: 800px;
+//     }
+
+//     &--align-end {
+//       justify-content: flex-end;
+//       order: 1;
+//     }
+//   }
+
+//   &__title {
+//     @include mdc-typography(headline6);
+//     @include mdc-rtl-reflexive-box(padding, left, $mdc-top-app-bar-title-left-padding);
+
+//     display: inline-block;
+//     line-height: unset;
+//     text-overflow: ellipsis;
+//     white-space: nowrap;
+//     overflow: hidden;
+//     z-index: 1;
+//   }
+
+//   &__action-item,
+//   &__navigation-icon {
+//     @include mdc-top-app-bar-icon_;
+//   }
+
+//   @media (max-width: $grid-mobile-bp - 1) {
+//     &__row {
+//       height: $mdc-top-app-bar-mobile-row-height;
+//     }
+
+//     &__section {
+//       padding: $mdc-top-app-bar-mobile-section-padding;
+//     }
+//   }
+// }

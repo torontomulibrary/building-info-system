@@ -1,15 +1,6 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop } from '@stencil/core';
 
-import {
-  getFaqData,
-} from '../../actions/faq-actions';
-import { APP_TITLE } from '../../global/constants';
-import {
-  Faq,
-  FaqMap,
-  LazyStore,
-} from '../../interface';
-import { faqReducer } from '../../reducers/faq-reducer';
+import { FaqMap } from '../../interface';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -22,56 +13,11 @@ import { sanitize } from '../../utils/sanitize';
 
 export class ViewFaq {
   /**
-   * Callback function used to unsubscribe from the Redux store.
-   */
-  private storeUnsubscribe: Function;
-
-  /**
-   * The currently active FAQ.
-   */
-  @State() activeFaq: Faq;
-
-  /**
    * A list of all the FAQs that will be displayed.
    */
-  @State() allFaqs: FaqMap;
+  @Prop() allFaqs: FaqMap = {};
 
-  /**
-   * The global Redux store.
-   */
-  @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
-
-  /**
-   * A URL used to access when loading data.
-   */
-  @Prop() apiUrl: string;
-
-  async componentWillLoad() {
-    this.lazyStore.addReducers({ faqReducer });
-    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
-      this._stateChanged(this.lazyStore.getState().faq)
-    );
-
-    if (this.apiUrl) {
-      this.lazyStore.dispatch(getFaqData(this.apiUrl));
-    } else {
-      // Fail preloading with 'Unable to load map data!'
-    }
-
-    document.title = `FAQs | ${APP_TITLE}`;
-  }
-
-  componentDidUnload() {
-    this.storeUnsubscribe();
-    document.title = APP_TITLE;
-  }
-
-  _stateChanged(state) {
-    this.allFaqs = this._renameKeys(state.allFaqs, { 'questiion': 'header', 'answer': 'content' });
-    this.activeFaq = state.activeFaq;
-  }
-
-  _renameKeys(obj, newKeys) {
+  _renameKeys(obj: any, newKeys: any) {
     const keyValues = Object.keys(obj).map(key => {
       const newKey = newKeys[key] || key;
       return { [newKey]: obj[key] };
@@ -80,9 +26,8 @@ export class ViewFaq {
   }
 
   render() {
-    if (!this.allFaqs) return;
-
     return ([
+      <stencil-route-title title="FAQs" />,
       <h2 class="rula-view__heading">Frequently asked questions</h2>,
       <div id="container" class="rula-view-faq__container" role="list">
         <rula-accordion>

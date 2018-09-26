@@ -1,14 +1,17 @@
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import {
+  Component,
+  Element,
+  Event,
+  EventEmitter,
+  Listen,
+  Method,
+  Prop,
+  State,
+  Watch,
+} from '@stencil/core';
 
-import {
-  updateActiveElement,
-} from '../../actions/map-actions';
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
-import {
-  LazyStore,
-  MapElementDetail,
-} from '../../interface';
-import { mapReducer } from '../../reducers/map-reducer';
+import { MapElement, MapElementDetail } from '../../interface';
 
 @Component({
   tag: 'rula-detail-panel',
@@ -22,73 +25,119 @@ export class DetailPanel {
   /**
    * The first tabbable child element of this detail panel.
    */
-  private firstTabStop: HTMLElement;
+  private firstTabStop?: HTMLElement;
 
   /**
    * The last tabbable child element of this detail panel.
    */
-  private lastTabStop: HTMLElement;
+  private lastTabStop?: HTMLElement;
 
   /**
    * The element that has focus when this detail panel is opened.
    */
-  private oldTabStop: HTMLElement;
+  private oldTabStop?: HTMLElement;
 
   /**
    * Callback function used to unsubscribe from the Redux store.
    */
-  private storeUnsubscribe: Function;
+  // private storeUnsubscribe!: Function;
 
   /**
    * Root element of this component.
    */
-  @Element() root: HTMLStencilElement;
+  @Element() root!: HTMLStencilElement;
 
   /**
    * Flag indicating if an animation is taking place.
    */
-  @State() animated = false;
+  @State() isAnimating = false;
+
+  /**
+   * The list of ElementDetails to be displayed.
+   */
+  // @State() details: MapElementDetail[] = [];
 
   /**
    * The list of ElementDetails to be displayed.
    */
   @State() details: MapElementDetail[] = [];
+  @Watch('details')
+  onDetailsChanged() {
+    this.root.addEventListener('transitionend', this.handleTransitionEnd);
+    this.isAnimating = true;
+    this.isOpen = true;
+    this.setFocusTrap();
+
+    if (this.firstTabStop) {
+      this.firstTabStop.focus();
+    }
+  }
+
+  @Prop() activeElement?: MapElement;
+  @Watch('activeElement')
+  onActiveElementChanged() {
+    if (this.activeElement && this.activeElement.details) {
+      this.details = [ ...Object.values(this.activeElement.details) ];
+      this.root.addEventListener('transitionend', this.handleTransitionEnd);
+      this.isAnimating = true;
+      this.isOpen = true;
+      this.setFocusTrap();
+
+      if (this.firstTabStop) {
+        this.firstTabStop.focus();
+      }
+    } else {
+      this.root.addEventListener('transitionend', this.handleTransitionEnd);
+      this.isAnimating = true;
+      this.isOpen = false;
+
+      if (this.oldTabStop) {
+        this.oldTabStop.focus();
+      }
+    }
+  }
 
   /**
    * The global Redux store.
    */
-  @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
+  // @Prop({ context: 'store' }) store!: Store;
 
   /**
    * A flag indicating if this detail panel is open.
    */
-  @Prop({ mutable: true }) open: boolean;
+  @State() isOpen!: boolean;
+
+  @Event() detailPanelClose!: EventEmitter;
 
   async componentWillLoad() {
-    this.lazyStore.addReducers({ mapReducer });
-    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
-      this.stateChanged(this.lazyStore.getState().map)
-    );
+    // this.lazyStore.addReducers({ mapReducer });
+    // this.storeUnsubscribe = this.lazyStore.subscribe(() =>
+    //   this.stateChanged(this.lazyStore.getState().mapReducer)
+    // );
   }
 
-  componentDidUnload() {
-    this.storeUnsubscribe();
-  }
+  // componentDidUnload() {
+    // this.storeUnsubscribe();
+  // }
 
   @Listen('keydown.tab')
   handleTab(evt: KeyboardEvent) {
-    const TAB_KEYCODE = 9;
+    const TAB_KEYCODE = '9';
 
-    if (this.open && evt.keyCode === TAB_KEYCODE) {
+    if (this.isOpen && evt.key === TAB_KEYCODE) {
       if (evt.shiftKey) {
         if (this.firstTabStop && evt.target === this.firstTabStop) {
           evt.preventDefault();
-          this.lastTabStop.focus();
+          if (this.lastTabStop) {
+            this.lastTabStop.focus();
+          }
         }
       } else {
         if (this.lastTabStop && evt.target === this.lastTabStop) {
           evt.preventDefault();
-          this.firstTabStop.focus();
+          if (this.firstTabStop) {
+            this.firstTabStop.focus();
+          }
         }
       }
     }
@@ -109,29 +158,60 @@ export class DetailPanel {
     this.oldTabStop = document.activeElement as HTMLElement;
   }
 
-  stateChanged(state) {
-    if (state.activeElement && state.activeElement.details) {
-      this.details = Object.values(state.activeElement.details);
-      this.root.addEventListener('transitionend', this.handleTransitionEnd);
-      this.animated = true;
-      this.open = true;
-      this.setFocusTrap();
+  /**
+   * Show the DetailPanel.
+   */
+  @Method()
+  showPanel() {
+    this.root.addEventListener('transitionend', this.handleTransitionEnd);
+    this.isAnimating = true;
+    this.isOpen = true;
+    this.setFocusTrap();
 
+    if (this.firstTabStop) {
       this.firstTabStop.focus();
-    } else {
-      this.root.addEventListener('transitionend', this.handleTransitionEnd);
-      this.animated = true;
-      this.open = false;
-
-      if (this.oldTabStop) {
-        this.oldTabStop.focus();
-      }
     }
   }
 
-  handleTransitionEnd(evt) {
+  /**
+   * Hide the DetailPanel.
+   */
+  @Method()
+  hidePanel() {
+    this.root.addEventListener('transitionend', this.handleTransitionEnd);
+    this.isAnimating = true;
+    this.isOpen = false;
+
+    if (this.oldTabStop) {
+      this.oldTabStop.focus();
+    }
+  }
+
+  // stateChanged(state: any) {
+  //   if (state.activeElement && state.activeElement.details) {
+  //     this.details = Object.values(state.activeElement.details);
+  //     this.root.addEventListener('transitionend', this.handleTransitionEnd);
+  //     this.isAnimating = true;
+  //     this.open = true;
+  //     this.setFocusTrap();
+
+  //     if (this.firstTabStop) {
+  //       this.firstTabStop.focus();
+  //     }
+  //   } else {
+  //     this.root.addEventListener('transitionend', this.handleTransitionEnd);
+  //     this.isAnimating = true;
+  //     this.open = false;
+
+  //     if (this.oldTabStop) {
+  //       this.oldTabStop.focus();
+  //     }
+  //   }
+  // }
+
+  handleTransitionEnd(evt: any) {
     if (this.root === evt.target) {
-      this.animated = false;
+      this.isAnimating = false;
       this.root.removeEventListener('transitionend', this.handleTransitionEnd);
     }
   }
@@ -139,8 +219,8 @@ export class DetailPanel {
   hostData() {
     return {
       class: {
-        'rula-detail-panel--open': this.open,
-        'rula-detail-panel--animated': this.animated,
+        'rula-detail-panel--open': this.isOpen,
+        'rula-detail-panel--animated': this.isAnimating,
       },
     };
   }
@@ -159,7 +239,7 @@ export class DetailPanel {
           </span>
           <button
               class="material-icons rula-detail-panel__close"
-              onClick={_ => {this.lazyStore.dispatch(updateActiveElement(undefined)); }}
+              onClick={_ => { this.isOpen = false; this.detailPanelClose.emit(); }}
               aria-label="Close detail panel.">
             close
           </button>
@@ -169,16 +249,6 @@ export class DetailPanel {
             <div class="rula-detail-panel__subtitle mdc-typography--subtitle2">Description</div>
             {detail && detail.description || ''}
           </div>
-          {/* <div class="rula-detail-panel__section">
-            <button
-                class="mdc-button rula-detail-panel__action"
-                aria-label={`Get directions to ${detail.code}`}>
-                <i class="material-icons mdc-button__icon" aria-hidden="true">
-                  directions
-                </i>
-              Directions
-            </button>
-          </div> */}
         </div>,
     ]);
   }

@@ -1,4 +1,4 @@
-export function fetchJSON(input: string, init?: any): Promise<any> {
+export function fetchJSON(input: string, init: {} = { method: 'GET', mode: 'cors' }): Promise<any> {
   return fetch(input, init).then(res => {
     if (res.ok) {
       return res.json();
