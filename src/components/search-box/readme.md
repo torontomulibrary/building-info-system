@@ -7,27 +7,19 @@
 
 ## Properties
 
-#### id
-
-string
-
-
-#### searchResults
-
-Array<SearchResult | SearchResultGroup>
+| Property     | Attribute   | Description | Type                  |
+| ------------ | ----------- | ----------- | --------------------- |
+| `id`         | `id`        |             | `string`              |
+| `searchData` | --          |             | `MapElementDetailMap` |
+| `showMenu`   | `show-menu` |             | `boolean`             |
 
 
-## Attributes
+## Events
 
-#### id
-
-string
-
-
-#### search-results
-
-
-
+| Event            | Description |
+| ---------------- | ----------- |
+| `iconClick`      |             |
+| `resultSelected` |             |
 
 
 ----------------------------------------------

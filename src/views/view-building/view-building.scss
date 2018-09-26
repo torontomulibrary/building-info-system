@@ -41,7 +41,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: linear-gradient(to top, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.1));
+    background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.95) 5%, rgba(255, 255, 255, 0.1));
   }
 
   &__header-content {
@@ -89,14 +89,26 @@
       @include mdc-rtl-reflexive-box(margin, right, 0);
     }
   }
-}
 
-.rula-building {
-  &__title {
-    @include mdc-typography(headline4);
-  }
+  &--building {
+    .rula-card {
+      &__title {
+        @include mdc-typography(headline4);
+      }
 
-  &__description {
-    @include mdc-typography(body1);
+      &__description {
+        @include mdc-typography(body1);
+
+        width: 80%;
+        float: left;
+      }
+
+      &__expand-icon {
+        width: 20%;
+        width: 64px;
+        height: 64px;
+        float: right;
+      }
+    }
   }
 }

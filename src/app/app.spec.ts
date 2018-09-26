@@ -1,16 +1,17 @@
 import { render } from '@stencil/core/testing';
-import { Main } from './main';
+
+import { App } from './app';
 
 describe('rula-bis', () => {
   it('should build', () => {
-    expect(new Main()).toBeTruthy();
+    expect(new App()).toBeTruthy();
   });
 
   describe('rendering', () => {
     beforeEach(async () => {
       await render({
-        components: [Main],
-        html: '<rula-bis></rula-bis>'
+        components: [App],
+        html: '<rula-bis></rula-bis>',
       });
     });
   });

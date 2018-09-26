@@ -45,61 +45,19 @@
   }
   // stylelint-enable selector-class-pattern
 
-  .mdc-tab-bar-scroller {
+  .mdc-tab-bar {
+    padding: 0 32px;
+  }
+
+  .mdc-tab-scroller {
     display: none;
     pointer-events: none;
     visibility: hidden;
 
     @media (min-width: $grid-medium-bp) {
-      display: flex;
+      display: block;
       pointer-events: all;
       visibility: visible;
     }
   }
 }
-
-// .rula-building-list {
-//   &__content {
-//     display: block;
-//     height: 72px;
-//     overflow-x: hidden;
-//     overflow-y: auto;
-//   }
-// }
-
-// .rula-building-list__content--list {
-//   margin: 0;
-//   padding: 0;
-//   list-style-type: none;
-
-//   &-item {
-//     display: flex;
-//     position: relative;
-//     align-items: center;
-//     justify-content: flex-start;
-//     height: 48px;
-//     padding: 0 16px;
-//     overflow: hidden;
-
-//     &:focus {
-//       outline: none;
-//     }
-//   }
-// }
-
-// .rula-floor-list {
-//   position: fixed;
-//   right: 8px;
-//   bottom: 64px;
-
-//   &__container {
-//     display: flex;
-//     flex-direction: column;
-//   }
-
-//   &__item {
-//     display: flex;
-//     align-content: center;
-//     justify-content: center;
-//   }
-// }

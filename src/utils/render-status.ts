@@ -32,7 +32,7 @@ function runQueue(queue: any[]) {
   }
 }
 
-function callMethod(info) {
+function callMethod(info: any) {
   const context = info[0];
   const callback = info[1];
   const args = info[2];

@@ -1,9 +1,7 @@
-import { Component, Element, Prop, State } from '@stencil/core';
+import { Component, Prop } from '@stencil/core';
 
-import { getEventData } from '../../actions/event-actions';
-import { APP_TITLE, FULL_MONTHS, MONTHS } from '../../global/constants';
-import { CalEvent, LazyStore } from '../../interface';
-import { eventReducer } from '../../reducers/event-reducer';
+import { FULL_MONTHS, MONTHS } from '../../global/constants';
+import { CalEvent } from '../../interface';
 import { formatTime } from '../../utils/event-parser';
 import { sanitize } from '../../utils/sanitize';
 
@@ -17,78 +15,14 @@ import { sanitize } from '../../utils/sanitize';
 
 export class ViewEvent {
   /**
-   * Callback function used to unsubscribe from the Redux store.
-   */
-  private storeUnsubscribe: Function;
-
-  /**
-   * Root element of this component.
-   */
-  @Element() root: HTMLElement;
-
-  /**
-   * The currently active Event.
-   */
-  @State() activeEvent: CalEvent;
-
-  /**
    * An array of all events.
    */
-  @State() allEvents: CalEvent[];
-
-  /**
-   * The global Redux store.
-   */
-  @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
-
-  /**
-   * The URL from which to load calendar events (ical file).
-   */
-  @Prop() icalUrl: string;
-
-  /**
-   * Lifecycle function called when the component is about to load and has not
-   * yet rendered.
-   */
-  componentWillLoad() {
-    // Add in the `map` recuder to the Store.
-    this.lazyStore.addReducers({ eventReducer });
-    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
-      this.stateChanged(this.lazyStore.getState().event)
-    );
-
-    // Load Map data.
-    if (this.icalUrl) {
-      this.lazyStore.dispatch(getEventData(this.icalUrl));
-    } else {
-      // Fail preloading with 'Unable to load map data!'
-    }
-
-    // Set window title.
-    document.title = `Events | ${APP_TITLE}`;
-  }
-
-  /**
-   * Lifecycle function called when the component has unloaded and will be
-   * destroyed.
-   */
-  componentDidUnload() {
-    this.storeUnsubscribe();
-    document.title = APP_TITLE;
-  }
-
-  /**
-   * Handle when the Redux state changes.
-   *
-   * @param state The new Redux state
-   */
-  stateChanged(state) {
-    this.allEvents = state.allEvents;
-  }
+  @Prop() allEvents!: CalEvent[];
 
   /**
    * Generates a string of text that describes an event usable for the
-   * `aria-label` attribute.
+   * `aria-label` attribute. This takes the form:
+   * `title + date + time + [location] + description`
    *
    * @param event The event to create a label from
    */
@@ -110,6 +44,10 @@ export class ViewEvent {
    * @param forAria A flag indicating if the date will be used in an aria label.
    */
   eventDate(event: CalEvent, forAria = false) {
+    if (!event.startTime) {
+      return;
+    }
+
     const sM = event.startTime.getMonth();
     const sD = event.startTime.getDate();
     const c = new Date();
@@ -136,10 +74,16 @@ export class ViewEvent {
   }
 
   /**
+   * Calculate the duration of a given event and format it as a readable string
+   * e.g. `10:00AM to 12:30 PM`.
    *
    * @param event The event
    */
   eventDuration(event: CalEvent) {
+    if (!event.startTime) {
+      return '';
+    }
+
     const s = [
       formatTime(event.startTime),
       (event.endTime ? ' to ' + formatTime(event.endTime) : ''),
@@ -153,7 +97,7 @@ export class ViewEvent {
    *
    * @param num The number to get the suffix for.
    */
-  ordinalSuffix(num) {
+  ordinalSuffix(num: number) {
     const j = num % 10;
     const k = num % 100;
     if (j === 1 && k !== 11) { return num + 'st'; }
@@ -173,10 +117,11 @@ export class ViewEvent {
     }
 
     return ([
+      <stencil-route-title title="Events" />,
       <h2 class="rula-view__heading">Upcoming events</h2>,
       <div class="rula-view__container mdc-layout-grid">
         <div class="mdc-layout-grid__inner" role="list">
-          {this.allEvents.map((event, index) =>
+          {this.allEvents.map((event: CalEvent, index: number) =>
             <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
                 data-fade-delay={(index + 1) * 20} fade-in
                 aria-label={this.eventLabel(event)}>
@@ -194,7 +139,7 @@ export class ViewEvent {
               </div>
               <div class="rula-event__actions">
                 <button class="mdc-button rula-event__action"
-                    aria-label={`Get directions to ${event.location}.`}>
+                    aria-label={`Find ${event.location} on the map.`}>
                   Find on map
                 </button>
               </div>

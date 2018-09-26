@@ -1,4 +1,4 @@
-import { MDCTemporaryDrawer } from '@material/drawer';
+import { MDCDrawer } from '@material/drawer';
 import { Component, Element, Event, EventEmitter, Listen, Prop, Watch } from '@stencil/core';
 
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
@@ -7,23 +7,24 @@ import { FOCUSABLE_ELEMENTS } from '../../global/constants';
   tag: 'rula-drawer',
   styleUrl: 'drawer.scss',
   host: {
-    theme: 'mdc-drawer mdc-drawer--temporary',
+    theme: '',
+    role: 'aside',
   },
 })
 
 export class RulaDrawer {
 
-  private drawer: MDCTemporaryDrawer;
+  private drawer!: MDCDrawer;
 
   /**
    * The first tabbable child element of this drawer.
    */
-  private firstTabStop: HTMLElement;
+  private firstTabStop?: HTMLElement;
 
   /**
    * The last tabbable child element of this drawer.
    */
-  private lastTabStop: HTMLElement;
+  private lastTabStop?: HTMLElement;
 
   /**
    * Flag indicating if a focus trap should be used to prevent the user from
@@ -34,17 +35,17 @@ export class RulaDrawer {
   /**
    * The element that had focus when this drawer was opened.
    */
-  private oldTabStop: HTMLElement;
+  private oldTabStop!: HTMLElement;
 
   /**
    * Root element of this component.
    */
-  @Element() root: HTMLElement;
+  @Element() root!: HTMLElement;
 
   /**
    * Flag indicating if the drawer is open.
    */
-  @Prop() open: boolean;
+  @Prop() open!: boolean;
   @Watch('open')
   openDrawer() {
     this.drawer.open = this.open;
@@ -53,16 +54,16 @@ export class RulaDrawer {
   /**
    * An event emitted when this drawer closes.
    */
-  @Event() drawerClose: EventEmitter;
+  @Event() drawerClose!: EventEmitter;
 
   componentDidLoad() {
-    this.drawer = new MDCTemporaryDrawer(this.root);
-    this.drawer.listen('MDCTemporaryDrawer:close', () => {
+    this.drawer = MDCDrawer.attachTo(this.root.querySelector('.mdc-drawer'));
+    this.drawer.listen('MDCDrawer:closed', () => {
       this.drawerClose.emit();
       this.oldTabStop.focus();
     });
 
-    this.drawer.listen('MDCTemporaryDrawer:open', () => {
+    this.drawer.listen('MDCDrawer:opened', () => {
       if (!this.noFocusTrap) {
         this.setFocusTrap();
       }
@@ -70,7 +71,7 @@ export class RulaDrawer {
 
     const links = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
     Object.keys(links).map(key => {
-      links[key].addEventListener('click', () => {
+      links[Number(key)].addEventListener('click', () => {
         this.drawer.open = false;
       });
     });
@@ -78,17 +79,21 @@ export class RulaDrawer {
 
   @Listen('keydown.tab')
   handleTab(ev: KeyboardEvent) {
-    const TAB_KEYCODE = 9;
-    if (this.drawer.open && ev.keyCode === TAB_KEYCODE) {
+    const TAB_KEYCODE = '9';
+    if (this.drawer.open && ev.key === TAB_KEYCODE) {
       if (ev.shiftKey) {
         if (this.firstTabStop && ev.target === this.firstTabStop) {
           ev.preventDefault();
-          this.lastTabStop.focus();
+          if (this.lastTabStop) {
+            this.lastTabStop.focus();
+          }
         }
       } else {
         if (this.lastTabStop && ev.target === this.lastTabStop) {
           ev.preventDefault();
-          this.firstTabStop.focus();
+          if (this.firstTabStop) {
+            this.firstTabStop.focus();
+          }
         }
       }
     }
@@ -110,10 +115,13 @@ export class RulaDrawer {
   }
 
   render() {
-    return (
-      <nav class="mdc-drawer__drawer">
-        <slot />
-      </nav>
-    );
+    return ([
+      <div class="mdc-drawer mdc-drawer--modal">
+        <aside class="mdc-drawer__drawer" role="navigation">
+          <slot />
+        </aside>
+      </div>,
+      <div class="mdc-drawer-scrim"></div>,
+    ]);
   }
 }

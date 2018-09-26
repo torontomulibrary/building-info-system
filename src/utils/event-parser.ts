@@ -22,7 +22,7 @@ export function formatTime(date: Date): string {
 }
 
 export class EventParser {
-  private events: CalEvent[];
+  private events!: CalEvent[];
   private listeners: Function[];
 
   /**
@@ -92,7 +92,7 @@ export class EventParser {
    *
    * @param evt an ical.js event to process.
    */
-  onICalEvent(evt) {
+  onICalEvent(evt: any) {
     const comp = evt['component'];
 
     let newEvent: CalEvent;
@@ -122,8 +122,11 @@ export class EventParser {
         end = start.clone();
         end.addDuration(duration);
 
-        if (end.toJSDate() < cutoff) { continue; }
-        newEvent = {};
+        if (end.toJSDate() < cutoff) {
+          start = recur.next();
+          continue;
+        }
+        newEvent = {} as CalEvent;
         newEvent.startTime = new Date(start.toJSDate());
         newEvent.endTime = new Date(end.toJSDate());
         newEvent.title = comp.getFirstPropertyValue('summary');
@@ -132,8 +135,11 @@ export class EventParser {
         // isolate it as the event category (stakeholder)  Remaining description
         // is used as-is.
         result = regEx.exec(comp.getFirstPropertyValue('description'));
-        newEvent.group = result[2];
-        newEvent.description = result[3];
+
+        if (result) {
+          newEvent.group = result[2];
+          newEvent.description = result[3];
+        }
 
         newEvent.location = comp.getFirstPropertyValue('location');
 
@@ -149,7 +155,7 @@ export class EventParser {
         return;
       }
 
-      newEvent = {};
+      newEvent = {} as CalEvent;
       newEvent.startTime =
         new Date(comp.getFirstPropertyValue('dtstart').toJSDate());
       newEvent.endTime =
@@ -161,8 +167,10 @@ export class EventParser {
       // is used as-is.
       result = regEx.exec(comp.getFirstPropertyValue('description'));
 
-      newEvent.group = result[2];
-      newEvent.description = result[3];
+      if (result) {
+        newEvent.group = result[2];
+        newEvent.description = result[3];
+      }
 
       newEvent.location = comp.getFirstPropertyValue('location');
 
@@ -187,9 +195,9 @@ export class EventParser {
    * @returns `-1` if `a < b`, `1` if `a > b` and `0` otherwise.
    */
   compareEventTimes(a: CalEvent, b: CalEvent) {
-    if (a.endTime < b.endTime) {
+    if (a.endTime && b.endTime && a.endTime < b.endTime) {
       return -1;
-    } else if (a.endTime > b.endTime) {
+    } else if (a.endTime && b.endTime && a.endTime > b.endTime) {
       return 1;
     } else {
       return 0;
@@ -215,14 +223,12 @@ export class EventParser {
    * @returns A shallow copy of all the events with an end time after the
    * current time.
    */
-  getFutureEvents(num?: number): CalEvent[] {
+  getFutureEvents(num: number = Number.MAX_SAFE_INTEGER): CalEvent[] {
     const events: CalEvent[] = [];
     const now = new Date();
 
-    num = num || Number.MAX_SAFE_INTEGER;
-
     this.events.map(event => {
-      if (event.endTime >= now && events.length < num) {
+      if (event.endTime && event.endTime >= now && events.length < num) {
         events.push(event);
       }
     });

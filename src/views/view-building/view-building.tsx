@@ -1,9 +1,9 @@
-import { Component, Element, Prop, State } from '@stencil/core';
+import { Component, Prop } from '@stencil/core';
 
-import { getBuildingData } from '../../actions/building-actions';
-import { APP_TITLE } from '../../global/constants';
-import { Building, BuildingMap, LazyStore } from '../../interface';
-import { buildingReducer } from '../../reducers/building-reducer';
+import {
+  Building,
+  BuildingMap,
+} from '../../interface';
 
 @Component({
   tag: 'view-building',
@@ -15,87 +15,63 @@ import { buildingReducer } from '../../reducers/building-reducer';
 
 export class ViewBuilding {
   /**
-   * Callback function used to unsubscribe from the Redux store.
-   */
-  private storeUnsubscribe: Function;
-
-  /**
-   * Root element of this component.
-   */
-  @Element() root: HTMLElement;
-
-  /**
    * A list of all the Buildings.
    */
-  @State() allBuildings: BuildingMap;
-
-  /**
-   * The global Redux store.
-   */
-  @Prop({ context: 'lazyStore' }) lazyStore: LazyStore;
-
-  /**
-   * A URL used to access when loading data.
-   */
-  @Prop() apiUrl: string;
-
-  async componentWillLoad() {
-    // Add in the `map` recuder to the Store.
-    this.lazyStore.addReducers({ buildingReducer });
-    this.storeUnsubscribe = this.lazyStore.subscribe(() =>
-      this.stateChanged(this.lazyStore.getState().building)
-    );
-
-    // Load Map data.
-    if (this.apiUrl) {
-      this.lazyStore.dispatch(getBuildingData(this.apiUrl));
-    } else {
-      // Fail preloading with 'Unable to load map data!'
-    }
-
-    document.title = `Buildings | ${APP_TITLE}`;
-  }
-
-  componentDidUnload() {
-    this.storeUnsubscribe();
-    document.title = APP_TITLE;
-  }
-
-  /**
-   * This handles when the state changes.
-   *
-   * @param state A copy of the new Redux state.
-   */
-  stateChanged(state) {
-    this.allBuildings = state.allBuildings;
-  }
+  @Prop() allBuildings!: BuildingMap;
 
   render() {
     if (!this.allBuildings) return;
 
     return ([
+      <stencil-route-title title="Buildings" />,
       <h2 class="rula-view__heading">Building Information</h2>,
       <div class="rula-view__container mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
           {Object.values(this.allBuildings).map((building: Building) =>
-            <div class="rula-card mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop">
+            <div class="rula-card rula-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop">
               <div class="rula-card__header rula-card__header--16-9"
                 style={{ backgroundImage: `url("${building.image}")` }}>
                 <div class="rula-card__text-protection"></div>
                 <div class="rula-card__header-content">
-                  <div class="rula-building__title">{building.name}</div>
+                  <div class="rula-card__title">{building.name}</div>
                 </div>
               </div>
               <div class="rula-card__content">
-                <div class="rula-building__description">{building.description}</div>
+                <div class="rula-card__description">{building.description}</div>
+                <div class="rula-card__expand-icon mdc-button">
+                  <i class="material-icons">expand_more</i>
+                </div>
               </div>
               <div class="rula-card__content-expandable">
-
+                <div class="rula-floor-list">
+                  <div class="rula-floor-list__item">
+                    <div class="rula-floor-list__header">
+                      <div class="rula-floor-list__image"></div>
+                      <div class="rula-floor-list__title">8th Floor</div>
+                      <div class="rula-floor-list__subtitle">SLC</div>
+                      <div class="rula-floor-list__loc-link mdc-button">
+                        <i class="material-icons">
+                          location_on
+                        </i>
+                      </div>
+                    </div>
+                    <div class="rula-floor-list__content">
+                      <div>The top floor of the SLC is dedicated to group and individual study with open-access carrels and twenty bookable study rooms.</div>
+                      <h3>Features</h3>
+                      <ul>
+                        <li>Collaborative &amp; Group Work Rooms</li>
+                        <li>Collaborative Work Space</li>
+                        <li>Individual Study Space</li>
+                        <li>Open Study Space</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="rula-card__actions">
-                <button class="mdc-button rula-event__action">
+                <a href={`/map/${building.code}`} role="button" class="mdc-button rula-event__action">
                   Map it!
-                </button>
+                </a>
               </div>
             </div>
           )}
