@@ -1,4 +1,4 @@
-import { MDCDrawer } from '@material/drawer';
+import { MDCDrawer } from '@material/drawer/index';
 import { Component, Element, Event, EventEmitter, Listen, Prop, Watch } from '@stencil/core';
 
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
@@ -6,10 +6,6 @@ import { FOCUSABLE_ELEMENTS } from '../../global/constants';
 @Component({
   tag: 'rula-drawer',
   styleUrl: 'drawer.scss',
-  host: {
-    theme: '',
-    role: 'aside',
-  },
 })
 
 export class RulaDrawer {
@@ -112,6 +108,12 @@ export class RulaDrawer {
     }
 
     this.oldTabStop = document.activeElement as HTMLElement;
+  }
+
+  hostData() {
+    return {
+      role: 'aisde',
+    };
   }
 
   render() {

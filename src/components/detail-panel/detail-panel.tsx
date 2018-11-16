@@ -16,9 +16,6 @@ import { MapElement, MapElementDetail } from '../../interface';
 @Component({
   tag: 'rula-detail-panel',
   styleUrl: 'detail-panel.scss',
-  host: {
-    theme: 'rula-detail-panel',
-  },
 })
 
 export class DetailPanel {
@@ -219,6 +216,7 @@ export class DetailPanel {
   hostData() {
     return {
       class: {
+        'rula-detail-panel': true,
         'rula-detail-panel--open': this.isOpen,
         'rula-detail-panel--animated': this.isAnimating,
       },

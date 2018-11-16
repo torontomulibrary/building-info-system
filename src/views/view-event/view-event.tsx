@@ -1,23 +1,37 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 
 import { FULL_MONTHS, MONTHS } from '../../global/constants';
-import { CalEvent } from '../../interface';
-import { formatTime } from '../../utils/event-parser';
+import { AppData, CalEvent } from '../../interface';
+import { EventParser, formatTime } from '../../utils/event-parser';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
   tag: 'view-event',
   styleUrl: 'view-event.scss',
-  host: {
-    theme: 'rula-view rula-view--events',
-  },
 })
 
 export class ViewEvent {
   /**
    * An array of all events.
    */
-  @Prop() allEvents!: CalEvent[];
+  // @Prop() allEvents!: CalEvent[];
+
+  @State() loaded = false;
+
+  @Prop({ mutable: true }) appData!: AppData;
+
+  componentWillLoad() {
+    // Load events.
+    const parser: EventParser = new EventParser();
+
+    parser.subscribe(() => {
+      this.appData = { ...this.appData, events: parser.getFutureEvents(52) };
+      // this.eventsLoaded = true;
+      this.loaded = true;
+    });
+
+    parser.loadIcal(this.appData.icalUrl);
+  }
 
   /**
    * Generates a string of text that describes an event usable for the
@@ -106,47 +120,57 @@ export class ViewEvent {
     return num + 'th';
   }
 
+  hostData() {
+    return {
+      class: {
+        'rula-view': true,
+        'rula-view--events': true,
+        'rula-view--loaded': this.loaded,
+      },
+    };
+  }
+
   /**
    * Component render function.
    */
   render() {
-    if (!this.allEvents) {
+    if (this.appData && this.appData.events) {
+      return ([
+        <stencil-route-title title="Events" />,
+        <h2 class="rula-view__heading">Upcoming events</h2>,
+        <div class="rula-view__container mdc-layout-grid">
+          <div class="mdc-layout-grid__inner" role="list">
+            {this.appData.events.map((event: CalEvent, index: number) =>
+              <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
+                  data-fade-delay={(index + 1) * 20} fade-in
+                  aria-label={this.eventLabel(event)}>
+                <div class="rula-event__header rula-event__header--16-9">
+                <div class="rula-event__text-protection"></div>
+                  <div class="rula-event__header-content">
+                    <div class="rula-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
+                    <div class="rula-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
+                    <div class="rula-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
+                  </div>
+                </div>
+                <div class="rula-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
+                  <div class="rula-event__title mdc-typography--headline5">{event.title}</div>
+                  <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
+                </div>
+                <div class="rula-event__actions">
+                  <button class="mdc-button rula-event__action"
+                      aria-label={`Find ${event.location} on the map.`}>
+                    Find on map
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>,
+      ]);
+    } else {
       return (
         <h2 class="rula-view__heading mdc-typography--headline2">No events currently available.</h2>
       );
     }
-
-    return ([
-      <stencil-route-title title="Events" />,
-      <h2 class="rula-view__heading">Upcoming events</h2>,
-      <div class="rula-view__container mdc-layout-grid">
-        <div class="mdc-layout-grid__inner" role="list">
-          {this.allEvents.map((event: CalEvent, index: number) =>
-            <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
-                data-fade-delay={(index + 1) * 20} fade-in
-                aria-label={this.eventLabel(event)}>
-              <div class="rula-event__header rula-event__header--16-9">
-              <div class="rula-event__text-protection"></div>
-                <div class="rula-event__header-content">
-                  <div class="rula-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
-                  <div class="rula-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
-                  <div class="rula-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
-                </div>
-              </div>
-              <div class="rula-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
-                <div class="rula-event__title mdc-typography--headline5">{event.title}</div>
-                <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
-              </div>
-              <div class="rula-event__actions">
-                <button class="mdc-button rula-event__action"
-                    aria-label={`Find ${event.location} on the map.`}>
-                  Find on map
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>,
-    ]);
   }
 }

@@ -1,13 +1,14 @@
 @import "rula-view";
+@import "@material/button/mdc-button";
 @import "@material/card/mixins";
 @import "@material/elevation/mixins";
-@import "@material/rtl/mixins";
-@import "@material/typography/mixins";
-@import "@material/button/mdc-button";
 @import "@material/layout-grid/mdc-layout-grid";
+@import "@material/rtl/mixins";
+@import "@material/shape/mixins";
+@import "@material/typography/mixins";
 
 .rula-card {
-  @include mdc-card-corner-radius(2px);
+  @include mdc-shape-radius(2px);
   @include mdc-elevation(2);
   @include mdc-card-container-layout_;
 

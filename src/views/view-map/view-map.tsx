@@ -1,25 +1,35 @@
 import '@rula/web-components';
-import { Component, Element, Listen, Method, Prop, State, Watch } from '@stencil/core';
+import {
+  Component,
+  Element,
+  Event,
+  EventEmitter,
+  Listen,
+  Method,
+  Prop,
+  State,
+  Watch,
+} from '@stencil/core';
 import { MatchResults } from '@stencil/router';
 
 import {
+  AppData,
+  BookDetails,
   Building,
+  BuildingMap,
   Floor,
   FloorMap,
-  MapData,
   MapElement,
   MapElementDetail,
+  MapElementDetailMap,
   MapElementMap,
 } from '../../interface';
 
-import { fetchIMG } from '../../utils/fetch';
+import { fetchIMG, fetchJSON } from '../../utils/fetch';
 
 @Component({
   tag: 'view-map',
   styleUrl: 'view-map.scss',
-  host: {
-    theme: 'rula-view rula-view--map',
-  },
 })
 
 export class ViewMap {
@@ -33,10 +43,14 @@ export class ViewMap {
    */
   private paramMatches: RegExpExecArray | null | undefined;
 
+  @Event() getBookLocations!: EventEmitter;
+
   /**
    * Root element of this component.
    */
   @Element() root!: HTMLStencilElement;
+
+  @State() loaded = false;
 
   /**
    * The currently active Building.
@@ -63,19 +77,32 @@ export class ViewMap {
    */
   @State() activeFloors!: FloorMap;
 
-  /**
-   * A list of all the Buildings.
-   */
-  @Prop() data!: MapData;
-  @Watch('data')
-  _onDataChanged() {
-    this.parseData();
+  @Prop() bookDetails?: BookDetails;
+  @Watch('bookDetails')
+  onBookDetailsChange() {
+    console.log(this.bookDetails);
   }
+
+  /**
+   * An object containing all the Elements that might get mapped.
+   */
+  // @Prop() allElements!: MapElementMap;
+  // @Watch('allElements')
+  // onAllElementsChanged() {
+  //   this._setActiveElements();
+  // }
+
+  /**
+   * An object containing all the Detail information that might get mapped.
+   */
+  // @Prop() allDetails!: MapElementDetailMap;
 
   /**
    * A list of all the Elements currently displayed on the Map.
    */
   @State() activeElements!: MapElementMap;
+
+  @Prop({ mutable: true }) appData!: AppData;
 
   /**
    * A string matched from the URL that should be used to pre-select a specific
@@ -86,12 +113,14 @@ export class ViewMap {
   /**
    * A URL used to access when loading data.
    */
-  @Prop() apiUrl!: string;
+  // @Prop() apiUrl!: string;
 
   /**
    * The results coming from `stencil-router` that contain any URL matches.
    */
   @Prop() match!: MatchResults;
+
+  @Event() dataLoaded!: EventEmitter;
 
   componentWillLoad() {
     // Check the URL value to see if any Building, Floor and or Location was
@@ -99,95 +128,62 @@ export class ViewMap {
     // Where BLD is the three letter building code, FLR is the floor number,
     // and RM is the 'room number'.  The `room number` is actually the full
     // location code (e.g. SLC508)
-    if (this.match && this.match.params && this.match.params.query) {
-      const query = this.match.params.query;
-      const re = /([A-Z]{3})(\d{2}(?=.{2,}|$)|\d{1})?.*/;
-      this.paramMatches = re.exec(query);
-    } else {
-      this.paramMatches = undefined;
-    }
-  }
+    if (this.match && this.match.params) {
+      if (this.match.params.roomNo) {
+        const query = this.match.params.roomNo;
+        const re = /([A-Z]{3})(\d{2}(?=.{2,}|$)|\d{1})?.*/;
+        this.paramMatches = re.exec(query);
+      } else {
+        this.paramMatches = undefined;
+      }
 
-  async parseData() {
-    if (this.data !== undefined) {
-      // Process buildings
-      const bldCode = this.paramMatches && this.paramMatches[1];
-      this.activeBuilding = bldCode ?
-        // If a building code was provided, select that as the first building.
-        Object.values(this.data.buildings).filter(b => b.code === bldCode)[0] :
-        // Otherwise, just select the first building.
-        Object.values(this.data.buildings)[0];
-
-      // Add references to the floors of each building.
-      Object.values(this.data.buildings).forEach((b: Building) => {
-        b.floors = Object.values(this.data.floors || {}).reduce((ob: FloorMap, f: Floor) => {
-          if (f.buildingId === b.id) ob[f.id] = f;
-          return ob;
-        }, {} as Floor);
-      });
-
-      // Now that the floors are assigned to each building, set the active floors.
-      const floorNum = this.paramMatches && Number(this.paramMatches[2]);
-      this._setActiveFloors(floorNum || undefined);
-
-      // Get the first floor by looking at the first floor of the current (first)
-      // building.
-      // let firstFloor: Floor;
-      this.activeFloor = typeof floorNum === 'number' ?
-        // If a floor number was provided, select it.
-        Object.values(this.activeFloors).filter(f => f.number === floorNum)[0] :
-        // Use the first floor as the one displayed.
-        Object.values(this.activeFloors)[0];
-
-      Object.values(this.data.floors).forEach((f: Floor) => {
-        f.elements = Object.values(this.data.elements || {}).reduce((ob, e) => {
-          if (e.floorId === f.id) ob[e.id] = e;
-          return ob;
-        }, {} as MapElement);
-      });
-
-      Object.values(this.data.elements).forEach(async (e: MapElement) => {
-        e.details = Object.values(this.data.details || {}).reduce((ob, d) => {
-          if (d.elementId === e.id) ob[d.id] = d;
-          return ob;
-        }, {} as MapElementDetail);
-
-        if (e.iconPath && e.iconPath.charAt(0) === 'h') {
-          await fetchIMG(e.iconPath).then(img => {
-            e.iconSrc = img;
-          });
+      if (this.match.params.callNo) {
+        const query = this.match.params.callNo;
+        if (query.charAt(0) === 'b') {
+          // Have a book record number.
+          this.getBookLocations.emit(query);
+        } else {
+          // Invalid record number.
         }
-      });
-
-      this._setActiveElements();
-
-      // Get the floorplan of the first building.  This will be loaded immediately.
-      // Remaining floorplan images will be loaded asynchronously after the fact.
-      await fetchIMG(this.activeFloor.floorplan).then(firstImg => {
-        // Store the src for the loaded blob and set it as the active map.
-        this.activeFloor.floorplan = firstImg;
-        if (typeof firstImg === 'string' && firstImg !== '') {
-          this._setActiveFloorplan(firstImg);
-        }
-
-        Object.values(this.data.floors || {}).forEach((f: Floor) => {
-          // Once the floorplan is loaded, the url will be `blob:http...` so check
-          // if the floorplan starts with the `h` of http.
-          if (f.floorplan && f.floorplan.charAt(0) === 'h') {
-            fetchIMG(f.floorplan).then(img => {
-              // Store the blob source when loaded.
-              f.floorplan = img;
-            });
-          }
-        });
-
-        return firstImg;
-      });
+      }
     }
-  }
 
-  componentDidLoad() {
-    this.parseData();
+    if (this.appData) {
+      const dataPromises: Array<Promise<any>> = [];
+
+      if (!this.appData.buildings) {
+        dataPromises.push(fetchJSON(this.appData.apiUrl + 'buildings').then(
+            (buildings: BuildingMap) => {
+          this.appData = { ...this.appData, buildings };
+        }));
+      }
+
+      if (!this.appData.floors) {
+        // Load floors.
+        dataPromises.push(fetchJSON(this.appData.apiUrl + 'floors').then(
+            (floors: FloorMap) => {
+          this.appData = { ...this.appData, floors };
+        }));
+      }
+
+      if (!this.appData.elements) {
+        // Load elements.
+        dataPromises.push(fetchJSON(this.appData.apiUrl + 'elements').then(
+            (elements: MapElementMap) => {
+          this.appData = { ...this.appData, elements };
+        }));
+      }
+
+      if (!this.appData.details) {
+        // Load details.
+        dataPromises.push(fetchJSON(this.appData.apiUrl + 'details').then(
+            (details: MapElementDetailMap) => {
+          this.appData = { ...this.appData, details };
+        }));
+      }
+
+      Promise.all(dataPromises).then(() => this._parseMapData());
+    }
   }
 
   onElementSelected(detail: any) {
@@ -203,13 +199,16 @@ export class ViewMap {
     // Perform a lookup to see which Element the detail belongs to, which floor
     // the Element is on and which Building the floor is in.
     // Then change the building, floor and element to match.
-    const dt = this.data.details[detailId];
-    const el = this.data.elements[dt.elementId];
-    const fl = this.data.floors[el.floorId];
-    const bl = this.data.buildings[fl.buildingId];
-    this._setActiveBuilding(bl);
-    this._setActiveFloor(fl);
-    this._setActiveElement(el);
+    const dt = this.appData.details && this.appData.details[detailId];
+    const el = dt && this.appData.elements && this.appData.elements[dt.elementId];
+    const fl = el && this.appData.floors && this.appData.floors[el.floorId];
+    const bl = fl && this.appData.buildings && this.appData.buildings[fl.buildingId];
+
+    if (bl && fl && el) {
+      this._setActiveBuilding(bl);
+      this._setActiveFloor(fl);
+      this._setActiveElement(el);
+    }
   }
 
   @Listen('mapNavBuildingChanged')
@@ -220,6 +219,79 @@ export class ViewMap {
   @Listen('mapNavFloorChanged')
   _onMapNavFloorChanged(e: CustomEvent) {
     this._onFloorChanged(e.detail);
+  }
+
+  _parseMapData() {
+    const blds = this.appData.buildings;
+    const flrs = this.appData.floors;
+    const elms = this.appData.elements;
+    const dtls = this.appData.details;
+
+    const dataPromises: Array<Promise<any>> = [];
+
+    if (blds && flrs && elms && dtls) {
+      // Add references to the floors of each building.
+      Object.values(blds).forEach((b: Building) => {
+        b.floors = Object.values(flrs || {}).reduce((ob: FloorMap, f: Floor) => {
+          if (f.buildingId === b.id) ob[f.id] = f;
+          return ob;
+        }, {} as Floor);
+      });
+
+      Object.values(flrs).forEach((f: Floor) => {
+        f.elements = Object.values(elms || {}).reduce((ob, e) => {
+          if (e.floorId === f.id) ob[e.id] = e;
+          return ob;
+        }, {} as MapElement);
+      });
+
+      Object.values(flrs).forEach((f: Floor) => {
+        // Once the floorplan is loaded, the url will be `blob:http...`
+        // so check if the floorplan starts with the `h` of http.
+        if (f.floorplan && f.floorplan.charAt(0) === 'h') {
+          dataPromises.push(fetchIMG(f.floorplan).then(img => {
+            // Store the blob source when loaded.
+            f.floorplan = img;
+          }));
+        }
+      });
+
+      Object.values(elms).forEach((e: MapElement) => {
+        e.details = Object.values(dtls || {}).reduce((ob, d) => {
+          if (d.elementId === e.id) ob[d.id] = d;
+          return ob;
+        }, {} as MapElementDetail);
+
+        if (e.iconPath) {
+          e.iconSrc = [];
+          e.iconPath.forEach((path: string) => {
+            if (path.charAt(0) === 'h') {
+              dataPromises.push(fetchIMG(path).then(img => {
+                e.iconSrc.push(img);
+              }));
+            }
+          });
+        }
+      });
+
+      const bldCode = this.paramMatches && this.paramMatches[1];
+      const bldVals = Object.values(blds);
+      this._setActiveBuilding(bldCode ?
+        // Set `activeBuilding` to the building matching the provided code
+        // or the first building.
+        bldVals.filter(b => b.code === bldCode)[0] : bldVals[0]
+      );
+
+      const floorNum = this.paramMatches &&
+          this.paramMatches[2] !== undefined &&
+          Number(this.paramMatches[2]);
+      this._setActiveFloors(floorNum || undefined);
+
+      Promise.all(dataPromises).then(() => {
+        this.loaded = true;
+        this.dataLoaded.emit(this.appData);
+      });
+    }
   }
 
   /**
@@ -259,11 +331,12 @@ export class ViewMap {
    * will be set as active.
    */
   _setActiveFloors(floorNumber?: number) {
-    if (this.activeBuilding !== undefined) {
+    if (this.activeBuilding !== undefined &&
+        this.activeBuilding.hasOwnProperty('floors')) {
       this.activeFloors = { ...this.activeBuilding.floors };
+      const flrs = Object.values(this.activeFloors);
       this._setActiveFloor(floorNumber === undefined ?
-        Object.values(this.activeFloors)[0] :
-        Object.values(this.activeFloors).filter(f => f.number === floorNumber)[0]);
+        flrs[0] : flrs.filter(f => f.number === floorNumber)[0]);
     }
   }
 
@@ -321,32 +394,45 @@ export class ViewMap {
     }
   }
 
+  hostData() {
+    return {
+      class: {
+        'rula-view': true,
+        'rula-view--map': true,
+        'rula-view--loaded': this.loaded,
+      },
+    };
+  }
+
   render() {
-    const buildings = this.data && this.data.buildings;
+    // const buildings = this.allBuildings;
+    if (this.loaded) {
+      return ([
+        <stencil-route-title pageTitle="Directory" />,
+        <rula-map
+          ref={elm => this.mapEl = elm as HTMLRulaMapElement}
+          class="rula-map"
+          elements={this.activeElements}
+          mapImage={this.activeFloorplan}
+          onElementSelected={e => this.onElementSelected(e.detail)}
+          onElementDeselected={() => this.onElementDeselected()}
+          onMapRendered={() => this.onMapRendered()}>
+        </rula-map>,
 
-    return ([
-      <stencil-route-title title="Directory" />,
-      <rula-map
-        ref={elm => this.mapEl = elm as HTMLRulaMapElement}
-        class="rula-map"
-        elements={this.activeElements}
-        mapImage={this.activeFloorplan}
-        onElementSelected={e => this.onElementSelected(e.detail)}
-        onElementDeselected={() => this.onElementDeselected()}
-        onMapRendered={() => this.onMapRendered()}>
-      </rula-map>,
+        <rula-detail-panel
+          activeElement={this.activeElement}>
+        </rula-detail-panel>,
 
-      <rula-detail-panel
-        activeElement={this.activeElement}>
-      </rula-detail-panel>,
+        <rula-map-nav
+          class="rula-map-nav"
+          activeFloors={this.activeFloors}
+          allBuildings={this.appData.buildings}
+          activeBuilding={this.activeBuilding}
+          activeFloor={this.activeFloor}>
+        </rula-map-nav>,
+      ]);
+    }
 
-      <rula-map-nav
-        class="rula-map-nav"
-        activeFloors={this.activeFloors}
-        allBuildings={buildings}
-        activeBuilding={this.activeBuilding}
-        activeFloor={this.activeFloor}>
-      </rula-map-nav>,
-    ]);
+    return (<div>Loading...</div>);
   }
 }

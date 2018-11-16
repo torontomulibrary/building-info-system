@@ -10,26 +10,48 @@
 
   <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
 
-  <script src="build/rula-bis.js"></script>
-  <script src="assets/ical.js"></script>
+  <script src="/build/rula-bis.js"></script>
+  <script src="/assets/ical.js"></script>
 
   <link rel="apple-touch-icon" href="assets/icon/icon.png">
   <link rel="manifest" href="manifest.json">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="mdc-typography">
-
+  <div class="rula-static-preload">
+    Loading....
+  </div>
   <rula-bis
     app-title="RULA Finder"
-    api-url="http://testnet.library.ryerson.ca/dev/rulapi/api/"
-    ical-url="http://testnet.library.ryerson.ca/dev/rulapi/ical"
-  ></rula-bis>
+    api-url="http://localhost:8080/api/"
+    search-url="http://localhost:8080/search"
+    ical-url="http://testnet.library.ryerson.ca/dev/rulapi/ical">
+  </rula-bis>
 
   <style>
     body {
       margin: 0px;
       padding: 0px;
       font-family: 'Times New Roman', Times, Georgia, serif;
+    }
+
+    rula-bis {
+      transition: opacity 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: opacity;
+      opacity: 0;
+    }
+
+    rula-bis.hydrated {
+      opacity: 1;
+    }
+
+    .rula-static-preload {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: grey;
     }
   </style>
 </body>

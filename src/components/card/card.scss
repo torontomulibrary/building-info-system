@@ -1,0 +1,70 @@
+@import "@material/button/mdc-button";
+@import "@material/card/mdc-card";
+@import "@material/elevation/mixins";
+@import "@material/animation/variables";
+@import "@material/icon-button/mdc-icon-button";
+
+.rula-card {
+  @include mdc-elevation(1);
+
+  display: flex;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 200px;
+  margin: 24px 8px;
+  transition: box-shadow 180ms $mdc-animation-standard-curve-timing-function;
+  will-change: box-shadow;
+
+  &__media-text {
+    @include mdc-typography(headline6);
+
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    padding: 8px 16px;
+  }
+
+  &__media-text-protection,
+  &__media-text {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__content-title {
+    @include mdc-typography(headline6);
+  }
+
+  &__primary {
+    padding: 1rem;
+  }
+
+  &__media-action {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 8px;
+    visibility: hidden;
+  }
+
+  &:hover {
+    @include mdc-elevation(4);
+
+    .rula-card__media-action {
+      display: initial;
+      visibility: visible;
+    }
+  }
+}

@@ -62,8 +62,8 @@ interface Building extends DescribedObject {
 interface MapElement extends DescribedObject {
   details: MapElementDetailMap;
   floorId: number;
-  iconPath: string;
-  iconSrc: string;
+  iconPath: string[];
+  iconSrc: string[];
   points: string;
 }
 
@@ -91,16 +91,51 @@ interface MapElementDetailMap { [keys: number]: MapElementDetail }
 interface MapElementDetailTypeMap { [keys: number]: MapElementDetailType }
 
 interface MapData {
-  buildings: BuildingMap,
-  details: MapElementDetailMap,
-  elements: MapElementMap,
-  floors: FloorMap,
+  buildings?: BuildingMap,
+}
+
+interface SearchHistory {
+  popular: Array<{
+    count: number,
+    id: number,
+    lastUsed: string,
+    value: string
+  }>,
+  recent: Array<{
+    count: number,
+    id: number,
+    lastUsed: string,
+    value: string
+  }>,
+}
+
+interface AppData {
+  buildings?: BuildingMap,
+  details?: MapElementDetailMap,
+  elements?: MapElementMap,
+  events?: CalEvent[],
+  faqs?: FaqMap,
+  floors?: FloorMap,
+  searches?: SearchHistory,
+  apiUrl: string,
+  searchUrl: string,
+  icalUrl: string,
+}
+
+interface BookDetails {
+  availability: string[],
+  locations: string[],
+  callNo: string,
+  title: string,
+  author: string,
+  isOnline: string,
 }
 
 export {
+  AppData,
+  BookDetails,
   Building,
   BuildingMap,
-  // LazyStore,
   CalEvent,
   Faq,
   FaqMap,
@@ -113,6 +148,7 @@ export {
   MapElementDetailMap,
   MapElementDetailType,
   MapElementDetailTypeMap,
+  SearchHistory,
 }
 
 export * from './components/search-box/search-box-interface';

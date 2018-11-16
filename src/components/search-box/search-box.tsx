@@ -19,12 +19,13 @@ import {
 @Component({
   tag: 'rula-search-box',
   styleUrl: 'search-box.scss',
-  host: {
-    theme: 'rula-search',
-  },
 })
 
 export class SearchBox {
+  /**
+   * @emits resultSelected
+   */
+
   private searchElements?: DocumentIndex<number, MapElementDetail>;
   private searchInput?: HTMLInputElement;
   // private allElements!: MapElementMap;
@@ -53,11 +54,13 @@ export class SearchBox {
   @Prop() searchData!: MapElementDetailMap;
   @Watch('searchData')
   _onSearchDataChange() {
-    Object.values(this.searchData).forEach((d: MapElementDetail) => {
-      if (this.searchElements !== undefined) {
-        this.searchElements.add(d.id, d);
-      }
-    });
+    if (this.searchData) {
+      Object.values(this.searchData).forEach((d: MapElementDetail) => {
+        if (this.searchElements !== undefined) {
+          this.searchElements.add(d.id, d);
+        }
+      });
+    }
   }
 
   @Event() iconClick!: EventEmitter;
@@ -209,6 +212,7 @@ export class SearchBox {
     return {
       role: 'search',
       class: {
+        'rula-search': true,
         'rula-search--open': (this.focused),
       },
     };

@@ -11,6 +11,10 @@
   overflow: hidden;
   z-index: 1;
 
+  @include mdc-layout-grid-media-query_(phone) {
+    width: 100%;
+  }
+
   &__input {
     box-sizing: border-box;
     width: 100%;
@@ -28,6 +32,10 @@
 
     &::placeholder {
       color: $mdc-theme-on-primary;
+    }
+
+    @include mdc-layout-grid-media-query_(phone) {
+      padding-right: 0;
     }
   }
 

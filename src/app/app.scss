@@ -1,6 +1,7 @@
 // @import "variables";
 
 //@import "@material/drawer/mdc-drawer";
+@import "@material/animation/variables";
 @import "@material/list/mdc-list";
 @import "@material/select/mdc-select";
 @import "@material/tab-bar/mdc-tab-bar";
@@ -13,16 +14,40 @@
 @import "@material/textfield/icon/mdc-text-field-icon";
 @import "@material/typography/mdc-typography";
 
-.rula-main-content {
-  position: relative;
-  top: $rula-top-bar-height;
-  box-sizing: border-box;
-  height: calc(100vh - #{$rula-top-bar-height});
-  user-select: none;
+.rula-bis.hydrated {
+  opacity: 1;
 
-  @media (max-width: $grid-mobile-bp - 1) {
-    top: $rula-top-bar-mobile-height;
-    height: calc(100vh - #{$rula-top-bar-mobile-height});
+  .rula-main-content {
+    position: relative;
+    top: $rula-top-bar-height;
+    box-sizing: border-box;
+    height: calc(100vh - #{$rula-top-bar-height});
+    background-color: $mdc-theme-background;
+    user-select: none;
+    overflow-x: hidden;
+
+    @media (max-width: $grid-mobile-bp - 1) {
+      top: $rula-top-bar-mobile-height;
+      height: calc(100vh - #{$rula-top-bar-mobile-height});
+    }
+    //stencil-router > div { display: inline; }
   }
-  //stencil-router > div { display: inline; }
+}
+
+.rula-preload {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  color: black;
+  will-change: opacity;
+}
+
+.rula-bis--loaded {
+  .rula-preload {
+    opacity: 0;
+  }
 }

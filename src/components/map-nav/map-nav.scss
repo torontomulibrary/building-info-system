@@ -1,4 +1,5 @@
 // @import "variables";
+@import "@material/layout-grid/mixins";
 @import "@material/ripple/mixins";
 @import "@material/typography/mixins";
 @import "@material/theme/mixins";
@@ -21,12 +22,13 @@
 
   // stylelint-disable selector-class-pattern
   .mdc-select {
-    margin-bottom: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
     margin-left: 0;
     font-size: 1rem;
 
     &--buildings {
-      min-width: 224px;
+      min-width: 256px;
 
       @media (min-width: $grid-medium-bp) {
         margin-left: 12px;
@@ -47,6 +49,15 @@
 
   .mdc-tab-bar {
     padding: 0 32px;
+
+    @include mdc-layout-grid-media-query_(phone) {
+      display: none;
+      visibility: hidden;
+    }
+
+    .mdc-tab {
+      height: 56px;
+    }
   }
 
   .mdc-tab-scroller {

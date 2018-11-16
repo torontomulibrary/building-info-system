@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 
-import { MDCSelect } from '@material/select';
-import { MDCTabBar } from '@material/tab-bar';
+import { MDCSelect } from '@material/select/index';
+import { MDCTabBar } from '@material/tab-bar/index';
 // import { MDCTabScroller } from '@material/tab-scroller';
 
 import {
@@ -14,9 +14,6 @@ import {
 @Component({
   tag: 'rula-map-nav',
   styleUrl: 'map-nav.scss',
-  host: {
-    theme: 'rula-map-nav',
-  },
 })
 
 export class MapNav {
@@ -82,7 +79,15 @@ export class MapNav {
    */
   @Event() mapNavFloorChanged!: EventEmitter;
 
+  componentDidLoad() {
+    this._setupDom();
+  }
+
   componentDidUpdate() {
+    this._setupDom();
+  }
+
+  _setupDom() {
     if (!this.bldSelect && this.root.querySelectorAll('option').length > 0) {
       const bldSelectRoot = this.root.querySelector('.mdc-select--buildings');
       if (bldSelectRoot) {
@@ -103,9 +108,13 @@ export class MapNav {
       });
     }
 
-    if (!this.floorTabs && this.root.querySelectorAll('#tab-bar button').length > 0) {
+    if (this.root.querySelectorAll('#tab-bar button').length > 0) {
       const tabBarRoot = this.root.querySelector('#tab-bar');
       if (tabBarRoot) {
+        if (this.floorTabs) {
+          // Remove old instance, if exists.
+          this.floorTabs.destroy();
+        }
         this.floorTabs = new MDCTabBar(tabBarRoot);
         this.floorTabs.listen('MDCTabBar:activated', e => {
           this.mapNavFloorChanged.emit(
@@ -115,14 +124,21 @@ export class MapNav {
     }
   }
 
-  render() {
-    if (!(this.allBuildings && this.activeFloors)) return;
+  hostData() {
+    return {
+      class: {
+        'rula-map-nav': true,
+      },
+    };
+  }
 
+  render() {
     const buildings = Object.values(this.allBuildings);
     const floors = Object.values(this.activeFloors);
 
     return ([
       <div class="mdc-select mdc-select--buildings">
+        <i class="mdc-select__dropdown-icon"></i>
         <select class="mdc-select__native-control">
           {buildings.map(b =>
             <option value={b.id}

@@ -1,4 +1,4 @@
-import { MDCTopAppBar } from '@material/top-app-bar';
+import { MDCTopAppBar } from '@material/top-app-bar/index';
 import { Component, Element, Event, EventEmitter, Prop } from '@stencil/core';
 
 import { MapElementDetailMap } from '../../interface';
@@ -6,10 +6,6 @@ import { MapElementDetailMap } from '../../interface';
 @Component({
   tag: 'rula-app-bar',
   styleUrl: 'app-bar.scss',
-  host: {
-    theme: 'mdc-top-app-bar mdc-top-app-bar--fixed',
-    role: 'banner',
-  },
 })
 export class AppBar {
   /**
@@ -40,7 +36,7 @@ export class AppBar {
     this.mdcAppBar.initialize();
   }
 
-  renderFullBar() {
+  renderCompactBar() {
     return(
       <section class="mdc-top-app-bar__section">
         <rula-search-box show-menu
@@ -50,7 +46,7 @@ export class AppBar {
     );
   }
 
-  renderCompactBar() {
+  renderFullBar() {
     return ([
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
         <button class="material-icons mdc-top-app-bar__navigation-icon"
@@ -67,6 +63,15 @@ export class AppBar {
       </section>,
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>,
     ]);
+  }
+
+  hostData() {
+    return {
+      class: {
+        'mdc-top-app-bar mdc-top-app-bar--fixed': true,
+      },
+      role: 'banner',
+    };
   }
 
   render() {

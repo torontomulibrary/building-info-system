@@ -6,9 +6,6 @@ import { Component } from '@stencil/core';
 @Component({
   tag: 'rula-expandable-card',
   styleUrl: 'expandable-card.scss',
-  host: {
-    theme: 'rula-expandable-card',
-  },
 })
 
 export class ExpandableCard {
