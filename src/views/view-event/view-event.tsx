@@ -1,4 +1,4 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State } from '@stencil/core';
 
 import { FULL_MONTHS, MONTHS } from '../../global/constants';
 import { AppData, CalEvent } from '../../interface';
@@ -20,17 +20,30 @@ export class ViewEvent {
 
   @Prop({ mutable: true }) appData!: AppData;
 
+  @Prop() appLoaded = false;
+
+  @Event() dataLoaded!: EventEmitter;
+
   componentWillLoad() {
-    // Load events.
-    const parser: EventParser = new EventParser();
+    if (!this.appData.events) {
+      // Load events if there are none loaded yet.
+      const parser: EventParser = new EventParser();
 
-    parser.subscribe(() => {
-      this.appData = { ...this.appData, events: parser.getFutureEvents(52) };
-      // this.eventsLoaded = true;
+      parser.subscribe(() => {
+        this.appData = { ...this.appData, events: parser.getFutureEvents(52) };
+        // this.eventsLoaded = true;
+        this.loaded = true;
+        this.dataLoaded.emit(this.appData);
+      });
+
+      parser.loadIcal(this.appData.icalUrl);
+    }
+  }
+
+  componentDidLoad() {
+    if (this.appData.events) {
       this.loaded = true;
-    });
-
-    parser.loadIcal(this.appData.icalUrl);
+    }
   }
 
   /**
@@ -125,7 +138,7 @@ export class ViewEvent {
       class: {
         'rula-view': true,
         'rula-view--events': true,
-        'rula-view--loaded': this.loaded,
+        'rula-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -167,10 +180,10 @@ export class ViewEvent {
           </div>
         </div>,
       ]);
-    } else {
-      return (
-        <h2 class="rula-view__heading mdc-typography--headline2">No events currently available.</h2>
-      );
     }
+
+    return (
+      <h2 class="rula-view__heading mdc-typography--headline2">No events currently available.</h2>
+    );
   }
 }

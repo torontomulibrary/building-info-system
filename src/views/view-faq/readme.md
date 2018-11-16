@@ -7,9 +7,17 @@
 
 ## Properties
 
-| Property  | Attribute | Description                                    | Type     |
-| --------- | --------- | ---------------------------------------------- | -------- |
-| `allFaqs` | --        | A list of all the FAQs that will be displayed. | `FaqMap` |
+| Property    | Attribute    | Description                                                                                                    | Type      |
+| ----------- | ------------ | -------------------------------------------------------------------------------------------------------------- | --------- |
+| `appData`   | --           | The global application data object.  Passed in by the main app and has relevant data added to it by this view. | `AppData` |
+| `appLoaded` | `app-loaded` |                                                                                                                | `boolean` |
+
+
+## Events
+
+| Event        | Detail | Description |
+| ------------ | ------ | ----------- |
+| `dataLoaded` |        |             |
 
 
 ----------------------------------------------

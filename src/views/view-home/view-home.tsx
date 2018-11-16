@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Prop, State } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 
 import { AppData } from '../../interface';
 
@@ -12,14 +12,10 @@ export class ViewHome {
 
   @Prop({ mutable: true }) appData!: AppData;
 
-  @Event() homeLoaded!: EventEmitter;
-
-  componentWillLoad() {
-    this.loaded = true;
-  }
+  @Prop() appLoaded = false;
 
   componentDidLoad() {
-    this.homeLoaded.emit();
+    this.loaded = true;
   }
 
   hostData() {
@@ -27,23 +23,20 @@ export class ViewHome {
       class: {
         'rula-view': true,
         'rula-view--home': true,
-        'rula-view--loaded': this.loaded,
+        'rula-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
 
   render() {
-    if (this.loaded) {
-      return ([
-        <stencil-route-title title="Home" />,
-        <div>
-          Welcome to the home screen.
-          <a href="#">Tabbable link</a>
-          <slot />
-        </div>,
-      ]);
-    }
-
-    return (<div>Loading...</div>);
+    console.log(`Rendering view with flags: ${this.loaded} and ${this.appLoaded}`);
+    return ([
+      <stencil-route-title title="Home" />,
+      <div>
+        Welcome to the home screen.
+        <a href="#">Tabbable link</a>
+        <slot />
+      </div>,
+    ]);
   }
 }

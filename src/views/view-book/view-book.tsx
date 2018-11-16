@@ -17,6 +17,8 @@ export class ViewBooks {
 
   @Prop() history!: RouterHistory;
 
+  @Prop() appLoaded = false;
+
   componentWillLoad() {
     // Load search history.
     if (this.appData && this.appData.searches) {
@@ -45,7 +47,7 @@ export class ViewBooks {
       class: {
         'rula-view': true,
         'rula-view--book': true,
-        'rula-view--loaded': this.loaded,
+        'rula-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }

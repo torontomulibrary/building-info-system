@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property       | Attribute | Description                  | Type          |
-| -------------- | --------- | ---------------------------- | ------------- |
-| `allBuildings` | --        | A list of all the Buildings. | `BuildingMap` |
+| Property    | Attribute    | Description | Type      |
+| ----------- | ------------ | ----------- | --------- |
+| `appData`   | --           |             | `AppData` |
+| `appLoaded` | `app-loaded` |             | `boolean` |
 
 
 ----------------------------------------------

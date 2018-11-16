@@ -14,9 +14,9 @@
 
 ## Events
 
-| Event         | Description                               |
-| ------------- | ----------------------------------------- |
-| `drawerClose` | An event emitted when this drawer closes. |
+| Event         | Detail | Description                               |
+| ------------- | ------ | ----------------------------------------- |
+| `drawerClose` |        | An event emitted when this drawer closes. |
 
 
 ----------------------------------------------

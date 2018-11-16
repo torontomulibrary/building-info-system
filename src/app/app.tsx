@@ -33,7 +33,7 @@ export class App {
    */
   @State() drawerOpen!: boolean;
 
-  @State() isLoading = true;
+  @State() appLoaded = false;
   @State() eventsLoaded = false;
 
   // @State() bookDetails?: BookDetails;
@@ -71,9 +71,15 @@ export class App {
     const icalUrl = this.icalUrl;
 
     Object.assign(this.appData, { apiUrl, searchUrl, icalUrl });
+  }
 
-    // Load resources.
-    // this.loadData();
+  componentDidLoad() {
+    const el = document.getElementById('splash-screen');
+    if (el && el.parentElement) {
+      el.parentElement.removeChild(el);
+    }
+
+    this.appLoaded = true;
   }
 
   @Listen('window:resize')
@@ -115,19 +121,13 @@ export class App {
     return {
       class: {
         'rula-bis': true,
-        'rula-bis-loaded': !this.isLoading,
+        'rula-bis--loaded': this.appLoaded,
       },
     };
   }
 
   render() {
-    const searches = this.appData.searches;
-
     return ([
-      <div class="rula-preload">
-        Preloading...
-      </div>,
-
       <rula-app-bar
           appTitle={this.appTitle} appWidth={this.appWidth}
           searchData={this.appData.details}
@@ -190,7 +190,10 @@ export class App {
             <stencil-route
                 url={`${this.baseUrl}/`}
                 component="view-home"
-                exact={true}>
+                exact={true}
+                componentProps={{
+                  appLoaded: this.appLoaded,
+                }}>
             </stencil-route>
             <stencil-route
               url={[
@@ -204,6 +207,7 @@ export class App {
               component="view-map"
               componentProps={{
                 appData: this.appData,
+                appLoaded: this.appLoaded,
               }}>
             </stencil-route>
             <stencil-route
@@ -214,6 +218,7 @@ export class App {
               component="view-building"
               componentProps={{
                 appData: this.appData,
+                appLoaded: this.appLoaded,
               }}>
             </stencil-route>
             <stencil-route
@@ -224,8 +229,7 @@ export class App {
               component="view-book"
               componentProps={{
                 appData: this.appData,
-                recentSearches: searches && searches.recent,
-                popularSearches: searches && searches.popular,
+                appLoaded: this.appLoaded,
               }}>
             </stencil-route>
             <stencil-route
@@ -236,6 +240,7 @@ export class App {
               component="view-event"
               componentProps={{
                 appData: this.appData,
+                appLoaded: this.appLoaded,
               }}>
             </stencil-route>
             <stencil-route
@@ -246,6 +251,7 @@ export class App {
               component="view-faq"
               componentProps={{
                 appData: this.appData,
+                appLoaded: this.appLoaded,
               }}>
             </stencil-route>
             <stencil-route
@@ -253,6 +259,7 @@ export class App {
               component="view-search"
               componentProps={{
                 appData: this.appData,
+                appLoaded: this.appLoaded,
                 searchUrl: this.searchUrl,
               }}>
             </stencil-route>

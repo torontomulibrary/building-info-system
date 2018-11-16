@@ -8,7 +8,6 @@
   height: 100%;
   margin: 0 10%;
   padding-top: 32px;
-  transition: opacity 200ms linear;
   opacity: 0;
   will-change: opacity;
 
@@ -39,6 +38,7 @@
   }
 
   &--loaded {
+    transition: opacity 200ms linear;
     opacity: 1;
   }
 }

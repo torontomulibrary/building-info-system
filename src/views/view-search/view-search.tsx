@@ -50,6 +50,8 @@ export class ViewSearch {
 
   @Prop() searchUrl?: string;
 
+  @Prop() appLoaded = false;
+
   /**
    * The component lifecycle function called when the component is being
    * loaded but before DOM is created and displayed.

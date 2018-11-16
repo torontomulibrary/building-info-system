@@ -7,24 +7,39 @@
 
 ## Properties
 
-| Property        | Attribute | Description | Type         |
-| --------------- | --------- | ----------- | ------------ |
-| `activeElement` | --        |             | `MapElement` |
+| Property        | Attribute | Description | Type                      |
+| --------------- | --------- | ----------- | ------------------------- |
+| `activeElement` | --        |             | `MapElement \| undefined` |
 
 
 ## Events
 
-| Event              | Description |
-| ------------------ | ----------- |
-| `detailPanelClose` |             |
+| Event              | Detail | Description |
+| ------------------ | ------ | ----------- |
+| `detailPanelClose` |        |             |
 
 
 ## Methods
 
-| Method      | Description           |
-| ----------- | --------------------- |
-| `hidePanel` | Hide the DetailPanel. |
-| `showPanel` | Show the DetailPanel. |
+### `hidePanel() => void`
+
+Hide the DetailPanel.
+
+#### Returns
+
+Type: `void`
+
+
+
+### `showPanel() => void`
+
+Show the DetailPanel.
+
+#### Returns
+
+Type: `void`
+
+
 
 
 ----------------------------------------------

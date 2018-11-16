@@ -95,7 +95,8 @@
     "tslint-ionic-rules": "0.0.19",
     "typesafe-actions": "^2.0.4",
     "typescript": "^3.0.3",
-    "validate-commit-msg": "^2.14.0"
+    "validate-commit-msg": "^2.14.0",
+    "workbox-build": "3.4.1"
   },
   "author": "Ryerson University Library",
   "license": "MIT",
