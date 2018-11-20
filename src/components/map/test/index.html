@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>rula-map Example</title>
+  <script src="/dist/rula.js"></script>
+  <style>
+    body { margin: 0 }
+
+    :root {
+      --rula-map-element-focus-fill: rgba(200,0,0, 0.4);
+      --rula-map-element-active-stroke: rgb(100, 50, 0);
+
+      --rula-map-element-font-family: "Arial";
+      --rula-map-element-font-size: 72px;
+    }
+
+    rula-map.rula-map {
+      top: 64px;
+      height: 700px;
+      width: 850px;
+      left: 40px;
+    }
+  </style>
+</head>
+<body class='demo-content'>
+  <script>
+    const elements = {
+      2: {id: 2, iconSrc: undefined, name: "Region 1", points: "1140 890 940 770 456 1019"},
+      5: {id: 5, iconSrc: undefined, name: "Text 1", points: "500 500"},
+      7: {id: 7, iconSrc: "test/64x64.png", name: "Icon 1", points: "750 600"},
+    }
+
+    function fetchIMG(url) {
+      return fetch(url).then(response => {
+        if (response.ok) {
+          return response.blob();
+        }
+        throw new Error('Network response was not OK.');
+      }).then(blob => {
+        return URL.createObjectURL(blob);
+      }).catch((error) => {
+        console.log('Fetch image error: ' + error.message);
+      });
+    }
+
+    window.onload = async () => {
+      let map = document.querySelector('rula-map');
+      let editor = document.querySelector('rula-map-editor');
+
+      let img = new Image();
+      img.src = await fetchIMG('test/3840x2160.png');
+      map.mapImage = img;
+      map.elements = elements;
+    }
+  </script>
+
+  <rula-map></rula-map>
+</div>
+</body>
+</html>
