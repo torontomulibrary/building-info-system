@@ -7,20 +7,20 @@
 
 ## Properties
 
-| Property         | Attribute | Description                                              | Type          |
-| ---------------- | --------- | -------------------------------------------------------- | ------------- |
-| `activeBuilding` | --        | The currently active Building.                           | `Building`    |
-| `activeFloor`    | --        | The currently active Floor.                              | `Floor`       |
-| `activeFloors`   | --        | A list of all the Floors of the currenly active Building | `FloorMap`    |
-| `allBuildings`   | --        | A list of all the buildings.                             | `BuildingMap` |
+| Property         | Attribute         | Description                                | Type          |
+| ---------------- | ----------------- | ------------------------------------------ | ------------- |
+| `activeBuilding` | `active-building` | The `id` of the currently active building. | `number`      |
+| `activeFloor`    | `active-floor`    | The `id` of the currently active floor.    | `number`      |
+| `buildings`      | --                | An id-indexed map of the buildings.        | `BuildingMap` |
+| `floors`         | --                | An id-indexed map of floors.               | `FloorMap`    |
 
 
 ## Events
 
-| Event                   | Detail | Description                                          |
-| ----------------------- | ------ | ---------------------------------------------------- |
-| `mapNavBuildingChanged` |        | An event emitted when the selected Building changes. |
-| `mapNavFloorChanged`    |        | An event emitted when the selected Floor changes.    |
+| Event             | Detail | Description                                          |
+| ----------------- | ------ | ---------------------------------------------------- |
+| `buildingChanged` |        | An event emitted when the selected Building changes. |
+| `floorChanged`    |        | An event emitted when the selected Floor changes.    |
 
 
 ----------------------------------------------

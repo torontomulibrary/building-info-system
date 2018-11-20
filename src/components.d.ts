@@ -9,17 +9,14 @@ import '@stencil/core';
 
 import '@stencil/router';
 import '@stencil/state-tunnel';
-import '@rula/web-components';
 import {
   AppData,
   BookDetails,
-  MapElement,
+  BuildingMap,
   MapElementDetailMap,
 } from './interface';
 import {
-  Building,
-  BuildingMap,
-  Floor,
+  BuildingMap as BuildingMap2,
   FloorMap,
 } from './interface.js';
 import {
@@ -117,22 +114,6 @@ export namespace Components {
     'collectionTitle'?: string;
   }
 
-  interface RulaDetailPanel {
-    'activeElement'?: MapElement;
-    /**
-    * Hide the DetailPanel.
-    */
-    'hidePanel': () => void;
-    /**
-    * Show the DetailPanel.
-    */
-    'showPanel': () => void;
-  }
-  interface RulaDetailPanelAttributes extends StencilHTMLAttributes {
-    'activeElement'?: MapElement;
-    'onDetailPanelClose'?: (event: CustomEvent) => void;
-  }
-
   interface RulaDrawer {
     /**
     * Flag indicating if the drawer is open.
@@ -156,49 +137,56 @@ export namespace Components {
   interface RulaGraphicDevice {}
   interface RulaGraphicDeviceAttributes extends StencilHTMLAttributes {}
 
+  interface RulaMapContainer {
+    'buildings': BuildingMap;
+  }
+  interface RulaMapContainerAttributes extends StencilHTMLAttributes {
+    'buildings'?: BuildingMap;
+  }
+
   interface RulaMapNav {
     /**
-    * The currently active Building.
+    * The `id` of the currently active building.
     */
-    'activeBuilding': Building;
+    'activeBuilding': number;
     /**
-    * The currently active Floor.
+    * The `id` of the currently active floor.
     */
-    'activeFloor': Floor;
+    'activeFloor': number;
     /**
-    * A list of all the Floors of the currenly active Building
+    * An id-indexed map of the buildings.
     */
-    'activeFloors': FloorMap;
+    'buildings': BuildingMap;
     /**
-    * A list of all the buildings.
+    * An id-indexed map of floors.
     */
-    'allBuildings': BuildingMap;
+    'floors': FloorMap;
   }
   interface RulaMapNavAttributes extends StencilHTMLAttributes {
     /**
-    * The currently active Building.
+    * The `id` of the currently active building.
     */
-    'activeBuilding'?: Building;
+    'activeBuilding'?: number;
     /**
-    * The currently active Floor.
+    * The `id` of the currently active floor.
     */
-    'activeFloor'?: Floor;
+    'activeFloor'?: number;
     /**
-    * A list of all the Floors of the currenly active Building
+    * An id-indexed map of the buildings.
     */
-    'activeFloors'?: FloorMap;
+    'buildings'?: BuildingMap;
     /**
-    * A list of all the buildings.
+    * An id-indexed map of floors.
     */
-    'allBuildings'?: BuildingMap;
+    'floors'?: FloorMap;
     /**
     * An event emitted when the selected Building changes.
     */
-    'onMapNavBuildingChanged'?: (event: CustomEvent) => void;
+    'onBuildingChanged'?: (event: CustomEvent) => void;
     /**
     * An event emitted when the selected Floor changes.
     */
-    'onMapNavFloorChanged'?: (event: CustomEvent) => void;
+    'onFloorChanged'?: (event: CustomEvent) => void;
   }
 
   interface RulaSearchBox {
@@ -212,6 +200,21 @@ export namespace Components {
     'onResultSelected'?: (event: CustomEvent) => void;
     'searchData'?: MapElementDetailMap;
     'showMenu'?: boolean;
+  }
+
+  interface RulaSideSheet {
+    'close': () => void;
+    'open': () => void;
+  }
+  interface RulaSideSheetAttributes extends StencilHTMLAttributes {
+    /**
+    * Event fired when the `side-sheet` has finished closing.
+    */
+    'onClosed'?: (event: CustomEvent) => void;
+    /**
+    * Event fired when the `side-sheet` has finished opening.
+    */
+    'onOpened'?: (event: CustomEvent) => void;
   }
 
   interface ViewBook {
@@ -274,7 +277,7 @@ export namespace Components {
     'appLoaded': boolean;
     'bookDetails'?: BookDetails;
     /**
-    * A URL used to access when loading data. The results coming from `stencil-router` that contain any URL matches.
+    * The results coming from `stencil-router` that contain any URL matches.
     */
     'match': MatchResults;
     'setActiveElementByDetail': (detailId: number) => void;
@@ -284,11 +287,10 @@ export namespace Components {
     'appLoaded'?: boolean;
     'bookDetails'?: BookDetails;
     /**
-    * A URL used to access when loading data. The results coming from `stencil-router` that contain any URL matches.
+    * The results coming from `stencil-router` that contain any URL matches.
     */
     'match'?: MatchResults;
     'onDataLoaded'?: (event: CustomEvent) => void;
-    'onGetBookLocations'?: (event: CustomEvent) => void;
   }
 
   interface ViewSearch {
@@ -311,12 +313,13 @@ declare global {
     'RulaAppBar': Components.RulaAppBar;
     'RulaCard': Components.RulaCard;
     'RulaCollection': Components.RulaCollection;
-    'RulaDetailPanel': Components.RulaDetailPanel;
     'RulaDrawer': Components.RulaDrawer;
     'RulaExpandableCard': Components.RulaExpandableCard;
     'RulaGraphicDevice': Components.RulaGraphicDevice;
+    'RulaMapContainer': Components.RulaMapContainer;
     'RulaMapNav': Components.RulaMapNav;
     'RulaSearchBox': Components.RulaSearchBox;
+    'RulaSideSheet': Components.RulaSideSheet;
     'ViewBook': Components.ViewBook;
     'ViewBuilding': Components.ViewBuilding;
     'ViewEvent': Components.ViewEvent;
@@ -331,12 +334,13 @@ declare global {
     'rula-app-bar': Components.RulaAppBarAttributes;
     'rula-card': Components.RulaCardAttributes;
     'rula-collection': Components.RulaCollectionAttributes;
-    'rula-detail-panel': Components.RulaDetailPanelAttributes;
     'rula-drawer': Components.RulaDrawerAttributes;
     'rula-expandable-card': Components.RulaExpandableCardAttributes;
     'rula-graphic-device': Components.RulaGraphicDeviceAttributes;
+    'rula-map-container': Components.RulaMapContainerAttributes;
     'rula-map-nav': Components.RulaMapNavAttributes;
     'rula-search-box': Components.RulaSearchBoxAttributes;
+    'rula-side-sheet': Components.RulaSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
     'view-event': Components.ViewEventAttributes;
@@ -371,12 +375,6 @@ declare global {
     new (): HTMLRulaCollectionElement;
   };
 
-  interface HTMLRulaDetailPanelElement extends Components.RulaDetailPanel, HTMLStencilElement {}
-  var HTMLRulaDetailPanelElement: {
-    prototype: HTMLRulaDetailPanelElement;
-    new (): HTMLRulaDetailPanelElement;
-  };
-
   interface HTMLRulaDrawerElement extends Components.RulaDrawer, HTMLStencilElement {}
   var HTMLRulaDrawerElement: {
     prototype: HTMLRulaDrawerElement;
@@ -395,6 +393,12 @@ declare global {
     new (): HTMLRulaGraphicDeviceElement;
   };
 
+  interface HTMLRulaMapContainerElement extends Components.RulaMapContainer, HTMLStencilElement {}
+  var HTMLRulaMapContainerElement: {
+    prototype: HTMLRulaMapContainerElement;
+    new (): HTMLRulaMapContainerElement;
+  };
+
   interface HTMLRulaMapNavElement extends Components.RulaMapNav, HTMLStencilElement {}
   var HTMLRulaMapNavElement: {
     prototype: HTMLRulaMapNavElement;
@@ -405,6 +409,12 @@ declare global {
   var HTMLRulaSearchBoxElement: {
     prototype: HTMLRulaSearchBoxElement;
     new (): HTMLRulaSearchBoxElement;
+  };
+
+  interface HTMLRulaSideSheetElement extends Components.RulaSideSheet, HTMLStencilElement {}
+  var HTMLRulaSideSheetElement: {
+    prototype: HTMLRulaSideSheetElement;
+    new (): HTMLRulaSideSheetElement;
   };
 
   interface HTMLViewBookElement extends Components.ViewBook, HTMLStencilElement {}
@@ -454,12 +464,13 @@ declare global {
     'rula-app-bar': HTMLRulaAppBarElement
     'rula-card': HTMLRulaCardElement
     'rula-collection': HTMLRulaCollectionElement
-    'rula-detail-panel': HTMLRulaDetailPanelElement
     'rula-drawer': HTMLRulaDrawerElement
     'rula-expandable-card': HTMLRulaExpandableCardElement
     'rula-graphic-device': HTMLRulaGraphicDeviceElement
+    'rula-map-container': HTMLRulaMapContainerElement
     'rula-map-nav': HTMLRulaMapNavElement
     'rula-search-box': HTMLRulaSearchBoxElement
+    'rula-side-sheet': HTMLRulaSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
     'view-event': HTMLViewEventElement
@@ -474,12 +485,13 @@ declare global {
     'rula-app-bar': HTMLRulaAppBarElement;
     'rula-card': HTMLRulaCardElement;
     'rula-collection': HTMLRulaCollectionElement;
-    'rula-detail-panel': HTMLRulaDetailPanelElement;
     'rula-drawer': HTMLRulaDrawerElement;
     'rula-expandable-card': HTMLRulaExpandableCardElement;
     'rula-graphic-device': HTMLRulaGraphicDeviceElement;
+    'rula-map-container': HTMLRulaMapContainerElement;
     'rula-map-nav': HTMLRulaMapNavElement;
     'rula-search-box': HTMLRulaSearchBoxElement;
+    'rula-side-sheet': HTMLRulaSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
     'view-event': HTMLViewEventElement;

@@ -1,7 +1,6 @@
 import { Component, Element, Listen, Prop, State } from '@stencil/core';
 
 import { AppData } from '../interface';
-import { fetchJSON } from '../utils/fetch';
 
 @Component({
   tag: 'rula-bis',
@@ -102,15 +101,10 @@ export class App {
     }
   }
 
-  @Listen('getBookLocations')
-  async _onGetBookLocations(e: CustomEvent) {
-    // console.log(e.detail);
-    const details = await fetchJSON(this.apiUrl + 'books/' + e.detail);
-    // Filter based on locations array.
-    if (details.locations) {
-      console.log(details);
-    }
-  }
+  // @Listen('getBookLocations')
+  // async _onGetBookLocations(e: CustomEvent) {
+  //   // console.log(e.detail);
+  // }
 
   @Listen('dataLoaded')
   _onDataLoaded(e: CustomEvent) {

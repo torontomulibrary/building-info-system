@@ -1,4 +1,3 @@
-import '@rula/web-components';
 import {
   Component,
   Element,
@@ -43,7 +42,7 @@ export class ViewMap {
    */
   private paramMatches: RegExpExecArray | null | undefined;
 
-  @Event() getBookLocations!: EventEmitter;
+  private sideSheet_!: HTMLRulaSideSheetElement;
 
   /**
    * Root element of this component.
@@ -80,22 +79,8 @@ export class ViewMap {
   @Prop() bookDetails?: BookDetails;
   @Watch('bookDetails')
   onBookDetailsChange() {
-    console.log(this.bookDetails);
+    // console.log(this.bookDetails);
   }
-
-  /**
-   * An object containing all the Elements that might get mapped.
-   */
-  // @Prop() allElements!: MapElementMap;
-  // @Watch('allElements')
-  // onAllElementsChanged() {
-  //   this._setActiveElements();
-  // }
-
-  /**
-   * An object containing all the Detail information that might get mapped.
-   */
-  // @Prop() allDetails!: MapElementDetailMap;
 
   /**
    * A list of all the Elements currently displayed on the Map.
@@ -111,11 +96,6 @@ export class ViewMap {
    * building, building and floor, or building, floor and element.
    */
   @State() query = '';
-
-  /**
-   * A URL used to access when loading data.
-   */
-  // @Prop() apiUrl!: string;
 
   /**
    * The results coming from `stencil-router` that contain any URL matches.
@@ -143,7 +123,9 @@ export class ViewMap {
         const query = this.match.params.callNo;
         if (query.charAt(0) === 'b') {
           // Have a book record number.
-          this.getBookLocations.emit(query);
+          fetchJSON(this.appData.apiUrl + 'books/' + query).then((details: BookDetails) => {
+            this.appData = { ...this.appData, bookDetails: details };
+          });
         } else {
           // Invalid record number.
         }
@@ -189,11 +171,13 @@ export class ViewMap {
   }
 
   onElementSelected(detail: any) {
-    this.activeElement = { ...detail };
+    this._setActiveElement(detail);
+    // this.activeElement = { ...detail };
   }
 
   onElementDeselected() {
-    this.activeElement = undefined;
+    this._setActiveElement();
+    // this.activeElement = undefined;
   }
 
   @Method()
@@ -368,8 +352,17 @@ export class ViewMap {
    *
    * @param element The Element object to set as the currently active Element.
    */
-  _setActiveElement(element: MapElement) {
-    this.activeElement = { ...element };
+  _setActiveElement(element?: MapElement) {
+    if (element) {
+      this.activeElement = { ...element };
+      this.sideSheet_.open();
+    } else {
+      this.activeElement = undefined;
+      this.sideSheet_.close();
+      if (this.mapEl) {
+        this.mapEl.clearActiveElement();
+      }
+    }
   }
 
   /**
@@ -407,31 +400,14 @@ export class ViewMap {
   }
 
   render() {
-    // const buildings = this.allBuildings;
+    // const detail = this.activeElement && Object.values(this.activeElement.details)[0];
+
     if (this.loaded) {
       return ([
         <stencil-route-title pageTitle="Directory" />,
-        <rula-map
-          ref={elm => this.mapEl = elm as HTMLRulaMapElement}
-          class="rula-map"
-          elements={this.activeElements}
-          mapImage={this.activeFloorplan}
-          onElementSelected={e => this.onElementSelected(e.detail)}
-          onElementDeselected={() => this.onElementDeselected()}
-          onMapRendered={() => this.onMapRendered()}>
-        </rula-map>,
-
-        <rula-detail-panel
-          activeElement={this.activeElement}>
-        </rula-detail-panel>,
-
-        <rula-map-nav
-          class="rula-map-nav"
-          activeFloors={this.activeFloors}
-          allBuildings={this.appData.buildings}
-          activeBuilding={this.activeBuilding}
-          activeFloor={this.activeFloor}>
-        </rula-map-nav>,
+        <rula-map-container
+            buildings={this.appData.buildings}>
+        </rula-map-container>,
       ]);
     }
 

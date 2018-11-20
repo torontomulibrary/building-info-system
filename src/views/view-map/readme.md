@@ -7,20 +7,19 @@
 
 ## Properties
 
-| Property      | Attribute    | Description                                                                                                    | Type                       |
-| ------------- | ------------ | -------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `appData`     | --           |                                                                                                                | `AppData`                  |
-| `appLoaded`   | `app-loaded` |                                                                                                                | `boolean`                  |
-| `bookDetails` | --           |                                                                                                                | `BookDetails \| undefined` |
-| `match`       | --           | A URL used to access when loading data. The results coming from `stencil-router` that contain any URL matches. | `MatchResults`             |
+| Property      | Attribute    | Description                                                            | Type                       |
+| ------------- | ------------ | ---------------------------------------------------------------------- | -------------------------- |
+| `appData`     | --           |                                                                        | `AppData`                  |
+| `appLoaded`   | `app-loaded` |                                                                        | `boolean`                  |
+| `bookDetails` | --           |                                                                        | `BookDetails \| undefined` |
+| `match`       | --           | The results coming from `stencil-router` that contain any URL matches. | `MatchResults`             |
 
 
 ## Events
 
-| Event              | Detail | Description |
-| ------------------ | ------ | ----------- |
-| `dataLoaded`       |        |             |
-| `getBookLocations` |        |             |
+| Event        | Detail | Description |
+| ------------ | ------ | ----------- |
+| `dataLoaded` |        |             |
 
 
 ## Methods

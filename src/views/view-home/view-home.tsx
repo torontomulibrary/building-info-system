@@ -29,7 +29,6 @@ export class ViewHome {
   }
 
   render() {
-    console.log(`Rendering view with flags: ${this.loaded} and ${this.appLoaded}`);
     return ([
       <stencil-route-title title="Home" />,
       <div>
