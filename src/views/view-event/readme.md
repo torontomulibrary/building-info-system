@@ -7,9 +7,17 @@
 
 ## Properties
 
-| Property    | Attribute | Description             | Type         |
-| ----------- | --------- | ----------------------- | ------------ |
-| `allEvents` | --        | An array of all events. | `CalEvent[]` |
+| Property    | Attribute    | Description | Type      |
+| ----------- | ------------ | ----------- | --------- |
+| `appData`   | --           |             | `AppData` |
+| `appLoaded` | `app-loaded` |             | `boolean` |
+
+
+## Events
+
+| Event        | Detail | Description |
+| ------------ | ------ | ----------- |
+| `dataLoaded` |        |             |
 
 
 ----------------------------------------------

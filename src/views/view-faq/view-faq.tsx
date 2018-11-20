@@ -1,4 +1,4 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, Prop, State } from '@stencil/core';
 
 import { AppData, FaqMap } from '../../interface';
 import { fetchJSON } from '../../utils/fetch';
@@ -18,6 +18,10 @@ export class ViewFaq {
    */
   @Prop({ mutable: true }) appData!: AppData;
 
+  @Prop() appLoaded = false;
+
+  @Event() dataLoaded!: EventEmitter;
+
   componentWillLoad() {
     // Load FAQs.
     if (this.appData && this.appData.faqs) {
@@ -25,6 +29,7 @@ export class ViewFaq {
     } else {
       fetchJSON(this.appData.apiUrl + 'faqs').then((faqs: FaqMap) => {
         this.appData = { ...this.appData, faqs };
+        this.dataLoaded.emit(this.appData);
         this.loaded = true;
       });
     }
@@ -35,7 +40,7 @@ export class ViewFaq {
       class: {
         'rula-view': true,
         'rula-view--faq': true,
-        'rula-view--loaded': this.loaded,
+        'rula-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }

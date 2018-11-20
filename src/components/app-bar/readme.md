@@ -16,9 +16,9 @@
 
 ## Events
 
-| Event         | Description                                                 |
-| ------------- | ----------------------------------------------------------- |
-| `menuClicked` | Event fired when the menu button on the app bar is clicked. |
+| Event         | Detail | Description                                                 |
+| ------------- | ------ | ----------------------------------------------------------- |
+| `menuClicked` |        | Event fired when the menu button on the app bar is clicked. |
 
 
 ----------------------------------------------

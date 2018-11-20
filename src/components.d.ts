@@ -216,25 +216,32 @@ export namespace Components {
 
   interface ViewBook {
     'appData': AppData;
+    'appLoaded': boolean;
     'history': RouterHistory;
   }
   interface ViewBookAttributes extends StencilHTMLAttributes {
     'appData'?: AppData;
+    'appLoaded'?: boolean;
     'history'?: RouterHistory;
   }
 
   interface ViewBuilding {
     'appData': AppData;
+    'appLoaded': boolean;
   }
   interface ViewBuildingAttributes extends StencilHTMLAttributes {
     'appData'?: AppData;
+    'appLoaded'?: boolean;
   }
 
   interface ViewEvent {
     'appData': AppData;
+    'appLoaded': boolean;
   }
   interface ViewEventAttributes extends StencilHTMLAttributes {
     'appData'?: AppData;
+    'appLoaded'?: boolean;
+    'onDataLoaded'?: (event: CustomEvent) => void;
   }
 
   interface ViewFaq {
@@ -242,24 +249,29 @@ export namespace Components {
     * The global application data object.  Passed in by the main app and has relevant data added to it by this view.
     */
     'appData': AppData;
+    'appLoaded': boolean;
   }
   interface ViewFaqAttributes extends StencilHTMLAttributes {
     /**
     * The global application data object.  Passed in by the main app and has relevant data added to it by this view.
     */
     'appData'?: AppData;
+    'appLoaded'?: boolean;
+    'onDataLoaded'?: (event: CustomEvent) => void;
   }
 
   interface ViewHome {
     'appData': AppData;
+    'appLoaded': boolean;
   }
   interface ViewHomeAttributes extends StencilHTMLAttributes {
     'appData'?: AppData;
-    'onHomeLoaded'?: (event: CustomEvent) => void;
+    'appLoaded'?: boolean;
   }
 
   interface ViewMap {
     'appData': AppData;
+    'appLoaded': boolean;
     'bookDetails'?: BookDetails;
     /**
     * A URL used to access when loading data. The results coming from `stencil-router` that contain any URL matches.
@@ -269,6 +281,7 @@ export namespace Components {
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
     'appData'?: AppData;
+    'appLoaded'?: boolean;
     'bookDetails'?: BookDetails;
     /**
     * A URL used to access when loading data. The results coming from `stencil-router` that contain any URL matches.
@@ -279,11 +292,13 @@ export namespace Components {
   }
 
   interface ViewSearch {
+    'appLoaded': boolean;
     'history': RouterHistory;
     'match': MatchResults;
     'searchUrl'?: string;
   }
   interface ViewSearchAttributes extends StencilHTMLAttributes {
+    'appLoaded'?: boolean;
     'history'?: RouterHistory;
     'match'?: MatchResults;
     'searchUrl'?: string;

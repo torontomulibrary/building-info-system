@@ -17,10 +17,10 @@
 
 ## Events
 
-| Event                   | Description                                          |
-| ----------------------- | ---------------------------------------------------- |
-| `mapNavBuildingChanged` | An event emitted when the selected Building changes. |
-| `mapNavFloorChanged`    | An event emitted when the selected Floor changes.    |
+| Event                   | Detail | Description                                          |
+| ----------------------- | ------ | ---------------------------------------------------- |
+| `mapNavBuildingChanged` |        | An event emitted when the selected Building changes. |
+| `mapNavFloorChanged`    |        | An event emitted when the selected Floor changes.    |
 
 
 ----------------------------------------------

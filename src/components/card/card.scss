@@ -11,7 +11,7 @@
   position: relative;
   flex-shrink: 0;
   box-sizing: border-box;
-  width: 200px;
+  min-width: 200px;
   margin: 24px 8px;
   transition: box-shadow 180ms $mdc-animation-standard-curve-timing-function;
   will-change: box-shadow;

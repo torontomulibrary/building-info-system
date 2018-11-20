@@ -16,10 +16,10 @@
 
 ## Events
 
-| Event            | Description |
-| ---------------- | ----------- |
-| `iconClick`      |             |
-| `resultSelected` |             |
+| Event            | Detail | Description |
+| ---------------- | ------ | ----------- |
+| `iconClick`      |        |             |
+| `resultSelected` |        |             |
 
 
 ----------------------------------------------

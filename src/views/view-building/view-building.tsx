@@ -17,15 +17,15 @@ export class ViewBuilding {
 
   @Prop({ mutable: true }) appData!: AppData;
 
+  @Prop() appLoaded = false;
+
   /**
    * A list of all the Buildings.
    */
   // @Prop() allBuildings!: BuildingMap;
 
   componentWillLoad() {
-    if (this.appData && this.appData.buildings) {
-      this.loaded = true;
-    } else {
+    if (this.appData && !this.appData.buildings) {
       fetchJSON(this.appData.apiUrl + 'buildings').then(
           (buildings: BuildingMap) => {
         this.appData = { ...this.appData, buildings };
@@ -34,12 +34,18 @@ export class ViewBuilding {
     }
   }
 
-  hostDat() {
+  componentDidLoad() {
+    if (this.appData && this.appData.buildings) {
+      this.loaded = true;
+    }
+  }
+
+  hostData() {
     return {
       class: {
         'rula-view': true,
         'rula-view--buildings': true,
-        'rula-view--loaded': this.loaded,
+        'rula-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }

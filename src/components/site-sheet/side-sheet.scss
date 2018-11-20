@@ -8,10 +8,10 @@
 @import "@material/top-app-bar/mixins";
 @import "rula-list";
 
-$rula-detail-panel-close-time: 200ms;
-$rula-detail-panel-open-time: 250ms;
-$rula-detail-panel-transition-close: mdc-animation-standard(transform, $rula-detail-panel-close-time);
-$rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-detail-panel-open-time);
+$rula-side-sheet-close-time: 200ms;
+$rula-side-sheet-open-time: 250ms;
+$rula-side-sheet-transition-close: mdc-animation-standard(transform, $rula-side-sheet-close-time);
+$rula-side-sheet-transition-open: mdc-animation-standard(transform, $rula-side-sheet-open-time);
 
 @mixin rula-slidable-panel {
   transform: translateX(107%);
@@ -33,18 +33,7 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
   transform: none;
 }
 
-@mixin rula-panel-fill-color($color) {
-  &.rula-drawer--permanent,
-  .rula-drawer__drawer {
-    @include mdc-theme-prop(background-color, $color);
-  }
-}
-
-@mixin rula-panel-ink-color($color) {
-  @include mdc-theme-prop(color, $color);
-}
-
-.rula-detail-panel {
+.rula-side-sheet {
   @include mdc-elevation(4);
   @include mdc-theme-prop(background-color, $mdc-drawer-surface-fill-color);
   @include mdc-theme-prop(color, text-secondary-on-light);
@@ -78,6 +67,24 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
     border-radius: 4px 4px 0 0;
   }
 
+  &--open {
+    @include rula-slidable-panel-open;
+
+    pointer-events: auto;
+
+    @include mdc-rtl {
+      @include rula-slidable-panel-open;
+    }
+  }
+
+  &--animate {
+    transition: $rula-side-sheet-transition-close;
+
+    &.rula-side-sheet--open {
+      transition: $rula-side-sheet-transition-open;
+    }
+  }
+
   &__header {
     display: flex;
     position: relative;
@@ -86,7 +93,7 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
     justify-content: space-between;
     padding: 16px;
 
-    .rula-detail-panel__header-content {
+    .rula-side-sheet__header-content {
       box-sizing: border-box;
 
       .mdc-typography--headline6 {
@@ -122,23 +129,5 @@ $rula-detail-panel-transition-open: mdc-animation-standard(transform, $rula-deta
 
   &__subtitle {
     @include mdc-theme-prop(color, text-hint-on-background);
-  }
-
-  &.rula-detail-panel--open {
-    @include rula-slidable-panel-open;
-
-    pointer-events: auto;
-
-    @include mdc-rtl {
-      @include rula-slidable-panel-open;
-    }
-  }
-
-  &--animated {
-    transition: $rula-detail-panel-transition-close;
-
-    &.rula-detail-panel--open {
-      transition: $rula-detail-panel-transition-open;
-    }
   }
 }

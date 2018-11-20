@@ -1,4 +1,3 @@
-@import "rula-view";
 @import "@material/button/mdc-button";
 @import "@material/card/mixins";
 @import "@material/elevation/mixins";
@@ -6,6 +5,7 @@
 @import "@material/rtl/mixins";
 @import "@material/shape/mixins";
 @import "@material/typography/mixins";
+@import "rula-view";
 
 .rula-card {
   @include mdc-shape-radius(2px);

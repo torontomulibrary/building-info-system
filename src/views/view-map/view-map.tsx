@@ -104,6 +104,8 @@ export class ViewMap {
 
   @Prop({ mutable: true }) appData!: AppData;
 
+  @Prop() appLoaded = false;
+
   /**
    * A string matched from the URL that should be used to pre-select a specific
    * building, building and floor, or building, floor and element.
@@ -399,7 +401,7 @@ export class ViewMap {
       class: {
         'rula-view': true,
         'rula-view--map': true,
-        'rula-view--loaded': this.loaded,
+        'rula-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }

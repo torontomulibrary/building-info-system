@@ -1,23 +1,11 @@
-interface Faq {
-  question?: string;
-  answer?: string;
-}
-interface FaqMap { [keys: number]: Faq }
-
-interface CalEvent {
-  group: string,
-  location: string,
-  title: string,
-  description: string,
-  startTime: Date,
-  endTime: Date,
-}
+export * from './components';
+export * from './components/map/map-interface';
 
 /**
  * Base type for any object that has a name and description.  Also includes
  * alt-text for an additional accessibility-oriented description.
  */
-interface DescribedObject {
+export type DescribedObject = {
   /**
    * Additional text describing the object in a way that is appropriate for
    * accessibility purposes.
@@ -40,6 +28,23 @@ interface DescribedObject {
   name: string;
 }
 
+export type NumberMap<T> = { [keys: number]: T }
+
+interface Faq {
+  question?: string;
+  answer?: string;
+}
+interface FaqMap extends NumberMap<Faq> {}
+
+interface CalEvent {
+  group: string,
+  location: string,
+  title: string,
+  description: string,
+  startTime: Date,
+  endTime: Date,
+}
+
 interface Floor extends DescribedObject {
   buildingId: number;
   floorplan: string;
@@ -50,6 +55,7 @@ interface Floor extends DescribedObject {
   function: string;
   icon: string;
   elements: MapElementMap;
+  enabled: boolean;
 }
 
 interface Building extends DescribedObject {
@@ -57,6 +63,7 @@ interface Building extends DescribedObject {
   shortName: string;
   floors: FloorMap;
   image: string;
+  enabled: boolean;
 }
 
 interface MapElement extends DescribedObject {
@@ -117,6 +124,7 @@ interface AppData {
   faqs?: FaqMap,
   floors?: FloorMap,
   searches?: SearchHistory,
+  bookDetails?: BookDetails,
   apiUrl: string,
   searchUrl: string,
   icalUrl: string,
