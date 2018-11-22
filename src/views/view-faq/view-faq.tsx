@@ -1,8 +1,4 @@
-import {
-  Component,
-  Prop,
-  State,
-} from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 
 import { FAQ_STORAGE_KEY } from '../../global/constants';
 import { AppData, FaqMap } from '../../interface';
