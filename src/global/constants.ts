@@ -55,3 +55,15 @@ export const DEFAULT_MAX_SCALE = 3;
 
 // Default minimum scale (zoom) factor.
 export const DEFAULT_MIN_SCALE = 1;
+
+export const BASE_URL = '/';
+export const API_URL = 'http://localhost:8080/api/';
+export const SEARCH_URL = 'http://localhost:8080/search/';
+export const EVENT_URL = 'http://testnet.library.ryerson.ca/dev/rulapi/ical';
+
+export const FAQ_STORAGE_KEY = 'rula-faqs';
+export const EVENTS_STORAGE_KEY = 'rula-events';
+export const BUILDINGS_STORAGE_KEY = 'rula-buildings';
+export const FLOORS_STORAGE_KEY = 'rula-floors';
+export const ELEMENTS_STORAGE_KEY = 'rula-elements';
+export const DETAILS_STORAGE_KEY = 'rula-details';
