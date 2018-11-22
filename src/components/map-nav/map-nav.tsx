@@ -2,7 +2,6 @@ import { Component, Element, Event, EventEmitter, Prop, Watch } from '@stencil/c
 
 import { MDCSelect } from '@material/select/index';
 import { MDCTabBar } from '@material/tab-bar/index';
-// import { MDCTabScroller } from '@material/tab-scroller';
 
 import {
   Building,
@@ -18,6 +17,12 @@ import {
 
 export class MapNav {
   /**
+   * Event handler for when the `MDCTabBar:activated` event fires.
+   */
+  private handleTabActivated = e => this.floorChanged.emit(
+    Number(Object.keys(this.floors)[e.detail.index]));
+
+  /**
    * The MDCSelect component used to pick and display the current Building.
    */
   private bldSelect!: MDCSelect;
@@ -26,7 +31,7 @@ export class MapNav {
    * The MDCSelect component used to pick and display the current Floor on
    * small (mobile) screens.
    */
-  private _floorSelect!: MDCSelect;
+  private floorSelect!: MDCSelect;
 
   /**
    * The MDCTabBar component used to pick and display the current Floor on
@@ -39,45 +44,43 @@ export class MapNav {
    */
   @Element() root!: HTMLElement;
 
-  // @State() buidlingSheetOpen = false;
+  /**
+   * The `id` of the currently active building.
+   */
+  @Prop() activeBuilding!: number;
 
   /**
-   * The currently active Building.
+   * The `id` of the currently active floor.
    */
-  @Prop() activeBuilding!: Building;
-
-  /**
-   * The currently active Floor.
-   */
-  @Prop() activeFloor!: Floor;
+  @Prop() activeFloor!: number;
   @Watch('activeFloor')
-  onActiveFloorChanged(newActiveFloor?: Floor) {
-    if (this.floorTabs && newActiveFloor) {
+  onActiveFloorChanged(newFloor?: number) {
+    if (this.floorTabs && newFloor) {
       // Update the active (selected) floor tab.
-      this.floorTabs.activeTabIndex =
-        Object.values(this.activeFloors).findIndex(f => f.id === newActiveFloor.id);
+      this.floorTabs.activateTab(
+        Object.values(this.floors).findIndex(f => f.id === newFloor));
     }
   }
 
   /**
-   * A list of all the Floors of the currenly active Building
+   * An id-indexed map of the buildings.
    */
-  @Prop() activeFloors!: FloorMap;
+  @Prop() buildings!: BuildingMap;
 
   /**
-   * A list of all the buildings.
+   * An id-indexed map of floors.
    */
-  @Prop() allBuildings!: BuildingMap;
+  @Prop() floors!: FloorMap;
 
   /**
    * An event emitted when the selected Building changes.
    */
-  @Event() mapNavBuildingChanged!: EventEmitter;
+  @Event() buildingChanged!: EventEmitter;
 
   /**
    * An event emitted when the selected Floor changes.
    */
-  @Event() mapNavFloorChanged!: EventEmitter;
+  @Event() floorChanged!: EventEmitter;
 
   componentDidLoad() {
     this._setupDom();
@@ -94,17 +97,17 @@ export class MapNav {
         this.bldSelect = new MDCSelect(bldSelectRoot);
       }
       this.bldSelect.listen('change', _ => {
-        this.mapNavBuildingChanged.emit(this.allBuildings[Number(this.bldSelect.value)]);
+        this.buildingChanged.emit(Number(this.bldSelect.value));
       });
     }
 
-    if (!this._floorSelect && this.root.querySelectorAll('option').length > 0) {
+    if (!this.floorSelect && this.root.querySelectorAll('option').length > 0) {
       const floorSelectRoot = this.root.querySelector('.mdc-select--floors');
       if (floorSelectRoot) {
-        this._floorSelect = new MDCSelect(floorSelectRoot);
+        this.floorSelect = new MDCSelect(floorSelectRoot);
       }
-      this._floorSelect.listen('change', _ => {
-        this.mapNavFloorChanged.emit(this.activeFloors[Number(this._floorSelect.value)]);
+      this.floorSelect.listen('change', _ => {
+        this.floorChanged.emit(Number(this.floorSelect.value));
       });
     }
 
@@ -113,13 +116,12 @@ export class MapNav {
       if (tabBarRoot) {
         if (this.floorTabs) {
           // Remove old instance, if exists.
+          this.floorTabs.unlisten('MDCTabBar:activated', this.handleTabActivated);
           this.floorTabs.destroy();
+          this.floorTabs = undefined;
         }
         this.floorTabs = new MDCTabBar(tabBarRoot);
-        this.floorTabs.listen('MDCTabBar:activated', e => {
-          this.mapNavFloorChanged.emit(
-            this.activeFloors[Number(Object.keys(this.activeFloors)[e.detail.index])]);
-        });
+        this.floorTabs.listen('MDCTabBar:activated', this.handleTabActivated);
       }
     }
   }
@@ -133,35 +135,37 @@ export class MapNav {
   }
 
   render() {
-    const buildings = Object.values(this.allBuildings);
-    const floors = Object.values(this.activeFloors);
+    const buildings = Object.values(this.buildings);
+    const floors = Object.values(this.floors);
 
     return ([
       <div class="mdc-select mdc-select--buildings">
         <i class="mdc-select__dropdown-icon"></i>
         <select class="mdc-select__native-control">
-          {buildings.map(b =>
-            <option value={b.id}
-                selected={this.activeBuilding.id === b.id}>
+          {buildings.map((b: Building) =>
+            <option value={b.id} disabled={!b.enabled}
+                selected={this.activeBuilding === b.id}>
               {b.name}
             </option>
           )}
         </select>
-        <div class="mdc-floating-label mdc-floating-label--float-above">Current Building</div>
+        <div class="mdc-floating-label mdc-floating-label--float-above">
+          Current Building
+        </div>
         <div class="mdc-line-ripple"></div>
       </div>,
       <div class="mdc-tab-bar" id="tab-bar" role="tablist">
         <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
           <div class="mdc-tab-scroller__scroll-area">
             <div class="mdc-tab-scroller__scroll-content">
-              {floors.map(f =>
-              <button role="tab"
-                  tabindex={f.id === this.activeFloor.id ? '0' : '-1'}
-                  class={`mdc-tab ${f.id === this.activeFloor.id ? 'mdc-tab--active' : ''}`}>
+              {floors.map((f: Floor) =>
+              <button role="tab" disabled={!f.enabled}
+                  tabindex={f.id === this.activeFloor ? '0' : '-1'}
+                  class={`mdc-tab ${f.id === this.activeFloor ? 'mdc-tab--active' : ''}`}>
                 <span class="mdc-tab__content">
                   <span>{f.name}</span>
                 </span>
-                <span class={`mdc-tab-indicator ${f.id === this.activeFloor.id ? 'mdc-tab-indicator--active' : ''}`}>
+                <span class={`mdc-tab-indicator ${f.id === this.activeFloor ? 'mdc-tab-indicator--active' : ''}`}>
                   <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                 </span>
                 <span class="mdc-tab__ripple"></span>
@@ -173,14 +177,16 @@ export class MapNav {
       </div>,
       <div class="mdc-select mdc-select--floors">
         <select class="mdc-select__native-control">
-          {floors.reverse().map(f =>
-            <option value={f.id}
-                selected={this.activeFloor.id === f.id}>
+          {floors.reverse().map((f: Floor) =>
+            <option value={f.id} disabled={!f.enabled}
+                selected={this.activeFloor === f.id}>
               {f.name}
             </option>
           )}
         </select>
-        <div class="mdc-floating-label mdc-floating-label--float-above">Current Floor</div>
+        <div class="mdc-floating-label mdc-floating-label--float-above">
+          Current Floor
+        </div>
         <div class="mdc-line-ripple"></div>
       </div>,
     ]);

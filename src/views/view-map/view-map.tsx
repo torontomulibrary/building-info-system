@@ -1,14 +1,10 @@
-import '@rula/web-components';
 import {
   Component,
   Element,
   Event,
   EventEmitter,
-  Listen,
-  Method,
   Prop,
   State,
-  Watch,
 } from '@stencil/core';
 import { MatchResults } from '@stencil/router';
 
@@ -26,6 +22,7 @@ import {
 } from '../../interface';
 
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
+import { compareLCCN } from '../../utils/lccn';
 
 @Component({
   tag: 'view-map',
@@ -34,16 +31,15 @@ import { fetchIMG, fetchJSON } from '../../utils/fetch';
 
 export class ViewMap {
   /**
-   * Internal reference to the `rula-map` component element.
-   */
-  private mapEl!: HTMLRulaMapElement;
-
-  /**
    * Any URL matches for determining pre-selected building, floor and element.
    */
   private paramMatches: RegExpExecArray | null | undefined;
 
-  @Event() getBookLocations!: EventEmitter;
+  private initialBuilding = -1;
+
+  private initialFloor = -1;
+
+  private initialElement?: number;
 
   /**
    * Root element of this component.
@@ -53,78 +49,34 @@ export class ViewMap {
   @State() loaded = false;
 
   /**
-   * The currently active Building.
-   */
-  @State() activeBuilding!: Building;
-
-  /**
-   * The currently active MapElement.
-   */
-  @State() activeElement?: MapElement;
-
-  /**
-   * The currently active Floor.
-   */
-  @State() activeFloor!: Floor;
-
-  /**
-   * Reference to the floorplan image currently being displayed.
-   */
-  @State() activeFloorplan!: HTMLImageElement;
-
-  /**
-   * A list of all the floors of the current Building.
-   */
-  @State() activeFloors!: FloorMap;
-
-  @Prop() bookDetails?: BookDetails;
-  @Watch('bookDetails')
-  onBookDetailsChange() {
-    console.log(this.bookDetails);
-  }
-
-  /**
-   * An object containing all the Elements that might get mapped.
-   */
-  // @Prop() allElements!: MapElementMap;
-  // @Watch('allElements')
-  // onAllElementsChanged() {
-  //   this._setActiveElements();
-  // }
-
-  /**
-   * An object containing all the Detail information that might get mapped.
-   */
-  // @Prop() allDetails!: MapElementDetailMap;
-
-  /**
-   * A list of all the Elements currently displayed on the Map.
-   */
-  @State() activeElements!: MapElementMap;
-
-  @Prop({ mutable: true }) appData!: AppData;
-
-  @Prop() appLoaded = false;
-
-  /**
    * A string matched from the URL that should be used to pre-select a specific
    * building, building and floor, or building, floor and element.
    */
   @State() query = '';
 
   /**
-   * A URL used to access when loading data.
+   * The global object of all application data.
    */
-  // @Prop() apiUrl!: string;
+  @Prop({ mutable: true }) appData!: AppData;
+
+  /**
+   * A global flag passed in to indicate if the application has loaded as well.
+   */
+  @Prop() appLoaded = false;
+
+  @Prop() mapType = 'directory';
 
   /**
    * The results coming from `stencil-router` that contain any URL matches.
    */
   @Prop() match!: MatchResults;
 
+  /**
+   * Event fired when the data specific to this view is finished loading.
+   */
   @Event() dataLoaded!: EventEmitter;
 
-  componentWillLoad() {
+  async componentWillLoad() {
     // Check the URL value to see if any Building, Floor and or Location was
     // provided.  Must be in the form BLD[FLR][RM].
     // Where BLD is the three letter building code, FLR is the floor number,
@@ -143,257 +95,123 @@ export class ViewMap {
         const query = this.match.params.callNo;
         if (query.charAt(0) === 'b') {
           // Have a book record number.
-          this.getBookLocations.emit(query);
+          await fetchJSON(this.appData.apiUrl + 'books/' + query).then((d: BookDetails) => {
+            this.appData = { ...this.appData, bookDetails: d };
+          });
         } else {
           // Invalid record number.
         }
       }
     }
 
-    if (this.appData) {
-      const dataPromises: Array<Promise<any>> = [];
+    // Load buildings.
+    await fetchJSON(this.appData.apiUrl + 'buildings').then(
+        (b: BuildingMap) => {
+      this.appData = { ...this.appData, buildings: b };
+    });
 
-      if (!this.appData.buildings) {
-        dataPromises.push(fetchJSON(this.appData.apiUrl + 'buildings').then(
-            (buildings: BuildingMap) => {
-          this.appData = { ...this.appData, buildings };
-        }));
+    // Load floors.
+    await fetchJSON(this.appData.apiUrl + 'floors').then(
+        (f: FloorMap) => {
+      this.appData = { ...this.appData, floors: f };
+    });
+
+    // Load elements.
+    await fetchJSON(this.appData.apiUrl + 'elements').then(
+        (e: MapElementMap) => {
+      this.appData = { ...this.appData, elements: e };
+    });
+
+    // Load details.
+    await fetchJSON(this.appData.apiUrl + 'details').then(
+        (d: MapElementDetailMap) => {
+      this.appData = { ...this.appData, details: d };
+    });
+
+    const { buildings, floors, elements, details, bookDetails } = this.appData;
+
+    Object.values(buildings).forEach((b: Building) => {
+      b.enabled = (this.mapType === 'directory' ||
+          (this.mapType !== 'directory' && b.code === 'LIB')) ?
+          true : false;
+      b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
+        if (f.buildingId === b.id) ob[f.id] = f;
+        return ob;
+      }, {} as Floor);
+
+      // Set the initial building to the first or the one specified in the URL.
+      if (b.enabled && (this.initialBuilding === -1) ||
+          (this.paramMatches && this.paramMatches[1] && b.code === this.paramMatches[1])) {
+        this.initialBuilding = b.id;
+      }
+    });
+
+    Object.values(floors).forEach((f: Floor) => {
+      f.enabled = (this.mapType === 'directory' ||
+          (this.mapType === 'book' && bookDetails &&
+          bookDetails.locations.indexOf(f.name) !== -1)) ?
+          true : false;
+      f.elements = Object.values(elements || {}).reduce((ob, e) => {
+        if (e.floorId === f.id) ob[e.id] = e;
+        return ob;
+      }, {} as MapElement);
+
+      // Set the initial floor to the specified floor, or first floor of the
+      // initial building.
+      if (f.enabled && (f.buildingId === this.initialBuilding && this.initialFloor === -1) ||
+          (this.paramMatches && this.paramMatches[2] && f.number === Number(this.paramMatches[2]))) {
+        this.initialFloor = f.id;
+      }
+    });
+
+    // Load floorplan images, starting with the image for the initial floor.
+    fetchIMG(floors[this.initialFloor].floorplan);
+
+    Object.values(floors).forEach((f: Floor) => {
+      if (f.floorplan && f.id !== this.initialFloor) {
+        fetchIMG(f.floorplan);
+      }
+    });
+
+    Object.values(elements).forEach((e: MapElement) => {
+      e.details = Object.values(details || {}).reduce((ob, d) => {
+        if (d.elementId === e.id) ob[d.id] = d;
+        return ob;
+      }, {} as MapElementDetail);
+
+      e.enabled = (this.mapType === 'directory' ||
+          (this.mapType === 'book' && bookDetails &&
+          this.bookOnShelf(bookDetails.callNo, e))) ?
+          true : false;
+
+      if (e.enabled && this.mapType === 'book' && !this.initialElement) {
+        this.initialElement = e.id;
       }
 
-      if (!this.appData.floors) {
-        // Load floors.
-        dataPromises.push(fetchJSON(this.appData.apiUrl + 'floors').then(
-            (floors: FloorMap) => {
-          this.appData = { ...this.appData, floors };
-        }));
+      if (e.icons && e.icons.length) {
+        e.icons.forEach((path: string) => {
+          fetchIMG(path);
+        });
       }
+    });
 
-      if (!this.appData.elements) {
-        // Load elements.
-        dataPromises.push(fetchJSON(this.appData.apiUrl + 'elements').then(
-            (elements: MapElementMap) => {
-          this.appData = { ...this.appData, elements };
-        }));
-      }
-
-      if (!this.appData.details) {
-        // Load details.
-        dataPromises.push(fetchJSON(this.appData.apiUrl + 'details').then(
-            (details: MapElementDetailMap) => {
-          this.appData = { ...this.appData, details };
-        }));
-      }
-
-      Promise.all(dataPromises).then(() => this._parseMapData());
-    }
+    this.loaded = true;
+    this.dataLoaded.emit(this.appData);
   }
 
-  onElementSelected(detail: any) {
-    this.activeElement = { ...detail };
-  }
-
-  onElementDeselected() {
-    this.activeElement = undefined;
-  }
-
-  @Method()
-  setActiveElementByDetail(detailId: number) {
-    // Perform a lookup to see which Element the detail belongs to, which floor
-    // the Element is on and which Building the floor is in.
-    // Then change the building, floor and element to match.
-    const dt = this.appData.details && this.appData.details[detailId];
-    const el = dt && this.appData.elements && this.appData.elements[dt.elementId];
-    const fl = el && this.appData.floors && this.appData.floors[el.floorId];
-    const bl = fl && this.appData.buildings && this.appData.buildings[fl.buildingId];
-
-    if (bl && fl && el) {
-      this._setActiveBuilding(bl);
-      this._setActiveFloor(fl);
-      this._setActiveElement(el);
-    }
-  }
-
-  @Listen('mapNavBuildingChanged')
-  _onMapNavBuildingChanged(e: CustomEvent) {
-    this._onBuildingChanged(e.detail);
-  }
-
-  @Listen('mapNavFloorChanged')
-  _onMapNavFloorChanged(e: CustomEvent) {
-    this._onFloorChanged(e.detail);
-  }
-
-  _parseMapData() {
-    const blds = this.appData.buildings;
-    const flrs = this.appData.floors;
-    const elms = this.appData.elements;
-    const dtls = this.appData.details;
-
-    const dataPromises: Array<Promise<any>> = [];
-
-    if (blds && flrs && elms && dtls) {
-      // Add references to the floors of each building.
-      Object.values(blds).forEach((b: Building) => {
-        b.floors = Object.values(flrs || {}).reduce((ob: FloorMap, f: Floor) => {
-          if (f.buildingId === b.id) ob[f.id] = f;
-          return ob;
-        }, {} as Floor);
-      });
-
-      Object.values(flrs).forEach((f: Floor) => {
-        f.elements = Object.values(elms || {}).reduce((ob, e) => {
-          if (e.floorId === f.id) ob[e.id] = e;
-          return ob;
-        }, {} as MapElement);
-      });
-
-      Object.values(flrs).forEach((f: Floor) => {
-        // Once the floorplan is loaded, the url will be `blob:http...`
-        // so check if the floorplan starts with the `h` of http.
-        if (f.floorplan && f.floorplan.charAt(0) === 'h') {
-          dataPromises.push(fetchIMG(f.floorplan).then(img => {
-            // Store the blob source when loaded.
-            f.floorplan = img;
-          }));
+  bookOnShelf(callNo: string, shelf: MapElement) {
+    let found = false;
+    if (shelf.details) {
+      Object.values(shelf.details).forEach((d: MapElementDetail) => {
+        const startCompare = compareLCCN(d.callStart, callNo);
+        const endCompare = compareLCCN(callNo, d.callEnd);
+        if (startCompare && startCompare >= 0 && endCompare && endCompare >= 0) {
+          found = true;
         }
       });
-
-      Object.values(elms).forEach((e: MapElement) => {
-        e.details = Object.values(dtls || {}).reduce((ob, d) => {
-          if (d.elementId === e.id) ob[d.id] = d;
-          return ob;
-        }, {} as MapElementDetail);
-
-        if (e.iconPath) {
-          e.iconSrc = [];
-          e.iconPath.forEach((path: string) => {
-            if (path.charAt(0) === 'h') {
-              dataPromises.push(fetchIMG(path).then(img => {
-                e.iconSrc.push(img);
-              }));
-            }
-          });
-        }
-      });
-
-      const bldCode = this.paramMatches && this.paramMatches[1];
-      const bldVals = Object.values(blds);
-      this._setActiveBuilding(bldCode ?
-        // Set `activeBuilding` to the building matching the provided code
-        // or the first building.
-        bldVals.filter(b => b.code === bldCode)[0] : bldVals[0]
-      );
-
-      const floorNum = this.paramMatches &&
-          this.paramMatches[2] !== undefined &&
-          Number(this.paramMatches[2]);
-      this._setActiveFloors(floorNum || undefined);
-
-      Promise.all(dataPromises).then(() => {
-        this.loaded = true;
-        this.dataLoaded.emit(this.appData);
-      });
     }
-  }
 
-  /**
-   * Handles when the `rula-menu-nav` fires a BuildingChanged event.
-   * @param newBuilding A new Building object to make the active Building.
-   */
-  _onBuildingChanged(newBuilding: Building) {
-    this._setActiveBuilding(newBuilding);
-  }
-
-  /**
-   * Handles when the `rula-map-nav` component fires a FloorChanged event.
-   * @param newFloor The Floor object to set as the new active Floor.
-   */
-  _onFloorChanged(newFloor: Floor) {
-    this._setActiveFloor(newFloor);
-  }
-
-  /**
-   * Sets the currently active Building object.  Also updates any other active
-   * elements accordingly.
-   *
-   * @param building The building to set as the active Building
-   */
-  _setActiveBuilding(building: Building) {
-    this.activeBuilding = { ...building };
-    // Since the building changed, the floors need to be set to match.
-    this._setActiveFloors();
-  }
-
-  /**
-   * Sets the currently active Floors.  This is simply the list of floors
-   * belonging to the currently active building.
-   *
-   * @param floorNumber Optional.  The number of a floor to set as the active
-   * Floor.  If not specified the first floor of the currently active Building
-   * will be set as active.
-   */
-  _setActiveFloors(floorNumber?: number) {
-    if (this.activeBuilding !== undefined &&
-        this.activeBuilding.hasOwnProperty('floors')) {
-      this.activeFloors = { ...this.activeBuilding.floors };
-      const flrs = Object.values(this.activeFloors);
-      this._setActiveFloor(floorNumber === undefined ?
-        flrs[0] : flrs.filter(f => f.number === floorNumber)[0]);
-    }
-  }
-
-  /**
-   * Sets the currently active Floor object.  Also updates any other components
-   * that should change when the floor changes.
-   *
-   * @param floor The Floor object to set as the currently active Floor.
-   */
-  _setActiveFloor(floor: Floor) {
-    this.activeFloor = { ...floor };
-    this._setActiveElements();
-    this._setActiveFloorplan();
-  }
-
-  /**
-   * Sets the list of currently active elements.
-   */
-  _setActiveElements() {
-    if (this.activeFloor !== undefined) {
-      this.activeElements = { ...this.activeFloor.elements };
-    }
-  }
-
-  /**
-   * Sets the currently active Element.
-   *
-   * @param element The Element object to set as the currently active Element.
-   */
-  _setActiveElement(element: MapElement) {
-    this.activeElement = { ...element };
-  }
-
-  /**
-   * Sets the currently active floorplan image.
-   *
-   * @param imgSrc The image that should be used as the currently active
-   * Floorplan.
-   */
-  _setActiveFloorplan(imgSrc?: string) {
-    if (this.activeFloor !== undefined) {
-      const i = new Image();
-      i.src = imgSrc === undefined ? this.activeFloor.floorplan : imgSrc;
-      this.activeFloorplan = i;
-    }
-  }
-
-  onMapRendered() {
-    if (this.mapEl) {
-      if (!this.activeElement) {
-        this.mapEl.clearActiveElement();
-      } else {
-        this.mapEl.setActiveElement(this.activeElement.id);
-      }
-    }
+    return found;
   }
 
   hostData() {
@@ -407,31 +225,16 @@ export class ViewMap {
   }
 
   render() {
-    // const buildings = this.allBuildings;
     if (this.loaded) {
       return ([
         <stencil-route-title pageTitle="Directory" />,
-        <rula-map
-          ref={elm => this.mapEl = elm as HTMLRulaMapElement}
-          class="rula-map"
-          elements={this.activeElements}
-          mapImage={this.activeFloorplan}
-          onElementSelected={e => this.onElementSelected(e.detail)}
-          onElementDeselected={() => this.onElementDeselected()}
-          onMapRendered={() => this.onMapRendered()}>
-        </rula-map>,
-
-        <rula-detail-panel
-          activeElement={this.activeElement}>
-        </rula-detail-panel>,
-
-        <rula-map-nav
-          class="rula-map-nav"
-          activeFloors={this.activeFloors}
-          allBuildings={this.appData.buildings}
-          activeBuilding={this.activeBuilding}
-          activeFloor={this.activeFloor}>
-        </rula-map-nav>,
+        <rula-map-container
+            buildings={this.appData.buildings}
+            initialBuilding={this.initialBuilding}
+            initialFloor={this.initialFloor}
+            initialElement={this.initialElement}
+            extraDetails={this.appData.bookDetails}>
+        </rula-map-container>,
       ]);
     }
 
