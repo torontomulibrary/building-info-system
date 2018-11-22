@@ -1,8 +1,9 @@
-import { Component, Event, EventEmitter, Prop, State } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 
-import { FULL_MONTHS, MONTHS } from '../../global/constants';
-import { AppData, CalEvent } from '../../interface';
+import { EVENTS_STORAGE_KEY, EVENT_URL, FULL_MONTHS, MONTHS } from '../../global/constants';
+import { CalEvent } from '../../interface';
 import { EventParser, formatTime } from '../../utils/event-parser';
+import { get, set } from '../../utils/local-storage';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -12,40 +13,48 @@ import { sanitize } from '../../utils/sanitize';
 
 export class ViewEvent {
   /**
-   * An array of all events.
+   * Internal list of all Events to display.
    */
-  // @Prop() allEvents!: CalEvent[];
+  @State() events?: CalEvent[];
 
+  /**
+   * A flag indicating if this view loaded all the data needed to display.
+   */
   @State() loaded = false;
 
-  @Prop({ mutable: true }) appData!: AppData;
-
+  /**
+   * Global flag indicating if the whole application has loaded.  If not, this
+   * view should not display either.
+   */
   @Prop() appLoaded = false;
 
-  @Event() dataLoaded!: EventEmitter;
-
+  /**
+   * Lifecycle event fired when the component is first initialized and not
+   * yet in the DOM.
+   */
   componentWillLoad() {
-    if (this.appData.events.length === 0) {
-      // Load events if there are none loaded yet.
-      const parser: EventParser = new EventParser();
-
-      parser.subscribe(() => {
-        this.appData = { ...this.appData, events: parser.getFutureEvents(52) };
-        // this.eventsLoaded = true;
+    get(EVENTS_STORAGE_KEY).then((events: CalEvent[]) => {
+      if (events) {
+        events.forEach((evt: CalEvent) => {
+          evt.endTime = new Date(evt.endTime);
+          evt.startTime = new Date(evt.startTime);
+        });
+        this.events = events;
         this.loaded = true;
-        this.dataLoaded.emit(this.appData);
-      });
+      } else {
+        const parser: EventParser = new EventParser();
 
-      parser.loadIcal(this.appData.eventUrl);
-    } else {
-      this.loaded = true;
-    }
-  }
+        parser.subscribe(() => {
+          const evts = parser.getFutureEvents(52);
+          set(EVENTS_STORAGE_KEY, evts);
+          this.events = evts;
 
-  componentDidLoad() {
-    if (this.appData.events) {
-      this.loaded = true;
-    }
+          this.loaded = true;
+        });
+
+        parser.loadIcal(EVENT_URL);
+      }
+    });
   }
 
   /**
@@ -135,6 +144,9 @@ export class ViewEvent {
     return num + 'th';
   }
 
+  /**
+   * Dynamically sets host element attributes.
+   */
   hostData() {
     return {
       class: {
@@ -149,13 +161,13 @@ export class ViewEvent {
    * Component render function.
    */
   render() {
-    if (this.appData && this.appData.events) {
+    if (this.events) {
       return ([
         <stencil-route-title title="Events" />,
         <h2 class="rula-view__heading">Upcoming events</h2>,
         <div class="rula-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner" role="list">
-            {this.appData.events.map((event: CalEvent, index: number) =>
+            {this.events.map((event: CalEvent, index: number) =>
               <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
                   data-fade-delay={(index + 1) * 20} fade-in
                   aria-label={this.eventLabel(event)}>
