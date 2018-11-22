@@ -158,8 +158,8 @@ export class ViewMap {
 
       // Set the initial floor to the specified floor, or first floor of the
       // initial building.
-      if (f.enabled && (f.buildingId === this.initialBuilding && this.initialFloor === -1) ||
-          (this.paramMatches && this.paramMatches[2] && f.number === Number(this.paramMatches[2]))) {
+      if (f.enabled && f.buildingId === this.initialBuilding && (this.initialFloor === -1 ||
+          this.paramMatches && this.paramMatches[2] && f.number === Number(this.paramMatches[2]))) {
         this.initialFloor = f.id;
       }
     });
