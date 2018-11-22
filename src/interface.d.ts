@@ -1,6 +1,3 @@
-export * from './components';
-export * from './components/map/map-interface';
-
 /**
  * Base type for any object that has a name and description.  Also includes
  * alt-text for an additional accessibility-oriented description.
@@ -30,13 +27,13 @@ export type DescribedObject = {
 
 export type NumberMap<T> = { [keys: number]: T }
 
-interface Faq {
+export interface Faq {
   question?: string;
   answer?: string;
 }
-interface FaqMap extends NumberMap<Faq> {}
+export interface FaqMap extends NumberMap<Faq> {}
 
-interface CalEvent {
+export interface CalEvent {
   group: string,
   location: string,
   title: string,
@@ -45,7 +42,7 @@ interface CalEvent {
   endTime: Date,
 }
 
-interface Floor extends DescribedObject {
+export interface Floor extends DescribedObject {
   buildingId: number;
   floorplan: string;
   floorplanImg: string;
@@ -58,7 +55,7 @@ interface Floor extends DescribedObject {
   enabled: boolean;
 }
 
-interface Building extends DescribedObject {
+export interface Building extends DescribedObject {
   code: string;
   shortName: string;
   floors: FloorMap;
@@ -66,15 +63,15 @@ interface Building extends DescribedObject {
   enabled: boolean;
 }
 
-interface MapElement extends DescribedObject {
+export interface MapElement extends DescribedObject {
   details: MapElementDetailMap;
   floorId: number;
-  iconPath: string[];
-  iconSrc: string[];
+  icons: string[];
   points: string;
+  enabled: boolean;
 }
 
-interface MapElementDetail extends DescribedObject {
+export interface MapElementDetail extends DescribedObject {
   elementId: number;
   detailTypeId: number;
   code: string;
@@ -83,25 +80,24 @@ interface MapElementDetail extends DescribedObject {
   type: MapElementDetailType;
 }
 
-interface MapElementDetailType extends DescribedObject {
+export interface MapElementDetailType extends DescribedObject {
   category: number;
   icon: string;
-  iconImg: string;
   cataloguePattern: string;
   priority: string;
 }
 
-interface BuildingMap { [keys: number]: Building }
-interface FloorMap { [keys: number]: Floor }
-interface MapElementMap { [keys: number]: MapElement }
-interface MapElementDetailMap { [keys: number]: MapElementDetail }
-interface MapElementDetailTypeMap { [keys: number]: MapElementDetailType }
+export interface BuildingMap extends NumberMap<Building> {}
+export interface FloorMap extends NumberMap<Floor> {}
+export interface MapElementMap extends NumberMap<MapElement> {}
+export interface MapElementDetailMap extends NumberMap<MapElementDetail> {}
+export interface MapElementDetailTypeMap extends NumberMap<MapElementDetailType> {}
 
-interface MapData {
+export interface MapData {
   buildings?: BuildingMap,
 }
 
-interface SearchHistory {
+export interface SearchHistory {
   popular: Array<{
     count: number,
     id: number,
@@ -116,47 +112,29 @@ interface SearchHistory {
   }>,
 }
 
-interface AppData {
-  buildings?: BuildingMap,
-  details?: MapElementDetailMap,
-  elements?: MapElementMap,
-  events?: CalEvent[],
-  faqs?: FaqMap,
-  floors?: FloorMap,
-  searches?: SearchHistory,
-  bookDetails?: BookDetails,
+export interface AppData {
   apiUrl: string,
-  searchUrl: string,
+  bookDetails?: BookDetails,
+  buildings: BuildingMap,
+  details: MapElementDetailMap,
+  elements: MapElementMap,
+  events: CalEvent[],
+  faqs: FaqMap,
+  floors: FloorMap,
   icalUrl: string,
+  searches?: SearchHistory,
+  searchUrl: string,
 }
 
-interface BookDetails {
-  availability: string[],
-  locations: string[],
-  callNo: string,
-  title: string,
+export interface BookDetails {
   author: string,
+  availability: string[],
+  callNo: string,
   isOnline: string,
+  locations: string[],
+  title: string,
 }
 
-export {
-  AppData,
-  BookDetails,
-  Building,
-  BuildingMap,
-  CalEvent,
-  Faq,
-  FaqMap,
-  Floor,
-  FloorMap,
-  MapData,
-  MapElement,
-  MapElementMap,
-  MapElementDetail,
-  MapElementDetailMap,
-  MapElementDetailType,
-  MapElementDetailTypeMap,
-  SearchHistory,
-}
-
+export * from './components';
+export * from './components/map/map-interface';
 export * from './components/search-box/search-box-interface';

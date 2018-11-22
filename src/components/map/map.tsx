@@ -76,11 +76,6 @@ export class RulaMap {
   @Prop() minScale: number = DEFAULT_MIN_SCALE;
 
   /**
-   * An array of the elements that will be displayed on the Map.
-   */
-  @Prop({ mutable: true }) elements!: MapElementMap;
-
-  /**
    * An image that will be displayed on the Map.
    */
   @Prop() floorplan?: string;
@@ -127,30 +122,35 @@ export class RulaMap {
   @Event() mapRendered!: EventEmitter;
 
   /**
+   * An array of the elements that will be displayed on the Map.
+   */
+  @Prop({ mutable: true }) elements!: MapElementMap;
+  /**
    * Handle when the list of specified elements changes.
    */
   @Watch('elements')
-  elementsChanged() {
+  onElementsChanged() {
     const elements = this.elements;
     this.processedElements = Object.keys(elements).map(i => {
       const el = elements[Number(i)];
       const decoded = decodeCoordinates(el.points, true);
       let parsed = {};
 
-      if (el.iconSrc.length) {
-        const icons: HTMLImageElement[] = [];
-        el.iconSrc.forEach(src => {
+      if (el.icons && el.icons.length) {
+        const iconImages: HTMLImageElement[] = [];
+        el.icons.forEach(src => {
           const icon = new Image();
           icon.src = src;
-          icons.push(icon);
+          iconImages.push(icon);
         });
-        parsed = { icons };
+        parsed = { iconImages };
       }
 
       return ({
         ...parsed,
         coordinates: decoded.points,
-        iconSrc: el.iconSrc,
+        enabled: el.enabled,
+        icons: el.icons,
         id: el.id,
         name: el.name,
         path: decoded.path,
@@ -161,6 +161,8 @@ export class RulaMap {
 
   componentDidLoad() {
     this.onFloorplanChange();
+    this.onElementsChanged();
+
   }
 
   componentDidUpdate() {
@@ -408,7 +410,7 @@ export class RulaMap {
    * Generates DOM content for the current list of `proccessedElements`.
    */
   private _renderElements() {
-    const elements = this.processedElements;
+    const elements = this.processedElements.filter((el => el.enabled));
     if (elements.length === 0) {
       return undefined;
     }
@@ -422,8 +424,8 @@ export class RulaMap {
         const gTrans = 'translate(' + (el.coordinates[0].x - CONTROL_SIZE / 2) + ' ' +
             (el.coordinates[0].y - CONTROL_SIZE / 2) + ')';
 
-        if (el.icons && el.icons.length) {
-          return el.icons.map(icon => {
+        if (el.iconImages && el.iconImages.length) {
+          return el.iconImages.map(icon => {
             let iconAspect = icon.height / icon.width;
 
             if (isNaN(iconAspect)) {

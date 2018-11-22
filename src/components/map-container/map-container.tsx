@@ -1,30 +1,19 @@
 import {
   Component,
   Element,
-  // Event,
-  // EventEmitter,
-  Listen,
   // Method,
   Prop,
   State,
-  // Watch,
 } from '@stencil/core';
-// import { MatchResults } from '@stencil/router';
 
 import {
-  // AppData,
-  // BookDetails,
   Building,
   BuildingMap,
   Floor,
   FloorMap,
   MapElement,
-  // MapElementDetail,
-  // MapElementDetailMap,
   MapElementMap,
 } from '../../interface';
-
-// import { fetchIMG, fetchJSON } from '../../utils/fetch';
 
 @Component({
   tag: 'rula-map-container',
@@ -37,14 +26,12 @@ export class MapContainer {
    */
   private mapEl!: HTMLRulaMapElement;
 
-  private sideSheet_!: HTMLRulaSideSheetElement;
+  // private sideSheet_!: HTMLRulaSideSheetElement;
 
   /**
    * Root element of this component.
    */
   @Element() root!: HTMLStencilElement;
-
-  // @State() loaded = false;
 
   /**
    * The currently active Building.
@@ -78,17 +65,20 @@ export class MapContainer {
 
   @Prop() buildings!: BuildingMap;
 
+  @Prop() initialBuilding!: number;
+
+  @Prop() initialFloor!: number;
+
+  @Prop() initialElement?: number;
+
+  @Prop() extraDetails?: {};
+
   componentWillLoad() {
-    // If no building is specified, select the first one.
-    if (this.activeBuilding === undefined) {
-      this.activeBuilding = Object.values(this.buildings)[0];
-    }
+    this._setActiveBuilding(this.buildings[this.initialBuilding]);
+    this._setActiveFloor(this.activeFloors[this.initialFloor]);
 
-    this.activeFloors = this.activeBuilding.floors;
-
-    // If no floor is specified, select the first one.
-    if (this.activeFloor === undefined) {
-      this.activeFloor = Object.values(this.activeBuilding.floors)[0];
+    if (this.initialElement) {
+      this._setActiveElement(this.activeElements[this.initialElement]);
     }
   }
 
@@ -98,32 +88,6 @@ export class MapContainer {
 
   onElementDeselected() {
     this._setActiveElement();
-  }
-
-  @Listen('mapNavBuildingChanged')
-  _onMapNavBuildingChanged(e: CustomEvent) {
-    this._onBuildingChanged(e.detail);
-  }
-
-  @Listen('mapNavFloorChanged')
-  _onMapNavFloorChanged(e: CustomEvent) {
-    this._onFloorChanged(e.detail);
-  }
-
-  /**
-   * Handles when the `rula-menu-nav` fires a BuildingChanged event.
-   * @param newBuilding A new Building object to make the active Building.
-   */
-  _onBuildingChanged(newBuilding: number) {
-    this._setActiveBuilding(this.buildings[newBuilding]);
-  }
-
-  /**
-   * Handles when the `rula-map-nav` component fires a FloorChanged event.
-   * @param newFloor The Floor object to set as the new active Floor.
-   */
-  _onFloorChanged(newFloor: number) {
-    this._setActiveFloor(this.activeFloors[newFloor]);
   }
 
   /**
@@ -185,10 +149,10 @@ export class MapContainer {
   _setActiveElement(element?: MapElement) {
     if (element) {
       this.activeElement = { ...element };
-      this.sideSheet_.open();
+      // this.sideSheet_.open();
     } else {
       this.activeElement = undefined;
-      this.sideSheet_.close();
+      // this.sideSheet_.close();
       if (this.mapEl) {
         this.mapEl.clearActiveElement();
       }
@@ -241,7 +205,7 @@ export class MapContainer {
         onMapRendered={() => this.onMapRendered()}>
       </rula-map>,
 
-      <rula-side-sheet ref={el => { this.sideSheet_ = el as HTMLRulaSideSheetElement; }}>
+      <rula-side-sheet open={this.activeElement !== undefined}>
         <header class="rula-side-sheet__header">
           <span class="rula-side-sheet__title">
             <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
@@ -259,6 +223,12 @@ export class MapContainer {
             <div class="rula-side-sheet__subtitle mdc-typography--subtitle2">Description</div>
             {detail && detail.description || ''}
           </div>
+          {this.extraDetails && Object.entries(this.extraDetails).map(item =>
+            <div class="rula-side-sheet__section">
+              <div class="rula-side-sheet__subtitle mdc-typography--subtitle2">{item[0]}</div>
+              {item[1]}
+            </div>
+          )}
         </div>
       </rula-side-sheet>,
 
@@ -267,8 +237,8 @@ export class MapContainer {
         activeFloor={this.activeFloor.id}
         buildings={this.buildings}
         floors={this.activeBuilding.floors}
-        onBuildingChanged={ev => this._onBuildingChanged(ev.detail)}
-        onFloorChanged={ev => this._onFloorChanged(ev.detail)}>
+        onBuildingChanged={ev => this._setActiveBuilding(this.buildings[ev.detail])}
+        onFloorChanged={ev => this._setActiveFloor(this.activeFloors[ev.detail])}>
       </rula-map-nav>,
     ]);
   }

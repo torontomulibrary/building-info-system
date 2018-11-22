@@ -16,7 +16,17 @@ export class App {
    * The master collection of application data.  Like a Redux store but without
    * the overhead.
    */
-  @State() appData: AppData = { apiUrl: '', searchUrl: '', icalUrl: '' };
+  @State() appData: AppData = {
+    apiUrl: '',
+    buildings: {},
+    details: {},
+    elements: {},
+    events: [],
+    faqs: {},
+    floors: {},
+    icalUrl: '',
+    searchUrl: '',
+  };
 
   /**
    * Keep track of the app width in order to change the interface.
@@ -97,7 +107,8 @@ export class App {
   _onResultSelected(e: CustomEvent) {
     const viewMap = this.root.querySelector('.rula-view--map') as HTMLViewMapElement;
     if (viewMap && viewMap.hasOwnProperty('setActiveElementByDetail')) {
-      viewMap.setActiveElementByDetail(e.detail);
+      // viewMap.setActiveElementByDetail(e.detail);
+      console.log(e.detail);
     }
   }
 
@@ -160,6 +171,12 @@ export class App {
           <stencil-route-link anchorClass="mdc-list-item"
               activeClass="mdc-list-item--activated"
               anchorTabIndex="0"
+              url={`${this.baseUrl}/computers`}>
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">computer</i>Computers
+          </stencil-route-link>
+          <stencil-route-link anchorClass="mdc-list-item"
+              activeClass="mdc-list-item--activated"
+              anchorTabIndex="0"
               url={`${this.baseUrl}/building`}>
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">business</i>Building Info
           </stencil-route-link>
@@ -191,17 +208,37 @@ export class App {
             </stencil-route>
             <stencil-route
               url={[
-                `${this.baseUrl}/books/map/:callNo`,
                 `${this.baseUrl}/directory/:roomNo?`,
-                `${this.baseUrl}/computers/`,
-                `${this.baseUrl}/computers`,
-                `${this.baseUrl}/directory/`,
                 `${this.baseUrl}/directory`,
               ]}
               component="view-map"
               componentProps={{
                 appData: this.appData,
                 appLoaded: this.appLoaded,
+                mapType: 'directory',
+              }}>
+            </stencil-route>
+            <stencil-route
+              url={[
+                `${this.baseUrl}/books/map/:callNo`,
+              ]}
+              component="view-map"
+              componentProps={{
+                appData: this.appData,
+                appLoaded: this.appLoaded,
+                mapType: 'book',
+              }}>
+            </stencil-route>
+            <stencil-route
+              url={[
+                `${this.baseUrl}/computers/`,
+                `${this.baseUrl}/computers`,
+              ]}
+              component="view-map"
+              componentProps={{
+                appData: this.appData,
+                appLoaded: this.appLoaded,
+                mapType: 'computer',
               }}>
             </stencil-route>
             <stencil-route

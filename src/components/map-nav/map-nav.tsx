@@ -143,7 +143,7 @@ export class MapNav {
         <i class="mdc-select__dropdown-icon"></i>
         <select class="mdc-select__native-control">
           {buildings.map((b: Building) =>
-            <option value={b.id}
+            <option value={b.id} disabled={!b.enabled}
                 selected={this.activeBuilding === b.id}>
               {b.name}
             </option>
@@ -159,7 +159,7 @@ export class MapNav {
           <div class="mdc-tab-scroller__scroll-area">
             <div class="mdc-tab-scroller__scroll-content">
               {floors.map((f: Floor) =>
-              <button role="tab"
+              <button role="tab" disabled={!f.enabled}
                   tabindex={f.id === this.activeFloor ? '0' : '-1'}
                   class={`mdc-tab ${f.id === this.activeFloor ? 'mdc-tab--active' : ''}`}>
                 <span class="mdc-tab__content">
@@ -178,7 +178,7 @@ export class MapNav {
       <div class="mdc-select mdc-select--floors">
         <select class="mdc-select__native-control">
           {floors.reverse().map((f: Floor) =>
-            <option value={f.id}
+            <option value={f.id} disabled={!f.enabled}
                 selected={this.activeFloor === f.id}>
               {f.name}
             </option>

@@ -4,8 +4,9 @@ import {
   Event,
   EventEmitter,
   Listen,
-  Method,
+  Prop,
   State,
+  Watch,
 } from '@stencil/core';
 import { FocusTrap } from 'focus-trap';
 
@@ -47,6 +48,21 @@ export class SideSheet {
    */
   @State() isOpen = false;
 
+  @Prop() open = false;
+  @Watch('open')
+  onOpenChange() {
+    if (this.isAnimating || this.open === this.isOpen) {
+      return;
+    }
+
+    if (this.open) {
+      this.previousFocus = document.activeElement;
+    }
+
+    this.isAnimating = true;
+    this.isOpen = this.open;
+  }
+
   /**
    * Event fired when the `side-sheet` has finished closing.
    */
@@ -63,6 +79,11 @@ export class SideSheet {
    */
   componentDidLoad() {
     this.focusTrap = util.createFocusTrapInstance(this.root);
+    this.onOpenChange();
+
+    // Hack-y workaround since if initially open, does not animate and does not
+    // fire `transitionend` event.
+    this.isAnimating = false;
   }
 
   @Listen('keydown')
@@ -74,7 +95,7 @@ export class SideSheet {
     const isEscape = key === 'Escape' || keyCode === 27;
 
     if (isEscape) {
-      this.close();
+      this.open = false;
     }
   }
 
@@ -105,33 +126,6 @@ export class SideSheet {
     }
 
     this.isAnimating = false;
-  }
-
-  @Method()
-  /**
-   * Opens the sheet if not already open or opening.
-   */
-  open() {
-    if (this.isOpen || this.isAnimating) {
-      return;
-    }
-
-    this.previousFocus = document.activeElement;
-    this.isAnimating = true;
-    this.isOpen = true;
-  }
-
-  @Method()
-  /**
-   * Closes the sheet if not already closed or closing.
-   */
-  close() {
-    if (!this.isOpen || this.isAnimating) {
-      return;
-    }
-
-    this.isAnimating = true;
-    this.isOpen = false;
   }
 
   /**
