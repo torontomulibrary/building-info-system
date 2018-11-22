@@ -10,8 +10,9 @@ export const config: Config = {
       type: 'dist',
     },
     {
-      type: 'www',
+      baseUrl: '/',
       serviceWorker: undefined,
+      type: 'www',
     },
   ],
   plugins: [
