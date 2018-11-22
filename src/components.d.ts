@@ -427,12 +427,14 @@ export namespace Components {
   }
 
   interface ViewSearch {
+    'appData': AppData;
     'appLoaded': boolean;
     'history': RouterHistory;
     'match': MatchResults;
     'searchUrl'?: string;
   }
   interface ViewSearchAttributes extends StencilHTMLAttributes {
+    'appData'?: AppData;
     'appLoaded'?: boolean;
     'history'?: RouterHistory;
     'match'?: MatchResults;

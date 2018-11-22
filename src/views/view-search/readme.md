@@ -9,6 +9,7 @@
 
 | Property    | Attribute    | Description | Type                  |
 | ----------- | ------------ | ----------- | --------------------- |
+| `appData`   | --           |             | `AppData`             |
 | `appLoaded` | `app-loaded` |             | `boolean`             |
 | `history`   | --           |             | `RouterHistory`       |
 | `match`     | --           |             | `MatchResults`        |

@@ -39,7 +39,7 @@ export class ViewBooks {
     e.preventDefault();
 
     const card: Card = e.detail;
-    this.history.push('/sr/' + card.cardData);
+    this.history.push(`${this.appData.baseUrl}/sr/${card.cardData}`);
   }
 
   hostData() {

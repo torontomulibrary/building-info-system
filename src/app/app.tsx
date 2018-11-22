@@ -18,6 +18,7 @@ export class App {
    */
   @State() appData: AppData = {
     apiUrl: '',
+    baseUrl: '',
     buildings: {},
     details: {},
     elements: {},
@@ -76,10 +77,11 @@ export class App {
     }
 
     const apiUrl = this.apiUrl;
+    const baseUrl = this.baseUrl;
     const searchUrl = this.searchUrl;
     const eventUrl = this.eventUrl;
 
-    Object.assign(this.appData, { apiUrl, searchUrl, eventUrl });
+    Object.assign(this.appData, { apiUrl, baseUrl, eventUrl, searchUrl });
   }
 
   componentDidLoad() {

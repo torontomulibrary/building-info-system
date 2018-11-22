@@ -1,6 +1,7 @@
 import { Component, Prop, State, Watch } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
+import { AppData } from '../../interface';
 import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
 
@@ -52,6 +53,8 @@ export class ViewSearch {
 
   @Prop() appLoaded = false;
 
+  @Prop() appData!: AppData;
+
   /**
    * The component lifecycle function called when the component is being
    * loaded but before DOM is created and displayed.
@@ -68,7 +71,7 @@ export class ViewSearch {
     const data = e.detail.cardData;
     if (typeof data === 'object') {
       const record = data.ExternalDocumentID[0].substring(0, 8);
-      this.history.push(`/books/map/${record}`, { record });
+      this.history.push(`${this.appData.baseUrl}/books/map/${record}`, { record });
     }
   }
 

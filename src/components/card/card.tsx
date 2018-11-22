@@ -79,7 +79,7 @@ export class Card {
 
   _renderMedia() {
     const mediaFile =
-        this.cardMedia ? this.cardMedia : 'url("/assets/img/no_img.png")';
+        this.cardMedia ? this.cardMedia : `url("assets/img/no_img.png")`;
 
     return (
       <div class={`mdc-card__media mdc-card__media--${this.wideMediaAspect ? '16-9' : 'square'}`}

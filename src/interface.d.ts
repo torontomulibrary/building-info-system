@@ -114,6 +114,7 @@ export interface SearchHistory {
 
 export interface AppData {
   apiUrl: string,
+  baseUrl: string,
   bookDetails?: BookDetails,
   buildings: BuildingMap,
   details: MapElementDetailMap,
