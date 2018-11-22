@@ -1,7 +1,7 @@
 import { Component, Prop, State } from '@stencil/core';
 
 import { FAQ_STORAGE_KEY } from '../../global/constants';
-import { AppData, FaqMap } from '../../interface';
+import { FaqMap } from '../../interface';
 import { loadData } from '../../utils/load-data';
 import { sanitize } from '../../utils/sanitize';
 
@@ -20,12 +20,6 @@ export class ViewFaq {
    * A flag indicating if this view loaded all the data needed to display.
    */
   @State() loaded = false;
-
-  /**
-   * The global application data object.  Passed in by the main app and has
-   * relevant data added to it by this view.
-   */
-  @Prop({ mutable: true }) appData!: AppData;
 
   /**
    * Global flag indicating if the whole application has loaded.  If not, this
