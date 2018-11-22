@@ -24,7 +24,7 @@ export class ViewFaq {
 
   componentWillLoad() {
     // Load FAQs.
-    if (this.appData && this.appData.faqs) {
+    if (Object.keys(this.appData.faqs).length !== 0) {
       this.loaded = true;
     } else {
       fetchJSON(this.appData.apiUrl + 'faqs').then((faqs: FaqMap) => {

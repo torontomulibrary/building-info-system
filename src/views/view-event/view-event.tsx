@@ -25,7 +25,7 @@ export class ViewEvent {
   @Event() dataLoaded!: EventEmitter;
 
   componentWillLoad() {
-    if (!this.appData.events) {
+    if (this.appData.events.length === 0) {
       // Load events if there are none loaded yet.
       const parser: EventParser = new EventParser();
 
@@ -36,7 +36,9 @@ export class ViewEvent {
         this.dataLoaded.emit(this.appData);
       });
 
-      parser.loadIcal(this.appData.icalUrl);
+      parser.loadIcal(this.appData.eventUrl);
+    } else {
+      this.loaded = true;
     }
   }
 

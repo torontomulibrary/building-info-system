@@ -24,7 +24,7 @@ export class App {
     events: [],
     faqs: {},
     floors: {},
-    icalUrl: '',
+    eventUrl: '',
     searchUrl: '',
   };
 
@@ -50,14 +50,14 @@ export class App {
   /**
    * A URL used to access when loading data.
    */
-  @Prop() apiUrl?: string;
+  @Prop() apiUrl!: string;
 
-  @Prop() searchUrl?: string;
+  @Prop() searchUrl!: string;
 
   /**
    * A URL used to load ICAL event information.
    */
-  @Prop() icalUrl!: string;
+  @Prop() eventUrl!: string;
 
   /**
    * The displayed title of the application.
@@ -77,9 +77,9 @@ export class App {
 
     const apiUrl = this.apiUrl;
     const searchUrl = this.searchUrl;
-    const icalUrl = this.icalUrl;
+    const eventUrl = this.eventUrl;
 
-    Object.assign(this.appData, { apiUrl, searchUrl, icalUrl });
+    Object.assign(this.appData, { apiUrl, searchUrl, eventUrl });
   }
 
   componentDidLoad() {
