@@ -1,6 +1,6 @@
 {
   "name": "@rula/building-info-system",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "An information and wayfinding web application for buildings.",
   "keywords": [
     "rula",
@@ -35,7 +35,7 @@
     "lint": "npm-run-all --parallel lint:*",
     "pretest": "npm run lint",
     "posttest": "istanbul report --root coverage text-summary && istanbul check-coverage --linees 95 -statements 95 --branches 95 --functions 95",
-    "serve": "stencil --serve",
+    "serve": "stencil build --serve",
     "start": "npm run dev",
     "test": "jest --no-cache",
     "test.watch": "jest --watch --no-cache"

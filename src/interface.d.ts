@@ -119,9 +119,9 @@ export interface AppData {
   details: MapElementDetailMap,
   elements: MapElementMap,
   events: CalEvent[],
+  eventUrl: string,
   faqs: FaqMap,
   floors: FloorMap,
-  icalUrl: string,
   searches?: SearchHistory,
   searchUrl: string,
 }

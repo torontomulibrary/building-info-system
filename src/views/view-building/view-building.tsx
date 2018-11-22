@@ -25,7 +25,9 @@ export class ViewBuilding {
   // @Prop() allBuildings!: BuildingMap;
 
   componentWillLoad() {
-    if (this.appData && !this.appData.buildings) {
+    if (Object.keys(this.appData.buildings).length !== 0) {
+      this.loaded = true;
+    } else {
       fetchJSON(this.appData.apiUrl + 'buildings').then(
           (buildings: BuildingMap) => {
         this.appData = { ...this.appData, buildings };

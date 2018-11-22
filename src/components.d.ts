@@ -11,9 +11,9 @@ import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
   AppData,
-  BookDetails,
   BuildingMap,
   MapElementDetailMap,
+  MapElementMap,
 } from './interface';
 import {
   BuildingMap as BuildingMap2,
@@ -31,7 +31,7 @@ export namespace Components {
     /**
     * A URL used to access when loading data.
     */
-    'apiUrl'?: string;
+    'apiUrl': string;
     /**
     * The displayed title of the application.
     */
@@ -40,8 +40,8 @@ export namespace Components {
     /**
     * A URL used to load ICAL event information.
     */
-    'icalUrl': string;
-    'searchUrl'?: string;
+    'eventUrl': string;
+    'searchUrl': string;
   }
   interface RulaBisAttributes extends StencilHTMLAttributes {
     /**
@@ -56,8 +56,62 @@ export namespace Components {
     /**
     * A URL used to load ICAL event information.
     */
-    'icalUrl'?: string;
+    'eventUrl'?: string;
     'searchUrl'?: string;
+  }
+
+  interface RulaAccordionItem {
+    /**
+    * This function closes this item.
+    */
+    'close': () => void;
+    /**
+    * A delay used to fade-in this item a specific amount of time after the component is rendered.
+    */
+    'delay': number;
+    /**
+    * An index number used to reference this item in the larger list of all items in the parent accordion.
+    */
+    'index': number;
+    /**
+    * This function opens this item.
+    */
+    'open': () => void;
+  }
+  interface RulaAccordionItemAttributes extends StencilHTMLAttributes {
+    /**
+    * A delay used to fade-in this item a specific amount of time after the component is rendered.
+    */
+    'delay'?: number;
+    /**
+    * An index number used to reference this item in the larger list of all items in the parent accordion.
+    */
+    'index'?: number;
+    /**
+    * An event that is emitted when this item changes its open/closed state.
+    */
+    'onToggleItem'?: (event: CustomEvent) => void;
+  }
+
+  interface RulaAccordion {
+    /**
+    * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
+    */
+    'allowMultiple': boolean;
+    /**
+    * An array of content displayed by the accordion.
+    */
+    'items': Array<{ [key: string]: string }>;
+  }
+  interface RulaAccordionAttributes extends StencilHTMLAttributes {
+    /**
+    * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
+    */
+    'allowMultiple'?: boolean;
+    /**
+    * An array of content displayed by the accordion.
+    */
+    'items'?: Array<{ [key: string]: string }>;
   }
 
   interface RulaAppBar {
@@ -139,9 +193,17 @@ export namespace Components {
 
   interface RulaMapContainer {
     'buildings': BuildingMap;
+    'extraDetails'?: {};
+    'initialBuilding': number;
+    'initialElement'?: number;
+    'initialFloor': number;
   }
   interface RulaMapContainerAttributes extends StencilHTMLAttributes {
     'buildings'?: BuildingMap;
+    'extraDetails'?: {};
+    'initialBuilding'?: number;
+    'initialElement'?: number;
+    'initialFloor'?: number;
   }
 
   interface RulaMapNav {
@@ -189,6 +251,63 @@ export namespace Components {
     'onFloorChanged'?: (event: CustomEvent) => void;
   }
 
+  interface RulaMap {
+    /**
+    * Clears the currently active element.
+    */
+    'clearActiveElement': () => void;
+    /**
+    * An array of the elements that will be displayed on the Map.
+    */
+    'elements': MapElementMap;
+    /**
+    * An image that will be displayed on the Map.
+    */
+    'floorplan'?: string;
+    /**
+    * The maximum scale factor.
+    */
+    'maxScale': number;
+    /**
+    * The minimum scale factor.
+    */
+    'minScale': number;
+    /**
+    * Sets the element with the specified ID to active.
+    */
+    'setActiveElement': (id: number) => void;
+  }
+  interface RulaMapAttributes extends StencilHTMLAttributes {
+    /**
+    * An array of the elements that will be displayed on the Map.
+    */
+    'elements'?: MapElementMap;
+    /**
+    * An image that will be displayed on the Map.
+    */
+    'floorplan'?: string;
+    /**
+    * The maximum scale factor.
+    */
+    'maxScale'?: number;
+    /**
+    * The minimum scale factor.
+    */
+    'minScale'?: number;
+    /**
+    * An event fired when the user deselects the selected MapElement. The clicked element will be passed as the event parameter.
+    */
+    'onElementDeselected'?: (event: CustomEvent) => void;
+    /**
+    * An event fired when the user selects a MapElement. The clicked element will be passed as the event parameter.
+    */
+    'onElementSelected'?: (event: CustomEvent) => void;
+    /**
+    * An event fired when the map floorplan is updated.
+    */
+    'onMapRendered'?: (event: CustomEvent) => void;
+  }
+
   interface RulaSearchBox {
     'id': string;
     'searchData': MapElementDetailMap;
@@ -203,8 +322,7 @@ export namespace Components {
   }
 
   interface RulaSideSheet {
-    'close': () => void;
-    'open': () => void;
+    'open': boolean;
   }
   interface RulaSideSheetAttributes extends StencilHTMLAttributes {
     /**
@@ -215,6 +333,7 @@ export namespace Components {
     * Event fired when the `side-sheet` has finished opening.
     */
     'onOpened'?: (event: CustomEvent) => void;
+    'open'?: boolean;
   }
 
   interface ViewBook {
@@ -273,23 +392,37 @@ export namespace Components {
   }
 
   interface ViewMap {
+    /**
+    * The global object of all application data.
+    */
     'appData': AppData;
+    /**
+    * A global flag passed in to indicate if the application has loaded as well.
+    */
     'appLoaded': boolean;
-    'bookDetails'?: BookDetails;
+    'mapType': string;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
     'match': MatchResults;
-    'setActiveElementByDetail': (detailId: number) => void;
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
+    /**
+    * The global object of all application data.
+    */
     'appData'?: AppData;
+    /**
+    * A global flag passed in to indicate if the application has loaded as well.
+    */
     'appLoaded'?: boolean;
-    'bookDetails'?: BookDetails;
+    'mapType'?: string;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
     'match'?: MatchResults;
+    /**
+    * Event fired when the data specific to this view is finished loading.
+    */
     'onDataLoaded'?: (event: CustomEvent) => void;
   }
 
@@ -310,6 +443,8 @@ export namespace Components {
 declare global {
   interface StencilElementInterfaces {
     'RulaBis': Components.RulaBis;
+    'RulaAccordionItem': Components.RulaAccordionItem;
+    'RulaAccordion': Components.RulaAccordion;
     'RulaAppBar': Components.RulaAppBar;
     'RulaCard': Components.RulaCard;
     'RulaCollection': Components.RulaCollection;
@@ -318,6 +453,7 @@ declare global {
     'RulaGraphicDevice': Components.RulaGraphicDevice;
     'RulaMapContainer': Components.RulaMapContainer;
     'RulaMapNav': Components.RulaMapNav;
+    'RulaMap': Components.RulaMap;
     'RulaSearchBox': Components.RulaSearchBox;
     'RulaSideSheet': Components.RulaSideSheet;
     'ViewBook': Components.ViewBook;
@@ -331,6 +467,8 @@ declare global {
 
   interface StencilIntrinsicElements {
     'rula-bis': Components.RulaBisAttributes;
+    'rula-accordion-item': Components.RulaAccordionItemAttributes;
+    'rula-accordion': Components.RulaAccordionAttributes;
     'rula-app-bar': Components.RulaAppBarAttributes;
     'rula-card': Components.RulaCardAttributes;
     'rula-collection': Components.RulaCollectionAttributes;
@@ -339,6 +477,7 @@ declare global {
     'rula-graphic-device': Components.RulaGraphicDeviceAttributes;
     'rula-map-container': Components.RulaMapContainerAttributes;
     'rula-map-nav': Components.RulaMapNavAttributes;
+    'rula-map': Components.RulaMapAttributes;
     'rula-search-box': Components.RulaSearchBoxAttributes;
     'rula-side-sheet': Components.RulaSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
@@ -355,6 +494,18 @@ declare global {
   var HTMLRulaBisElement: {
     prototype: HTMLRulaBisElement;
     new (): HTMLRulaBisElement;
+  };
+
+  interface HTMLRulaAccordionItemElement extends Components.RulaAccordionItem, HTMLStencilElement {}
+  var HTMLRulaAccordionItemElement: {
+    prototype: HTMLRulaAccordionItemElement;
+    new (): HTMLRulaAccordionItemElement;
+  };
+
+  interface HTMLRulaAccordionElement extends Components.RulaAccordion, HTMLStencilElement {}
+  var HTMLRulaAccordionElement: {
+    prototype: HTMLRulaAccordionElement;
+    new (): HTMLRulaAccordionElement;
   };
 
   interface HTMLRulaAppBarElement extends Components.RulaAppBar, HTMLStencilElement {}
@@ -403,6 +554,12 @@ declare global {
   var HTMLRulaMapNavElement: {
     prototype: HTMLRulaMapNavElement;
     new (): HTMLRulaMapNavElement;
+  };
+
+  interface HTMLRulaMapElement extends Components.RulaMap, HTMLStencilElement {}
+  var HTMLRulaMapElement: {
+    prototype: HTMLRulaMapElement;
+    new (): HTMLRulaMapElement;
   };
 
   interface HTMLRulaSearchBoxElement extends Components.RulaSearchBox, HTMLStencilElement {}
@@ -461,6 +618,8 @@ declare global {
 
   interface HTMLElementTagNameMap {
     'rula-bis': HTMLRulaBisElement
+    'rula-accordion-item': HTMLRulaAccordionItemElement
+    'rula-accordion': HTMLRulaAccordionElement
     'rula-app-bar': HTMLRulaAppBarElement
     'rula-card': HTMLRulaCardElement
     'rula-collection': HTMLRulaCollectionElement
@@ -469,6 +628,7 @@ declare global {
     'rula-graphic-device': HTMLRulaGraphicDeviceElement
     'rula-map-container': HTMLRulaMapContainerElement
     'rula-map-nav': HTMLRulaMapNavElement
+    'rula-map': HTMLRulaMapElement
     'rula-search-box': HTMLRulaSearchBoxElement
     'rula-side-sheet': HTMLRulaSideSheetElement
     'view-book': HTMLViewBookElement
@@ -482,6 +642,8 @@ declare global {
 
   interface ElementTagNameMap {
     'rula-bis': HTMLRulaBisElement;
+    'rula-accordion-item': HTMLRulaAccordionItemElement;
+    'rula-accordion': HTMLRulaAccordionElement;
     'rula-app-bar': HTMLRulaAppBarElement;
     'rula-card': HTMLRulaCardElement;
     'rula-collection': HTMLRulaCollectionElement;
@@ -490,6 +652,7 @@ declare global {
     'rula-graphic-device': HTMLRulaGraphicDeviceElement;
     'rula-map-container': HTMLRulaMapContainerElement;
     'rula-map-nav': HTMLRulaMapNavElement;
+    'rula-map': HTMLRulaMapElement;
     'rula-search-box': HTMLRulaSearchBoxElement;
     'rula-side-sheet': HTMLRulaSideSheetElement;
     'view-book': HTMLViewBookElement;

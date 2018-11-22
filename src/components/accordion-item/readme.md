@@ -15,17 +15,32 @@
 
 ## Events
 
-| Event        | Description                                                            |
-| ------------ | ---------------------------------------------------------------------- |
-| `toggleItem` | An event that is emitted when this item changes its open/closed state. |
+| Event        | Detail | Description                                                            |
+| ------------ | ------ | ---------------------------------------------------------------------- |
+| `toggleItem` |        | An event that is emitted when this item changes its open/closed state. |
 
 
 ## Methods
 
-| Method  | Description                     |
-| ------- | ------------------------------- |
-| `close` | This function closes this item. |
-| `open`  | This function opens this item.  |
+### `close() => void`
+
+This function closes this item.
+
+#### Returns
+
+Type: `void`
+
+
+
+### `open() => void`
+
+This function opens this item.
+
+#### Returns
+
+Type: `void`
+
+
 
 
 ----------------------------------------------
