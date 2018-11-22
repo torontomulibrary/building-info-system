@@ -10,7 +10,7 @@ export function loadData<T>(key: string, type: string) {
     } else {
       return fetchJSON(API_URL + type).then((data: T) => {
         set(key, data);
-        return Promise.resolve(res);
+        return Promise.resolve(data);
       }, reason => {
         return Promise.reject(reason);
       });
