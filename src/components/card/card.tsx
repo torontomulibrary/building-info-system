@@ -23,6 +23,7 @@ export class Card {
   @Element() root!: HTMLStencilElement;
 
   @State() protectionFadeColor = new Color(255, 255, 255, 0.5);
+  @State() protectionColor = new Color(255, 255, 255, 1);
   @State() textColors = [new Color(255, 255, 255), new Color(0, 0, 0)];
 
   @Prop() buttons?: Array<{name: string}>;
@@ -39,14 +40,19 @@ export class Card {
   @Prop() noContent = false;
 
   @Prop() wideMediaAspect = false;
-  @Prop() protectionColor = new Color(255, 255, 255);
-  @Watch('protectionColor')
-  onProtectionColorChange() {
+  @Prop() cardColor: {r: number, g: number, b: number} = { r: 255, g: 255, b: 255 };
+  @Watch('cardColor')
+  onColorChange() {
+    this.protectionColor = new Color(this.cardColor.r, this.cardColor.g, this.cardColor.b);
     this.protectionFadeColor = this.protectionColor.clone();
     this.protectionFadeColor.setAlpha(0.5);
   }
 
   @Event() cardClicked!: EventEmitter;
+
+  componentWillLoad() {
+    this.onColorChange();
+  }
 
   _renderActions() {
     // Render nothing if no buttons and icons are defined.
