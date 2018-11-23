@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>rula-map Example</title>
+  <title>rl-map Example</title>
   <script src="/dist/rula.js"></script>
   <style>
     body { margin: 0 }
 
     :root {
-      --rula-map-element-focus-fill: rgba(200,0,0, 0.4);
-      --rula-map-element-active-stroke: rgb(100, 50, 0);
+      --rl-map-element-focus-fill: rgba(200,0,0, 0.4);
+      --rl-map-element-active-stroke: rgb(100, 50, 0);
 
-      --rula-map-element-font-family: "Arial";
-      --rula-map-element-font-size: 72px;
+      --rl-map-element-font-family: "Arial";
+      --rl-map-element-font-size: 72px;
     }
 
-    rula-map.rula-map {
+    rl-map.rl-map {
       top: 64px;
       height: 700px;
       width: 850px;
@@ -46,8 +46,8 @@
     }
 
     window.onload = async () => {
-      let map = document.querySelector('rula-map');
-      let editor = document.querySelector('rula-map-editor');
+      let map = document.querySelector('rl-map');
+      let editor = document.querySelector('rl-map-editor');
 
       let img = new Image();
       img.src = await fetchIMG('test/3840x2160.png');
@@ -56,7 +56,7 @@
     }
   </script>
 
-  <rula-map></rula-map>
+  <rl-map></rl-map>
 </div>
 </body>
 </html>

@@ -47,9 +47,9 @@ export class ViewFaq {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--faq': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--faq': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -61,17 +61,17 @@ export class ViewFaq {
     if (this.faqs) {
       return ([
         <stencil-route-title title="FAQs" />,
-        <h2 class="rula-view__heading">Frequently asked questions</h2>,
-        <div id="container" class="rula-view-faq__container" role="list">
-          <rula-accordion>
+        <h2 class="rl-view__heading">Frequently asked questions</h2>,
+        <div id="container" class="rl-view-faq__container" role="list">
+          <rl-accordion>
             {Object.values(this.faqs).map((faq, idx) =>
-              <rula-accordion-item class="rula-accordion-item rula-accordion-item--fade-in"
+              <rl-accordion-item class="rl-accordion-item rl-accordion-item--fade-in"
                 index={idx} delay={idx * 30}>
                 <div slot="header">{faq.question}</div>
                 <div slot="content">{sanitize(faq.answer)}</div>
-              </rula-accordion-item>
+              </rl-accordion-item>
             )}
-          </rula-accordion>
+          </rl-accordion>
         </div>,
       ]);
     }

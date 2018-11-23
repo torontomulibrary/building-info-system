@@ -13,7 +13,7 @@ import { FocusTrap } from 'focus-trap';
 import * as util from './util';
 
 @Component({
-  tag: 'rula-side-sheet',
+  tag: 'rl-side-sheet',
   styleUrl: 'side-sheet.scss',
 })
 
@@ -105,7 +105,7 @@ export class SideSheet {
    */
   handleTransitionEnd(evt: Event) {
     if (!(evt.target instanceof HTMLElement) ||
-        !evt.target.classList.contains('rula-side-sheet')) {
+        !evt.target.classList.contains('rl-side-sheet')) {
       return;
     }
 
@@ -120,7 +120,7 @@ export class SideSheet {
       }
     } else {
       // TODO: Add support for pre-activated item to get focus.
-      // const activeItem = this.root.querySelector('rula-side-sheet')
+      // const activeItem = this.root.querySelector('rl-side-sheet')
       this.focusTrap.activate();
       this.opened.emit();
     }
@@ -134,9 +134,9 @@ export class SideSheet {
   hostData() {
     return {
       class: {
-        'rula-side-sheet': true,
-        'rula-side-sheet--open': this.isOpen,
-        'rula-side-sheet--animate': this.isAnimating,
+        'rl-side-sheet': true,
+        'rl-side-sheet--open': this.isOpen,
+        'rl-side-sheet--animate': this.isAnimating,
       },
     };
   }

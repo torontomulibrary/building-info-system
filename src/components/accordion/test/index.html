@@ -3,11 +3,11 @@
 <head>
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'>
-  <title>rula-accordion Example || RULA Web Components</title>
+  <title>rl-accordion Example || RULA Web Components</title>
   <script src='/dist/rula.js'></script>
   <style>
     :root {
-      --rula-accordion-item-ripple-color: blue;
+      --rl-accordion-item-ripple-color: blue;
     }
     .demo-content {
       max-width: 900px;
@@ -20,9 +20,9 @@
 <body class='demo-content'>
   <h2>Accordion Demos</h2>
   <h3>Fade-in with allow-multiple (default)</h3>
-  <rula-accordion>
-    <rula-accordion-item
-        class="rula-accordion-item--fade-in"
+  <rl-accordion>
+    <rl-accordion-item
+        class="rl-accordion-item--fade-in"
         index=1 delay="100">
       <div slot="header">
         What is Lorem Ipsum?
@@ -32,9 +32,9 @@
         egestas posuere in id velit. Curabitur id turpis eu augue commodo gravida.
         Quisque non dictum lorem.
       </div>
-    </rula-accordion-item>
-    <rula-accordion-item
-        class="rula-accordion-item--fade-in"
+    </rl-accordion-item>
+    <rl-accordion-item
+        class="rl-accordion-item--fade-in"
         index=2 delay="200">
       <div slot="header">
         Why do we use it?
@@ -45,9 +45,9 @@
         senectus et netus et malesuada fames ac turpis egestas. Nulla quis 
         dolor at enim imperdiet ornare. Ut quis tempus massa, id congue quam.
       </div>
-    </rula-accordion-item>
-    <rula-accordion-item
-        class="rula-accordion-item--fade-in"
+    </rl-accordion-item>
+    <rl-accordion-item
+        class="rl-accordion-item--fade-in"
         index=3 delay="300">
       <div slot="header">
         Where can I get some?
@@ -65,9 +65,9 @@
         pulvinar fringilla lacus. Nam viverra placerat mi at sagittis. 
         Fusce tincidunt semper dapibus.
       </div>
-    </rula-accordion-item>
-    <rula-accordion-item
-        class="rula-accordion-item--fade-in"
+    </rl-accordion-item>
+    <rl-accordion-item
+        class="rl-accordion-item--fade-in"
         index=4 delay="400">
       <div slot="header">
         What if I want even more?
@@ -82,13 +82,13 @@
         enim. Aenean ultrices lectus neque, id consequat urna ornare non. Duis 
         ac congue tellus, a consectetur orci.
       </div>
-    </rula-accordion-item>
-  </rula-accordion>
+    </rl-accordion-item>
+  </rl-accordion>
 
   <br />
   <h3>Single-only, no fade-in</h3>
-  <rula-accordion allow-multiple="false">
-    <rula-accordion-item index=1>
+  <rl-accordion allow-multiple="false">
+    <rl-accordion-item index=1>
       <div slot="header">
         What is Lorem Ipsum?
       </div>
@@ -97,8 +97,8 @@
         egestas posuere in id velit. Curabitur id turpis eu augue commodo gravida.
         Quisque non dictum lorem.
       </div>
-    </rula-accordion-item>
-    <rula-accordion-item index=2>
+    </rl-accordion-item>
+    <rl-accordion-item index=2>
       <div slot="header">
         Why do we use it?
       </div>
@@ -108,8 +108,8 @@
         senectus et netus et malesuada fames ac turpis egestas. Nulla quis 
         dolor at enim imperdiet ornare. Ut quis tempus massa, id congue quam.
       </div>
-    </rula-accordion-item>
-    <rula-accordion-item index=3>
+    </rl-accordion-item>
+    <rl-accordion-item index=3>
       <div slot="header">
         Where can I get some?
       </div>
@@ -126,8 +126,8 @@
         pulvinar fringilla lacus. Nam viverra placerat mi at sagittis. 
         Fusce tincidunt semper dapibus.
       </div>
-    </rula-accordion-item>
-    <rula-accordion-item index=4>
+    </rl-accordion-item>
+    <rl-accordion-item index=4>
       <div slot="header">
         What if I want even more?
       </div>
@@ -141,7 +141,7 @@
         enim. Aenean ultrices lectus neque, id consequat urna ornare non. Duis 
         ac congue tellus, a consectetur orci.
       </div>
-    </rula-accordion-item>
-  </rula-accordion>
+    </rl-accordion-item>
+  </rl-accordion>
 </body>
 </html>

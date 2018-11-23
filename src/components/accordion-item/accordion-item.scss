@@ -2,7 +2,7 @@
 @import "@material/elevation/mixins";
 @import "@material/ripple/mdc-ripple";
 
-.rula-accordion-item {
+.rl-accordion-item {
   @include mdc-elevation(2);
 
   display: block;
@@ -32,7 +32,7 @@
     border-bottom-right-radius: 2px;
   }
 
-  &:not([open]) + .rula-accordion-item {
+  &:not([open]) + .rl-accordion-item {
     box-sizing: border-box;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
   }
@@ -49,7 +49,7 @@
   &__trigger {
     @include mdc-ripple-surface;
     @include mdc-ripple-radius-bounded;
-    @include mdc-states-base-color(var(--rula-accordion-item-ripple-color, red));
+    @include mdc-states-base-color(var(--rl-accordion-item-ripple-color, red));
     @include mdc-states-hover-opacity(0.1);
     @include mdc-states-focus-opacity(0.2);
     @include mdc-states-press-opacity(0.3);
@@ -94,15 +94,15 @@
     border: none;
     border-radius: 2px;
 
-    .rula-accordion-item__trigger {
+    .rl-accordion-item__trigger {
       height: 64px;
     }
 
-    .rula-accordion-item__icon {
+    .rl-accordion-item__icon {
       transform: rotate(180deg);
     }
 
-    .rula-accordion-item__content {
+    .rl-accordion-item__content {
       max-height: 50em;
       padding-top: 16px;
       padding-bottom: 16px;

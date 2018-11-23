@@ -8,13 +8,13 @@ $mdc-theme-on-primary: #ffffff;
 $mdc-theme-on-secondary: #000000;
 $mdc-theme-on-surface: #000000;
 
-$rula-theme-primary: $mdc-theme-primary;
-$rula-theme-secondary: $mdc-theme-secondary;
-$rula-theme-background: $mdc-theme-background;
-$rula-theme-surface: $mdc-theme-surface;
-$rula-theme-on-primary: $mdc-theme-on-primary;
-$rula-theme-on-secondary: $mdc-theme-on-secondary;
-$rula-theme-on-surface: $mdc-theme-on-surface;
+$rl-theme-primary: $mdc-theme-primary;
+$rl-theme-secondary: $mdc-theme-secondary;
+$rl-theme-background: $mdc-theme-background;
+$rl-theme-surface: $mdc-theme-surface;
+$rl-theme-on-primary: $mdc-theme-on-primary;
+$rl-theme-on-secondary: $mdc-theme-on-secondary;
+$rl-theme-on-surface: $mdc-theme-on-surface;
 
 // High contrast colours
 $hot-pink:			#cc66ca;
@@ -29,8 +29,8 @@ $ruby:					#c02f1d;
 $ui-fixed-increment: 64px;
 
 /* TOP-BAR */
-$rula-top-bar-height: 64px;
-$rula-top-bar-mobile-height: 56px;
+$rl-top-bar-height: 64px;
+$rl-top-bar-mobile-height: 56px;
 
 /* GRID */
 
@@ -54,5 +54,5 @@ $grid-xlarge-bp: 1850px;
 $grid-cell-default-columns: $grid-phone-columns;
 $grid-max-columns: $grid-desktop-columns;
 
-$rula-building-list-icon-padding: 12px;
-$rula-building-list-icon-size: 24px;
+$rl-building-list-icon-padding: 12px;
+$rl-building-list-icon-size: 24px;

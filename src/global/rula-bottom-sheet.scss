@@ -1,10 +1,10 @@
-$rula-two-line-header-caption-baseline-height_: 24px;
-$rula-two-line-header-baseline-height_: 20px;
+$rl-two-line-header-caption-baseline-height_: 24px;
+$rl-two-line-header-baseline-height_: 20px;
 
-$rula-bottom-sheet-vertical-padding: 8px;
-$rula-bottom-sheet-horizontal-padding: 12px;
+$rl-bottom-sheet-vertical-padding: 8px;
+$rl-bottom-sheet-horizontal-padding: 12px;
 
-.rula-bottom-sheet {
+.rl-bottom-sheet {
   display: block;
   position: fixed;
   bottom: 0;
@@ -26,7 +26,7 @@ $rula-bottom-sheet-horizontal-padding: 12px;
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    padding: $rula-bottom-sheet-vertical-padding $rula-bottom-sheet-horizontal-padding;
+    padding: $rl-bottom-sheet-vertical-padding $rl-bottom-sheet-horizontal-padding;
   }
 
   &__section {
@@ -57,9 +57,9 @@ $rula-bottom-sheet-horizontal-padding: 12px;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: $rula-building-list-icon-size + $rula-building-list-icon-padding * 2;
-    height: $rula-building-list-icon-size + $rula-building-list-icon-padding * 2;
-    padding: $rula-building-list-icon-padding;
+    width: $rl-building-list-icon-size + $rl-building-list-icon-padding * 2;
+    height: $rl-building-list-icon-size + $rl-building-list-icon-padding * 2;
+    padding: $rl-building-list-icon-padding;
     border: none;
     outline: none;
     background-color: transparent;
@@ -70,21 +70,21 @@ $rula-bottom-sheet-horizontal-padding: 12px;
   }
 }
 
-.rula-two-line-header {
+.rl-two-line-header {
   align-self: flex-start;
 
   &__caption {
     @include mdc-typography(caption);
-    @include mdc-typography-baseline-top($rula-two-line-header-caption-baseline-height_);
-    @include mdc-typography-baseline-bottom($rula-two-line-header-baseline-height_);
+    @include mdc-typography-baseline-top($rl-two-line-header-caption-baseline-height_);
+    @include mdc-typography-baseline-bottom($rl-two-line-header-baseline-height_);
 
     display: block;
     margin-top: -6px;
-    color: $rula-theme-primary;
+    color: $rl-theme-primary;
   }
 
   &__text {
-    @include mdc-typography-baseline-top($rula-two-line-header-baseline-height_);
+    @include mdc-typography-baseline-top($rl-two-line-header-baseline-height_);
 
     display: block;
   }

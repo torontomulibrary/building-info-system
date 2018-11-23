@@ -11,7 +11,7 @@ import {
 import { Color } from '../../utils/color';
 
 @Component({
-  tag: 'rula-card',
+  tag: 'rl-card',
   styleUrl: 'card.scss',
 })
 
@@ -92,11 +92,11 @@ export class Card {
         style={{ 'background-image': mediaFile }}>
         {this.titleInMedia ?
           [
-            <div class="rula-card__media-text-protection" style={{
+            <div class="rl-card__media-text-protection" style={{
               background: `linear-gradient(to top, ${this.protectionColor.toRgb()},
               ${this.protectionFadeColor.toRgb()})`,
             }}></div>,
-            <div class="rula-card__media-text" style={{
+            <div class="rl-card__media-text" style={{
               color: this.protectionColor.highContrast(this.textColors).toRgb(),
             }}>{this.cardTitle}</div>,
           ] : undefined
@@ -110,10 +110,10 @@ export class Card {
       this._renderMedia(),
       this.noContent ?
         undefined : [
-        <div class="rula-card__primary">
+        <div class="rl-card__primary">
           <slot name="primary" />
         </div>,
-        <div class="rula-card__secondary">
+        <div class="rl-card__secondary">
           <slot name="secondary" />
         </div>],
     ]);
@@ -122,7 +122,7 @@ export class Card {
   hostData() {
     return {
       class: {
-        'rula-card': true,
+        'rl-card': true,
         'mdc-card': true,
       },
     };

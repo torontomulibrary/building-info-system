@@ -4,7 +4,7 @@ import { Component } from '@stencil/core';
  * @description A list item link
  */
 @Component({
-  tag: 'rula-graphic-device',
+  tag: 'rl-graphic-device',
   styleUrl: 'graphic-device.scss',
 })
 

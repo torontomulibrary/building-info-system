@@ -21,9 +21,9 @@ export class ViewHome {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--home': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--home': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }

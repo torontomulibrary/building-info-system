@@ -233,9 +233,9 @@ export class ViewMap {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--map': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--map': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -244,13 +244,13 @@ export class ViewMap {
     if (this.loaded) {
       return ([
         <stencil-route-title pageTitle="Directory" />,
-        <rula-map-container
+        <rl-map-container
             buildings={this.buildings}
             initialBuilding={this.initialBuilding}
             initialFloor={this.initialFloor}
             initialElement={this.initialElement}
             extraDetails={this._book}>
-        </rula-map-container>,
+        </rl-map-container>,
       ]);
     }
 

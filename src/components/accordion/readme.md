@@ -1,4 +1,4 @@
-# rula-expansion-panel
+# rl-expansion-panel
 
 
 

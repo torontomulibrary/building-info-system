@@ -1,11 +1,11 @@
 @import "@material/typography/mixins";
-@import "rula-view";
+@import "rl-view";
 
-.rula-view--book {
+.rl-view--book {
   display: block;
 }
 
-.rula-block--centered {
+.rl-block--centered {
   display: block;
   width: 30%;
   max-width: 256px;

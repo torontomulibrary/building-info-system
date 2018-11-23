@@ -433,19 +433,19 @@ declare global {
   }
 
   interface StencilIntrinsicElements {
-    'rula-bis': Components.RulaBisAttributes;
-    'rula-accordion-item': Components.RulaAccordionItemAttributes;
-    'rula-accordion': Components.RulaAccordionAttributes;
-    'rula-app-bar': Components.RulaAppBarAttributes;
-    'rula-card': Components.RulaCardAttributes;
-    'rula-collection': Components.RulaCollectionAttributes;
-    'rula-drawer': Components.RulaDrawerAttributes;
-    'rula-graphic-device': Components.RulaGraphicDeviceAttributes;
-    'rula-map-container': Components.RulaMapContainerAttributes;
-    'rula-map-nav': Components.RulaMapNavAttributes;
-    'rula-map': Components.RulaMapAttributes;
-    'rula-search-box': Components.RulaSearchBoxAttributes;
-    'rula-side-sheet': Components.RulaSideSheetAttributes;
+    'rl-bis': Components.RulaBisAttributes;
+    'rl-accordion-item': Components.RulaAccordionItemAttributes;
+    'rl-accordion': Components.RulaAccordionAttributes;
+    'rl-app-bar': Components.RulaAppBarAttributes;
+    'rl-card': Components.RulaCardAttributes;
+    'rl-collection': Components.RulaCollectionAttributes;
+    'rl-drawer': Components.RulaDrawerAttributes;
+    'rl-graphic-device': Components.RulaGraphicDeviceAttributes;
+    'rl-map-container': Components.RulaMapContainerAttributes;
+    'rl-map-nav': Components.RulaMapNavAttributes;
+    'rl-map': Components.RulaMapAttributes;
+    'rl-search-box': Components.RulaSearchBoxAttributes;
+    'rl-side-sheet': Components.RulaSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
     'view-event': Components.ViewEventAttributes;
@@ -577,19 +577,19 @@ declare global {
   };
 
   interface HTMLElementTagNameMap {
-    'rula-bis': HTMLRulaBisElement
-    'rula-accordion-item': HTMLRulaAccordionItemElement
-    'rula-accordion': HTMLRulaAccordionElement
-    'rula-app-bar': HTMLRulaAppBarElement
-    'rula-card': HTMLRulaCardElement
-    'rula-collection': HTMLRulaCollectionElement
-    'rula-drawer': HTMLRulaDrawerElement
-    'rula-graphic-device': HTMLRulaGraphicDeviceElement
-    'rula-map-container': HTMLRulaMapContainerElement
-    'rula-map-nav': HTMLRulaMapNavElement
-    'rula-map': HTMLRulaMapElement
-    'rula-search-box': HTMLRulaSearchBoxElement
-    'rula-side-sheet': HTMLRulaSideSheetElement
+    'rl-bis': HTMLRulaBisElement
+    'rl-accordion-item': HTMLRulaAccordionItemElement
+    'rl-accordion': HTMLRulaAccordionElement
+    'rl-app-bar': HTMLRulaAppBarElement
+    'rl-card': HTMLRulaCardElement
+    'rl-collection': HTMLRulaCollectionElement
+    'rl-drawer': HTMLRulaDrawerElement
+    'rl-graphic-device': HTMLRulaGraphicDeviceElement
+    'rl-map-container': HTMLRulaMapContainerElement
+    'rl-map-nav': HTMLRulaMapNavElement
+    'rl-map': HTMLRulaMapElement
+    'rl-search-box': HTMLRulaSearchBoxElement
+    'rl-side-sheet': HTMLRulaSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
     'view-event': HTMLViewEventElement
@@ -600,19 +600,19 @@ declare global {
   }
 
   interface ElementTagNameMap {
-    'rula-bis': HTMLRulaBisElement;
-    'rula-accordion-item': HTMLRulaAccordionItemElement;
-    'rula-accordion': HTMLRulaAccordionElement;
-    'rula-app-bar': HTMLRulaAppBarElement;
-    'rula-card': HTMLRulaCardElement;
-    'rula-collection': HTMLRulaCollectionElement;
-    'rula-drawer': HTMLRulaDrawerElement;
-    'rula-graphic-device': HTMLRulaGraphicDeviceElement;
-    'rula-map-container': HTMLRulaMapContainerElement;
-    'rula-map-nav': HTMLRulaMapNavElement;
-    'rula-map': HTMLRulaMapElement;
-    'rula-search-box': HTMLRulaSearchBoxElement;
-    'rula-side-sheet': HTMLRulaSideSheetElement;
+    'rl-bis': HTMLRulaBisElement;
+    'rl-accordion-item': HTMLRulaAccordionItemElement;
+    'rl-accordion': HTMLRulaAccordionElement;
+    'rl-app-bar': HTMLRulaAppBarElement;
+    'rl-card': HTMLRulaCardElement;
+    'rl-collection': HTMLRulaCollectionElement;
+    'rl-drawer': HTMLRulaDrawerElement;
+    'rl-graphic-device': HTMLRulaGraphicDeviceElement;
+    'rl-map-container': HTMLRulaMapContainerElement;
+    'rl-map-nav': HTMLRulaMapNavElement;
+    'rl-map': HTMLRulaMapElement;
+    'rl-search-box': HTMLRulaSearchBoxElement;
+    'rl-side-sheet': HTMLRulaSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
     'view-event': HTMLViewEventElement;

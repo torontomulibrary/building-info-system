@@ -46,9 +46,9 @@ export class ViewBuilding {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--buildings': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--buildings': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -61,38 +61,38 @@ export class ViewBuilding {
 
       return ([
         <stencil-route-title pageTitle="Buildings" />,
-        <h2 class="rula-view__heading">Building Information</h2>,
-        <div class="rula-view__container mdc-layout-grid">
+        <h2 class="rl-view__heading">Building Information</h2>,
+        <div class="rl-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner">
             {Object.values(this.buildings).map((building: Building) =>
-              <div class="rula-card rula-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop">
-                <div class="rula-card__header rula-card__header--16-9"
+              <div class="rl-card rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop">
+                <div class="rl-card__header rl-card__header--16-9"
                   style={{ backgroundImage: `url("${building.image}")` }}>
-                  <div class="rula-card__text-protection"></div>
-                  <div class="rula-card__header-content">
-                    <div class="rula-card__title">{building.name}</div>
+                  <div class="rl-card__text-protection"></div>
+                  <div class="rl-card__header-content">
+                    <div class="rl-card__title">{building.name}</div>
                   </div>
                 </div>
-                <div class="rula-card__content">
-                  <div class="rula-card__description">{building.description}</div>
-                  <div class="rula-card__expand-icon mdc-button">
+                <div class="rl-card__content">
+                  <div class="rl-card__description">{building.description}</div>
+                  <div class="rl-card__expand-icon mdc-button">
                     <i class="material-icons">expand_more</i>
                   </div>
                 </div>
-                <div class="rula-card__content-expandable">
-                  <div class="rula-floor-list">
-                    <div class="rula-floor-list__item">
-                      <div class="rula-floor-list__header">
-                        <div class="rula-floor-list__image"></div>
-                        <div class="rula-floor-list__title">8th Floor</div>
-                        <div class="rula-floor-list__subtitle">SLC</div>
-                        <div class="rula-floor-list__loc-link mdc-button">
+                <div class="rl-card__content-expandable">
+                  <div class="rl-floor-list">
+                    <div class="rl-floor-list__item">
+                      <div class="rl-floor-list__header">
+                        <div class="rl-floor-list__image"></div>
+                        <div class="rl-floor-list__title">8th Floor</div>
+                        <div class="rl-floor-list__subtitle">SLC</div>
+                        <div class="rl-floor-list__loc-link mdc-button">
                           <i class="material-icons">
                             location_on
                           </i>
                         </div>
                       </div>
-                      <div class="rula-floor-list__content">
+                      <div class="rl-floor-list__content">
                         <div>The top floor of the SLC is dedicated to group and individual study with open-access carrels and twenty bookable study rooms.</div>
                         <h3>Features</h3>
                         <ul>
@@ -105,8 +105,8 @@ export class ViewBuilding {
                     </div>
                   </div>
                 </div>
-                <div class="rula-card__actions">
-                  <a href={`/map/${building.code}`} role="button" class="mdc-button rula-event__action">
+                <div class="rl-card__actions">
+                  <a href={`/map/${building.code}`} role="button" class="mdc-button rl-event__action">
                     Map it!
                   </a>
                 </div>

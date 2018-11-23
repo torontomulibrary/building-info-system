@@ -1,7 +1,7 @@
 import { Component, Element, Prop } from '@stencil/core';
 
 @Component({
-  tag: 'rula-collection',
+  tag: 'rl-collection',
   styleUrl: 'collection.scss',
 })
 export class Collection {
@@ -16,21 +16,21 @@ export class Collection {
   hostData() {
     return {
       class: {
-        'rula-collection': true,
+        'rl-collection': true,
       },
     };
   }
 
   render() {
     return ([
-      <div class="rula-collection__title">
+      <div class="rl-collection__title">
         <h2>{this.collectionTitle}</h2>
-        <div class="rula-collection__title-bar"></div>
+        <div class="rl-collection__title-bar"></div>
       </div>,
-      <div class="rula-collection__wrapper">
-        <div class="rula-collection__scroller">
+      <div class="rl-collection__wrapper">
+        <div class="rl-collection__scroller">
           <slot />
-          <div class="rula-collection__end-pad"></div>
+          <div class="rl-collection__end-pad"></div>
         </div>
       </div>,
     ]);

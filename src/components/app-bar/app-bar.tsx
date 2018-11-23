@@ -4,7 +4,7 @@ import { Component, Element, Event, EventEmitter, Prop } from '@stencil/core';
 import { MapElementDetailMap } from '../../interface';
 
 @Component({
-  tag: 'rula-app-bar',
+  tag: 'rl-app-bar',
   styleUrl: 'app-bar.scss',
 })
 export class AppBar {
@@ -39,9 +39,9 @@ export class AppBar {
   renderCompactBar() {
     return(
       <section class="mdc-top-app-bar__section">
-        <rula-search-box show-menu
+        <rl-search-box show-menu
           searchData={this.searchData}
-          onIconClick={_ => this.menuClicked.emit() }></rula-search-box>
+          onIconClick={_ => this.menuClicked.emit() }></rl-search-box>
       </section>
     );
   }
@@ -57,9 +57,9 @@ export class AppBar {
         <span class="mdc-top-app-bar__title">{this.appTitle}</span>
       </section>,
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-middle">
-        <rula-search-box
+        <rl-search-box
           searchData={this.searchData}>
-        </rula-search-box>
+        </rl-search-box>
       </section>,
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>,
     ]);

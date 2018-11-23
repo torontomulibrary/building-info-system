@@ -55,9 +55,9 @@ export class ViewBooks {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--book': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--book': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -67,41 +67,41 @@ export class ViewBooks {
     if (this.searches) {
       return ([
         <stencil-route-title pageTitle="Books" />,
-        <div class="rula-block--centered">
+        <div class="rl-block--centered">
           Welcome to the Ryerson Library Book Finder.  Use it to find where the
           book you're looking for is in the Library.  Below are some common search
           terms and popular books.  To look for a specific book, use the search
           bar above.
           <slot />
         </div>,
-        <rula-collection collectionTitle="Recently Searched">
+        <rl-collection collectionTitle="Recently Searched">
           {this.searches.recent.map(s =>
-            <rula-card
+            <rl-card
               cardData={s.value}
               hasPrimaryAction
               onCardClicked={ev => this._cardClicked(ev)}>
               <div slot="primary">
                 {s.value}
               </div>
-            </rula-card>
+            </rl-card>
           )}
-        </rula-collection>,
-        <rula-collection collectionTitle="Frequently Searched">
+        </rl-collection>,
+        <rl-collection collectionTitle="Frequently Searched">
           {this.searches.popular.map(s =>
-            <rula-card
+            <rl-card
               cardData={s.value}
               hasPrimaryAction
               onCardClicked={ev => this._cardClicked(ev.detail)}>
               <div slot="primary">
                 {s.value}
               </div>
-            </rula-card>
+            </rl-card>
           )}
-        </rula-collection>,
-        <rula-collection collectionTitle="Popular Books">
-          <rula-card></rula-card>
-          <rula-card></rula-card>
-        </rula-collection>,
+        </rl-collection>,
+        <rl-collection collectionTitle="Popular Books">
+          <rl-card></rl-card>
+          <rl-card></rl-card>
+        </rl-collection>,
       ]);
     }
 

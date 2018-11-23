@@ -2,7 +2,7 @@
 @import "@material/elevation/mixins";
 @import "@material/textfield/mixins";
 
-.rula-search {
+.rl-search {
   display: block;
   position: relative;
   transition: all, 0.2s ease;
@@ -65,7 +65,7 @@
 
     background-color: $mdc-theme-surface;
 
-    .rula-search {
+    .rl-search {
       &__input,
       &__input::placeholder,
       &__icon {
@@ -85,7 +85,7 @@
   }
 
   &[show-menu] {
-    .rula-search__icon {
+    .rl-search__icon {
       cursor: pointer;
       pointer-events: all;
     }

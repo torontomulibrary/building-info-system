@@ -1,15 +1,15 @@
 @import "@material/elevation/mixins";
-@import "rula-view";
+@import "rl-view";
 
 :root {
-  --rula-accordion-item-ripple-color: #002d72;
+  --rl-accordion-item-ripple-color: #002d72;
 }
 
-.rula-view--faq {
+.rl-view--faq {
   display: block;
   box-sizing: border-box;
 
-  .rula-accordion-item:focus {
+  .rl-accordion-item:focus {
     outline: none;
   }
 

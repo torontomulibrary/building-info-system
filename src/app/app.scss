@@ -12,24 +12,24 @@
 @import "@material/textfield/icon/mdc-text-field-icon";
 @import "@material/typography/mdc-typography";
 
-.rula-bis.hydrated {
-  .rula-main-content {
+.rl-bis.hydrated {
+  .rl-main-content {
     position: relative;
-    top: $rula-top-bar-height;
+    top: $rl-top-bar-height;
     box-sizing: border-box;
-    height: calc(100vh - #{$rula-top-bar-height});
+    height: calc(100vh - #{$rl-top-bar-height});
     background-color: $mdc-theme-background;
     user-select: none;
     overflow-x: hidden;
 
     @media (max-width: $grid-mobile-bp - 1) {
-      top: $rula-top-bar-mobile-height;
-      height: calc(100vh - #{$rula-top-bar-mobile-height});
+      top: $rl-top-bar-mobile-height;
+      height: calc(100vh - #{$rl-top-bar-mobile-height});
     }
     //stencil-router > div { display: inline; }
   }
 }
 
-.rula-bis--loaded {
+.rl-bis--loaded {
   opacity: 1;
 }

@@ -17,18 +17,13 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body class="mdc-typography">
-  <div id="splash-screen" class="rula-splash-screen">
-    <div class="rula-splash-screen__content">
+  <div id="splash-screen" class="rl-splash-screen">
+    <div class="rl-splash-screen__content">
       <div style="font-size: 18px; color: #1c1c1c; margin-top: 48px;">Loading Finder....</div>
     </div>
   </div>
-  <rula-bis
-    app-title="RULA Finder">
-    <!-- base-url=""
-    api-url="http://localhost:8080/api/"
-    search-url="http://localhost:8080/search"
-    event-url="http://testnet.library.ryerson.ca/dev/rulapi/ical"> -->
-  </rula-bis>
+  <rl-bis>
+  </rl-bis>
 
   <style>
     body {
@@ -37,13 +32,13 @@
       font-family: 'Times New Roman', Times, Georgia, serif;
     }
 
-    rula-bis {
+    rl-bis {
       transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
       will-change: opacity;
       opacity: 0;
     }
 
-    .rula-splash-screen {
+    .rl-splash-screen {
       display: flex;
       position: absolute;
       top: 0;
@@ -54,14 +49,14 @@
       justify-content: center;
     }
 
-    .rula-splash-screen__content {
+    .rl-splash-screen__content {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
   </style>
 
-  <script src="/build/rula-bis.js"></script>
+  <script src="/build/rl-bis.js"></script>
   <script src="/assets/ical.js"></script>
 </body>
 </html>

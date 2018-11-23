@@ -80,9 +80,9 @@ export class ViewSearch {
     const books = this.searchResults && this.searchResults['books'];
     if (books) {
       return (
-        <rula-collection collectionTitle="Books">
+        <rl-collection collectionTitle="Books">
           {books.map(b =>
-            <rula-card
+            <rl-card
               cardTitle={b.Title[0]}
               cardData={b}
               titleInMedia
@@ -91,9 +91,9 @@ export class ViewSearch {
               wideMediaAspect
               cardColor={{ r: 12, g: 34, b: 56 }}
               onCardClicked={evt => this._bookCardClicked(evt)}>
-            </rula-card>
+            </rl-card>
           )}
-         </rula-collection>
+         </rl-collection>
       );
     } else {
       return undefined;

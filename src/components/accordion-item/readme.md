@@ -1,4 +1,4 @@
-# rula-accordion-item
+# rl-accordion-item
 
 
 

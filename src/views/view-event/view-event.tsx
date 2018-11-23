@@ -150,9 +150,9 @@ export class ViewEvent {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--events': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--events': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -164,27 +164,27 @@ export class ViewEvent {
     if (this.events) {
       return ([
         <stencil-route-title title="Events" />,
-        <h2 class="rula-view__heading">Upcoming events</h2>,
-        <div class="rula-view__container mdc-layout-grid">
+        <h2 class="rl-view__heading">Upcoming events</h2>,
+        <div class="rl-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner" role="list">
             {this.events.map((event: CalEvent, index: number) =>
-              <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
+              <div class={`${event.group} rl-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
                   data-fade-delay={(index + 1) * 20} fade-in
                   aria-label={this.eventLabel(event)}>
-                <div class="rula-event__header rula-event__header--16-9">
-                <div class="rula-event__text-protection"></div>
-                  <div class="rula-event__header-content">
-                    <div class="rula-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
-                    <div class="rula-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
-                    <div class="rula-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
+                <div class="rl-event__header rl-event__header--16-9">
+                <div class="rl-event__text-protection"></div>
+                  <div class="rl-event__header-content">
+                    <div class="rl-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
+                    <div class="rl-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
+                    <div class="rl-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
                   </div>
                 </div>
-                <div class="rula-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
-                  <div class="rula-event__title mdc-typography--headline5">{event.title}</div>
+                <div class="rl-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
+                  <div class="rl-event__title mdc-typography--headline5">{event.title}</div>
                   <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
                 </div>
-                <div class="rula-event__actions">
-                  <button class="mdc-button rula-event__action"
+                <div class="rl-event__actions">
+                  <button class="mdc-button rl-event__action"
                       aria-label={`Find ${event.location} on the map.`}>
                     Find on map
                   </button>
@@ -197,7 +197,7 @@ export class ViewEvent {
     }
 
     return (
-      <h2 class="rula-view__heading mdc-typography--headline2">No events currently available.</h2>
+      <h2 class="rl-view__heading mdc-typography--headline2">No events currently available.</h2>
     );
   }
 }

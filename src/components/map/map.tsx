@@ -8,7 +8,7 @@ import { decodeCoordinates } from '../../utils/path';
 import { MapElementMap, ParsedMapElement } from '../../interface';
 
 @Component({
-  tag: 'rula-map',
+  tag: 'rl-map',
   styleUrl: 'map.scss',
 })
 
@@ -44,7 +44,7 @@ export class RulaMap {
   // The current size of the SVG element used to display the map.
   private _svgSize!: ClientRect | DOMRect | undefined;
 
-  // Reference to the root node (`rula-map`).
+  // Reference to the root node (`rl-map`).
   @Element() root!: HTMLElement;
 
   /**
@@ -418,8 +418,8 @@ export class RulaMap {
     const parsed = elements.map(el => {
       if (el.coordinates.length === 1) {
         const rectClass = {
-          'rula-map-element__rect': true,
-          'rula-map-element__rect--activated': el === this.activeElement, // el.isActive,
+          'rl-map-element__rect': true,
+          'rl-map-element__rect--activated': el === this.activeElement, // el.isActive,
         };
         const gTrans = 'translate(' + (el.coordinates[0].x - CONTROL_SIZE / 2) + ' ' +
             (el.coordinates[0].y - CONTROL_SIZE / 2) + ')';
@@ -433,9 +433,9 @@ export class RulaMap {
             }
 
             return (
-              <g id={el.id} class="rula-map-element__point" tabindex="0" transform={gTrans}>
+              <g id={el.id} class="rl-map-element__point" tabindex="0" transform={gTrans}>
                 <image
-                  class="rula-map-element__icon"
+                  class="rl-map-element__icon"
                   // Don't set width.  Some icons are not square and leaving width
                   // unset will set the width automatically while keeping aspect.
                   height={CONTROL_SIZE}
@@ -452,15 +452,15 @@ export class RulaMap {
         } else {
           // We have a text node.
           return (
-            <text id={el.id} class="rula-map-element__text" transform={gTrans}>
+            <text id={el.id} class="rl-map-element__text" transform={gTrans}>
               {el.name}
             </text>
           );
         }
       } else {
         const regionClass = {
-          'rula-map-element__region': true,
-          'rula-map-element__region--activated': el === this.activeElement, // el.isActive,
+          'rl-map-element__region': true,
+          'rl-map-element__region--activated': el === this.activeElement, // el.isActive,
         };
 
         return (
@@ -513,7 +513,7 @@ export class RulaMap {
   hostData() {
     return {
       class: {
-        'rula-map': true,
+        'rl-map': true,
       },
     };
   }
@@ -525,15 +525,15 @@ export class RulaMap {
     const matrix = 'matrix(' + m.join(',') + ')';
 
     return (
-      <svg class="rula-map__svg">
-        <g class="rula-map__transform" transform={matrix}>
-          <g class="rula-map__floorplan">
-            <image class="rula-map__floorplan--image"
+      <svg class="rl-map__svg">
+        <g class="rl-map__transform" transform={matrix}>
+          <g class="rl-map__floorplan">
+            <image class="rl-map__floorplan--image"
                 xlinkHref={this.floorplan !== undefined ? this.floorplan : undefined}
                 ref={(el: SVGImageElement) => this.floorplanImage = el}>
             </image>
           </g>
-          <g class="rula-map__elements">
+          <g class="rl-map__elements">
             {this._renderElements()}
           </g>
         </g>

@@ -1,34 +1,17 @@
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, State } from '@stencil/core';
 
-import { BASE_URL } from '../global/constants';
-// import { AppData } from '../interface';
+import { APP_TITLE, BASE_URL } from '../global/constants';
 
 @Component({
-  tag: 'rula-bis',
+  tag: 'rl-bis',
   styleUrl: 'app.scss',
 })
+
 export class App {
   /**
    * Root element of this component.
    */
   @Element() root!: HTMLStencilElement;
-
-  /**
-   * The master collection of application data.  Like a Redux store but without
-   * the overhead.
-   */
-  // @State() appData: AppData = {
-  //   // apiUrl: '',
-  //   // baseUrl: '',
-  //   buildings: {},
-  //   details: {},
-  //   elements: {},
-  //   events: [],
-  //   faqs: {},
-  //   floors: {},
-  //   // eventUrl: '',
-  //   // searchUrl: '',
-  // };
 
   /**
    * Keep track of the app width in order to change the interface.
@@ -44,45 +27,14 @@ export class App {
    */
   @State() drawerOpen!: boolean;
 
+  /**
+   * Global flag indicating if the whole application has loaded.
+   */
   @State() appLoaded = false;
-  @State() eventsLoaded = false;
 
   /**
-   * A URL used to access when loading data.
+   * Lifecycle event fired after the component has rendered the first time.
    */
-  // @Prop() apiUrl?: string;
-
-  // @Prop() searchUrl?: string;
-
-  /**
-   * A URL used to load ICAL event information.
-   */
-  // @Prop() eventUrl!: string;
-
-  /**
-   * The displayed title of the application.
-   */
-  @Prop() appTitle = '';
-
-  // @Prop() baseUrl = '';
-
-  componentWillLoad() {
-    // if (this.apiUrl === undefined) {
-    //   throw new Error('API url not specified. Can not continue.');
-    // }
-
-    // if (this.searchUrl === undefined) {
-    //   throw new Error('Search url not specified. Can not continue.');
-    // }
-
-    // const apiUrl = this.apiUrl;
-    // const baseUrl = this.baseUrl;
-    // const searchUrl = this.searchUrl;
-    // const eventUrl = this.eventUrl;
-
-    // Object.assign(this.appData, { apiUrl, baseUrl, eventUrl, searchUrl });
-  }
-
   componentDidLoad() {
     const el = document.getElementById('splash-screen');
     if (el && el.parentElement) {
@@ -92,8 +44,11 @@ export class App {
     this.appLoaded = true;
   }
 
+  /**
+   * Listen for and handle global `resize` events on the window.
+   */
   @Listen('window:resize')
-  onresize() {
+  handleResize() {
     this.appWidth = window.innerWidth;
   }
 
@@ -106,48 +61,43 @@ export class App {
    */
   @Listen('resultSelected')
   _onResultSelected(e: CustomEvent) {
-    const viewMap = this.root.querySelector('.rula-view--map') as HTMLViewMapElement;
+    const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
     if (viewMap && viewMap.hasOwnProperty('setActiveElementByDetail')) {
       // viewMap.setActiveElementByDetail(e.detail);
       console.log(e.detail);
     }
   }
 
-  // @Listen('getBookLocations')
-  // async _onGetBookLocations(e: CustomEvent) {
-  //   // console.log(e.detail);
-  // }
-
-  // @Listen('dataLoaded')
-  // _onDataLoaded(e: CustomEvent) {
-  //   this.appData = { ...e.detail };
-  // }
-
+  /**
+   * Dynamically sets host element attributes.
+   */
   hostData() {
     return {
       class: {
-        'rula-bis': true,
-        'rula-bis--loaded': this.appLoaded,
+        'rl-bis': true,
+        'rl-bis--loaded': this.appLoaded,
       },
     };
   }
 
+  /**
+   * Component render function.
+   */
   render() {
     return ([
-      <rula-app-bar
-          appTitle={this.appTitle} appWidth={this.appWidth}
-          // searchData={this.appData.details}
+      <rl-app-bar
+          appTitle={APP_TITLE} appWidth={this.appWidth}
           onMenuClicked={_ => { this.drawerOpen = true; }}>
-      </rula-app-bar>,
+      </rl-app-bar>,
 
-      <rula-drawer
+      <rl-drawer
           open={this.drawerOpen}
           onDrawerClose={_ => { this.drawerOpen = false; }}>
-        <header class="rula-drawer__header">
-          <div class="rula-drawer__header-content">
+        <header class="rl-drawer__header">
+          <div class="rl-drawer__header-content">
             <button class="material-icons mdc-top-app-bar__navigation-icon"
               aria-label="Close navigation menu.">close</button>
-            <span class="mdc-top-app-bar__title">{this.appTitle}</span>
+            <span class="mdc-top-app-bar__title">{APP_TITLE}</span>
           </div>
         </header>
         <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
@@ -194,10 +144,10 @@ export class App {
             <i class="material-icons mdc-list-item__graphic" aria-hidden="true">question_answer</i>FAQs
           </stencil-route-link>
         </nav>
-      </rula-drawer>,
+      </rl-drawer>,
 
-      <main class="rula-main-content">
-        <stencil-router id="router" titleSuffix={` | ${this.appTitle}`}>
+      <main class="rl-main-content">
+        <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`}>
           <stencil-route-switch>
             <stencil-route
                 url={`${BASE_URL}`}
