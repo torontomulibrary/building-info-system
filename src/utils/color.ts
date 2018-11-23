@@ -25,11 +25,11 @@ export class Color {
     this._color = (r !== (r & 255) || g !== (g & 255) || b !== (b & 255)) ?
       [] : [r, g, b];
 
-    this._alpha = (typeof a === 'number' && a >= 0 && a <= 1) ? a : 1;
+    this._alpha = (!isNaN(a) && a >= 0 && a <= 1) ? a : 1;
   }
 
   setAlpha(a: number) {
-    this._alpha = (typeof a === 'number' && a >= 0 && a <= 1) ? a : 1;
+    this._alpha = (!isNaN(a) && a >= 0 && a <= 1) ? a : 1;
   }
 
   clone() {
@@ -40,7 +40,7 @@ export class Color {
    * Converts this color to an RGB string appropriate for CSS styles.
    */
   toRgb(): string {
-    return (this._alpha && this._alpha !== 1) ?
+    return (this._alpha !== 1) ?
       `rgba(${this._color.join(',')},${this._alpha})` :
       `rgb(${this._color.join(',')})`;
   }

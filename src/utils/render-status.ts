@@ -19,7 +19,7 @@ function schedule() {
 }
 
 function flushQueue(queue: any[]) {
-  while (queue.length) {
+  while (queue.length > 0) {
     callMethod(queue.shift());
   }
 }
@@ -49,7 +49,7 @@ function callMethod(info: any) {
  * Forces the queu to run immediately.
  */
 function flush() {
-  while (beforeRenderQueue.length || afterRenderQueue.length) {
+  while (beforeRenderQueue.length > 0 || afterRenderQueue.length > 0) {
     flushQueue(beforeRenderQueue);
     flushQueue(afterRenderQueue);
   }

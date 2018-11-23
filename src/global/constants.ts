@@ -67,3 +67,4 @@ export const BUILDINGS_STORAGE_KEY = 'rula-buildings';
 export const FLOORS_STORAGE_KEY = 'rula-floors';
 export const ELEMENTS_STORAGE_KEY = 'rula-elements';
 export const DETAILS_STORAGE_KEY = 'rula-details';
+export const SEARCH_STORAGE_KEY = 'rula-search';

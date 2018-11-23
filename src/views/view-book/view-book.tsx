@@ -2,9 +2,10 @@ import { Component, Prop, State } from '@stencil/core';
 import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
-import { API_URL, BASE_URL } from '../../global/constants';
-import { AppData, SearchHistory } from '../../interface';
-import { fetchJSON } from '../../utils/fetch';
+import { BASE_URL, SEARCH_STORAGE_KEY } from '../../global/constants';
+import { SearchHistory } from '../../interface';
+// import { fetchJSON } from '../../utils/fetch';
+import { loadData } from '../../utils/load-data';
 
 @Component({
   tag: 'view-book',
@@ -12,9 +13,11 @@ import { fetchJSON } from '../../utils/fetch';
 })
 
 export class ViewBooks {
+  @State() searches?: SearchHistory;
+
   @State() loaded = false;
 
-  @Prop({ mutable: true }) appData!: AppData;
+  // @Prop({ mutable: true }) appData!: AppData;
 
   @Prop() history!: RouterHistory;
 
@@ -22,18 +25,24 @@ export class ViewBooks {
 
   componentWillLoad() {
     // Load search history.
-    if (this.appData && this.appData.searches) {
+    loadData('faqs', SEARCH_STORAGE_KEY).then((history: SearchHistory) => {
+      this.searches = history;
       this.loaded = true;
-    } else {
-      fetchJSON(API_URL + 'history').then((history: SearchHistory) => {
-        this.appData = { ...this.appData, searches: {
-          popular: history.popular,
-          recent: history.recent,
-        }};
+    }, reason => {
+      console.log(reason);
+    });
+    // if (this.appData && this.appData.searches) {
+    //   this.loaded = true;
+    // } else {
+    //   fetchJSON(API_URL + 'history').then((history: SearchHistory) => {
+    //     this.appData = { ...this.appData, searches: {
+    //       popular: history.popular,
+    //       recent: history.recent,
+    //     }};
 
-        this.loaded = true;
-      });
-    }
+    //     this.loaded = true;
+    //   });
+    // }
   }
 
   _cardClicked(e: CustomEvent) {
@@ -55,7 +64,7 @@ export class ViewBooks {
 
   render() {
     // Render resent searches and popular books.
-    if (this.appData && this.appData.searches) {
+    if (this.searches) {
       return ([
         <stencil-route-title pageTitle="Books" />,
         <div class="rula-block--centered">
@@ -66,7 +75,7 @@ export class ViewBooks {
           <slot />
         </div>,
         <rula-collection collectionTitle="Recently Searched">
-          {this.appData.searches.recent.map(s =>
+          {this.searches.recent.map(s =>
             <rula-card
               cardData={s.value}
               hasPrimaryAction
@@ -78,7 +87,7 @@ export class ViewBooks {
           )}
         </rula-collection>,
         <rula-collection collectionTitle="Frequently Searched">
-          {this.appData.searches.popular.map(s =>
+          {this.searches.popular.map(s =>
             <rula-card
               cardData={s.value}
               hasPrimaryAction

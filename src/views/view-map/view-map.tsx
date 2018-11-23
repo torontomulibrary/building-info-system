@@ -9,7 +9,7 @@ import {
 import { MatchResults } from '@stencil/router';
 
 import {
-  AppData,
+  // AppData,
   BookDetails,
   Building,
   BuildingMap,
@@ -22,6 +22,7 @@ import {
 } from '../../interface';
 
 import {
+  API_URL,
   BUILDINGS_STORAGE_KEY,
   DETAILS_STORAGE_KEY,
   ELEMENTS_STORAGE_KEY,
@@ -72,7 +73,7 @@ export class ViewMap {
   /**
    * The global object of all application data.
    */
-  @Prop({ mutable: true }) appData!: AppData;
+  // @Prop({ mutable: true }) appData!: AppData;
 
   /**
    * A global flag passed in to indicate if the application has loaded as well.
@@ -110,10 +111,10 @@ export class ViewMap {
         const query = this.match.params.callNo;
         if (query.charAt(0) === 'b') {
           // Have a book record number.
-          await fetchJSON(this.appData.apiUrl + 'books/' + query).then((d: BookDetails) => {
+          await fetchJSON(API_URL + 'books/' + query).then((d: BookDetails) => {
             this._book = d;
           });
-          await loadData<BookDetails>('books/' + query).then(
+          await loadData('books/' + query).then(
             (b: BookDetails) => {
               this._book = b;
           });
@@ -124,22 +125,22 @@ export class ViewMap {
     }
 
     // Load buildings.
-    await loadData<BuildingMap>('buildings', BUILDINGS_STORAGE_KEY).then(
+    await loadData('buildings', BUILDINGS_STORAGE_KEY).then(
       (b: BuildingMap) => {
         this._blds = b;
     });
 
-    await loadData<FloorMap>('floors', FLOORS_STORAGE_KEY).then(
+    await loadData('floors', FLOORS_STORAGE_KEY).then(
       (f: FloorMap) => {
         this._flrs = f;
     });
 
-    await loadData<MapElementMap>('elements', ELEMENTS_STORAGE_KEY).then(
+    await loadData('elements', ELEMENTS_STORAGE_KEY).then(
       (e: MapElementMap) => {
         this._elms = e;
     });
 
-    await loadData<MapElementDetailMap>('details', DETAILS_STORAGE_KEY).then(
+    await loadData('details', DETAILS_STORAGE_KEY).then(
       (d: MapElementDetailMap) => {
         this._dtls = d;
     });

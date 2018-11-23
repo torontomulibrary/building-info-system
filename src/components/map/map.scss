@@ -55,6 +55,16 @@
     }
   }
 
+  &__rect {
+    fill: none;
+    stroke: none;
+
+    &--activated {
+      @include rula-element-activated();
+      @include rula-element-focused();
+    }
+  }
+
   &__point {
     &:focus {
       outline: none;
@@ -70,16 +80,6 @@
 
         cursor: pointer;
       }
-    }
-  }
-
-  &__rect {
-    fill: none;
-    stroke: none;
-
-    &--activated {
-      @include rula-element-activated();
-      @include rula-element-focused();
     }
   }
 }

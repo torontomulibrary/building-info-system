@@ -116,18 +116,18 @@ export interface SearchHistory {
 }
 
 export interface AppData {
-  apiUrl: string,
-  baseUrl: string,
+  // apiUrl: string,
+  // baseUrl: string,
   bookDetails?: BookDetails,
   buildings: BuildingMap,
   details: MapElementDetailMap,
   elements: MapElementMap,
   events: CalEvent[],
-  eventUrl: string,
+  // eventUrl: string,
   faqs: FaqMap,
   floors: FloorMap,
   searches?: SearchHistory,
-  searchUrl: string,
+  // searchUrl: string,
 }
 
 export interface BookDetails {
