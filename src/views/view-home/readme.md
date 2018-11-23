@@ -9,7 +9,6 @@
 
 | Property    | Attribute    | Description | Type      |
 | ----------- | ------------ | ----------- | --------- |
-| `appData`   | --           |             | `AppData` |
 | `appLoaded` | `app-loaded` |             | `boolean` |
 
 

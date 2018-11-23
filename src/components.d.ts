@@ -10,7 +10,6 @@ import '@stencil/core';
 import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
-  AppData,
   BuildingMap,
   MapElementDetailMap,
   MapElementMap,
@@ -29,35 +28,15 @@ export namespace Components {
 
   interface RulaBis {
     /**
-    * A URL used to access when loading data.
-    */
-    'apiUrl': string;
-    /**
-    * The displayed title of the application.
+    * A URL used to access when loading data. A URL used to load ICAL event information. The displayed title of the application.
     */
     'appTitle': string;
-    'baseUrl': string;
-    /**
-    * A URL used to load ICAL event information.
-    */
-    'eventUrl': string;
-    'searchUrl': string;
   }
   interface RulaBisAttributes extends StencilHTMLAttributes {
     /**
-    * A URL used to access when loading data.
-    */
-    'apiUrl'?: string;
-    /**
-    * The displayed title of the application.
+    * A URL used to access when loading data. A URL used to load ICAL event information. The displayed title of the application.
     */
     'appTitle'?: string;
-    'baseUrl'?: string;
-    /**
-    * A URL used to load ICAL event information.
-    */
-    'eventUrl'?: string;
-    'searchUrl'?: string;
   }
 
   interface RulaAccordionItem {
@@ -137,18 +116,19 @@ export namespace Components {
 
   interface RulaCard {
     'buttons'?: Array<{name: string}>;
+    'cardColor': {r: number, g: number, b: number};
     'cardData': { [keys: string]: string[] } | string;
     'cardMedia': string;
     'cardTitle': string;
     'hasPrimaryAction': boolean;
     'icons'?: Array<{name: string}>;
     'noContent': boolean;
-    'protectionColor': any;
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
   }
   interface RulaCardAttributes extends StencilHTMLAttributes {
     'buttons'?: Array<{name: string}>;
+    'cardColor'?: {r: number, g: number, b: number};
     'cardData'?: { [keys: string]: string[] } | string;
     'cardMedia'?: string;
     'cardTitle'?: string;
@@ -156,7 +136,6 @@ export namespace Components {
     'icons'?: Array<{name: string}>;
     'noContent'?: boolean;
     'onCardClicked'?: (event: CustomEvent) => void;
-    'protectionColor'?: any;
     'titleInMedia'?: boolean;
     'wideMediaAspect'?: boolean;
   }
@@ -337,12 +316,10 @@ export namespace Components {
   }
 
   interface ViewBook {
-    'appData': AppData;
     'appLoaded': boolean;
     'history': RouterHistory;
   }
   interface ViewBookAttributes extends StencilHTMLAttributes {
-    'appData'?: AppData;
     'appLoaded'?: boolean;
     'history'?: RouterHistory;
   }
@@ -387,21 +364,15 @@ export namespace Components {
   }
 
   interface ViewHome {
-    'appData': AppData;
     'appLoaded': boolean;
   }
   interface ViewHomeAttributes extends StencilHTMLAttributes {
-    'appData'?: AppData;
     'appLoaded'?: boolean;
   }
 
   interface ViewMap {
     /**
-    * The global object of all application data.
-    */
-    'appData': AppData;
-    /**
-    * A global flag passed in to indicate if the application has loaded as well.
+    * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded': boolean;
     'mapType': string;
@@ -412,11 +383,7 @@ export namespace Components {
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
     /**
-    * The global object of all application data.
-    */
-    'appData'?: AppData;
-    /**
-    * A global flag passed in to indicate if the application has loaded as well.
+    * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded'?: boolean;
     'mapType'?: string;
@@ -431,14 +398,12 @@ export namespace Components {
   }
 
   interface ViewSearch {
-    'appData': AppData;
     'appLoaded': boolean;
     'history': RouterHistory;
     'match': MatchResults;
     'searchUrl'?: string;
   }
   interface ViewSearchAttributes extends StencilHTMLAttributes {
-    'appData'?: AppData;
     'appLoaded'?: boolean;
     'history'?: RouterHistory;
     'match'?: MatchResults;

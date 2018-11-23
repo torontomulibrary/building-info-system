@@ -10,13 +10,13 @@
 | Property           | Attribute            | Description | Type                                      |
 | ------------------ | -------------------- | ----------- | ----------------------------------------- |
 | `buttons`          | --                   |             | `undefined \| { name: string; }[]`        |
+| `cardColor`        | --                   |             | `{ r: number; g: number; b: number; }`    |
 | `cardData`         | `card-data`          |             | `string \| { [keys: string]: string[]; }` |
 | `cardMedia`        | `card-media`         |             | `string`                                  |
 | `cardTitle`        | `card-title`         |             | `string`                                  |
 | `hasPrimaryAction` | `has-primary-action` |             | `boolean`                                 |
 | `icons`            | --                   |             | `undefined \| { name: string; }[]`        |
 | `noContent`        | `no-content`         |             | `boolean`                                 |
-| `protectionColor`  | --                   |             | `Color`                                   |
 | `titleInMedia`     | `title-in-media`     |             | `boolean`                                 |
 | `wideMediaAspect`  | `wide-media-aspect`  |             | `boolean`                                 |
 
