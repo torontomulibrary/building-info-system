@@ -26,7 +26,7 @@ export class EventParser {
   private listeners: Function[];
 
   /**
-   * Create a new RulaICALParser.
+   * Create a new RLICALParser.
    *
    * @param url Optional URL to an ICAL file to load and parse.
    */

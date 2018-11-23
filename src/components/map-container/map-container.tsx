@@ -24,9 +24,9 @@ export class MapContainer {
   /**
    * Internal reference to the `rl-map` component element.
    */
-  private mapEl!: HTMLRulaMapElement;
+  private mapEl!: HTMLRlMapElement;
 
-  // private sideSheet_!: HTMLRulaSideSheetElement;
+  // private sideSheet_!: HTMLRLSideSheetElement;
 
   /**
    * Root element of this component.
@@ -196,7 +196,7 @@ export class MapContainer {
 
     return ([
       <rl-map
-        ref={elm => this.mapEl = elm as HTMLRulaMapElement}
+        ref={elm => this.mapEl = elm as HTMLRlMapElement}
         class="rl-map"
         elements={this.activeElements}
         floorplan={this.activeFloor.floorplan}

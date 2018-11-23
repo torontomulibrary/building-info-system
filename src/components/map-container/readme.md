@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property          | Attribute          | Description | Type          |
-| ----------------- | ------------------ | ----------- | ------------- |
-| `buildings`       | --                 |             | `BuildingMap` |
-| `extraDetails`    | --                 |             | `{}`          |
-| `initialBuilding` | `initial-building` |             | `number`      |
-| `initialElement`  | `initial-element`  |             | `number`      |
-| `initialFloor`    | `initial-floor`    |             | `number`      |
+| Property          | Attribute          | Description | Type                  |
+| ----------------- | ------------------ | ----------- | --------------------- |
+| `buildings`       | --                 |             | `BuildingMap`         |
+| `extraDetails`    | --                 |             | `undefined \| {}`     |
+| `initialBuilding` | `initial-building` |             | `number`              |
+| `initialElement`  | `initial-element`  |             | `number \| undefined` |
+| `initialFloor`    | `initial-floor`    |             | `number`              |
 
 
 ----------------------------------------------

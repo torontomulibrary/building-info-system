@@ -1,8 +1,8 @@
-import { RulaMap } from './map';
+import { RLMap } from './map';
 
 describe('rl-map', () => {
   it('should build', () => {
-    const rm = new RulaMap();
+    const rm = new RLMap();
     expect(rm).toBeTruthy();
   });
 });

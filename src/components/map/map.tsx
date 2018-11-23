@@ -12,7 +12,7 @@ import { MapElementMap, ParsedMapElement } from '../../interface';
   styleUrl: 'map.scss',
 })
 
-export class RulaMap {
+export class RLMap {
   // The array of MapElements currently being displayed.  Created from the
   // `elements` Prop with additional internal information added.
   private processedElements: ParsedMapElement[] = [];

@@ -4,7 +4,7 @@ import { sass } from '@stencil/sass';
 
 export const config: Config = {
   enableCache: false,
-  namespace: 'rula-bis',
+  namespace: 'rl-bis',
   outputTargets: [
     {
       type: 'dist',

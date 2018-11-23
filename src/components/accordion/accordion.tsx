@@ -75,7 +75,7 @@ export class Accordion {
    */
   @Listen('toggleItem')
   toggleItemHandler() {
-    const active = this.root.querySelector('[aria-expanded]') as HTMLRulaAccordionItemElement;
+    const active = this.root.querySelector('[aria-expanded]') as HTMLRlAccordionItemElement;
     if (active && !this.allowMultiple) {
       active.close();
     }

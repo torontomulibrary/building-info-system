@@ -8,7 +8,7 @@ import { FOCUSABLE_ELEMENTS } from '../../global/constants';
   styleUrl: 'drawer.scss',
 })
 
-export class RulaDrawer {
+export class RLDrawer {
 
   private drawer!: MDCDrawer;
 

@@ -26,20 +26,10 @@ import {
 
 export namespace Components {
 
-  interface RulaBis {
-    /**
-    * A URL used to access when loading data. A URL used to load ICAL event information. The displayed title of the application.
-    */
-    'appTitle': string;
-  }
-  interface RulaBisAttributes extends StencilHTMLAttributes {
-    /**
-    * A URL used to access when loading data. A URL used to load ICAL event information. The displayed title of the application.
-    */
-    'appTitle'?: string;
-  }
+  interface RlBis {}
+  interface RlBisAttributes extends StencilHTMLAttributes {}
 
-  interface RulaAccordionItem {
+  interface RlAccordionItem {
     /**
     * This function closes this item.
     */
@@ -57,7 +47,7 @@ export namespace Components {
     */
     'open': () => void;
   }
-  interface RulaAccordionItemAttributes extends StencilHTMLAttributes {
+  interface RlAccordionItemAttributes extends StencilHTMLAttributes {
     /**
     * A delay used to fade-in this item a specific amount of time after the component is rendered.
     */
@@ -72,7 +62,7 @@ export namespace Components {
     'onToggleItem'?: (event: CustomEvent) => void;
   }
 
-  interface RulaAccordion {
+  interface RlAccordion {
     /**
     * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
     */
@@ -82,7 +72,7 @@ export namespace Components {
     */
     'items': Array<{ [key: string]: string }>;
   }
-  interface RulaAccordionAttributes extends StencilHTMLAttributes {
+  interface RlAccordionAttributes extends StencilHTMLAttributes {
     /**
     * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
     */
@@ -93,7 +83,7 @@ export namespace Components {
     'items'?: Array<{ [key: string]: string }>;
   }
 
-  interface RulaAppBar {
+  interface RlAppBar {
     'appTitle': string;
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
@@ -101,7 +91,7 @@ export namespace Components {
     'appWidth': number;
     'searchData': MapElementDetailMap;
   }
-  interface RulaAppBarAttributes extends StencilHTMLAttributes {
+  interface RlAppBarAttributes extends StencilHTMLAttributes {
     'appTitle'?: string;
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
@@ -114,7 +104,7 @@ export namespace Components {
     'searchData'?: MapElementDetailMap;
   }
 
-  interface RulaCard {
+  interface RlCard {
     'buttons'?: Array<{name: string}>;
     'cardColor': {r: number, g: number, b: number};
     'cardData': { [keys: string]: string[] } | string;
@@ -126,7 +116,7 @@ export namespace Components {
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
   }
-  interface RulaCardAttributes extends StencilHTMLAttributes {
+  interface RlCardAttributes extends StencilHTMLAttributes {
     'buttons'?: Array<{name: string}>;
     'cardColor'?: {r: number, g: number, b: number};
     'cardData'?: { [keys: string]: string[] } | string;
@@ -140,20 +130,20 @@ export namespace Components {
     'wideMediaAspect'?: boolean;
   }
 
-  interface RulaCollection {
+  interface RlCollection {
     'collectionTitle': string;
   }
-  interface RulaCollectionAttributes extends StencilHTMLAttributes {
+  interface RlCollectionAttributes extends StencilHTMLAttributes {
     'collectionTitle'?: string;
   }
 
-  interface RulaDrawer {
+  interface RlDrawer {
     /**
     * Flag indicating if the drawer is open.
     */
     'open': boolean;
   }
-  interface RulaDrawerAttributes extends StencilHTMLAttributes {
+  interface RlDrawerAttributes extends StencilHTMLAttributes {
     /**
     * An event emitted when this drawer closes.
     */
@@ -164,17 +154,17 @@ export namespace Components {
     'open'?: boolean;
   }
 
-  interface RulaGraphicDevice {}
-  interface RulaGraphicDeviceAttributes extends StencilHTMLAttributes {}
+  interface RlGraphicDevice {}
+  interface RlGraphicDeviceAttributes extends StencilHTMLAttributes {}
 
-  interface RulaMapContainer {
+  interface RlMapContainer {
     'buildings': BuildingMap;
     'extraDetails'?: {};
     'initialBuilding': number;
     'initialElement'?: number;
     'initialFloor': number;
   }
-  interface RulaMapContainerAttributes extends StencilHTMLAttributes {
+  interface RlMapContainerAttributes extends StencilHTMLAttributes {
     'buildings'?: BuildingMap;
     'extraDetails'?: {};
     'initialBuilding'?: number;
@@ -182,7 +172,7 @@ export namespace Components {
     'initialFloor'?: number;
   }
 
-  interface RulaMapNav {
+  interface RlMapNav {
     /**
     * The `id` of the currently active building.
     */
@@ -200,7 +190,7 @@ export namespace Components {
     */
     'floors': FloorMap;
   }
-  interface RulaMapNavAttributes extends StencilHTMLAttributes {
+  interface RlMapNavAttributes extends StencilHTMLAttributes {
     /**
     * The `id` of the currently active building.
     */
@@ -227,7 +217,7 @@ export namespace Components {
     'onFloorChanged'?: (event: CustomEvent) => void;
   }
 
-  interface RulaMap {
+  interface RlMap {
     /**
     * Clears the currently active element.
     */
@@ -253,7 +243,7 @@ export namespace Components {
     */
     'setActiveElement': (id: number) => void;
   }
-  interface RulaMapAttributes extends StencilHTMLAttributes {
+  interface RlMapAttributes extends StencilHTMLAttributes {
     /**
     * An array of the elements that will be displayed on the Map.
     */
@@ -284,12 +274,12 @@ export namespace Components {
     'onMapRendered'?: (event: CustomEvent) => void;
   }
 
-  interface RulaSearchBox {
+  interface RlSearchBox {
     'id': string;
     'searchData': MapElementDetailMap;
     'showMenu': boolean;
   }
-  interface RulaSearchBoxAttributes extends StencilHTMLAttributes {
+  interface RlSearchBoxAttributes extends StencilHTMLAttributes {
     'id'?: string;
     'onIconClick'?: (event: CustomEvent) => void;
     'onResultSelected'?: (event: CustomEvent) => void;
@@ -297,10 +287,10 @@ export namespace Components {
     'showMenu'?: boolean;
   }
 
-  interface RulaSideSheet {
+  interface RlSideSheet {
     'open': boolean;
   }
-  interface RulaSideSheetAttributes extends StencilHTMLAttributes {
+  interface RlSideSheetAttributes extends StencilHTMLAttributes {
     /**
     * Event fired when the `side-sheet` has finished closing.
     */
@@ -410,19 +400,19 @@ export namespace Components {
 
 declare global {
   interface StencilElementInterfaces {
-    'RulaBis': Components.RulaBis;
-    'RulaAccordionItem': Components.RulaAccordionItem;
-    'RulaAccordion': Components.RulaAccordion;
-    'RulaAppBar': Components.RulaAppBar;
-    'RulaCard': Components.RulaCard;
-    'RulaCollection': Components.RulaCollection;
-    'RulaDrawer': Components.RulaDrawer;
-    'RulaGraphicDevice': Components.RulaGraphicDevice;
-    'RulaMapContainer': Components.RulaMapContainer;
-    'RulaMapNav': Components.RulaMapNav;
-    'RulaMap': Components.RulaMap;
-    'RulaSearchBox': Components.RulaSearchBox;
-    'RulaSideSheet': Components.RulaSideSheet;
+    'RlBis': Components.RlBis;
+    'RlAccordionItem': Components.RlAccordionItem;
+    'RlAccordion': Components.RlAccordion;
+    'RlAppBar': Components.RlAppBar;
+    'RlCard': Components.RlCard;
+    'RlCollection': Components.RlCollection;
+    'RlDrawer': Components.RlDrawer;
+    'RlGraphicDevice': Components.RlGraphicDevice;
+    'RlMapContainer': Components.RlMapContainer;
+    'RlMapNav': Components.RlMapNav;
+    'RlMap': Components.RlMap;
+    'RlSearchBox': Components.RlSearchBox;
+    'RlSideSheet': Components.RlSideSheet;
     'ViewBook': Components.ViewBook;
     'ViewBuilding': Components.ViewBuilding;
     'ViewEvent': Components.ViewEvent;
@@ -433,19 +423,19 @@ declare global {
   }
 
   interface StencilIntrinsicElements {
-    'rl-bis': Components.RulaBisAttributes;
-    'rl-accordion-item': Components.RulaAccordionItemAttributes;
-    'rl-accordion': Components.RulaAccordionAttributes;
-    'rl-app-bar': Components.RulaAppBarAttributes;
-    'rl-card': Components.RulaCardAttributes;
-    'rl-collection': Components.RulaCollectionAttributes;
-    'rl-drawer': Components.RulaDrawerAttributes;
-    'rl-graphic-device': Components.RulaGraphicDeviceAttributes;
-    'rl-map-container': Components.RulaMapContainerAttributes;
-    'rl-map-nav': Components.RulaMapNavAttributes;
-    'rl-map': Components.RulaMapAttributes;
-    'rl-search-box': Components.RulaSearchBoxAttributes;
-    'rl-side-sheet': Components.RulaSideSheetAttributes;
+    'rl-bis': Components.RlBisAttributes;
+    'rl-accordion-item': Components.RlAccordionItemAttributes;
+    'rl-accordion': Components.RlAccordionAttributes;
+    'rl-app-bar': Components.RlAppBarAttributes;
+    'rl-card': Components.RlCardAttributes;
+    'rl-collection': Components.RlCollectionAttributes;
+    'rl-drawer': Components.RlDrawerAttributes;
+    'rl-graphic-device': Components.RlGraphicDeviceAttributes;
+    'rl-map-container': Components.RlMapContainerAttributes;
+    'rl-map-nav': Components.RlMapNavAttributes;
+    'rl-map': Components.RlMapAttributes;
+    'rl-search-box': Components.RlSearchBoxAttributes;
+    'rl-side-sheet': Components.RlSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
     'view-event': Components.ViewEventAttributes;
@@ -456,82 +446,82 @@ declare global {
   }
 
 
-  interface HTMLRulaBisElement extends Components.RulaBis, HTMLStencilElement {}
-  var HTMLRulaBisElement: {
-    prototype: HTMLRulaBisElement;
-    new (): HTMLRulaBisElement;
+  interface HTMLRlBisElement extends Components.RlBis, HTMLStencilElement {}
+  var HTMLRlBisElement: {
+    prototype: HTMLRlBisElement;
+    new (): HTMLRlBisElement;
   };
 
-  interface HTMLRulaAccordionItemElement extends Components.RulaAccordionItem, HTMLStencilElement {}
-  var HTMLRulaAccordionItemElement: {
-    prototype: HTMLRulaAccordionItemElement;
-    new (): HTMLRulaAccordionItemElement;
+  interface HTMLRlAccordionItemElement extends Components.RlAccordionItem, HTMLStencilElement {}
+  var HTMLRlAccordionItemElement: {
+    prototype: HTMLRlAccordionItemElement;
+    new (): HTMLRlAccordionItemElement;
   };
 
-  interface HTMLRulaAccordionElement extends Components.RulaAccordion, HTMLStencilElement {}
-  var HTMLRulaAccordionElement: {
-    prototype: HTMLRulaAccordionElement;
-    new (): HTMLRulaAccordionElement;
+  interface HTMLRlAccordionElement extends Components.RlAccordion, HTMLStencilElement {}
+  var HTMLRlAccordionElement: {
+    prototype: HTMLRlAccordionElement;
+    new (): HTMLRlAccordionElement;
   };
 
-  interface HTMLRulaAppBarElement extends Components.RulaAppBar, HTMLStencilElement {}
-  var HTMLRulaAppBarElement: {
-    prototype: HTMLRulaAppBarElement;
-    new (): HTMLRulaAppBarElement;
+  interface HTMLRlAppBarElement extends Components.RlAppBar, HTMLStencilElement {}
+  var HTMLRlAppBarElement: {
+    prototype: HTMLRlAppBarElement;
+    new (): HTMLRlAppBarElement;
   };
 
-  interface HTMLRulaCardElement extends Components.RulaCard, HTMLStencilElement {}
-  var HTMLRulaCardElement: {
-    prototype: HTMLRulaCardElement;
-    new (): HTMLRulaCardElement;
+  interface HTMLRlCardElement extends Components.RlCard, HTMLStencilElement {}
+  var HTMLRlCardElement: {
+    prototype: HTMLRlCardElement;
+    new (): HTMLRlCardElement;
   };
 
-  interface HTMLRulaCollectionElement extends Components.RulaCollection, HTMLStencilElement {}
-  var HTMLRulaCollectionElement: {
-    prototype: HTMLRulaCollectionElement;
-    new (): HTMLRulaCollectionElement;
+  interface HTMLRlCollectionElement extends Components.RlCollection, HTMLStencilElement {}
+  var HTMLRlCollectionElement: {
+    prototype: HTMLRlCollectionElement;
+    new (): HTMLRlCollectionElement;
   };
 
-  interface HTMLRulaDrawerElement extends Components.RulaDrawer, HTMLStencilElement {}
-  var HTMLRulaDrawerElement: {
-    prototype: HTMLRulaDrawerElement;
-    new (): HTMLRulaDrawerElement;
+  interface HTMLRlDrawerElement extends Components.RlDrawer, HTMLStencilElement {}
+  var HTMLRlDrawerElement: {
+    prototype: HTMLRlDrawerElement;
+    new (): HTMLRlDrawerElement;
   };
 
-  interface HTMLRulaGraphicDeviceElement extends Components.RulaGraphicDevice, HTMLStencilElement {}
-  var HTMLRulaGraphicDeviceElement: {
-    prototype: HTMLRulaGraphicDeviceElement;
-    new (): HTMLRulaGraphicDeviceElement;
+  interface HTMLRlGraphicDeviceElement extends Components.RlGraphicDevice, HTMLStencilElement {}
+  var HTMLRlGraphicDeviceElement: {
+    prototype: HTMLRlGraphicDeviceElement;
+    new (): HTMLRlGraphicDeviceElement;
   };
 
-  interface HTMLRulaMapContainerElement extends Components.RulaMapContainer, HTMLStencilElement {}
-  var HTMLRulaMapContainerElement: {
-    prototype: HTMLRulaMapContainerElement;
-    new (): HTMLRulaMapContainerElement;
+  interface HTMLRlMapContainerElement extends Components.RlMapContainer, HTMLStencilElement {}
+  var HTMLRlMapContainerElement: {
+    prototype: HTMLRlMapContainerElement;
+    new (): HTMLRlMapContainerElement;
   };
 
-  interface HTMLRulaMapNavElement extends Components.RulaMapNav, HTMLStencilElement {}
-  var HTMLRulaMapNavElement: {
-    prototype: HTMLRulaMapNavElement;
-    new (): HTMLRulaMapNavElement;
+  interface HTMLRlMapNavElement extends Components.RlMapNav, HTMLStencilElement {}
+  var HTMLRlMapNavElement: {
+    prototype: HTMLRlMapNavElement;
+    new (): HTMLRlMapNavElement;
   };
 
-  interface HTMLRulaMapElement extends Components.RulaMap, HTMLStencilElement {}
-  var HTMLRulaMapElement: {
-    prototype: HTMLRulaMapElement;
-    new (): HTMLRulaMapElement;
+  interface HTMLRlMapElement extends Components.RlMap, HTMLStencilElement {}
+  var HTMLRlMapElement: {
+    prototype: HTMLRlMapElement;
+    new (): HTMLRlMapElement;
   };
 
-  interface HTMLRulaSearchBoxElement extends Components.RulaSearchBox, HTMLStencilElement {}
-  var HTMLRulaSearchBoxElement: {
-    prototype: HTMLRulaSearchBoxElement;
-    new (): HTMLRulaSearchBoxElement;
+  interface HTMLRlSearchBoxElement extends Components.RlSearchBox, HTMLStencilElement {}
+  var HTMLRlSearchBoxElement: {
+    prototype: HTMLRlSearchBoxElement;
+    new (): HTMLRlSearchBoxElement;
   };
 
-  interface HTMLRulaSideSheetElement extends Components.RulaSideSheet, HTMLStencilElement {}
-  var HTMLRulaSideSheetElement: {
-    prototype: HTMLRulaSideSheetElement;
-    new (): HTMLRulaSideSheetElement;
+  interface HTMLRlSideSheetElement extends Components.RlSideSheet, HTMLStencilElement {}
+  var HTMLRlSideSheetElement: {
+    prototype: HTMLRlSideSheetElement;
+    new (): HTMLRlSideSheetElement;
   };
 
   interface HTMLViewBookElement extends Components.ViewBook, HTMLStencilElement {}
@@ -577,19 +567,19 @@ declare global {
   };
 
   interface HTMLElementTagNameMap {
-    'rl-bis': HTMLRulaBisElement
-    'rl-accordion-item': HTMLRulaAccordionItemElement
-    'rl-accordion': HTMLRulaAccordionElement
-    'rl-app-bar': HTMLRulaAppBarElement
-    'rl-card': HTMLRulaCardElement
-    'rl-collection': HTMLRulaCollectionElement
-    'rl-drawer': HTMLRulaDrawerElement
-    'rl-graphic-device': HTMLRulaGraphicDeviceElement
-    'rl-map-container': HTMLRulaMapContainerElement
-    'rl-map-nav': HTMLRulaMapNavElement
-    'rl-map': HTMLRulaMapElement
-    'rl-search-box': HTMLRulaSearchBoxElement
-    'rl-side-sheet': HTMLRulaSideSheetElement
+    'rl-bis': HTMLRlBisElement
+    'rl-accordion-item': HTMLRlAccordionItemElement
+    'rl-accordion': HTMLRlAccordionElement
+    'rl-app-bar': HTMLRlAppBarElement
+    'rl-card': HTMLRlCardElement
+    'rl-collection': HTMLRlCollectionElement
+    'rl-drawer': HTMLRlDrawerElement
+    'rl-graphic-device': HTMLRlGraphicDeviceElement
+    'rl-map-container': HTMLRlMapContainerElement
+    'rl-map-nav': HTMLRlMapNavElement
+    'rl-map': HTMLRlMapElement
+    'rl-search-box': HTMLRlSearchBoxElement
+    'rl-side-sheet': HTMLRlSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
     'view-event': HTMLViewEventElement
@@ -600,19 +590,19 @@ declare global {
   }
 
   interface ElementTagNameMap {
-    'rl-bis': HTMLRulaBisElement;
-    'rl-accordion-item': HTMLRulaAccordionItemElement;
-    'rl-accordion': HTMLRulaAccordionElement;
-    'rl-app-bar': HTMLRulaAppBarElement;
-    'rl-card': HTMLRulaCardElement;
-    'rl-collection': HTMLRulaCollectionElement;
-    'rl-drawer': HTMLRulaDrawerElement;
-    'rl-graphic-device': HTMLRulaGraphicDeviceElement;
-    'rl-map-container': HTMLRulaMapContainerElement;
-    'rl-map-nav': HTMLRulaMapNavElement;
-    'rl-map': HTMLRulaMapElement;
-    'rl-search-box': HTMLRulaSearchBoxElement;
-    'rl-side-sheet': HTMLRulaSideSheetElement;
+    'rl-bis': HTMLRlBisElement;
+    'rl-accordion-item': HTMLRlAccordionItemElement;
+    'rl-accordion': HTMLRlAccordionElement;
+    'rl-app-bar': HTMLRlAppBarElement;
+    'rl-card': HTMLRlCardElement;
+    'rl-collection': HTMLRlCollectionElement;
+    'rl-drawer': HTMLRlDrawerElement;
+    'rl-graphic-device': HTMLRlGraphicDeviceElement;
+    'rl-map-container': HTMLRlMapContainerElement;
+    'rl-map-nav': HTMLRlMapNavElement;
+    'rl-map': HTMLRlMapElement;
+    'rl-search-box': HTMLRlSearchBoxElement;
+    'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
     'view-event': HTMLViewEventElement;

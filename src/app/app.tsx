@@ -7,7 +7,7 @@ import { APP_TITLE, BASE_URL } from '../global/constants';
   styleUrl: 'app.scss',
 })
 
-export class App {
+export class RLApp {
   /**
    * Root element of this component.
    */
