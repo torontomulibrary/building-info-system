@@ -266,13 +266,13 @@ rules:
         - /fieldset/
   # Styles for components should never need the universal selector.
   selector-max-universal: 0
-  # Ensure any defined symbols are prefixed with "rula-"
-  custom-media-pattern: ^rula-.+
-  custom-property-pattern: ^rula-.+
+  # Ensure any defined symbols are prefixed with "rl-"
+  custom-media-pattern: ^rl-.+
+  custom-property-pattern: ^rl-.+
   # selector-class-pattern:
-  #   - ^rula-.+
+  #   - ^rl-.+
   #   - resolveNestedSelectors: false
-  selector-id-pattern: ^rula-.+
+  selector-id-pattern: ^rl-.+
   # Names are more semantic than numbers
   font-weight-notation: named-where-possible
   # http://www.paulirish.com/2010/the-protocol-relative-url/
@@ -308,7 +308,7 @@ rules:
   plugin/selector-bem-pattern:
     componentName: ^[a-z]+(?:-[a-z]+)*$
     # <namespace>-<block>__<element>*--<modifier>*[<attribute>]*
-    componentSelectors: ^\.rula-{componentName}(?:__[a-z]+(?:-[a-z]+)*)*(?:--[a-z]+(?:-[a-z]+)*)*(?:\[.+\])*$
+    componentSelectors: ^\.rl-{componentName}(?:__[a-z]+(?:-[a-z]+)*)*(?:--[a-z]+(?:-[a-z]+)*)*(?:\[.+\])*$
     ignoreSelectors:
       - ^fieldset
       - ^\[aria\-disabled=(?:.+)\]
@@ -316,11 +316,11 @@ rules:
   # SCSS naming patterns, just like our CSS conventions above.
   # (note for $-vars we use a leading underscore for "private" variables)
   scss/dollar-variable-pattern:
-    - ^_?rula-.+
+    - ^_?rl-.+
     -
       ignore: local
-  scss/at-function-pattern: ^rula-.+
-  scss/at-mixin-pattern: ^rula-.+
+  scss/at-function-pattern: ^rl-.+
+  scss/at-mixin-pattern: ^rl-.+
   # Prevents unneeded nesting selectors
   scss/selector-no-redundant-nesting-selector: true
   # Since leading underscores are not needed, they can be omitted
