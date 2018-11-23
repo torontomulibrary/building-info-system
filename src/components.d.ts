@@ -348,38 +348,42 @@ export namespace Components {
   }
 
   interface ViewBuilding {
-    'appData': AppData;
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
     'appLoaded': boolean;
   }
   interface ViewBuildingAttributes extends StencilHTMLAttributes {
-    'appData'?: AppData;
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
     'appLoaded'?: boolean;
   }
 
   interface ViewEvent {
-    'appData': AppData;
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
     'appLoaded': boolean;
   }
   interface ViewEventAttributes extends StencilHTMLAttributes {
-    'appData'?: AppData;
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
     'appLoaded'?: boolean;
-    'onDataLoaded'?: (event: CustomEvent) => void;
   }
 
   interface ViewFaq {
     /**
-    * The global application data object.  Passed in by the main app and has relevant data added to it by this view.
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
-    'appData': AppData;
     'appLoaded': boolean;
   }
   interface ViewFaqAttributes extends StencilHTMLAttributes {
     /**
-    * The global application data object.  Passed in by the main app and has relevant data added to it by this view.
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
-    'appData'?: AppData;
     'appLoaded'?: boolean;
-    'onDataLoaded'?: (event: CustomEvent) => void;
   }
 
   interface ViewHome {

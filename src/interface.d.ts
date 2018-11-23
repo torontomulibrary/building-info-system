@@ -94,7 +94,10 @@ export interface MapElementDetailMap extends NumberMap<MapElementDetail> {}
 export interface MapElementDetailTypeMap extends NumberMap<MapElementDetailType> {}
 
 export interface MapData {
-  buildings?: BuildingMap,
+  buildings: BuildingMap,
+  floors: FloorMap,
+  elements: MapElementMap,
+  details: MapElementDetailMap,
 }
 
 export interface SearchHistory {

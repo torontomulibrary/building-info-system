@@ -33,7 +33,7 @@ export class ViewFaq {
    */
   componentWillLoad() {
     // Start loading the FAQs.
-    loadData<FaqMap>(FAQ_STORAGE_KEY, 'faqs').then((faqs: FaqMap) => {
+    loadData<FaqMap>('faqs', FAQ_STORAGE_KEY).then((faqs: FaqMap) => {
       this.faqs = faqs;
       this.loaded = true;
     }, reason => {
@@ -55,7 +55,7 @@ export class ViewFaq {
   }
 
   /**
-   * Render the component.
+   * Component render function.
    */
   render() {
     if (this.faqs) {

@@ -46,8 +46,6 @@ export class App {
   @State() appLoaded = false;
   @State() eventsLoaded = false;
 
-  // @State() bookDetails?: BookDetails;
-
   /**
    * A URL used to access when loading data.
    */

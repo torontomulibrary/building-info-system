@@ -2,6 +2,7 @@ import { Component, Prop, State } from '@stencil/core';
 import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
+import { API_URL, BASE_URL } from '../../global/constants';
 import { AppData, SearchHistory } from '../../interface';
 import { fetchJSON } from '../../utils/fetch';
 
@@ -24,7 +25,7 @@ export class ViewBooks {
     if (this.appData && this.appData.searches) {
       this.loaded = true;
     } else {
-      fetchJSON(this.appData.apiUrl + 'history').then((history: SearchHistory) => {
+      fetchJSON(API_URL + 'history').then((history: SearchHistory) => {
         this.appData = { ...this.appData, searches: {
           popular: history.popular,
           recent: history.recent,
@@ -39,7 +40,7 @@ export class ViewBooks {
     e.preventDefault();
 
     const card: Card = e.detail;
-    this.history.push(`${this.appData.baseUrl}/sr/${card.cardData}`);
+    this.history.push(`${BASE_URL}sr/${card.cardData}`);
   }
 
   hostData() {

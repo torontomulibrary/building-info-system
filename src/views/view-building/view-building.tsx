@@ -32,7 +32,7 @@ export class ViewBuilding {
    */
   componentWillLoad() {
     // Start loading the Buildings.
-    loadData<BuildingMap>(BUILDINGS_STORAGE_KEY, 'buildings').then((blds: BuildingMap) => {
+    loadData<BuildingMap>('buildings', BUILDINGS_STORAGE_KEY).then((blds: BuildingMap) => {
       this.buildings = blds;
       this.loaded = true;
     }, reason => {
