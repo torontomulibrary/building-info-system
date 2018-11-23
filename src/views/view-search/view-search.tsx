@@ -1,9 +1,9 @@
 import { Component, Prop, State, Watch } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { BASE_URL } from '../../global/constants';
+import { BASE_URL, SEARCH_URL } from '../../global/constants';
 // import { AppData } from '../../interface';
-import { Color } from '../../utils/color';
+// import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -19,8 +19,8 @@ export class ViewSearch {
   @State() searchQuery?: string;
   @Watch('searchQuery')
   onSearchQueryChanged(newQuery: string) {
-    if (newQuery && this.searchUrl) {
-      const results = fetchJSON(this.searchUrl, {
+    if (newQuery && SEARCH_URL) {
+      const results = fetchJSON(SEARCH_URL, {
         method: 'POST',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -72,7 +72,7 @@ export class ViewSearch {
     const data = e.detail.cardData;
     if (typeof data === 'object') {
       const record = data.ExternalDocumentID[0].substring(0, 8);
-      this.history.push(`${BASE_URL}/books/map/${record}`, { record });
+      this.history.push(`${BASE_URL}books/map/${record}`, { record });
     }
   }
 
@@ -89,7 +89,7 @@ export class ViewSearch {
               noContent
               hasPrimaryAction
               wideMediaAspect
-              protectionColor={new Color(12, 34, 56)}
+              cardColor={{ r: 12, g: 34, b: 56 }}
               onCardClicked={evt => this._bookCardClicked(evt)}>
             </rula-card>
           )}
