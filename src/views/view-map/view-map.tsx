@@ -21,8 +21,15 @@ import {
   MapElementMap,
 } from '../../interface';
 
+import {
+  BUILDINGS_STORAGE_KEY,
+  DETAILS_STORAGE_KEY,
+  ELEMENTS_STORAGE_KEY,
+  FLOORS_STORAGE_KEY,
+} from '../../global/constants';
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
+import { loadData } from '../../utils/load-data';
 
 @Component({
   tag: 'view-map',
@@ -30,6 +37,12 @@ import { compareLCCN } from '../../utils/lccn';
 })
 
 export class ViewMap {
+  private _blds!: BuildingMap;
+  private _flrs!: FloorMap;
+  private _elms!: MapElementMap;
+  private _dtls!: MapElementDetailMap;
+  private _book!: BookDetails;
+
   /**
    * Any URL matches for determining pre-selected building, floor and element.
    */
@@ -53,6 +66,8 @@ export class ViewMap {
    * building, building and floor, or building, floor and element.
    */
   @State() query = '';
+
+  @State() buildings?: BuildingMap;
 
   /**
    * The global object of all application data.
@@ -96,7 +111,11 @@ export class ViewMap {
         if (query.charAt(0) === 'b') {
           // Have a book record number.
           await fetchJSON(this.appData.apiUrl + 'books/' + query).then((d: BookDetails) => {
-            this.appData = { ...this.appData, bookDetails: d };
+            this._book = d;
+          });
+          await loadData<BookDetails>('books/' + query).then(
+            (b: BookDetails) => {
+              this._book = b;
           });
         } else {
           // Invalid record number.
@@ -105,36 +124,31 @@ export class ViewMap {
     }
 
     // Load buildings.
-    await fetchJSON(this.appData.apiUrl + 'buildings').then(
-        (b: BuildingMap) => {
-      this.appData = { ...this.appData, buildings: b };
+    await loadData<BuildingMap>('buildings', BUILDINGS_STORAGE_KEY).then(
+      (b: BuildingMap) => {
+        this._blds = b;
     });
 
-    // Load floors.
-    await fetchJSON(this.appData.apiUrl + 'floors').then(
-        (f: FloorMap) => {
-      this.appData = { ...this.appData, floors: f };
+    await loadData<FloorMap>('floors', FLOORS_STORAGE_KEY).then(
+      (f: FloorMap) => {
+        this._flrs = f;
     });
 
-    // Load elements.
-    await fetchJSON(this.appData.apiUrl + 'elements').then(
-        (e: MapElementMap) => {
-      this.appData = { ...this.appData, elements: e };
+    await loadData<MapElementMap>('elements', ELEMENTS_STORAGE_KEY).then(
+      (e: MapElementMap) => {
+        this._elms = e;
     });
 
-    // Load details.
-    await fetchJSON(this.appData.apiUrl + 'details').then(
-        (d: MapElementDetailMap) => {
-      this.appData = { ...this.appData, details: d };
+    await loadData<MapElementDetailMap>('details', DETAILS_STORAGE_KEY).then(
+      (d: MapElementDetailMap) => {
+        this._dtls = d;
     });
 
-    const { buildings, floors, elements, details, bookDetails } = this.appData;
-
-    Object.values(buildings).forEach((b: Building) => {
+    Object.values(this._blds).forEach((b: Building) => {
       b.enabled = (this.mapType === 'directory' ||
           (this.mapType !== 'directory' && b.code === 'LIB')) ?
           true : false;
-      b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
+      b.floors = Object.values(this._flrs || {}).reduce((ob: FloorMap, f: Floor) => {
         if (f.buildingId === b.id) ob[f.id] = f;
         return ob;
       }, {} as Floor);
@@ -146,12 +160,12 @@ export class ViewMap {
       }
     });
 
-    Object.values(floors).forEach((f: Floor) => {
+    Object.values(this._flrs).forEach((f: Floor) => {
       f.enabled = (this.mapType === 'directory' ||
-          (this.mapType === 'book' && bookDetails &&
-          bookDetails.locations.indexOf(f.name) !== -1)) ?
+          (this.mapType === 'book' && this._book &&
+          this._book.locations.indexOf(f.name) !== -1)) ?
           true : false;
-      f.elements = Object.values(elements || {}).reduce((ob, e) => {
+      f.elements = Object.values(this._elms || {}).reduce((ob, e) => {
         if (e.floorId === f.id) ob[e.id] = e;
         return ob;
       }, {} as MapElement);
@@ -165,23 +179,23 @@ export class ViewMap {
     });
 
     // Load floorplan images, starting with the image for the initial floor.
-    fetchIMG(floors[this.initialFloor].floorplan);
+    fetchIMG(this._flrs[this.initialFloor].floorplan);
 
-    Object.values(floors).forEach((f: Floor) => {
+    Object.values(this._flrs).forEach((f: Floor) => {
       if (f.floorplan && f.id !== this.initialFloor) {
         fetchIMG(f.floorplan);
       }
     });
 
-    Object.values(elements).forEach((e: MapElement) => {
-      e.details = Object.values(details || {}).reduce((ob, d) => {
+    Object.values(this._elms).forEach((e: MapElement) => {
+      e.details = Object.values(this._dtls || {}).reduce((ob, d) => {
         if (d.elementId === e.id) ob[d.id] = d;
         return ob;
       }, {} as MapElementDetail);
 
       e.enabled = (this.mapType === 'directory' ||
-          (this.mapType === 'book' && bookDetails &&
-          this.bookOnShelf(bookDetails.callNo, e))) ?
+          (this.mapType === 'book' && this._book &&
+          this.bookOnShelf(this._book.callNo, e))) ?
           true : false;
 
       if (e.enabled && this.mapType === 'book' && !this.initialElement) {
@@ -196,7 +210,8 @@ export class ViewMap {
     });
 
     this.loaded = true;
-    this.dataLoaded.emit(this.appData);
+    this.buildings = this._blds;
+    // this.dataLoaded.emit(this.appData);
   }
 
   bookOnShelf(callNo: string, shelf: MapElement) {
@@ -229,11 +244,11 @@ export class ViewMap {
       return ([
         <stencil-route-title pageTitle="Directory" />,
         <rula-map-container
-            buildings={this.appData.buildings}
+            buildings={this.buildings}
             initialBuilding={this.initialBuilding}
             initialFloor={this.initialFloor}
             initialElement={this.initialElement}
-            extraDetails={this.appData.bookDetails}>
+            extraDetails={this._book}>
         </rula-map-container>,
       ]);
     }
