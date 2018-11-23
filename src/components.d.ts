@@ -164,9 +164,6 @@ export namespace Components {
     'open'?: boolean;
   }
 
-  interface RulaExpandableCard {}
-  interface RulaExpandableCardAttributes extends StencilHTMLAttributes {}
-
   interface RulaGraphicDevice {}
   interface RulaGraphicDeviceAttributes extends StencilHTMLAttributes {}
 
@@ -420,7 +417,6 @@ declare global {
     'RulaCard': Components.RulaCard;
     'RulaCollection': Components.RulaCollection;
     'RulaDrawer': Components.RulaDrawer;
-    'RulaExpandableCard': Components.RulaExpandableCard;
     'RulaGraphicDevice': Components.RulaGraphicDevice;
     'RulaMapContainer': Components.RulaMapContainer;
     'RulaMapNav': Components.RulaMapNav;
@@ -444,7 +440,6 @@ declare global {
     'rula-card': Components.RulaCardAttributes;
     'rula-collection': Components.RulaCollectionAttributes;
     'rula-drawer': Components.RulaDrawerAttributes;
-    'rula-expandable-card': Components.RulaExpandableCardAttributes;
     'rula-graphic-device': Components.RulaGraphicDeviceAttributes;
     'rula-map-container': Components.RulaMapContainerAttributes;
     'rula-map-nav': Components.RulaMapNavAttributes;
@@ -501,12 +496,6 @@ declare global {
   var HTMLRulaDrawerElement: {
     prototype: HTMLRulaDrawerElement;
     new (): HTMLRulaDrawerElement;
-  };
-
-  interface HTMLRulaExpandableCardElement extends Components.RulaExpandableCard, HTMLStencilElement {}
-  var HTMLRulaExpandableCardElement: {
-    prototype: HTMLRulaExpandableCardElement;
-    new (): HTMLRulaExpandableCardElement;
   };
 
   interface HTMLRulaGraphicDeviceElement extends Components.RulaGraphicDevice, HTMLStencilElement {}
@@ -595,7 +584,6 @@ declare global {
     'rula-card': HTMLRulaCardElement
     'rula-collection': HTMLRulaCollectionElement
     'rula-drawer': HTMLRulaDrawerElement
-    'rula-expandable-card': HTMLRulaExpandableCardElement
     'rula-graphic-device': HTMLRulaGraphicDeviceElement
     'rula-map-container': HTMLRulaMapContainerElement
     'rula-map-nav': HTMLRulaMapNavElement
@@ -619,7 +607,6 @@ declare global {
     'rula-card': HTMLRulaCardElement;
     'rula-collection': HTMLRulaCollectionElement;
     'rula-drawer': HTMLRulaDrawerElement;
-    'rula-expandable-card': HTMLRulaExpandableCardElement;
     'rula-graphic-device': HTMLRulaGraphicDeviceElement;
     'rula-map-container': HTMLRulaMapContainerElement;
     'rula-map-nav': HTMLRulaMapNavElement;

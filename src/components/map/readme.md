@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property    | Attribute   | Description                                                 | Type                  |
-| ----------- | ----------- | ----------------------------------------------------------- | --------------------- |
-| `elements`  | --          | An array of the elements that will be displayed on the Map. | `MapElementMap`       |
-| `floorplan` | `floorplan` | An image that will be displayed on the Map.                 | `string \| undefined` |
-| `maxScale`  | `max-scale` | The maximum scale factor.                                   | `number`              |
-| `minScale`  | `min-scale` | The minimum scale factor.                                   | `number`              |
+| Property    | Attribute   | Description                                                 | Type            |
+| ----------- | ----------- | ----------------------------------------------------------- | --------------- |
+| `elements`  | --          | An array of the elements that will be displayed on the Map. | `MapElementMap` |
+| `floorplan` | `floorplan` | An image that will be displayed on the Map.                 | `string`        |
+| `maxScale`  | `max-scale` | The maximum scale factor.                                   | `number`        |
+| `minScale`  | `min-scale` | The minimum scale factor.                                   | `number`        |
 
 
 ## Events

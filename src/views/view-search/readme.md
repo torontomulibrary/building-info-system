@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property    | Attribute    | Description | Type                  |
-| ----------- | ------------ | ----------- | --------------------- |
-| `appLoaded` | `app-loaded` |             | `boolean`             |
-| `history`   | --           |             | `RouterHistory`       |
-| `match`     | --           |             | `MatchResults`        |
-| `searchUrl` | `search-url` |             | `string \| undefined` |
+| Property    | Attribute    | Description | Type            |
+| ----------- | ------------ | ----------- | --------------- |
+| `appLoaded` | `app-loaded` |             | `boolean`       |
+| `history`   | --           |             | `RouterHistory` |
+| `match`     | --           |             | `MatchResults`  |
+| `searchUrl` | `search-url` |             | `string`        |
 
 
 ----------------------------------------------
