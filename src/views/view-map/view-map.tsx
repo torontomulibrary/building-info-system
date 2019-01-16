@@ -189,7 +189,11 @@ export class ViewMap {
     });
 
     Object.values(this._elms).forEach((e: MapElement) => {
-      e.details = Object.values(this._dtls || {}).reduce((ob, d) => {
+      e.details = Object.values(this._dtls || {}).reduce((ob, d: MapElementDetail) => {
+        if (this.paramMatches && d.code === this.paramMatches[0] &&
+            this.mapType === 'directory' && !this.initialElement) {
+          this.initialElement = d.elementId;
+        }
         if (d.elementId === e.id) ob[d.id] = d;
         return ob;
       }, {} as MapElementDetail);

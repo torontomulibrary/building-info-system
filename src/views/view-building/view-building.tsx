@@ -1,7 +1,7 @@
 import { Component, Prop, State } from '@stencil/core';
 
-import { BUILDINGS_STORAGE_KEY } from '../../global/constants';
-import { Building, BuildingMap } from '../../interface';
+import { BASE_URL, BUILDINGS_STORAGE_KEY, FLOORS_STORAGE_KEY } from '../../global/constants';
+import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
 import { loadData } from '../../utils/load-data';
 
 @Component({
@@ -13,7 +13,7 @@ export class ViewBuilding {
   /**
    * Internal list of Buildings to display.
    */
-  @State() buildings?: BuildingMap;
+  @State() buildings!: BuildingMap;
 
   /**
    * A flag indicating if this view loaded all the data needed to display.
@@ -30,13 +30,27 @@ export class ViewBuilding {
    * Lifecycle event fired when the component is first initialized and not
    * yet in the DOM.
    */
-  componentWillLoad() {
+  async componentWillLoad() {
     // Start loading the Buildings.
     loadData('buildings', BUILDINGS_STORAGE_KEY).then((blds: BuildingMap) => {
       this.buildings = blds;
       this.loaded = true;
     }, reason => {
       console.log(reason);
+    });
+
+    let floors: FloorMap;
+
+    await loadData('floors', FLOORS_STORAGE_KEY).then(
+      (f: FloorMap) => {
+        floors = f;
+    });
+
+    Object.values(this.buildings).forEach((b: Building) => {
+      b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
+        if (f.buildingId === b.id) ob[f.id] = f;
+        return ob;
+      }, {} as Floor);
     });
   }
 
@@ -65,52 +79,34 @@ export class ViewBuilding {
         <div class="rl-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner">
             {Object.values(this.buildings).map((building: Building) =>
-              <div class="rl-card rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop">
-                <div class="rl-card__header rl-card__header--16-9"
-                  style={{ backgroundImage: `url("${building.image}")` }}>
-                  <div class="rl-card__text-protection"></div>
-                  <div class="rl-card__header-content">
-                    <div class="rl-card__title">{building.name}</div>
-                  </div>
-                </div>
-                <div class="rl-card__content">
-                  <div class="rl-card__description">{building.description}</div>
-                  <div class="rl-card__expand-icon mdc-button">
-                    <i class="material-icons">expand_more</i>
-                  </div>
-                </div>
-                <div class="rl-card__content-expandable">
-                  <div class="rl-floor-list">
-                    <div class="rl-floor-list__item">
-                      <div class="rl-floor-list__header">
-                        <div class="rl-floor-list__image"></div>
-                        <div class="rl-floor-list__title">8th Floor</div>
-                        <div class="rl-floor-list__subtitle">SLC</div>
-                        <div class="rl-floor-list__loc-link mdc-button">
-                          <i class="material-icons">
-                            location_on
-                          </i>
-                        </div>
-                      </div>
-                      <div class="rl-floor-list__content">
-                        <div>The top floor of the SLC is dedicated to group and individual study with open-access carrels and twenty bookable study rooms.</div>
-                        <h3>Features</h3>
-                        <ul>
-                          <li>Collaborative &amp; Group Work Rooms</li>
-                          <li>Collaborative Work Space</li>
-                          <li>Individual Study Space</li>
-                          <li>Open Study Space</li>
-                        </ul>
-                      </div>
+              <rl-card
+                class="rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"
+                titleInMedia={true}
+                cardTitle={building.name}
+                cardMedia={`url("${building.image}")`}
+                buttons={[
+                  { name: 'Map It!', link: `${BASE_URL}directory/${building.code}` },
+                ]}
+                >
+                <div slot="primary">
+                  <rl-expansion-panel index={1}>
+                    <div slot="header">{building.description}</div>
+                    <div slot="content">
+                      {Object.keys(building.floors).map(id => {
+                        const floor = building.floors[id];
+                        return (
+                        <rl-expansion-panel index={floor.id}>
+                          <div slot="header">{floor.name}</div>
+                          <div slot="content">
+                            <div>{floor.description}</div>
+                          </div>
+                        </rl-expansion-panel>
+                        );
+                      })}
                     </div>
-                  </div>
+                  </rl-expansion-panel>
                 </div>
-                <div class="rl-card__actions">
-                  <a href={`/map/${building.code}`} role="button" class="mdc-button rl-event__action">
-                    Map it!
-                  </a>
-                </div>
-              </div>
+              </rl-card>
             )}
           </div>
         </div>,

@@ -199,7 +199,7 @@ export class SearchBox {
         return (
           <div ref={el => this.suggestionHeight = el ? el.clientHeight : 0}
               class="rl-search__no-results">
-            Nothing results were found.
+            No results were found.
           </div>
         );
       }
@@ -225,6 +225,8 @@ export class SearchBox {
           aria-owns="rl-search-suggestions" class="rl-search__input"
           placeholder={(this.showMenu && !this.focused) ? 'RULA Finder' : 'Search'}
           onInput={e => this._onSearchChange(e)}
+          onFocus={_ => this.focused = true}
+          onBlur={_ => this.focused = false}
           onKeyDown={e => { this.onKeyDown(e); }}></input>,
       <div class="material-icons rl-search__icon"
           onClick={_ => this._onIconClick()}

@@ -1,6 +1,12 @@
 import { Component, Prop, State } from '@stencil/core';
 
-import { EVENTS_STORAGE_KEY, EVENT_URL, FULL_MONTHS, MONTHS } from '../../global/constants';
+import {
+  BASE_URL,
+  EVENTS_STORAGE_KEY,
+  EVENT_URL,
+  FULL_MONTHS,
+  MONTHS,
+} from '../../global/constants';
 import { CalEvent } from '../../interface';
 import { EventParser, formatTime } from '../../utils/event-parser';
 import { get, set } from '../../utils/local-storage';
@@ -162,12 +168,15 @@ export class ViewEvent {
    */
   render() {
     if (this.events) {
+
       return ([
         <stencil-route-title title="Events" />,
         <h2 class="rl-view__heading">Upcoming events</h2>,
         <div class="rl-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner" role="list">
-            {this.events.map((event: CalEvent, index: number) =>
+            {this.events.map((event: CalEvent, index: number) => {
+              const room = event.location.replace(/\s/g, '').slice(0, 6);
+              return (
               <div class={`${event.group} rl-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
                   data-fade-delay={(index + 1) * 20} fade-in
                   aria-label={this.eventLabel(event)}>
@@ -186,11 +195,13 @@ export class ViewEvent {
                 <div class="rl-event__actions">
                   <button class="mdc-button rl-event__action"
                       aria-label={`Find ${event.location} on the map.`}>
-                    Find on map
+                    <a href={`${BASE_URL}directory/${room}`}>
+                      Find on map
+                    </a>
                   </button>
                 </div>
-              </div>
-            )}
+              </div>);
+            })}
           </div>
         </div>,
       ]);

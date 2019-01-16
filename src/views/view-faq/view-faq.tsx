@@ -60,9 +60,9 @@ export class ViewFaq {
   render() {
     if (this.faqs) {
       return ([
-        <stencil-route-title title="FAQs" />,
-        <h2 class="rl-view__heading">Frequently asked questions</h2>,
-        <div id="container" class="rl-view-faq__container" role="list">
+        <stencil-route-title pageTitle="Frequently Asked Questions" />,
+        <h1 class="rl-view__heading">Frequently asked questions</h1>,
+        <div id="container" class="rl-view-faq__container">
           <rl-accordion>
             {Object.values(this.faqs).map((faq, idx) =>
               <rl-accordion-item class="rl-accordion-item rl-accordion-item--fade-in"
