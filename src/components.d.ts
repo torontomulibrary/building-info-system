@@ -101,7 +101,7 @@ export namespace Components {
     * Event fired when the menu button on the app bar is clicked.
     */
     'onMenuClicked'?: (event: CustomEvent) => void;
-    'searchData'?: MapElementDetailMap;
+    'searchData': MapElementDetailMap;
   }
 
   interface RlCard {
@@ -151,7 +151,7 @@ export namespace Components {
     /**
     * Flag indicating if the drawer is open.
     */
-    'open'?: boolean;
+    'open': boolean;
   }
 
   interface RlExpansionPanel {
@@ -175,11 +175,11 @@ export namespace Components {
     'initialFloor': number;
   }
   interface RlMapContainerAttributes extends StencilHTMLAttributes {
-    'buildings'?: BuildingMap;
+    'buildings': BuildingMap;
     'extraDetails'?: {};
-    'initialBuilding'?: number;
+    'initialBuilding': number;
     'initialElement'?: number;
-    'initialFloor'?: number;
+    'initialFloor': number;
   }
 
   interface RlMapNav {
@@ -204,19 +204,19 @@ export namespace Components {
     /**
     * The `id` of the currently active building.
     */
-    'activeBuilding'?: number;
+    'activeBuilding': number;
     /**
     * The `id` of the currently active floor.
     */
-    'activeFloor'?: number;
+    'activeFloor': number;
     /**
     * An id-indexed map of the buildings.
     */
-    'buildings'?: BuildingMap;
+    'buildings': BuildingMap;
     /**
     * An id-indexed map of floors.
     */
-    'floors'?: FloorMap;
+    'floors': FloorMap;
     /**
     * An event emitted when the selected Building changes.
     */
@@ -236,7 +236,7 @@ export namespace Components {
     'id'?: string;
     'onIconClick'?: (event: CustomEvent) => void;
     'onResultSelected'?: (event: CustomEvent) => void;
-    'searchData'?: MapElementDetailMap;
+    'searchData': MapElementDetailMap;
     'showMenu'?: boolean;
   }
 
@@ -261,7 +261,7 @@ export namespace Components {
   }
   interface ViewBookAttributes extends StencilHTMLAttributes {
     'appLoaded'?: boolean;
-    'history'?: RouterHistory;
+    'history': RouterHistory;
   }
 
   interface ViewBuilding {
@@ -330,7 +330,7 @@ export namespace Components {
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
-    'match'?: MatchResults;
+    'match': MatchResults;
     /**
     * Event fired when the data specific to this view is finished loading.
     */
@@ -345,8 +345,8 @@ export namespace Components {
   }
   interface ViewSearchAttributes extends StencilHTMLAttributes {
     'appLoaded'?: boolean;
-    'history'?: RouterHistory;
-    'match'?: MatchResults;
+    'history': RouterHistory;
+    'match': MatchResults;
     'searchUrl'?: string;
   }
 }
