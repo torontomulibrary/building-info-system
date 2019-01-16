@@ -140,5 +140,5 @@ export interface BookDetails {
 }
 
 export * from './components';
-export * from './components/map/map-interface';
+// export * from './components/map/map-interface';
 export * from './components/search-box/search-box-interface';
