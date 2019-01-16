@@ -7,12 +7,12 @@
 
 import '@stencil/core';
 
+import '@ryelib/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
   BuildingMap,
   MapElementDetailMap,
-  MapElementMap,
 } from './interface';
 import {
   BuildingMap as BuildingMap2,
@@ -105,7 +105,7 @@ export namespace Components {
   }
 
   interface RlCard {
-    'buttons'?: Array<{name: string}>;
+    'buttons'?: Array<{name: string, link: string}>;
     'cardColor': {r: number, g: number, b: number};
     'cardData': { [keys: string]: string[] } | string;
     'cardMedia': string;
@@ -117,7 +117,7 @@ export namespace Components {
     'wideMediaAspect': boolean;
   }
   interface RlCardAttributes extends StencilHTMLAttributes {
-    'buttons'?: Array<{name: string}>;
+    'buttons'?: Array<{name: string, link: string}>;
     'cardColor'?: {r: number, g: number, b: number};
     'cardData'?: { [keys: string]: string[] } | string;
     'cardMedia'?: string;
@@ -152,6 +152,16 @@ export namespace Components {
     * Flag indicating if the drawer is open.
     */
     'open'?: boolean;
+  }
+
+  interface RlExpansionPanel {
+    'close': () => void;
+    'index': number;
+    'open': () => void;
+  }
+  interface RlExpansionPanelAttributes extends StencilHTMLAttributes {
+    'index'?: number;
+    'onToggled'?: (event: CustomEvent) => void;
   }
 
   interface RlGraphicDevice {}
@@ -215,63 +225,6 @@ export namespace Components {
     * An event emitted when the selected Floor changes.
     */
     'onFloorChanged'?: (event: CustomEvent) => void;
-  }
-
-  interface RlMap {
-    /**
-    * Clears the currently active element.
-    */
-    'clearActiveElement': () => void;
-    /**
-    * An array of the elements that will be displayed on the Map.
-    */
-    'elements': MapElementMap;
-    /**
-    * An image that will be displayed on the Map.
-    */
-    'floorplan'?: string;
-    /**
-    * The maximum scale factor.
-    */
-    'maxScale': number;
-    /**
-    * The minimum scale factor.
-    */
-    'minScale': number;
-    /**
-    * Sets the element with the specified ID to active.
-    */
-    'setActiveElement': (id: number) => void;
-  }
-  interface RlMapAttributes extends StencilHTMLAttributes {
-    /**
-    * An array of the elements that will be displayed on the Map.
-    */
-    'elements'?: MapElementMap;
-    /**
-    * An image that will be displayed on the Map.
-    */
-    'floorplan'?: string;
-    /**
-    * The maximum scale factor.
-    */
-    'maxScale'?: number;
-    /**
-    * The minimum scale factor.
-    */
-    'minScale'?: number;
-    /**
-    * An event fired when the user deselects the selected MapElement. The clicked element will be passed as the event parameter.
-    */
-    'onElementDeselected'?: (event: CustomEvent) => void;
-    /**
-    * An event fired when the user selects a MapElement. The clicked element will be passed as the event parameter.
-    */
-    'onElementSelected'?: (event: CustomEvent) => void;
-    /**
-    * An event fired when the map floorplan is updated.
-    */
-    'onMapRendered'?: (event: CustomEvent) => void;
   }
 
   interface RlSearchBox {
@@ -407,10 +360,10 @@ declare global {
     'RlCard': Components.RlCard;
     'RlCollection': Components.RlCollection;
     'RlDrawer': Components.RlDrawer;
+    'RlExpansionPanel': Components.RlExpansionPanel;
     'RlGraphicDevice': Components.RlGraphicDevice;
     'RlMapContainer': Components.RlMapContainer;
     'RlMapNav': Components.RlMapNav;
-    'RlMap': Components.RlMap;
     'RlSearchBox': Components.RlSearchBox;
     'RlSideSheet': Components.RlSideSheet;
     'ViewBook': Components.ViewBook;
@@ -430,10 +383,10 @@ declare global {
     'rl-card': Components.RlCardAttributes;
     'rl-collection': Components.RlCollectionAttributes;
     'rl-drawer': Components.RlDrawerAttributes;
+    'rl-expansion-panel': Components.RlExpansionPanelAttributes;
     'rl-graphic-device': Components.RlGraphicDeviceAttributes;
     'rl-map-container': Components.RlMapContainerAttributes;
     'rl-map-nav': Components.RlMapNavAttributes;
-    'rl-map': Components.RlMapAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
     'rl-side-sheet': Components.RlSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
@@ -488,6 +441,12 @@ declare global {
     new (): HTMLRlDrawerElement;
   };
 
+  interface HTMLRlExpansionPanelElement extends Components.RlExpansionPanel, HTMLStencilElement {}
+  var HTMLRlExpansionPanelElement: {
+    prototype: HTMLRlExpansionPanelElement;
+    new (): HTMLRlExpansionPanelElement;
+  };
+
   interface HTMLRlGraphicDeviceElement extends Components.RlGraphicDevice, HTMLStencilElement {}
   var HTMLRlGraphicDeviceElement: {
     prototype: HTMLRlGraphicDeviceElement;
@@ -504,12 +463,6 @@ declare global {
   var HTMLRlMapNavElement: {
     prototype: HTMLRlMapNavElement;
     new (): HTMLRlMapNavElement;
-  };
-
-  interface HTMLRlMapElement extends Components.RlMap, HTMLStencilElement {}
-  var HTMLRlMapElement: {
-    prototype: HTMLRlMapElement;
-    new (): HTMLRlMapElement;
   };
 
   interface HTMLRlSearchBoxElement extends Components.RlSearchBox, HTMLStencilElement {}
@@ -574,10 +527,10 @@ declare global {
     'rl-card': HTMLRlCardElement
     'rl-collection': HTMLRlCollectionElement
     'rl-drawer': HTMLRlDrawerElement
+    'rl-expansion-panel': HTMLRlExpansionPanelElement
     'rl-graphic-device': HTMLRlGraphicDeviceElement
     'rl-map-container': HTMLRlMapContainerElement
     'rl-map-nav': HTMLRlMapNavElement
-    'rl-map': HTMLRlMapElement
     'rl-search-box': HTMLRlSearchBoxElement
     'rl-side-sheet': HTMLRlSideSheetElement
     'view-book': HTMLViewBookElement
@@ -597,10 +550,10 @@ declare global {
     'rl-card': HTMLRlCardElement;
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
+    'rl-expansion-panel': HTMLRlExpansionPanelElement;
     'rl-graphic-device': HTMLRlGraphicDeviceElement;
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
-    'rl-map': HTMLRlMapElement;
     'rl-search-box': HTMLRlSearchBoxElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
