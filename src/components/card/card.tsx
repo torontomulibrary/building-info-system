@@ -26,7 +26,7 @@ export class Card {
   @State() protectionColor = new Color(255, 255, 255, 1);
   @State() textColors = [new Color(255, 255, 255), new Color(0, 0, 0)];
 
-  @Prop() buttons?: Array<{name: string}>;
+  @Prop() buttons?: Array<{name: string, link: string}>;
   @Prop() icons?: Array<{name: string}>;
 
   @Prop() cardMedia = '';
@@ -65,7 +65,7 @@ export class Card {
           <div class="mdc-card__action-buttons">
             {this.buttons.map(b =>
               <button class="mdc-button">
-                <a href="#">{b.name}</a>
+                <a href={b.link}>{b.name}</a>
               </button>
             )}
           </div> : undefined
