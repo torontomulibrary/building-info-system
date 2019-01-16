@@ -17,7 +17,7 @@ export class AccordionItem {
    * The button used as the header, and allows the user to toggle the open
    * state of the item.
    */
-  private _button!: HTMLElement | null;
+  private _button?: HTMLButtonElement;
 
   /**
    * The root element of this component.
@@ -51,7 +51,7 @@ export class AccordionItem {
    * entered into the DOM.
    */
   componentDidLoad() {
-    this._button = this.root.querySelector('#rl-accordion-item__trigger-' + this.index);
+    // this._button = this.root.querySelector('#rl-accordion-item__trigger-' + this.index);
 
     if (this._button) {
       MDCRipple.attachTo(this._button);
@@ -60,16 +60,6 @@ export class AccordionItem {
     window.setTimeout(() => {
       this.root.classList.remove('rl-accordion-item--fade-in');
     }, this.delay);
-  }
-
-  /**
-   * Handes when an `enter` key is pressed on this component.
-   * @param e The triggering event
-   */
-  onKeyPress(e: KeyboardEvent) {
-    if (e.key === 'Enter') {
-      this.toggle();
-    }
   }
 
   /**
@@ -101,7 +91,6 @@ export class AccordionItem {
    */
   hostData() {
     return {
-      'aria-expanded': this.isOpen,
       class: {
         'rl-accordion-item': true,
         'rl-accordion-item--open': this.isOpen,
@@ -114,11 +103,13 @@ export class AccordionItem {
    */
   render() {
     return ([
-      <dt role="heading" aria-level="3" class="rl-accordion-item__header"
+      <dt role="heading" aria-level="2" class="rl-accordion-item__header"
           onClick={_ => { this.toggle(); }}>
-        <button aria-expanded={this.open} id={`rl-accordion-item__trigger-${this.index}`}
-            class="rl-accordion-item__trigger" type="button"
-            onKeyPress={e => { this.onKeyPress(e); }}
+        <button aria-expanded={this.isOpen ? 'true' : 'false'}
+            ref={el => this._button = el}
+            id={`rl-accordion-item__trigger-${this.index}`}
+            class="rl-accordion-item__trigger"
+            // onKeyPress={e => { this.onKeyPress(e); }}
             aria-controls={`rl-accordion-item__content-${this.index}`}>
           <span class="rl-accordion-item__title">
             <slot name="header" />
@@ -131,8 +122,8 @@ export class AccordionItem {
       </dt>,
       <dd id={`rl-accordion-item__content-${this.index}`} role="region"
           aria-hidden={!this.isOpen}
-          aria-labelledby={`rl-accordion-item__trigger-${this.index}`}
-          class="rl-accordion-item__content">
+          // aria-labelledby={`rl-accordion-item__trigger-${this.index}`}
+          class="rl-accordion-item__content" tabindex={this.isOpen ? '0' : '-1'}>
         <slot name="content" />
       </dd>,
     ]);

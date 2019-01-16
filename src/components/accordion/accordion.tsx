@@ -64,6 +64,12 @@ export class Accordion {
         this._triggers[newIndex].focus();
 
         evt.preventDefault();
+      } else if (key === 'End') {
+        const newIndex = this._triggers.length;
+        this._triggers[newIndex].focus();
+      } else if (key === 'Home') {
+        const newIndex = 0;
+        this._triggers[newIndex].focus();
       }
     }
   }
