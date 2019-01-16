@@ -132,7 +132,8 @@ export class RLApp {
     return ([
       <rl-app-bar
           appTitle={APP_TITLE} appWidth={this.appWidth}
-          onMenuClicked={_ => { this.drawerOpen = true; }}>
+          onMenuClicked={_ => { this.drawerOpen = true; }}
+          searchData={{}}>
       </rl-app-bar>,
 
       <rl-drawer

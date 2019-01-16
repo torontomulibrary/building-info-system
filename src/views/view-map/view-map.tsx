@@ -245,7 +245,7 @@ export class ViewMap {
   }
 
   render() {
-    if (this.loaded) {
+    if (this.loaded && this.buildings) {
       return ([
         <stencil-route-title pageTitle="Directory" />,
         <rl-map-container
