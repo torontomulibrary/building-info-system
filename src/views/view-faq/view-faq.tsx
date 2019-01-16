@@ -1,7 +1,8 @@
-import { Component, Event, EventEmitter, Prop, State } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 
-import { AppData, FaqMap } from '../../interface';
-import { fetchJSON } from '../../utils/fetch';
+import { FAQ_STORAGE_KEY } from '../../global/constants';
+import { FaqMap } from '../../interface';
+import { loadData } from '../../utils/load-data';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -10,56 +11,67 @@ import { sanitize } from '../../utils/sanitize';
 })
 
 export class ViewFaq {
+  /**
+   * Internal list of FAQs to display.
+   */
+  @State() faqs?: FaqMap;
+
+  /**
+   * A flag indicating if this view loaded all the data needed to display.
+   */
   @State() loaded = false;
 
   /**
-   * The global application data object.  Passed in by the main app and has
-   * relevant data added to it by this view.
+   * Global flag indicating if the whole application has loaded.  If not, this
+   * view should not display either.
    */
-  @Prop({ mutable: true }) appData!: AppData;
-
   @Prop() appLoaded = false;
 
-  @Event() dataLoaded!: EventEmitter;
-
+  /**
+   * Lifecycle event fired when the component is first initialized and not
+   * yet in the DOM.
+   */
   componentWillLoad() {
-    // Load FAQs.
-    if (Object.keys(this.appData.faqs).length !== 0) {
+    // Start loading the FAQs.
+    loadData('faqs', FAQ_STORAGE_KEY).then((faqs: FaqMap) => {
+      this.faqs = faqs;
       this.loaded = true;
-    } else {
-      fetchJSON(this.appData.apiUrl + 'faqs').then((faqs: FaqMap) => {
-        this.appData = { ...this.appData, faqs };
-        this.dataLoaded.emit(this.appData);
-        this.loaded = true;
-      });
-    }
+    }, reason => {
+      console.log(reason);
+    });
   }
 
+  /**
+   * Dynamically sets host element attributes.
+   */
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--faq': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--faq': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
 
+  /**
+   * Component render function.
+   */
   render() {
-    if (this.appData && this.appData.faqs) {
+    if (this.faqs) {
       return ([
-        <stencil-route-title title="FAQs" />,
-        <h2 class="rula-view__heading">Frequently asked questions</h2>,
-        <div id="container" class="rula-view-faq__container" role="list">
-          <rula-accordion>
-            {Object.values(this.appData.faqs).map((faq, idx) =>
-              <rula-accordion-item class="rula-accordion-item rula-accordion-item--fade-in"
+        <stencil-route-title pageTitle="Frequently Asked Questions" />,
+        <h1 class="rl-view__heading">Frequently asked questions</h1>,
+        <div id="container" class="rl-view-faq__container">
+          <rl-accordion>
+            {Object.values(this.faqs).map((faq, idx) =>
+              <rl-accordion-item class="rl-accordion-item rl-accordion-item--fade-in"
                 index={idx} delay={idx * 30}>
                 <div slot="header">{faq.question}</div>
                 <div slot="content">{sanitize(faq.answer)}</div>
-              </rula-accordion-item>
+              </rl-accordion-item>
             )}
-          </rula-accordion>
+          </rl-accordion>
         </div>,
       ]);
     }

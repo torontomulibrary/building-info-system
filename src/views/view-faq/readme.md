@@ -7,17 +7,9 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                                                                    | Type      |
-| ----------- | ------------ | -------------------------------------------------------------------------------------------------------------- | --------- |
-| `appData`   | --           | The global application data object.  Passed in by the main app and has relevant data added to it by this view. | `AppData` |
-| `appLoaded` | `app-loaded` |                                                                                                                | `boolean` |
-
-
-## Events
-
-| Event        | Detail | Description |
-| ------------ | ------ | ----------- |
-| `dataLoaded` |        |             |
+| Property    | Attribute    | Description                                                                                               | Type      |
+| ----------- | ------------ | --------------------------------------------------------------------------------------------------------- | --------- |
+| `appLoaded` | `app-loaded` | Global flag indicating if the whole application has loaded.  If not, this view should not display either. | `boolean` |
 
 
 ----------------------------------------------

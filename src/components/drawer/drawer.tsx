@@ -4,11 +4,11 @@ import { Component, Element, Event, EventEmitter, Listen, Prop, Watch } from '@s
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
 
 @Component({
-  tag: 'rula-drawer',
+  tag: 'rl-drawer',
   styleUrl: 'drawer.scss',
 })
 
-export class RulaDrawer {
+export class RLDrawer {
 
   private drawer!: MDCDrawer;
 

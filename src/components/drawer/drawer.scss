@@ -6,15 +6,15 @@
   z-index: 10;
 }
 
-.rula-drawer__header {
-  @include mdc-theme-prop(background-color, $rula-theme-primary);
+.rl-drawer__header {
+  @include mdc-theme-prop(background-color, $rl-theme-primary);
 
   position: relative;
-  height: $rula-top-bar-height;
-  color: mdc-theme-accessible-ink-color($rula-theme-primary);
+  height: $rl-top-bar-height;
+  color: mdc-theme-accessible-ink-color($rl-theme-primary);
 
   @media (max-width: $grid-mobile-bp) {
-    height: $rula-top-bar-mobile-height;
+    height: $rl-top-bar-mobile-height;
   }
 
   &-content {
@@ -31,5 +31,5 @@
 }
 
 .mdc-drawer__header-content {
-  background-color: $rula-theme-primary;
+  background-color: $rl-theme-primary;
 }

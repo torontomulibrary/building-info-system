@@ -1,15 +1,15 @@
 @import "@material/typography/variables";
 
-$rula-divider-color-on-light-bg: rgba(0, 0, 0, 0.12) !default;
-$rula-divider-color-on-dark-bg: rgba(255, 255, 255, 0.2) !default;
+$rl-divider-color-on-light-bg: rgba(0, 0, 0, 0.12) !default;
+$rl-divider-color-on-dark-bg: rgba(255, 255, 255, 0.2) !default;
 
-@mixin rula-divider($color) {
-  .rula-list-divider {
+@mixin rl-divider($color) {
+  .rl-list-divider {
     @include mdc-theme-prop(border-bottom-color, $color);
   }
 }
 
-.rula-list {
+.rl-list {
   margin: 0;
   padding: 8px 0;
   line-height: map-get(map-get($mdc-typography-styles, body1), line-height);
@@ -35,12 +35,12 @@ $rula-divider-color-on-dark-bg: rgba(255, 255, 255, 0.2) !default;
       height: 20px;
       margin-bottom: -12px;
       padding-top: 8px;
-      color: $rula-theme-primary;
+      color: $rl-theme-primary;
     }
   }
 }
 
-.rula-list-divider {
+.rl-list-divider {
   height: 0;
   margin: 0;
   border: none;
@@ -49,11 +49,11 @@ $rula-divider-color-on-dark-bg: rgba(255, 255, 255, 0.2) !default;
 }
 
 @at-root {
-  $rula-divider-color: if(
-    mdc-theme-tone($rula-theme-background) == "dark",
-    $rula-divider-color-on-dark-bg,
-    $rula-divider-color-on-light-bg
+  $rl-divider-color: if(
+    mdc-theme-tone($rl-theme-background) == "dark",
+    $rl-divider-color-on-dark-bg,
+    $rl-divider-color-on-light-bg
   );
 
-  @include rula-divider($rula-divider-color);
+  @include rl-divider($rl-divider-color);
 }

@@ -6,7 +6,7 @@ import { Component, Element, Listen, Prop } from '@stencil/core';
  * expanded when interacted with by the user to display the content.
  */
 @Component({
-  tag: 'rula-accordion',
+  tag: 'rl-accordion',
   styleUrl: 'accordion.scss',
 })
 
@@ -39,7 +39,7 @@ export class Accordion {
    */
   componentDidLoad() {
     this._triggers = Array.prototype.slice.call(
-      this.root.querySelectorAll('.rula-accordion-item__trigger'));
+      this.root.querySelectorAll('.rl-accordion-item__trigger'));
   }
 
   /**
@@ -54,7 +54,7 @@ export class Accordion {
     const key = evt.key;
 
     if (target instanceof HTMLButtonElement && target &&
-        target.classList.contains('rula-accordion-item__trigger')) {
+        target.classList.contains('rl-accordion-item__trigger')) {
       if (key === 'ArrowUp' || key === 'ArrowDown') {
         const index = this._triggers.indexOf(target);
         const dir = (key === 'ArrowDown') ? 1 : -1;
@@ -64,6 +64,12 @@ export class Accordion {
         this._triggers[newIndex].focus();
 
         evt.preventDefault();
+      } else if (key === 'End') {
+        const newIndex = this._triggers.length;
+        this._triggers[newIndex].focus();
+      } else if (key === 'Home') {
+        const newIndex = 0;
+        this._triggers[newIndex].focus();
       }
     }
   }
@@ -75,7 +81,7 @@ export class Accordion {
    */
   @Listen('toggleItem')
   toggleItemHandler() {
-    const active = this.root.querySelector('[aria-expanded]') as HTMLRulaAccordionItemElement;
+    const active = this.root.querySelector('[aria-expanded]') as HTMLRlAccordionItemElement;
     if (active && !this.allowMultiple) {
       active.close();
     }
@@ -86,7 +92,7 @@ export class Accordion {
    */
   render() {
     return (
-      <dl role="presentation" class="rula-accordion-group"
+      <dl role="presentation" class="rl-accordion-group"
           onKeyDown={e => { this.onKeyDown(e); }}>
         <slot />
       </dl>

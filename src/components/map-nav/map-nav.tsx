@@ -11,7 +11,7 @@ import {
 } from '../../interface.js';
 
 @Component({
-  tag: 'rula-map-nav',
+  tag: 'rl-map-nav',
   styleUrl: 'map-nav.scss',
 })
 
@@ -129,7 +129,7 @@ export class MapNav {
   hostData() {
     return {
       class: {
-        'rula-map-nav': true,
+        'rl-map-nav': true,
       },
     };
   }

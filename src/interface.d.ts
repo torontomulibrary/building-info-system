@@ -94,7 +94,10 @@ export interface MapElementDetailMap extends NumberMap<MapElementDetail> {}
 export interface MapElementDetailTypeMap extends NumberMap<MapElementDetailType> {}
 
 export interface MapData {
-  buildings?: BuildingMap,
+  buildings: BuildingMap,
+  floors: FloorMap,
+  elements: MapElementMap,
+  details: MapElementDetailMap,
 }
 
 export interface SearchHistory {
@@ -113,17 +116,18 @@ export interface SearchHistory {
 }
 
 export interface AppData {
-  apiUrl: string,
+  // apiUrl: string,
+  // baseUrl: string,
   bookDetails?: BookDetails,
   buildings: BuildingMap,
   details: MapElementDetailMap,
   elements: MapElementMap,
   events: CalEvent[],
-  eventUrl: string,
+  // eventUrl: string,
   faqs: FaqMap,
   floors: FloorMap,
   searches?: SearchHistory,
-  searchUrl: string,
+  // searchUrl: string,
 }
 
 export interface BookDetails {
@@ -136,5 +140,5 @@ export interface BookDetails {
 }
 
 export * from './components';
-export * from './components/map/map-interface';
+// export * from './components/map/map-interface';
 export * from './components/search-box/search-box-interface';

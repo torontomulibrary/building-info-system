@@ -16,17 +16,17 @@ import {
 } from '../../interface';
 
 @Component({
-  tag: 'rula-map-container',
+  tag: 'rl-map-container',
   styleUrl: 'map-container.scss',
 })
 
 export class MapContainer {
   /**
-   * Internal reference to the `rula-map` component element.
+   * Internal reference to the `rl-map` component element.
    */
-  private mapEl!: HTMLRulaMapElement;
+  private mapEl!: HTMLRlMapElement;
 
-  // private sideSheet_!: HTMLRulaSideSheetElement;
+  // private sideSheet_!: HTMLRLSideSheetElement;
 
   /**
    * Root element of this component.
@@ -186,7 +186,7 @@ export class MapContainer {
   hostData() {
     return {
       class: {
-        'rula-map-container': true,
+        'rl-map-container': true,
       },
     };
   }
@@ -195,51 +195,51 @@ export class MapContainer {
     const detail = this.activeElement && Object.values(this.activeElement.details)[0];
 
     return ([
-      <rula-map
-        ref={elm => this.mapEl = elm as HTMLRulaMapElement}
-        class="rula-map"
+      <rl-map
+        ref={elm => this.mapEl = elm as HTMLRlMapElement}
+        class="rl-map"
         elements={this.activeElements}
-        floorplan={this.activeFloor.floorplan}
+        mapImage={this.activeFloor.floorplan}
         onElementSelected={e => this.onElementSelected(e.detail)}
         onElementDeselected={() => this.onElementDeselected()}
         onMapRendered={() => this.onMapRendered()}>
-      </rula-map>,
+      </rl-map>,
 
-      <rula-side-sheet open={this.activeElement !== undefined}>
-        <header class="rula-side-sheet__header">
-          <span class="rula-side-sheet__title">
+      <rl-side-sheet open={this.activeElement !== undefined}>
+        <header class="rl-side-sheet__header">
+          <span class="rl-side-sheet__title">
             <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
             <div class="mdc-typography--headline6">{detail && detail.name || ''}</div>
           </span>
           <button
-              class="material-icons rula-side-sheet__close"
+              class="material-icons rl-side-sheet__close"
               onClick={_ => { this._setActiveElement(); }}
               aria-label="Close detail panel.">
             close
           </button>
         </header>
-        <div class="rula-side-sheet__content">
-          <div class="rula-side-sheet__section">
-            <div class="rula-side-sheet__subtitle mdc-typography--subtitle2">Description</div>
+        <div class="rl-side-sheet__content">
+          <div class="rl-side-sheet__section">
+            <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">Description</div>
             {detail && detail.description || ''}
           </div>
           {this.extraDetails && Object.entries(this.extraDetails).map(item =>
-            <div class="rula-side-sheet__section">
-              <div class="rula-side-sheet__subtitle mdc-typography--subtitle2">{item[0]}</div>
+            <div class="rl-side-sheet__section">
+              <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">{item[0]}</div>
               {item[1]}
             </div>
           )}
         </div>
-      </rula-side-sheet>,
+      </rl-side-sheet>,
 
-      <rula-map-nav
+      <rl-map-nav
         activeBuilding={this.activeBuilding.id}
         activeFloor={this.activeFloor.id}
         buildings={this.buildings}
         floors={this.activeBuilding.floors}
         onBuildingChanged={ev => this._setActiveBuilding(this.buildings[ev.detail])}
         onFloorChanged={ev => this._setActiveFloor(this.activeFloors[ev.detail])}>
-      </rula-map-nav>,
+      </rl-map-nav>,
     ]);
   }
 }

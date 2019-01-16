@@ -1,8 +1,15 @@
-import { Component, Event, EventEmitter, Prop, State } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 
-import { FULL_MONTHS, MONTHS } from '../../global/constants';
-import { AppData, CalEvent } from '../../interface';
+import {
+  BASE_URL,
+  EVENTS_STORAGE_KEY,
+  EVENT_URL,
+  FULL_MONTHS,
+  MONTHS,
+} from '../../global/constants';
+import { CalEvent } from '../../interface';
 import { EventParser, formatTime } from '../../utils/event-parser';
+import { get, set } from '../../utils/local-storage';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -12,40 +19,48 @@ import { sanitize } from '../../utils/sanitize';
 
 export class ViewEvent {
   /**
-   * An array of all events.
+   * Internal list of all Events to display.
    */
-  // @Prop() allEvents!: CalEvent[];
+  @State() events?: CalEvent[];
 
+  /**
+   * A flag indicating if this view loaded all the data needed to display.
+   */
   @State() loaded = false;
 
-  @Prop({ mutable: true }) appData!: AppData;
-
+  /**
+   * Global flag indicating if the whole application has loaded.  If not, this
+   * view should not display either.
+   */
   @Prop() appLoaded = false;
 
-  @Event() dataLoaded!: EventEmitter;
-
+  /**
+   * Lifecycle event fired when the component is first initialized and not
+   * yet in the DOM.
+   */
   componentWillLoad() {
-    if (this.appData.events.length === 0) {
-      // Load events if there are none loaded yet.
-      const parser: EventParser = new EventParser();
-
-      parser.subscribe(() => {
-        this.appData = { ...this.appData, events: parser.getFutureEvents(52) };
-        // this.eventsLoaded = true;
+    get(EVENTS_STORAGE_KEY).then((events: CalEvent[]) => {
+      if (events) {
+        events.forEach((evt: CalEvent) => {
+          evt.endTime = new Date(evt.endTime);
+          evt.startTime = new Date(evt.startTime);
+        });
+        this.events = events;
         this.loaded = true;
-        this.dataLoaded.emit(this.appData);
-      });
+      } else {
+        const parser: EventParser = new EventParser();
 
-      parser.loadIcal(this.appData.eventUrl);
-    } else {
-      this.loaded = true;
-    }
-  }
+        parser.subscribe(() => {
+          const evts = parser.getFutureEvents(52);
+          set(EVENTS_STORAGE_KEY, evts);
+          this.events = evts;
 
-  componentDidLoad() {
-    if (this.appData.events) {
-      this.loaded = true;
-    }
+          this.loaded = true;
+        });
+
+        parser.loadIcal(EVENT_URL);
+      }
+    });
   }
 
   /**
@@ -135,12 +150,15 @@ export class ViewEvent {
     return num + 'th';
   }
 
+  /**
+   * Dynamically sets host element attributes.
+   */
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--events': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--events': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }
@@ -149,43 +167,48 @@ export class ViewEvent {
    * Component render function.
    */
   render() {
-    if (this.appData && this.appData.events) {
+    if (this.events) {
+
       return ([
         <stencil-route-title title="Events" />,
-        <h2 class="rula-view__heading">Upcoming events</h2>,
-        <div class="rula-view__container mdc-layout-grid">
+        <h2 class="rl-view__heading">Upcoming events</h2>,
+        <div class="rl-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner" role="list">
-            {this.appData.events.map((event: CalEvent, index: number) =>
-              <div class={`${event.group} rula-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
+            {this.events.map((event: CalEvent, index: number) => {
+              const room = event.location.replace(/\s/g, '').slice(0, 6);
+              return (
+              <div class={`${event.group} rl-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
                   data-fade-delay={(index + 1) * 20} fade-in
                   aria-label={this.eventLabel(event)}>
-                <div class="rula-event__header rula-event__header--16-9">
-                <div class="rula-event__text-protection"></div>
-                  <div class="rula-event__header-content">
-                    <div class="rula-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
-                    <div class="rula-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
-                    <div class="rula-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
+                <div class="rl-event__header rl-event__header--16-9">
+                <div class="rl-event__text-protection"></div>
+                  <div class="rl-event__header-content">
+                    <div class="rl-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
+                    <div class="rl-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
+                    <div class="rl-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
                   </div>
                 </div>
-                <div class="rula-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
-                  <div class="rula-event__title mdc-typography--headline5">{event.title}</div>
+                <div class="rl-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
+                  <div class="rl-event__title mdc-typography--headline5">{event.title}</div>
                   <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
                 </div>
-                <div class="rula-event__actions">
-                  <button class="mdc-button rula-event__action"
+                <div class="rl-event__actions">
+                  <button class="mdc-button rl-event__action"
                       aria-label={`Find ${event.location} on the map.`}>
-                    Find on map
+                    <a href={`${BASE_URL}directory/${room}`}>
+                      Find on map
+                    </a>
                   </button>
                 </div>
-              </div>
-            )}
+              </div>);
+            })}
           </div>
         </div>,
       ]);
     }
 
     return (
-      <h2 class="rula-view__heading mdc-typography--headline2">No events currently available.</h2>
+      <h2 class="rl-view__heading mdc-typography--headline2">No events currently available.</h2>
     );
   }
 }

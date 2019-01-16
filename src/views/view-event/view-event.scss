@@ -3,12 +3,12 @@
 @import "@material/layout-grid/mdc-layout-grid";
 @import "@material/rtl/mixins";
 @import "@material/shape/mixins";
-@import "rula-view";
+@import "rl-view";
 
-@mixin rula-event-colourize($color, $url) {
-  .rula-event { border-color: darken($color, 25%); }
+@mixin rl-event-colourize($color, $url) {
+  .rl-event { border-color: darken($color, 25%); }
 
-  .rula-event__header {
+  .rl-event__header {
     background-color: $color;
 
     &::before {
@@ -19,22 +19,22 @@
     }
   }
 
-  .rula-event__text-protection {
+  .rl-event__text-protection {
     background-image: linear-gradient(to right, $color, transparentize($color, 0.5));
   }
 }
 
-.rula-event {
+.rl-event {
   @include mdc-shape-radius(2px);
   @include mdc-elevation(2);
   @include mdc-card-container-layout_;
 
-  &.DME { @include rula-event-colourize($bright-sky, "/assets/img/DME_black.png"); }
-  &.SB { @include rula-event-colourize($coral, "/assets/img/SB_black.png"); }
-  &.SLS { @include rula-event-colourize($sour-apple, "/assets/img/SLS_black.png"); }
-  &.SLC { @include rula-event-colourize($goldenrod, "/assets/img/SLC_black.png"); }
-  &.SOP { @include rula-event-colourize($ruby, "/assets/img/SOP_black.png"); }
-  &.LIB { @include rula-event-colourize($charcoal, "/assets/img/LIB_white.png"); }
+  &.DME { @include rl-event-colourize($bright-sky, "/assets/img/DME_black.png"); }
+  &.SB { @include rl-event-colourize($coral, "/assets/img/SB_black.png"); }
+  &.SLS { @include rl-event-colourize($sour-apple, "/assets/img/SLS_black.png"); }
+  &.SLC { @include rl-event-colourize($goldenrod, "/assets/img/SLC_black.png"); }
+  &.SOP { @include rl-event-colourize($ruby, "/assets/img/SOP_black.png"); }
+  &.LIB { @include rl-event-colourize($charcoal, "/assets/img/LIB_white.png"); }
 
   &:focus {
     @include mdc-elevation(4);

@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 
-import { AppData } from '../../interface';
+// import { AppData } from '../../interface';
 
 @Component({
   tag: 'view-home',
@@ -10,7 +10,7 @@ import { AppData } from '../../interface';
 export class ViewHome {
   @State() loaded = false;
 
-  @Prop({ mutable: true }) appData!: AppData;
+  // @Prop({ mutable: true }) appData!: AppData;
 
   @Prop() appLoaded = false;
 
@@ -21,9 +21,9 @@ export class ViewHome {
   hostData() {
     return {
       class: {
-        'rula-view': true,
-        'rula-view--home': true,
-        'rula-view--loaded': this.loaded && this.appLoaded,
+        'rl-view': true,
+        'rl-view--home': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
       },
     };
   }

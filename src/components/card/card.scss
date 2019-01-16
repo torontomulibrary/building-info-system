@@ -4,7 +4,7 @@
 @import "@material/animation/variables";
 @import "@material/icon-button/mdc-icon-button";
 
-.rula-card {
+.rl-card {
   @include mdc-elevation(1);
 
   display: flex;
@@ -19,8 +19,6 @@
   &__media-text {
     @include mdc-typography(headline6);
 
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     -ms-flex-direction: column;
     -webkit-flex-direction: column;
@@ -62,7 +60,7 @@
   &:hover {
     @include mdc-elevation(4);
 
-    .rula-card__media-action {
+    .rl-card__media-action {
       display: initial;
       visibility: visible;
     }

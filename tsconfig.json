@@ -2,10 +2,9 @@
   "compilerOptions": {
     "strict": true,
     "alwaysStrict": true,
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
-    "declaration": true,
+    "declaration": false,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
@@ -28,7 +27,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "types/jsx.d.ts"
   ],
   "exclude": [
     "node_modules"

@@ -26,12 +26,12 @@ export class EventParser {
   private listeners: Function[];
 
   /**
-   * Create a new RulaICALParser.
+   * Create a new RLICALParser.
    *
    * @param url Optional URL to an ICAL file to load and parse.
    */
   constructor(url?: string) {
-    if (url) {
+    if (url !== undefined) {
       // If the optional URL provided, load it.
       this.loadIcal(url);
     }
@@ -243,15 +243,11 @@ export class EventParser {
    * @param url The URL to load the ICAL file from
    */
   loadIcal(url: string) {
-    if (url) {
-      this.fetchICAL(url).then(res => {
-        if (res) {
-          this.onICalLoad(res);
-        } else {
-          throw new Error('Fetched ICAL had no content');
-        }
-      });
-    }
+    this.fetchICAL(url).then(res => {
+      this.onICalLoad(res);
+    }, reason => {
+      throw new Error(`Unable to fetch ICAL. ${reason}`);
+    });
   }
 
   /**
@@ -260,10 +256,6 @@ export class EventParser {
    * @param listener A callback function used to subscribe to notifications.
    */
   subscribe(listener: () => void): () => void {
-    if (typeof listener !== 'function') {
-      throw new Error('expected listener to be a function.');
-    }
-
     const listeners = this.listeners;
     listeners.push(listener);
 

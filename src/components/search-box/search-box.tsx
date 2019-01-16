@@ -17,7 +17,7 @@ import {
 } from '../../interface';
 
 @Component({
-  tag: 'rula-search-box',
+  tag: 'rl-search-box',
   styleUrl: 'search-box.scss',
 })
 
@@ -89,7 +89,7 @@ export class SearchBox {
     const key = evt.key;
 
     if (target && target instanceof HTMLInputElement &&
-        target.classList.contains('rula-search__input') &&
+        target.classList.contains('rl-search__input') &&
         this.searchResults && this.searchResults.length > 0) {
       if (key === 'ArrowUp' || key === 'ArrowDown') {
         if (this.activeResult === undefined) {
@@ -176,7 +176,7 @@ export class SearchBox {
             const listClass = {
               'mdc-list-item': true,
               'mdc-list-item--selected': i === this.activeResult,
-              'rula-search__result_item': true,
+              'rl-search__result_item': true,
             };
             return (
               <li class={listClass} role="option" tabIndex={0}
@@ -198,8 +198,8 @@ export class SearchBox {
       if (this.searchQuery !== '') {
         return (
           <div ref={el => this.suggestionHeight = el ? el.clientHeight : 0}
-              class="rula-search__no-results">
-            Nothing results were found.
+              class="rl-search__no-results">
+            No results were found.
           </div>
         );
       }
@@ -212,26 +212,28 @@ export class SearchBox {
     return {
       role: 'search',
       class: {
-        'rula-search': true,
-        'rula-search--open': (this.focused),
+        'rl-search': true,
+        'rl-search--open': (this.focused),
       },
     };
   }
 
   render() {
     return ([
-      <input id="rula-search-input" role="combobox" aria-autocomplete="list"
+      <input id="rl-search-input" role="combobox" aria-autocomplete="list"
           ref={elm => this.searchInput = elm}
-          aria-owns="rula-search-suggestions" class="rula-search__input"
+          aria-owns="rl-search-suggestions" class="rl-search__input"
           placeholder={(this.showMenu && !this.focused) ? 'RULA Finder' : 'Search'}
           onInput={e => this._onSearchChange(e)}
+          onFocus={_ => this.focused = true}
+          onBlur={_ => this.focused = false}
           onKeyDown={e => { this.onKeyDown(e); }}></input>,
-      <div class="material-icons rula-search__icon"
+      <div class="material-icons rl-search__icon"
           onClick={_ => this._onIconClick()}
           role="button">
         {this.showMenu ? 'menu' : 'search'}
       </div>,
-      <div id="rula-search-suggestions" class="rula-search__results"
+      <div id="rl-search-suggestions" class="rl-search__results"
           style={{ height: `${this.suggestionHeight}px` }}>
         {this._renderResults()}
       </div>,

@@ -1,15 +1,15 @@
-@import "rula-view";
+@import "rl-view";
 
 :root {
-  --rula-map-element-font-size: 48px;
+  --rl-map-element-font-size: 48px;
 }
 
-.rula-view.rula-view--map {
+.rl-view.rl-view--map {
   width: 100%;
   margin: 0;
   padding: 0;
 
-  .rula-map {
+  .rl-map {
     height: calc(100% - 60px);
   }
 }

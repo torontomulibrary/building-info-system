@@ -2,13 +2,13 @@ import { MDCRipple } from '@material/ripple/index';
 import { Component, Element, Event, EventEmitter, Method, Prop, State } from '@stencil/core';
 
 /**
- * A component used in tandem with `rula-accordion` and represents a single item
+ * A component used in tandem with `rl-accordion` and represents a single item
  * of an accordion list.  A single `accordion-item` has header and content
  * sections.  The header is always visible and when the item is expanded, the
  * content is made visible.
  */
 @Component({
-  tag: 'rula-accordion-item',
+  tag: 'rl-accordion-item',
   styleUrl: 'accordion-item.scss',
 })
 
@@ -17,7 +17,7 @@ export class AccordionItem {
    * The button used as the header, and allows the user to toggle the open
    * state of the item.
    */
-  private _button!: HTMLElement | null;
+  private _button?: HTMLButtonElement;
 
   /**
    * The root element of this component.
@@ -51,25 +51,15 @@ export class AccordionItem {
    * entered into the DOM.
    */
   componentDidLoad() {
-    this._button = this.root.querySelector('#rula-accordion-item__trigger-' + this.index);
+    // this._button = this.root.querySelector('#rl-accordion-item__trigger-' + this.index);
 
     if (this._button) {
       MDCRipple.attachTo(this._button);
     }
 
     window.setTimeout(() => {
-      this.root.classList.remove('rula-accordion-item--fade-in');
+      this.root.classList.remove('rl-accordion-item--fade-in');
     }, this.delay);
-  }
-
-  /**
-   * Handes when an `enter` key is pressed on this component.
-   * @param e The triggering event
-   */
-  onKeyPress(e: KeyboardEvent) {
-    if (e.key === 'Enter') {
-      this.toggle();
-    }
   }
 
   /**
@@ -101,10 +91,9 @@ export class AccordionItem {
    */
   hostData() {
     return {
-      'aria-expanded': this.isOpen,
       class: {
-        'rula-accordion-item': true,
-        'rula-accordion-item--open': this.isOpen,
+        'rl-accordion-item': true,
+        'rl-accordion-item--open': this.isOpen,
       },
     };
   }
@@ -114,25 +103,27 @@ export class AccordionItem {
    */
   render() {
     return ([
-      <dt role="heading" aria-level="3" class="rula-accordion-item__header"
+      <dt role="heading" aria-level="2" class="rl-accordion-item__header"
           onClick={_ => { this.toggle(); }}>
-        <button aria-expanded={this.open} id={`rula-accordion-item__trigger-${this.index}`}
-            class="rula-accordion-item__trigger" type="button"
-            onKeyPress={e => { this.onKeyPress(e); }}
-            aria-controls={`rula-accordion-item__content-${this.index}`}>
-          <span class="rula-accordion-item__title">
+        <button aria-expanded={this.isOpen ? 'true' : 'false'}
+            ref={el => this._button = el}
+            id={`rl-accordion-item__trigger-${this.index}`}
+            class="rl-accordion-item__trigger"
+            // onKeyPress={e => { this.onKeyPress(e); }}
+            aria-controls={`rl-accordion-item__content-${this.index}`}>
+          <span class="rl-accordion-item__title">
             <slot name="header" />
           </span>
-          <span class="rula-accordion-item__icon material-icons"
+          <span class="rl-accordion-item__icon material-icons"
               aria-hidden="true">
             expand_more
           </span>
         </button>
       </dt>,
-      <dd id={`rula-accordion-item__content-${this.index}`} role="region"
+      <dd id={`rl-accordion-item__content-${this.index}`} role="region"
           aria-hidden={!this.isOpen}
-          aria-labelledby={`rula-accordion-item__trigger-${this.index}`}
-          class="rula-accordion-item__content">
+          // aria-labelledby={`rl-accordion-item__trigger-${this.index}`}
+          class="rl-accordion-item__content" tabindex={this.isOpen ? '0' : '-1'}>
         <slot name="content" />
       </dd>,
     ]);

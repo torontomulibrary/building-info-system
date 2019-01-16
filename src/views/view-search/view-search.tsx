@@ -1,7 +1,9 @@
 import { Component, Prop, State, Watch } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { Color } from '../../utils/color';
+import { BASE_URL, SEARCH_URL } from '../../global/constants';
+// import { AppData } from '../../interface';
+// import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -17,8 +19,8 @@ export class ViewSearch {
   @State() searchQuery?: string;
   @Watch('searchQuery')
   onSearchQueryChanged(newQuery: string) {
-    if (newQuery && this.searchUrl) {
-      const results = fetchJSON(this.searchUrl, {
+    if (newQuery && SEARCH_URL) {
+      const results = fetchJSON(SEARCH_URL, {
         method: 'POST',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -52,6 +54,8 @@ export class ViewSearch {
 
   @Prop() appLoaded = false;
 
+  // @Prop() appData!: AppData;
+
   /**
    * The component lifecycle function called when the component is being
    * loaded but before DOM is created and displayed.
@@ -68,7 +72,7 @@ export class ViewSearch {
     const data = e.detail.cardData;
     if (typeof data === 'object') {
       const record = data.ExternalDocumentID[0].substring(0, 8);
-      this.history.push(`/books/map/${record}`, { record });
+      this.history.push(`${BASE_URL}books/map/${record}`, { record });
     }
   }
 
@@ -76,20 +80,20 @@ export class ViewSearch {
     const books = this.searchResults && this.searchResults['books'];
     if (books) {
       return (
-        <rula-collection collectionTitle="Books">
+        <rl-collection collectionTitle="Books">
           {books.map(b =>
-            <rula-card
+            <rl-card
               cardTitle={b.Title[0]}
               cardData={b}
               titleInMedia
               noContent
               hasPrimaryAction
               wideMediaAspect
-              protectionColor={new Color(12, 34, 56)}
+              cardColor={{ r: 12, g: 34, b: 56 }}
               onCardClicked={evt => this._bookCardClicked(evt)}>
-            </rula-card>
+            </rl-card>
           )}
-         </rula-collection>
+         </rl-collection>
       );
     } else {
       return undefined;

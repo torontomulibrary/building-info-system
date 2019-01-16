@@ -4,10 +4,10 @@
 @import "@material/typography/mixins";
 @import "@material/theme/mixins";
 @import "@material/elevation/mixins";
-@import "rula-bottom-sheet";
-@import "rula-list";
+@import "rl-bottom-sheet";
+@import "rl-list";
 
-.rula-map-nav {
+.rl-map-nav {
   @include mdc-elevation(4);
 
   display: flex;

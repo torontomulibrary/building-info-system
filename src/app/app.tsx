@@ -1,32 +1,62 @@
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import '@ryelib/web-components';
+import { Component, Element, Listen, State } from '@stencil/core';
 
-import { AppData } from '../interface';
+import { APP_TITLE, BASE_URL } from '../global/constants';
 
 @Component({
-  tag: 'rula-bis',
+  tag: 'rl-bis',
   styleUrl: 'app.scss',
 })
-export class App {
+
+export class RLApp {
+  /**
+   * Object containing all the pages used for the nav menu of the App.
+   */
+  private appPages = [
+    {
+      title: 'Home',
+      url: '',
+      icon: 'home',
+      component: 'view-home',
+    },
+    {
+      title: 'Directory',
+      url: 'directory',
+      icon: 'map',
+    },
+    {
+      title: 'Books',
+      url: 'books',
+      icon: 'import_contacts',
+      component: 'view-map',
+      params: ':roomNo?',
+    },
+    {
+      title: 'Computers',
+      url: 'computers',
+      icon: 'computer',
+    },
+    {
+      title: 'Buildings',
+      url: 'buildings',
+      icon: 'business',
+    },
+    {
+      title: 'Events',
+      url: 'events',
+      icon: 'event',
+    },
+    {
+      title: 'FAQs',
+      url: 'faqs',
+      icon: 'question_answer',
+    },
+  ];
+
   /**
    * Root element of this component.
    */
   @Element() root!: HTMLStencilElement;
-
-  /**
-   * The master collection of application data.  Like a Redux store but without
-   * the overhead.
-   */
-  @State() appData: AppData = {
-    apiUrl: '',
-    buildings: {},
-    details: {},
-    elements: {},
-    events: [],
-    faqs: {},
-    floors: {},
-    eventUrl: '',
-    searchUrl: '',
-  };
 
   /**
    * Keep track of the app width in order to change the interface.
@@ -42,46 +72,14 @@ export class App {
    */
   @State() drawerOpen!: boolean;
 
+  /**
+   * Global flag indicating if the whole application has loaded.
+   */
   @State() appLoaded = false;
-  @State() eventsLoaded = false;
-
-  // @State() bookDetails?: BookDetails;
 
   /**
-   * A URL used to access when loading data.
+   * Lifecycle event fired after the component has rendered the first time.
    */
-  @Prop() apiUrl!: string;
-
-  @Prop() searchUrl!: string;
-
-  /**
-   * A URL used to load ICAL event information.
-   */
-  @Prop() eventUrl!: string;
-
-  /**
-   * The displayed title of the application.
-   */
-  @Prop() appTitle = '';
-
-  @Prop() baseUrl = '';
-
-  componentWillLoad() {
-    if (!this.apiUrl) {
-      throw new Error('API url not specified. Can not continue.');
-    }
-
-    if (!this.searchUrl) {
-      throw new Error('Search url not specified. Can not continue.');
-    }
-
-    const apiUrl = this.apiUrl;
-    const searchUrl = this.searchUrl;
-    const eventUrl = this.eventUrl;
-
-    Object.assign(this.appData, { apiUrl, searchUrl, eventUrl });
-  }
-
   componentDidLoad() {
     const el = document.getElementById('splash-screen');
     if (el && el.parentElement) {
@@ -91,8 +89,11 @@ export class App {
     this.appLoaded = true;
   }
 
+  /**
+   * Listen for and handle global `resize` events on the window.
+   */
   @Listen('window:resize')
-  onresize() {
+  handleResize() {
     this.appWidth = window.innerWidth;
   }
 
@@ -105,194 +106,143 @@ export class App {
    */
   @Listen('resultSelected')
   _onResultSelected(e: CustomEvent) {
-    const viewMap = this.root.querySelector('.rula-view--map') as HTMLViewMapElement;
+    const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
     if (viewMap && viewMap.hasOwnProperty('setActiveElementByDetail')) {
       // viewMap.setActiveElementByDetail(e.detail);
       console.log(e.detail);
     }
   }
 
-  // @Listen('getBookLocations')
-  // async _onGetBookLocations(e: CustomEvent) {
-  //   // console.log(e.detail);
-  // }
-
-  @Listen('dataLoaded')
-  _onDataLoaded(e: CustomEvent) {
-    this.appData = { ...e.detail };
-  }
-
+  /**
+   * Dynamically sets host element attributes.
+   */
   hostData() {
     return {
       class: {
-        'rula-bis': true,
-        'rula-bis--loaded': this.appLoaded,
+        'rl-bis': true,
+        'rl-bis--loaded': this.appLoaded,
       },
     };
   }
 
+  /**
+   * Component render function.
+   */
   render() {
     return ([
-      <rula-app-bar
-          appTitle={this.appTitle} appWidth={this.appWidth}
-          searchData={this.appData.details}
-          onMenuClicked={_ => { this.drawerOpen = true; }}>
-      </rula-app-bar>,
+      <rl-app-bar
+          appTitle={APP_TITLE} appWidth={this.appWidth}
+          onMenuClicked={_ => { this.drawerOpen = true; }}
+          searchData={{}}>
+      </rl-app-bar>,
 
-      <rula-drawer
+      <rl-drawer
           open={this.drawerOpen}
           onDrawerClose={_ => { this.drawerOpen = false; }}>
-        <header class="rula-drawer__header">
-          <div class="rula-drawer__header-content">
+        <header class="rl-drawer__header">
+          <div class="rl-drawer__header-content">
             <button class="material-icons mdc-top-app-bar__navigation-icon"
               aria-label="Close navigation menu.">close</button>
-            <span class="mdc-top-app-bar__title">{this.appTitle}</span>
+            <span class="mdc-top-app-bar__title">{APP_TITLE}</span>
           </div>
         </header>
         <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/`} exact>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>Home
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/directory`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">map</i>Directory
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/books`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">import_contacts</i>Books
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/computers`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">computer</i>Computers
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/building`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">business</i>Building Info
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/events`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">event</i>Events
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${this.baseUrl}/faqs`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">question_answer</i>FAQs
-          </stencil-route-link>
+          {this.appPages.map(page =>
+            <stencil-route-link activeClass="mdc-list-item--activated"
+                anchorClass="mdc-list-item" anchorTabIndex="0"
+                url={`${BASE_URL}${page.url}`} exact={page.url === ''}>
+              <i class="material-icons mdc-list-item__graphic" aria-hidden="true">
+                {page.icon}
+              </i>
+              {page.title}
+            </stencil-route-link>
+          )}
         </nav>
-      </rula-drawer>,
+      </rl-drawer>,
 
-      <main class="rula-main-content">
-        <stencil-router id="router" titleSuffix={` | ${this.appTitle}`}>
+      <main class="rl-main-content">
+        <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`}>
           <stencil-route-switch>
-            <stencil-route
-                url={`${this.baseUrl}/`}
-                component="view-home"
-                exact={true}
-                componentProps={{
-                  appLoaded: this.appLoaded,
-                }}>
-            </stencil-route>
-            <stencil-route
+            <stencil-route component="view-map"
               url={[
-                `${this.baseUrl}/directory/:roomNo?`,
-                `${this.baseUrl}/directory`,
+                `${BASE_URL}directory/:roomNo?`,
+                `${BASE_URL}directory`,
               ]}
-              component="view-map"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
                 mapType: 'directory',
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-map"
               url={[
-                `${this.baseUrl}/books/map/:callNo`,
+                `${BASE_URL}books/map/:callNo`,
               ]}
-              component="view-map"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
                 mapType: 'book',
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-map"
               url={[
-                `${this.baseUrl}/computers/`,
-                `${this.baseUrl}/computers`,
+                `${BASE_URL}computers/`,
+                `${BASE_URL}computers`,
               ]}
-              component="view-map"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
                 mapType: 'computer',
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-building"
               url={[
-                `${this.baseUrl}/building/`,
-                `${this.baseUrl}/building`,
+                `${BASE_URL}buildings/`,
+                `${BASE_URL}buildings`,
               ]}
-              component="view-building"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-book"
               url={[
-                `${this.baseUrl}/books/`,
-                `${this.baseUrl}/books`,
+                `${BASE_URL}books/`,
+                `${BASE_URL}books`,
               ]}
-              component="view-book"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-event"
               url={[
-                `${this.baseUrl}/events/`,
-                `${this.baseUrl}/events`,
+                `${BASE_URL}events/`,
+                `${BASE_URL}events`,
               ]}
-              component="view-event"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-faq"
               url={[
-                `${this.baseUrl}/faqs/`,
-                `${this.baseUrl}/faqs`,
+                `${BASE_URL}faqs/`,
+                `${BASE_URL}faqs`,
               ]}
-              component="view-faq"
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
-              url={[`${this.baseUrl}/sr/:query?`]}
-              component="view-search"
+            <stencil-route component="view-search"
+              url={[`${BASE_URL}sr/:query?`]}
               componentProps={{
-                appData: this.appData,
                 appLoaded: this.appLoaded,
-                searchUrl: this.searchUrl,
               }}>
+            </stencil-route>
+            <stencil-route component="view-home" url={BASE_URL} exact
+                componentProps={{
+                  appLoaded: this.appLoaded,
+                }}>
+            </stencil-route>
+            <stencil-route routeRender={() => ([
+              <span>Undefined route</span>,
+              <stencil-router-redirect url="/" />,
+            ])}>
             </stencil-route>
           </stencil-route-switch>
         </stencil-router>

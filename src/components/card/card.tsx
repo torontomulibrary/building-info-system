@@ -11,7 +11,7 @@ import {
 import { Color } from '../../utils/color';
 
 @Component({
-  tag: 'rula-card',
+  tag: 'rl-card',
   styleUrl: 'card.scss',
 })
 
@@ -23,9 +23,10 @@ export class Card {
   @Element() root!: HTMLStencilElement;
 
   @State() protectionFadeColor = new Color(255, 255, 255, 0.5);
+  @State() protectionColor = new Color(255, 255, 255, 1);
   @State() textColors = [new Color(255, 255, 255), new Color(0, 0, 0)];
 
-  @Prop() buttons?: Array<{name: string}>;
+  @Prop() buttons?: Array<{name: string, link: string}>;
   @Prop() icons?: Array<{name: string}>;
 
   @Prop() cardMedia = '';
@@ -39,14 +40,19 @@ export class Card {
   @Prop() noContent = false;
 
   @Prop() wideMediaAspect = false;
-  @Prop() protectionColor = new Color(255, 255, 255);
-  @Watch('protectionColor')
-  onProtectionColorChange() {
+  @Prop() cardColor: {r: number, g: number, b: number} = { r: 255, g: 255, b: 255 };
+  @Watch('cardColor')
+  onColorChange() {
+    this.protectionColor = new Color(this.cardColor.r, this.cardColor.g, this.cardColor.b);
     this.protectionFadeColor = this.protectionColor.clone();
     this.protectionFadeColor.setAlpha(0.5);
   }
 
   @Event() cardClicked!: EventEmitter;
+
+  componentWillLoad() {
+    this.onColorChange();
+  }
 
   _renderActions() {
     // Render nothing if no buttons and icons are defined.
@@ -59,7 +65,7 @@ export class Card {
           <div class="mdc-card__action-buttons">
             {this.buttons.map(b =>
               <button class="mdc-button">
-                <a href="#">{b.name}</a>
+                <a href={b.link}>{b.name}</a>
               </button>
             )}
           </div> : undefined
@@ -79,18 +85,18 @@ export class Card {
 
   _renderMedia() {
     const mediaFile =
-        this.cardMedia ? this.cardMedia : 'url("/assets/img/no_img.png")';
+        this.cardMedia ? this.cardMedia : `url("assets/img/no_img.png")`;
 
     return (
       <div class={`mdc-card__media mdc-card__media--${this.wideMediaAspect ? '16-9' : 'square'}`}
         style={{ 'background-image': mediaFile }}>
         {this.titleInMedia ?
           [
-            <div class="rula-card__media-text-protection" style={{
+            <div class="rl-card__media-text-protection" style={{
               background: `linear-gradient(to top, ${this.protectionColor.toRgb()},
               ${this.protectionFadeColor.toRgb()})`,
             }}></div>,
-            <div class="rula-card__media-text" style={{
+            <div class="rl-card__media-text" style={{
               color: this.protectionColor.highContrast(this.textColors).toRgb(),
             }}>{this.cardTitle}</div>,
           ] : undefined
@@ -104,10 +110,10 @@ export class Card {
       this._renderMedia(),
       this.noContent ?
         undefined : [
-        <div class="rula-card__primary">
+        <div class="rl-card__primary">
           <slot name="primary" />
         </div>,
-        <div class="rula-card__secondary">
+        <div class="rl-card__secondary">
           <slot name="secondary" />
         </div>],
     ]);
@@ -116,7 +122,7 @@ export class Card {
   hostData() {
     return {
       class: {
-        'rula-card': true,
+        'rl-card': true,
         'mdc-card': true,
       },
     };
