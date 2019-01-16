@@ -1,3 +1,4 @@
+import '@ryelib/web-components';
 import { Component, Element, Listen, State } from '@stencil/core';
 
 import { APP_TITLE, BASE_URL } from '../global/constants';
@@ -8,6 +9,50 @@ import { APP_TITLE, BASE_URL } from '../global/constants';
 })
 
 export class RLApp {
+  /**
+   * Object containing all the pages used for the nav menu of the App.
+   */
+  private appPages = [
+    {
+      title: 'Home',
+      url: '',
+      icon: 'home',
+      component: 'view-home',
+    },
+    {
+      title: 'Directory',
+      url: 'directory',
+      icon: 'map',
+    },
+    {
+      title: 'Books',
+      url: 'books',
+      icon: 'import_contacts',
+      component: 'view-map',
+      params: ':roomNo?',
+    },
+    {
+      title: 'Computers',
+      url: 'computers',
+      icon: 'computer',
+    },
+    {
+      title: 'Buildings',
+      url: 'buildings',
+      icon: 'business',
+    },
+    {
+      title: 'Events',
+      url: 'events',
+      icon: 'event',
+    },
+    {
+      title: 'FAQs',
+      url: 'faqs',
+      icon: 'question_answer',
+    },
+  ];
+
   /**
    * Root element of this component.
    */
@@ -101,140 +146,102 @@ export class RLApp {
           </div>
         </header>
         <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}`} exact>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>Home
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}directory`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">map</i>Directory
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}books`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">import_contacts</i>Books
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}computers`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">computer</i>Computers
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}building`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">business</i>Building Info
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}events`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">event</i>Events
-          </stencil-route-link>
-          <stencil-route-link anchorClass="mdc-list-item"
-              activeClass="mdc-list-item--activated"
-              anchorTabIndex="0"
-              url={`${BASE_URL}faqs`}>
-            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">question_answer</i>FAQs
-          </stencil-route-link>
+          {this.appPages.map(page =>
+            <stencil-route-link activeClass="mdc-list-item--activated"
+                anchorClass="mdc-list-item" anchorTabIndex="0"
+                url={`${BASE_URL}${page.url}`} exact={page.url === ''}>
+              <i class="material-icons mdc-list-item__graphic" aria-hidden="true">
+                {page.icon}
+              </i>
+              {page.title}
+            </stencil-route-link>
+          )}
         </nav>
       </rl-drawer>,
 
       <main class="rl-main-content">
         <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`}>
           <stencil-route-switch>
-            <stencil-route
-                url={`${BASE_URL}`}
-                component="view-home"
-                exact={true}
-                componentProps={{
-                  appLoaded: this.appLoaded,
-                }}>
-            </stencil-route>
-            <stencil-route
+            <stencil-route component="view-map"
               url={[
                 `${BASE_URL}directory/:roomNo?`,
                 `${BASE_URL}directory`,
               ]}
-              component="view-map"
               componentProps={{
                 appLoaded: this.appLoaded,
                 mapType: 'directory',
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-map"
               url={[
                 `${BASE_URL}books/map/:callNo`,
               ]}
-              component="view-map"
               componentProps={{
                 appLoaded: this.appLoaded,
                 mapType: 'book',
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-map"
               url={[
                 `${BASE_URL}computers/`,
                 `${BASE_URL}computers`,
               ]}
-              component="view-map"
               componentProps={{
                 appLoaded: this.appLoaded,
                 mapType: 'computer',
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-building"
               url={[
-                `${BASE_URL}building/`,
-                `${BASE_URL}building`,
+                `${BASE_URL}buildings/`,
+                `${BASE_URL}buildings`,
               ]}
-              component="view-building"
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-book"
               url={[
                 `${BASE_URL}books/`,
                 `${BASE_URL}books`,
               ]}
-              component="view-book"
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-event"
               url={[
                 `${BASE_URL}events/`,
                 `${BASE_URL}events`,
               ]}
-              component="view-event"
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-faq"
               url={[
                 `${BASE_URL}faqs/`,
                 `${BASE_URL}faqs`,
               ]}
-              component="view-faq"
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
-            <stencil-route
+            <stencil-route component="view-search"
               url={[`${BASE_URL}sr/:query?`]}
-              component="view-search"
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>
+            </stencil-route>
+            <stencil-route component="view-home" url={BASE_URL} exact
+                componentProps={{
+                  appLoaded: this.appLoaded,
+                }}>
+            </stencil-route>
+            <stencil-route routeRender={() => ([
+              <span>Undefined route</span>,
+              <stencil-router-redirect url="/" />,
+            ])}>
             </stencil-route>
           </stencil-route-switch>
         </stencil-router>
