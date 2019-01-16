@@ -199,7 +199,7 @@ export class MapContainer {
         ref={elm => this.mapEl = elm as HTMLRlMapElement}
         class="rl-map"
         elements={this.activeElements}
-        floorplan={this.activeFloor.floorplan}
+        mapImage={this.activeFloor.floorplan}
         onElementSelected={e => this.onElementSelected(e.detail)}
         onElementDeselected={() => this.onElementDeselected()}
         onMapRendered={() => this.onMapRendered()}>
