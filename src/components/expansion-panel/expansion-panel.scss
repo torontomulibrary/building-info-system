@@ -1,0 +1,91 @@
+@import "@material/ripple/mdc-ripple";
+
+.rl-expansion-panel {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  transition:
+    mdc-animation-standard(margin, 280ms),
+    mdc-animation-standard(opacity, 280ms);
+  outline: none;
+  background-color: #fff;
+  opacity: 1;
+  overflow: hidden;
+  will-change: margin, opacity;
+
+  &__header {
+    user-select: none;
+    overflow: hidden;
+  }
+
+  &__title {
+    text-align: left;
+  }
+
+  &__trigger {
+    @include mdc-ripple-surface;
+    @include mdc-ripple-radius-bounded;
+    // @include mdc-states-base-color(var(--rl-e-item-ripple-color, red));
+    @include mdc-states-hover-opacity(0.1);
+    @include mdc-states-focus-opacity(0.2);
+    @include mdc-states-press-opacity(0.3);
+
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 48px;
+    margin: 0;
+    transition: mdc-animation-standard(height, 280ms);
+    border: 0;
+    background: none;
+    cursor: pointer;
+    will-change: height;
+  }
+
+  & > &__icon {
+    transform: rotate(0);
+    transition: mdc-animation-standard(transform, 280ms);
+    will-change: transform;
+  }
+
+  & > &__content {
+    box-sizing: border-box;
+    max-height: 0;
+    margin: 0;
+    padding-right: 24px;
+    padding-left: 24px;
+    transition:
+      mdc-animation-standard(padding-bottom, 280ms),
+      mdc-animation-standard(max-height, 280ms),
+      mdc-animation-standard(padding-top, 280ms);
+  }
+
+  // stylelint-disable: max-nesting-depth
+  &--open {
+    > .rl-expansion-panel__header {
+      > .rl-expansion-panel__trigger {
+        > .rl-expansion-panel__icon {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    > .rl-expansion-panel__content {
+      max-height: 50em;
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+    > &:first-child {
+      margin-top: 0;
+    }
+
+    > &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  // stylelint-enable
+}
