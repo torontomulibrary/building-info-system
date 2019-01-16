@@ -56,9 +56,14 @@ export const DEFAULT_MAX_SCALE = 3;
 // Default minimum scale (zoom) factor.
 export const DEFAULT_MIN_SCALE = 1;
 
+// Local development paths
 export const BASE_URL = '/';
 export const API_URL = 'http://localhost:8080/api/';
 export const SEARCH_URL = 'http://localhost:8080/search/';
+// Testnet Paths
+// export const BASE_URL = '/dev/bis/';
+// export const API_URL = 'http://testnet.library.ryerson.ca/dev/rulapi/api/';
+// export const SEARCH_URL = 'http://testnet.library.ryerson.ca/dev/rulapi/search/';
 export const EVENT_URL = 'http://testnet.library.ryerson.ca/dev/rulapi/ical';
 
 export const FAQ_STORAGE_KEY = 'rl-faqs';
