@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
+    "build:dev": "stencil build --dev",
     "changelog": "standard-changelog -i CHANGELOG.md",
     "clean": "del-cli dist/** dist www/** www",
     "commitmsg": "validate-commit-msg",
@@ -35,6 +36,7 @@
     "lint": "npm-run-all --parallel lint:*",
     "pretest": "npm run lint",
     "posttest": "istanbul report --root coverage text-summary && istanbul check-coverage --linees 95 -statements 95 --branches 95 --functions 95",
+    "prerender": "stencil build --prerender",
     "serve": "stencil build --serve",
     "start": "npm run dev",
     "test": "jest --no-cache",
