@@ -225,8 +225,8 @@ export class MapContainer {
           </div>
           {this.extraDetails && Object.entries(this.extraDetails).map(item =>
             <div class="rl-side-sheet__section">
-              <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">{item[0]}</div>
-              {item[1]}
+              <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">{item[0].charAt(0).toUpperCase() + item[0].slice(1)}</div>
+              {typeof item[1] === 'boolean' ? item[1] ? 'Yes' : 'No' : item[1]}
             </div>
           )}
         </div>

@@ -26,4 +26,8 @@ export const config: Config = {
       plugins: [require('autoprefixer')],
     }),
   ],
+  testing: {
+    coverageDirectory: './coverage',
+    collectCoverage: true,
+  },
 };

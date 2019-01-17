@@ -67,12 +67,17 @@ export class ViewBooks {
     if (this.searches) {
       return ([
         <stencil-route-title pageTitle="Books" />,
-        <div class="rl-block--centered">
-          Welcome to the Ryerson Library Book Finder.  Use it to find where the
-          book you're looking for is in the Library.  Below are some common search
-          terms and popular books.  To look for a specific book, use the search
-          bar above.
-          <slot />
+        <div class="mdc-layout-grid">
+          <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop"></div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop">
+              Welcome to the Ryerson Library Book Finder.  Use it to find where the
+              book you're looking for is in the Library.  Below are some common search
+              terms and popular books.  To look for a specific book, use the search
+              bar above.
+              <slot />
+            </div>
+          </div>
         </div>,
         <rl-collection collectionTitle="Recently Searched">
           {this.searches.recent.map(s =>
