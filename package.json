@@ -35,6 +35,7 @@
     "lint.ts": "tslint --project tsconfig.json ./src/**/*.ts ./src/**/*.tsx",
     "lint.css": "stylelint \"src/**/*.scss\"",
     "lint": "npm-run-all --parallel lint.*",
+    "postinstall": "npm link @ryelib/web-components",
     "pretest": "npm run lint",
     "prerender": "stencil build --prerender",
     "release": "node scripts/release.js",
