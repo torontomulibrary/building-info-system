@@ -7,17 +7,17 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type      |
-| -------- | --------- | ----------- | --------- |
-| `open`   | `open`    |             | `boolean` |
+| Property | Attribute | Description | Type      | Default |
+| -------- | --------- | ----------- | --------- | ------- |
+| `open`   | `open`    |             | `boolean` | `false` |
 
 
 ## Events
 
-| Event    | Detail | Description                                             |
-| -------- | ------ | ------------------------------------------------------- |
-| `closed` |        | Event fired when the `side-sheet` has finished closing. |
-| `opened` |        | Event fired when the `side-sheet` has finished opening. |
+| Event    | Description                                             | Type                |
+| -------- | ------------------------------------------------------- | ------------------- |
+| `closed` | Event fired when the `side-sheet` has finished closing. | `CustomEvent<void>` |
+| `opened` | Event fired when the `side-sheet` has finished opening. | `CustomEvent<void>` |
 
 
 ----------------------------------------------

@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property    | Attribute    | Description | Type            |
-| ----------- | ------------ | ----------- | --------------- |
-| `appLoaded` | `app-loaded` |             | `boolean`       |
-| `history`   | --           |             | `RouterHistory` |
+| Property               | Attribute    | Description | Type            | Default     |
+| ---------------------- | ------------ | ----------- | --------------- | ----------- |
+| `appLoaded`            | `app-loaded` |             | `boolean`       | `false`     |
+| `history` _(required)_ | --           |             | `RouterHistory` | `undefined` |
 
 
 ----------------------------------------------

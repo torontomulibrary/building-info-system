@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                                                                           | Type           |
-| ----------- | ------------ | --------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `appLoaded` | `app-loaded` | The global object of all application data. A global flag passed in to indicate if the application has loaded as well. | `boolean`      |
-| `mapType`   | `map-type`   |                                                                                                                       | `string`       |
-| `match`     | --           | The results coming from `stencil-router` that contain any URL matches.                                                | `MatchResults` |
+| Property             | Attribute    | Description                                                                                                           | Type           | Default       |
+| -------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- | -------------- | ------------- |
+| `appLoaded`          | `app-loaded` | The global object of all application data. A global flag passed in to indicate if the application has loaded as well. | `boolean`      | `false`       |
+| `mapType`            | `map-type`   |                                                                                                                       | `string`       | `'directory'` |
+| `match` _(required)_ | --           | The results coming from `stencil-router` that contain any URL matches.                                                | `MatchResults` | `undefined`   |
 
 
 ## Events
 
-| Event        | Detail | Description                                                          |
-| ------------ | ------ | -------------------------------------------------------------------- |
-| `dataLoaded` |        | Event fired when the data specific to this view is finished loading. |
+| Event        | Description                                                          | Type                |
+| ------------ | -------------------------------------------------------------------- | ------------------- |
+| `dataLoaded` | Event fired when the data specific to this view is finished loading. | `CustomEvent<void>` |
 
 
 ----------------------------------------------

@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property          | Attribute          | Description | Type     |
-| ----------------- | ------------------ | ----------- | -------- |
-| `collectionTitle` | `collection-title` |             | `string` |
+| Property          | Attribute          | Description | Type     | Default |
+| ----------------- | ------------------ | ----------- | -------- | ------- |
+| `collectionTitle` | `collection-title` |             | `string` | `''`    |
 
 
 ----------------------------------------------

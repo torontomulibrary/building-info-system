@@ -7,20 +7,20 @@
 
 ## Properties
 
-| Property         | Attribute         | Description                                | Type          |
-| ---------------- | ----------------- | ------------------------------------------ | ------------- |
-| `activeBuilding` | `active-building` | The `id` of the currently active building. | `number`      |
-| `activeFloor`    | `active-floor`    | The `id` of the currently active floor.    | `number`      |
-| `buildings`      | --                | An id-indexed map of the buildings.        | `BuildingMap` |
-| `floors`         | --                | An id-indexed map of floors.               | `FloorMap`    |
+| Property                      | Attribute         | Description                                | Type          | Default     |
+| ----------------------------- | ----------------- | ------------------------------------------ | ------------- | ----------- |
+| `activeBuilding` _(required)_ | `active-building` | The `id` of the currently active building. | `number`      | `undefined` |
+| `activeFloor` _(required)_    | `active-floor`    | The `id` of the currently active floor.    | `number`      | `undefined` |
+| `buildings` _(required)_      | --                | An id-indexed map of the buildings.        | `BuildingMap` | `undefined` |
+| `floors` _(required)_         | --                | An id-indexed map of floors.               | `FloorMap`    | `undefined` |
 
 
 ## Events
 
-| Event             | Detail | Description                                          |
-| ----------------- | ------ | ---------------------------------------------------- |
-| `buildingChanged` |        | An event emitted when the selected Building changes. |
-| `floorChanged`    |        | An event emitted when the selected Floor changes.    |
+| Event             | Description                                          | Type                |
+| ----------------- | ---------------------------------------------------- | ------------------- |
+| `buildingChanged` | An event emitted when the selected Building changes. | `CustomEvent<void>` |
+| `floorChanged`    | An event emitted when the selected Floor changes.    | `CustomEvent<void>` |
 
 
 ----------------------------------------------

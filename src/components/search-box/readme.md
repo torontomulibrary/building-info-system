@@ -7,19 +7,19 @@
 
 ## Properties
 
-| Property     | Attribute   | Description | Type                  |
-| ------------ | ----------- | ----------- | --------------------- |
-| `id`         | `id`        |             | `string`              |
-| `searchData` | --          |             | `MapElementDetailMap` |
-| `showMenu`   | `show-menu` |             | `boolean`             |
+| Property                  | Attribute   | Description | Type                  | Default       |
+| ------------------------- | ----------- | ----------- | --------------------- | ------------- |
+| `id`                      | `id`        |             | `string`              | `'searchbox'` |
+| `searchData` _(required)_ | --          |             | `MapElementDetailMap` | `undefined`   |
+| `showMenu`                | `show-menu` |             | `boolean`             | `false`       |
 
 
 ## Events
 
-| Event            | Detail | Description |
-| ---------------- | ------ | ----------- |
-| `iconClick`      |        |             |
-| `resultSelected` |        |             |
+| Event            | Description | Type                |
+| ---------------- | ----------- | ------------------- |
+| `iconClick`      |             | `CustomEvent<void>` |
+| `resultSelected` |             | `CustomEvent<void>` |
 
 
 ----------------------------------------------

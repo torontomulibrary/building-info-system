@@ -7,25 +7,25 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type                                      |
-| ------------------ | -------------------- | ----------- | ----------------------------------------- |
-| `buttons`          | --                   |             | `undefined \| { name: string; }[]`        |
-| `cardColor`        | --                   |             | `{ r: number; g: number; b: number; }`    |
-| `cardData`         | `card-data`          |             | `string \| { [keys: string]: string[]; }` |
-| `cardMedia`        | `card-media`         |             | `string`                                  |
-| `cardTitle`        | `card-title`         |             | `string`                                  |
-| `hasPrimaryAction` | `has-primary-action` |             | `boolean`                                 |
-| `icons`            | --                   |             | `undefined \| { name: string; }[]`        |
-| `noContent`        | `no-content`         |             | `boolean`                                 |
-| `titleInMedia`     | `title-in-media`     |             | `boolean`                                 |
-| `wideMediaAspect`  | `wide-media-aspect`  |             | `boolean`                                 |
+| Property           | Attribute            | Description | Type                                             | Default                    |
+| ------------------ | -------------------- | ----------- | ------------------------------------------------ | -------------------------- |
+| `buttons`          | --                   |             | `undefined \| { name: string; link: string; }[]` | `undefined`                |
+| `cardColor`        | --                   |             | `Color`                                          | `new Color(255, 255, 255)` |
+| `cardData`         | `card-data`          |             | `string \| { [keys: string]: string[]; }`        | `{}`                       |
+| `cardMedia`        | `card-media`         |             | `string`                                         | `''`                       |
+| `cardTitle`        | `card-title`         |             | `string`                                         | `''`                       |
+| `hasPrimaryAction` | `has-primary-action` |             | `boolean`                                        | `false`                    |
+| `icons`            | --                   |             | `undefined \| { name: string; }[]`               | `undefined`                |
+| `noContent`        | `no-content`         |             | `boolean`                                        | `false`                    |
+| `titleInMedia`     | `title-in-media`     |             | `boolean`                                        | `false`                    |
+| `wideMediaAspect`  | `wide-media-aspect`  |             | `boolean`                                        | `false`                    |
 
 
 ## Events
 
-| Event         | Detail | Description |
-| ------------- | ------ | ----------- |
-| `cardClicked` |        |             |
+| Event         | Description | Type                |
+| ------------- | ----------- | ------------------- |
+| `cardClicked` |             | `CustomEvent<void>` |
 
 
 ----------------------------------------------
