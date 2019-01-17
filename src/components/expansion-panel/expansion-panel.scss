@@ -65,12 +65,8 @@
 
   // stylelint-disable: max-nesting-depth
   &--open {
-    > .rl-expansion-panel__header {
-      > .rl-expansion-panel__trigger {
-        > .rl-expansion-panel__icon {
-          transform: rotate(180deg);
-        }
-      }
+    > .rl-expansion-panel__header > .rl-expansion-panel__trigger > .rl-expansion-panel__icon {
+      transform: rotate(180deg);
     }
 
     > .rl-expansion-panel__content {
