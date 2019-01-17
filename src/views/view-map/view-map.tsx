@@ -9,6 +9,13 @@ import {
 import { MatchResults } from '@stencil/router';
 
 import {
+  API_URL,
+  BUILDINGS_STORAGE_KEY,
+  DETAILS_STORAGE_KEY,
+  ELEMENTS_STORAGE_KEY,
+  FLOORS_STORAGE_KEY,
+} from '../../global/constants';
+import {
   // AppData,
   BookDetails,
   Building,
@@ -20,14 +27,6 @@ import {
   MapElementDetailMap,
   MapElementMap,
 } from '../../interface';
-
-import {
-  API_URL,
-  BUILDINGS_STORAGE_KEY,
-  DETAILS_STORAGE_KEY,
-  ELEMENTS_STORAGE_KEY,
-  FLOORS_STORAGE_KEY,
-} from '../../global/constants';
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
