@@ -15,6 +15,9 @@ import {
   MapElementDetailMap,
 } from './interface';
 import {
+  Color,
+} from './utils/color';
+import {
   BuildingMap as BuildingMap2,
   FloorMap,
 } from './interface.js';
@@ -106,7 +109,7 @@ export namespace Components {
 
   interface RlCard {
     'buttons'?: Array<{name: string, link: string}>;
-    'cardColor': {r: number, g: number, b: number};
+    'cardColor': Color;
     'cardData': { [keys: string]: string[] } | string;
     'cardMedia': string;
     'cardTitle': string;
@@ -118,7 +121,7 @@ export namespace Components {
   }
   interface RlCardAttributes extends StencilHTMLAttributes {
     'buttons'?: Array<{name: string, link: string}>;
-    'cardColor'?: {r: number, g: number, b: number};
+    'cardColor'?: Color;
     'cardData'?: { [keys: string]: string[] } | string;
     'cardMedia'?: string;
     'cardTitle'?: string;
