@@ -1,9 +1,10 @@
 {
-  "name": "@rula/building-info-system",
+  "name": "@ryelib/building-info-system",
   "version": "0.1.1",
   "description": "An information and wayfinding web application for buildings.",
   "keywords": [
-    "rula",
+    "ryerson",
+    "ryerson library",
     "wayfinding",
     "information",
     "web",
@@ -17,7 +18,7 @@
   "main": "dist/index.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
-  "unpkg": "dist/rula.js",
+  "unpkg": "dist/rl-bis.js",
   "files": [
     "dist/"
   ],
