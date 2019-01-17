@@ -3,7 +3,7 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/constants';
 // import { AppData } from '../../interface';
-// import { Color } from '../../utils/color';
+import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -12,6 +12,7 @@ import { fetchJSON } from '../../utils/fetch';
 })
 
 export class ViewSearch {
+  @State() loaded = false;
 
   /**
    * The query currently being searched for.
@@ -29,7 +30,10 @@ export class ViewSearch {
         body: 's_q=' + newQuery,
       });
       results
-        .then(res => this.searchResults = res)
+        .then(res => {
+          this.searchResults = res;
+          this.loaded = true;
+        })
         .catch(e => console.error(e.message));
     }
   }
@@ -88,9 +92,10 @@ export class ViewSearch {
               titleInMedia
               noContent
               hasPrimaryAction
-              wideMediaAspect
-              cardColor={{ r: 12, g: 34, b: 56 }}
-              onCardClicked={evt => this._bookCardClicked(evt)}>
+              cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
+              cardColor={new Color(12, 34, 56, 0.8)}
+              onCardClicked={evt => this._bookCardClicked(evt)}
+              style={{ width: '256px' }}>
             </rl-card>
           )}
          </rl-collection>
@@ -98,6 +103,16 @@ export class ViewSearch {
     } else {
       return undefined;
     }
+  }
+
+  hostData() {
+    return {
+      class: {
+        'rl-view': true,
+        'rl-view--search': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
+      },
+    };
   }
 
   render() {
