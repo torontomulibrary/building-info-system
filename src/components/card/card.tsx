@@ -22,8 +22,8 @@ export class Card {
 
   @Element() root!: HTMLStencilElement;
 
-  @State() protectionFadeColor = new Color(255, 255, 255, 0.5);
-  @State() protectionColor = new Color(255, 255, 255, 1);
+  @State() protectionFadeColor = new Color(255, 255, 255, 0.2);
+  @State() protectionColor = new Color(255, 255, 255, 0.8);
   @State() textColors = [new Color(255, 255, 255), new Color(0, 0, 0)];
 
   @Prop() buttons?: Array<{name: string, link: string}>;
@@ -40,10 +40,10 @@ export class Card {
   @Prop() noContent = false;
 
   @Prop() wideMediaAspect = false;
-  @Prop() cardColor: {r: number, g: number, b: number} = { r: 255, g: 255, b: 255 };
+  @Prop() cardColor: Color = new Color(255, 255, 255);
   @Watch('cardColor')
   onColorChange() {
-    this.protectionColor = new Color(this.cardColor.r, this.cardColor.g, this.cardColor.b);
+    this.protectionColor = this.cardColor.clone();
     this.protectionFadeColor = this.protectionColor.clone();
     this.protectionFadeColor.setAlpha(0.5);
   }
@@ -85,11 +85,11 @@ export class Card {
 
   _renderMedia() {
     const mediaFile =
-        this.cardMedia ? this.cardMedia : `url("assets/img/no_img.png")`;
+        `url("${this.cardMedia ? this.cardMedia : '/assets/img/no_img.png'})`;
 
     return (
       <div class={`mdc-card__media mdc-card__media--${this.wideMediaAspect ? '16-9' : 'square'}`}
-        style={{ 'background-image': mediaFile }}>
+        style={{ backgroundImage: mediaFile, backgroundSize: 'contain' }}>
         {this.titleInMedia ?
           [
             <div class="rl-card__media-text-protection" style={{
