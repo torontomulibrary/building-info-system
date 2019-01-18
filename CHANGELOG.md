@@ -1,3 +1,12 @@
+# [0.2.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.1.1...v0.2.0) (2019-01-18)
+
+
+### Features
+
+* **app:** move URL constants to config file and ignore from GIT ([c6cae1a](https://github.com/ryersonlibrary/building-info-system/commit/c6cae1a))
+
+
+
 ## [0.1.1](https://github.com/ryersonlibrary/building-info-system/compare/v1.0.0...v0.1.1) (2019-01-17)
 
 
