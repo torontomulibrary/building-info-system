@@ -16,6 +16,7 @@
 | `cardTitle`        | `card-title`         |             | `string`                                         | `''`                       |
 | `hasPrimaryAction` | `has-primary-action` |             | `boolean`                                        | `false`                    |
 | `icons`            | --                   |             | `undefined \| { name: string; }[]`               | `undefined`                |
+| `mediaSize`        | `media-size`         |             | `"contain" \| "cover"`                           | `'cover'`                  |
 | `noContent`        | `no-content`         |             | `boolean`                                        | `false`                    |
 | `titleInMedia`     | `title-in-media`     |             | `boolean`                                        | `false`                    |
 | `wideMediaAspect`  | `wide-media-aspect`  |             | `boolean`                                        | `false`                    |

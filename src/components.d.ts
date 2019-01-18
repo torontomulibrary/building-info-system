@@ -115,6 +115,7 @@ export namespace Components {
     'cardTitle': string;
     'hasPrimaryAction': boolean;
     'icons'?: Array<{name: string}>;
+    'mediaSize': 'contain' | 'cover';
     'noContent': boolean;
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
@@ -127,6 +128,7 @@ export namespace Components {
     'cardTitle'?: string;
     'hasPrimaryAction'?: boolean;
     'icons'?: Array<{name: string}>;
+    'mediaSize'?: 'contain' | 'cover';
     'noContent'?: boolean;
     'onCardClicked'?: (event: CustomEvent) => void;
     'titleInMedia'?: boolean;
