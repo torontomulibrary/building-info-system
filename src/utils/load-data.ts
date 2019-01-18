@@ -1,4 +1,4 @@
-import { API_URL } from '../global/constants';
+import { API_URL } from '../global/config';
 import { fetchJSON } from '../utils/fetch';
 
 import { get, set } from './local-storage';

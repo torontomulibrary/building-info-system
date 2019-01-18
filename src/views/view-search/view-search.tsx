@@ -1,7 +1,7 @@
 import { Component, Prop, State, Watch } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { BASE_URL, SEARCH_URL } from '../../global/constants';
+import { BASE_URL, SEARCH_URL } from '../../global/config';
 // import { AppData } from '../../interface';
 import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';

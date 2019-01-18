@@ -1,0 +1,27 @@
+// RENAME THIS FILE to `config.ts`
+
+/**
+ * The path as the root of the webapp.  Typically this matches any part of the
+ * URL that comes after the host.  For example, hosting from `localhost:8080`
+ * would have a base URL of `/` while `localhost:8080/dev/site` would use a base
+ * URL of `/dev/site/`.
+ */
+export const BASE_URL = '/';
+
+/**
+ * The path to a RESTful API where the data for the application can be pulled
+ * from using GET commands.  See the documentation for the functions that need
+ * to exist and the data expected.
+ */
+export const API_URL = '/api';
+
+/**
+ * The path that will get called when search querys are entered.
+ */ 
+export const SEARCH_URL = '/search';
+
+/**
+ * The path called when loading the list of events.  This needs to point to
+ * and ICAL file.
+ */
+export const EVENT_URL = '/ical';
