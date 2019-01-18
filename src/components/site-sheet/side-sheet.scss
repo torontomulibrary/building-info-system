@@ -1,11 +1,11 @@
 @import "@material/animation/functions";
+@import "@material/drawer/variables";
 @import "@material/elevation/mixins";
+@import "@material/layout-grid/mixins";
 @import "@material/rtl/mixins";
 @import "@material/theme/mixins";
-@import "@material/drawer/variables";
-@import "@material/typography/mixins";
-@import "@material/layout-grid/mixins";
 @import "@material/top-app-bar/mixins";
+@import "@material/typography/mixins";
 @import "rl-list";
 
 $rl-side-sheet-close-time: 200ms;

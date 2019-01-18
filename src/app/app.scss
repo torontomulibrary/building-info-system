@@ -1,16 +1,25 @@
-//@import "@material/drawer/mdc-drawer";
 @import "@material/animation/variables";
+// Material Components used throughout the app.  Import here rather than in
+// individual locations to avoid duplication.
+@import "@material/button/mdc-button";
+@import "@material/card/mdc-card";
+@import "@material/drawer/mdc-drawer";
+@import "@material/icon-button/mdc-icon-button";
+@import "@material/layout-grid/mdc-layout-grid";
 @import "@material/list/mdc-list";
+@import "@material/ripple/mdc-ripple";
 @import "@material/select/mdc-select";
+@import "@material/tab/mdc-tab";
 @import "@material/tab-bar/mdc-tab-bar";
 @import "@material/tab-scroller/mdc-tab-scroller";
 @import "@material/tab-indicator/mdc-tab-indicator";
-@import "@material/tab/mdc-tab";
-@import "@material/layout-grid/mixins";
-@import "@material/elevation/mixins";
 @import "@material/textfield/mdc-text-field";
 @import "@material/textfield/icon/mdc-text-field-icon";
+@import "@material/top-app-bar/mdc-top-app-bar";
 @import "@material/typography/mdc-typography";
+// Mixins
+@import "@material/layout-grid/mixins";
+@import "@material/elevation/mixins";
 
 .rl-bis.hydrated {
   .rl-main-content {

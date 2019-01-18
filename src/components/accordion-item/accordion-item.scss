@@ -1,6 +1,6 @@
 @import "@material/animation/functions";
 @import "@material/elevation/mixins";
-@import "@material/ripple/mdc-ripple";
+@import "@material/ripple/mixins";
 
 .rl-accordion-item {
   @include mdc-elevation(2);

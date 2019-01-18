@@ -1,4 +1,4 @@
-@import "@material/ripple/mdc-ripple";
+@import "@material/ripple/mixins";
 
 .rl-expansion-panel {
   display: block;
@@ -25,7 +25,6 @@
   &__trigger {
     @include mdc-ripple-surface;
     @include mdc-ripple-radius-bounded;
-    // @include mdc-states-base-color(var(--rl-e-item-ripple-color, red));
     @include mdc-states-hover-opacity(0.1);
     @include mdc-states-focus-opacity(0.2);
     @include mdc-states-press-opacity(0.3);

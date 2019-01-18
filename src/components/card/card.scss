@@ -1,8 +1,6 @@
-@import "@material/button/mdc-button";
-@import "@material/card/mdc-card";
-@import "@material/elevation/mixins";
 @import "@material/animation/variables";
-@import "@material/icon-button/mdc-icon-button";
+@import "@material/elevation/mixins";
+@import "@material/typography/mixins";
 
 .rl-card {
   @include mdc-elevation(1);
