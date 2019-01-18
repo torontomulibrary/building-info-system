@@ -1,4 +1,5 @@
 import { Component, Prop, State } from '@stencil/core';
+import union from 'lodash/union';
 
 import {
   BASE_URL,
@@ -43,11 +44,28 @@ export class ViewEvent {
   componentWillLoad() {
     get(EVENTS_STORAGE_KEY).then((events: CalEvent[]) => {
       if (events) {
-        events.forEach((evt: CalEvent) => {
+        events.forEach((evt: CalEvent, idx: number) => {
           evt.endTime = new Date(evt.endTime);
           evt.startTime = new Date(evt.startTime);
+          if (evt.startTime.valueOf() < new Date().valueOf()) {
+            delete events[idx];
+          }
         });
         this.events = events;
+
+        // Load additional events if the cached ones are depleted.
+        if (events.length < 50) {
+          const parser: EventParser = new EventParser();
+          parser.subscribe(() => {
+            const evts = parser.getFutureEvents(52);
+            const newEvents = union(events, evts);
+
+            set(EVENTS_STORAGE_KEY, newEvents);
+            this.events = newEvents;
+          });
+          parser.loadIcal(EVENT_URL);
+        }
+
         this.loaded = true;
       } else {
         const parser: EventParser = new EventParser();
