@@ -167,9 +167,6 @@ export namespace Components {
     'onToggled'?: (event: CustomEvent) => void;
   }
 
-  interface RlGraphicDevice {}
-  interface RlGraphicDeviceAttributes extends StencilHTMLAttributes {}
-
   interface RlMapContainer {
     'buildings': BuildingMap;
     'extraDetails'?: {};
@@ -285,12 +282,14 @@ export namespace Components {
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded': boolean;
+    'history': RouterHistory;
   }
   interface ViewEventAttributes extends StencilHTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
+    'history': RouterHistory;
   }
 
   interface ViewFaq {
@@ -364,7 +363,6 @@ declare global {
     'RlCollection': Components.RlCollection;
     'RlDrawer': Components.RlDrawer;
     'RlExpansionPanel': Components.RlExpansionPanel;
-    'RlGraphicDevice': Components.RlGraphicDevice;
     'RlMapContainer': Components.RlMapContainer;
     'RlMapNav': Components.RlMapNav;
     'RlSearchBox': Components.RlSearchBox;
@@ -387,7 +385,6 @@ declare global {
     'rl-collection': Components.RlCollectionAttributes;
     'rl-drawer': Components.RlDrawerAttributes;
     'rl-expansion-panel': Components.RlExpansionPanelAttributes;
-    'rl-graphic-device': Components.RlGraphicDeviceAttributes;
     'rl-map-container': Components.RlMapContainerAttributes;
     'rl-map-nav': Components.RlMapNavAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
@@ -448,12 +445,6 @@ declare global {
   var HTMLRlExpansionPanelElement: {
     prototype: HTMLRlExpansionPanelElement;
     new (): HTMLRlExpansionPanelElement;
-  };
-
-  interface HTMLRlGraphicDeviceElement extends Components.RlGraphicDevice, HTMLStencilElement {}
-  var HTMLRlGraphicDeviceElement: {
-    prototype: HTMLRlGraphicDeviceElement;
-    new (): HTMLRlGraphicDeviceElement;
   };
 
   interface HTMLRlMapContainerElement extends Components.RlMapContainer, HTMLStencilElement {}
@@ -531,7 +522,6 @@ declare global {
     'rl-collection': HTMLRlCollectionElement
     'rl-drawer': HTMLRlDrawerElement
     'rl-expansion-panel': HTMLRlExpansionPanelElement
-    'rl-graphic-device': HTMLRlGraphicDeviceElement
     'rl-map-container': HTMLRlMapContainerElement
     'rl-map-nav': HTMLRlMapNavElement
     'rl-search-box': HTMLRlSearchBoxElement
@@ -554,7 +544,6 @@ declare global {
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
-    'rl-graphic-device': HTMLRlGraphicDeviceElement;
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;
