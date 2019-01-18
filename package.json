@@ -32,7 +32,7 @@
     "lint": "npm run lint.sass && npm run lint.ts",
     "lint.sass": "stylelint \"src/**/*.scss\"",
     "lint.ts": "tslint --project tsconfig.json ./src/**/*.ts ./src/**/*.tsx",
-    "postinstall": "npm link @ryelib/web-components",
+    "postinstall": "npm link @ryersonlibrary/web-components",
     "pretest": "npm run lint",
     "prerender": "stencil build --prerender",
     "release": "node scripts/release.js",

@@ -7,7 +7,7 @@
 
 import '@stencil/core';
 
-import '@ryelib/web-components';
+import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
 import {

@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/ryersonlibrary/building-info-system.svg?branch=master)](https://travis-ci.org/ryersonlibrary/building-info-system)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/161698bdb1d44fe4a02c5b625c44e71a)](https://www.codacy.com/project/ryersonlibrary/building-info-system/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ryersonlibrary/building-info-system&amp;utm_campaign=Badge_Grade_Dashboard)
 
-# @rula/building-info-system
+# @ryersonlibrary/building-info-system
 
 RULA-BIS is an open source web application designed to provide directory,
 wayfinding and other informational services for buildings using the latest web
@@ -26,7 +26,7 @@ either cloning this repo or by using NPM:
 
 or
 
-`npm i --save @rula/building-info-system`
+`npm i --save @ryersonlibrary/building-info-system`
 
 ## Requirements
 

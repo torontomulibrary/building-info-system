@@ -1,4 +1,4 @@
-import '@ryelib/web-components';
+import '@ryersonlibrary/web-components';
 import { Component, Element, Listen, State } from '@stencil/core';
 
 import { BASE_URL } from '../global/config';
