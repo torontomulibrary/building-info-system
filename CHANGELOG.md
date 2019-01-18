@@ -1,3 +1,21 @@
+## [0.2.1](https://github.com/ryersonlibrary/building-info-system/compare/v0.2.0...v0.2.1) (2019-01-18)
+
+
+### Bug Fixes
+
+* **accordion:** fix active item selector and change `allowMultiple` default to `false` ([1f737ae](https://github.com/ryersonlibrary/building-info-system/commit/1f737ae))
+* **card:** fix typo in card background url ([663ef38](https://github.com/ryersonlibrary/building-info-system/commit/663ef38))
+* **testing:** fix problem with localStorage that prevented e2e test from running ([025ecab](https://github.com/ryersonlibrary/building-info-system/commit/025ecab))
+
+
+### Features
+
+* **card:** add `mediaSize` property to specify how media background image is sized ([985defc](https://github.com/ryersonlibrary/building-info-system/commit/985defc))
+* **side-sheet:** improve focus flow ([89ef8b7](https://github.com/ryersonlibrary/building-info-system/commit/89ef8b7))
+* **view-map:** remove old events from local storage and lazy-load new events to fill missing ones ([04668c4](https://github.com/ryersonlibrary/building-info-system/commit/04668c4))
+
+
+
 # [0.2.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.1.1...v0.2.0) (2019-01-18)
 
 
