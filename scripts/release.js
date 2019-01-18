@@ -1,5 +1,6 @@
 /**
- * Deploy script adopted from https://github.com/sindresorhus/np
+ * Deployment script taken from (https://github.com/ionic-team/stencil/)[StencilJS]
+ * and originally based on https://github.com/sindresorhus/np
  * MIT License (c) Sindre Sorhus (sindresorhus.com)
  */
 const color = require('ansi-colors');
@@ -127,7 +128,7 @@ function runTasks(opts) {
         task: () => execa('npm', ['install'], { cwd: rootDir }),
       },
       {
-        title: 'Build @ryelib/building-info-system',
+        title: 'Build @ryersonlibrary/building-info-system',
         task: () => execa('npm', ['run', 'build'], { cwd: rootDir })
       },
       {
@@ -148,7 +149,7 @@ function runTasks(opts) {
   if (opts.publish) {
     tasks.push(
       {
-        title: 'Publish @ryelib/building-info-system',
+        title: 'Publish @ryersonlibrary/building-info-system',
         task: () => execa(
           'npm',
           ['publish'].concat(opts.tag ? ['--tag', opts.tag] : [])
@@ -169,10 +170,10 @@ function runTasks(opts) {
     if (opts.tag !== 'next' && opts.tag !== 'test') {
       tasks.push(
         {
-          title: 'Also set "next" tag on @ryelib/building-info-system',
+          title: 'Also set "next" tag on @ryersonlibrary/building-info-system',
           task: () => execa(
             'npm',
-            ['dist-tag', 'add', '@ryelib/building-info-system@' + opts.version, 'next']
+            ['dist-tag', 'add', '@ryersonlibrary/building-info-system@' + opts.version, 'next']
             .concat(opts.otp ? ['--otp', opts.otp] : []),
             { cwd: rootDir })
         }
