@@ -5,7 +5,6 @@ import { Card } from '../../components/card/card';
 import { BASE_URL } from '../../global/config';
 import { ROUTES, SEARCH_HISTORY_STORAGE_KEY } from '../../global/constants';
 import { SearchHistory } from '../../interface';
-// import { fetchJSON } from '../../utils/fetch';
 import { loadData } from '../../utils/load-data';
 
 @Component({

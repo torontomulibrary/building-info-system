@@ -1,7 +1,5 @@
 import { Component, Prop, State } from '@stencil/core';
 
-// import { AppData } from '../../interface';
-
 @Component({
   tag: 'view-home',
   styleUrl: 'view-home.scss',

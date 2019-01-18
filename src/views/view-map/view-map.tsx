@@ -16,7 +16,6 @@ import {
   FLOORS_STORAGE_KEY,
 } from '../../global/constants';
 import {
-  // AppData,
   BookDetails,
   Building,
   BuildingMap,

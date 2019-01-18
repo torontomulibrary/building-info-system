@@ -1,7 +1,6 @@
 import {
   Component,
   Element,
-  // Method,
   Prop,
   State,
 } from '@stencil/core';

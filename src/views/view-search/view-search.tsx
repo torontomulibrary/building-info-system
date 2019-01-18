@@ -3,7 +3,6 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/config';
 import { ROUTES } from '../../global/constants';
-// import { AppData } from '../../interface';
 import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
 

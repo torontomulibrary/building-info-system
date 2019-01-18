@@ -1,7 +1,6 @@
-import { Component, Element, Event, EventEmitter, Prop, Watch } from '@stencil/core';
-
 import { MDCSelect } from '@material/select/index';
 import { MDCTabBar } from '@material/tab-bar/index';
+import { Component, Element, Event, EventEmitter, Prop, Watch } from '@stencil/core';
 
 import {
   Building,
