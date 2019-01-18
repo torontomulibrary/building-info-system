@@ -16,10 +16,6 @@ import { Color } from '../../utils/color';
 })
 
 export class Card {
-  /**
-   * @emits resultSelected
-   */
-
   @Element() root!: HTMLStencilElement;
 
   @State() protectionFadeColor = new Color(255, 255, 255, 0.2);
@@ -39,6 +35,7 @@ export class Card {
 
   @Prop() noContent = false;
 
+  @Prop() mediaSize: 'contain' | 'cover' = 'cover';
   @Prop() wideMediaAspect = false;
   @Prop() cardColor: Color = new Color(255, 255, 255);
   @Watch('cardColor')
@@ -89,7 +86,7 @@ export class Card {
 
     return (
       <div class={`mdc-card__media mdc-card__media--${this.wideMediaAspect ? '16-9' : 'square'}`}
-        style={{ backgroundImage: mediaFile, backgroundSize: 'contain' }}>
+        style={{ backgroundImage: mediaFile, backgroundSize: this.mediaSize }}>
         {this.titleInMedia ?
           [
             <div class="rl-card__media-text-protection" style={{

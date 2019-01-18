@@ -88,7 +88,8 @@ export class ViewBuilding {
                 class="rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"
                 titleInMedia={true}
                 cardTitle={building.name}
-                cardMedia={`url("${building.image}")`}
+                cardMedia={building.image}
+                mediaSize="cover"
                 buttons={[
                   { name: 'Map It!', link: `${BASE_URL}${ROUTES.DIRECTORY}/${building.code}` },
                 ]}
