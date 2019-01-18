@@ -8,8 +8,8 @@ import {
 } from '@stencil/core';
 import { MatchResults } from '@stencil/router';
 
+import { API_URL } from '../../global/config';
 import {
-  API_URL,
   BUILDINGS_STORAGE_KEY,
   DETAILS_STORAGE_KEY,
   ELEMENTS_STORAGE_KEY,
