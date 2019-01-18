@@ -31,7 +31,7 @@ export class Accordion {
    * Flag indicating if multiple `accordion-item`s can be open at once.
    * Defaults to true.
    */
-  @Prop() allowMultiple = true;
+  @Prop() allowMultiple = false;
 
   /**
    * Component lifecycle function that is called when completely lodaded and
@@ -81,8 +81,8 @@ export class Accordion {
    */
   @Listen('toggleItem')
   toggleItemHandler() {
-    const active = this.root.querySelector('[aria-expanded]') as HTMLRlAccordionItemElement;
-    if (active && !this.allowMultiple) {
+    const active = this.root.querySelector('.rl-accordion-item--open') as HTMLRlAccordionItemElement;
+    if (active && this.allowMultiple === false) {
       active.close();
     }
   }
