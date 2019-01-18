@@ -1,6 +1,7 @@
 import { Component, Prop, State } from '@stencil/core';
 
-import { BASE_URL, BUILDINGS_STORAGE_KEY, FLOORS_STORAGE_KEY } from '../../global/constants';
+import { BASE_URL } from '../../global/config';
+import { BUILDINGS_STORAGE_KEY, FLOORS_STORAGE_KEY } from '../../global/constants';
 import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
 import { loadData } from '../../utils/load-data';
 

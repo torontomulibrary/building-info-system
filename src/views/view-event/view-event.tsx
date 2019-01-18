@@ -2,8 +2,10 @@ import { Component, Prop, State } from '@stencil/core';
 
 import {
   BASE_URL,
-  EVENTS_STORAGE_KEY,
   EVENT_URL,
+} from '../../global/config';
+import {
+  EVENTS_STORAGE_KEY,
   FULL_MONTHS,
   MONTHS,
 } from '../../global/constants';

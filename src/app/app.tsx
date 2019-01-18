@@ -1,7 +1,8 @@
 import '@ryelib/web-components';
 import { Component, Element, Listen, State } from '@stencil/core';
 
-import { APP_TITLE, BASE_URL } from '../global/constants';
+import { BASE_URL } from '../global/config';
+import { APP_TITLE } from '../global/constants';
 
 @Component({
   tag: 'rl-bis',
