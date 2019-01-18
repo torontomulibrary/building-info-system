@@ -40,7 +40,9 @@
     "serve": "stencil build --serve",
     "set.version": "node scripts/set-version.js",
     "start": "npm run dev",
-    "test": "stencil test --spec --e2e",
+    "test": "npm run test.spec && npm run test.e2e",
+    "test.e2e": "stencil test --e2e",
+    "test.spec": "stencil test --spec",
     "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "devDependencies": {

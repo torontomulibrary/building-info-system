@@ -1,10 +1,17 @@
-const storage = window.localStorage;
+let storage: Storage | undefined;
+try {
+  storage = window.localStorage;
+} catch (e) {
+  // Just here to prevent a blow-up in puppeteer.
+}
 
 export function set(key: string, value: any): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      storage.setItem(key, JSON.stringify(value));
-      resolve();
+      if (storage) {
+        storage.setItem(key, JSON.stringify(value));
+        resolve();
+      }
     } catch (err) {
       reject(`Couldnt store object ${err}`);
     }
@@ -14,8 +21,10 @@ export function set(key: string, value: any): Promise<void> {
 export function remove(key: string): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      storage.removeItem(key);
-      resolve();
+      if (storage !== undefined) {
+        storage.removeItem(key);
+        resolve();
+      }
     } catch (err) {
       reject(`Couldnt remove object ${err}`);
     }
@@ -25,13 +34,15 @@ export function remove(key: string): Promise<void> {
 export function get(key: string): Promise<any | undefined> {
   return new Promise((resolve, reject) => {
     try {
-      const item = storage.getItem(key);
+      if (storage) {
+        const item = storage.getItem(key);
 
-      if (item !== null) {
-        resolve(JSON.parse(item));
+        if (item !== null) {
+          resolve(JSON.parse(item));
+        }
+
+        resolve(undefined);
       }
-
-      resolve(undefined);
     } catch (err) {
       reject(`Couldnt get object: ${err}`);
     }

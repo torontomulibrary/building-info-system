@@ -3,7 +3,7 @@ import { postcss } from '@stencil/postcss';
 import { sass } from '@stencil/sass';
 
 export const config: Config = {
-  enableCache: false,
+  enableCache: true,
   namespace: 'rl-bis',
   outputTargets: [
     {
