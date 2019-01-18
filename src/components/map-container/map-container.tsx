@@ -213,7 +213,8 @@ export class MapContainer {
           <button
               class="material-icons rl-side-sheet__close"
               onClick={_ => { this._setActiveElement(); }}
-              aria-label="Close detail panel.">
+              aria-label="Close detail panel."
+              tabindex={this.activeElement ? '0' : '-1'}>
             close
           </button>
         </header>

@@ -23,6 +23,8 @@ import * as util from './util';
  * of the screen.
  */
 export class SideSheet {
+  private oldFocus!: HTMLElement | null;
+
   /**
    * Object used to trap user focus when this sheet is open.
    */
@@ -111,6 +113,9 @@ export class SideSheet {
 
     if (!this.isOpen) {
       this.focusTrap.deactivate();
+      if (this.oldFocus) {
+        this.oldFocus.focus();
+      }
       this.closed.emit();
 
       if (this.root.contains(document.activeElement) &&
@@ -121,6 +126,7 @@ export class SideSheet {
     } else {
       // TODO: Add support for pre-activated item to get focus.
       // const activeItem = this.root.querySelector('rl-side-sheet')
+      this.oldFocus = document.activeElement as HTMLElement;
       this.focusTrap.activate();
       this.opened.emit();
     }
