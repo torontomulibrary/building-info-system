@@ -2,6 +2,7 @@ import { Component, Prop, State, Watch } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/config';
+import { ROUTES } from '../../global/constants';
 // import { AppData } from '../../interface';
 import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
@@ -76,7 +77,7 @@ export class ViewSearch {
     const data = e.detail.cardData;
     if (typeof data === 'object') {
       const record = data.ExternalDocumentID[0].substring(0, 8);
-      this.history.push(`${BASE_URL}books/map/${record}`, { record });
+      this.history.push(`${BASE_URL}${ROUTES.BOOKS}/map/${record}`, { record });
     }
   }
 

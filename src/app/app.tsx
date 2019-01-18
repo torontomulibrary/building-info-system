@@ -2,7 +2,10 @@ import '@ryersonlibrary/web-components';
 import { Component, Element, Listen, State } from '@stencil/core';
 
 import { BASE_URL } from '../global/config';
-import { APP_TITLE } from '../global/constants';
+import {
+  APP_TITLE,
+  ROUTES,
+} from '../global/constants';
 
 @Component({
   tag: 'rl-bis',
@@ -16,40 +19,40 @@ export class RLApp {
   private appPages = [
     {
       title: 'Home',
-      url: '',
+      url: BASE_URL,
       icon: 'home',
       component: 'view-home',
     },
     {
       title: 'Directory',
-      url: 'directory',
+      url: ROUTES.DIRECTORY,
       icon: 'map',
     },
     {
       title: 'Books',
-      url: 'books',
+      url: ROUTES.BOOKS,
       icon: 'import_contacts',
       component: 'view-map',
       params: ':roomNo?',
     },
     {
       title: 'Computers',
-      url: 'computers',
+      url: ROUTES.COMPUTERS,
       icon: 'computer',
     },
     {
       title: 'Buildings',
-      url: 'buildings',
+      url: ROUTES.BUILDINGS,
       icon: 'business',
     },
     {
       title: 'Events',
-      url: 'events',
+      url: ROUTES.EVENTS,
       icon: 'event',
     },
     {
       title: 'FAQs',
-      url: 'faqs',
+      url: ROUTES.FAQS,
       icon: 'question_answer',
     },
   ];
@@ -166,8 +169,8 @@ export class RLApp {
           <stencil-route-switch>
             <stencil-route component="view-map"
               url={[
-                `${BASE_URL}directory/:roomNo?`,
-                `${BASE_URL}directory`,
+                `${BASE_URL}${ROUTES.DIRECTORY}/:roomNo?`,
+                `${BASE_URL}${ROUTES.DIRECTORY}`,
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
@@ -185,8 +188,8 @@ export class RLApp {
             </stencil-route>
             <stencil-route component="view-map"
               url={[
-                `${BASE_URL}computers/`,
-                `${BASE_URL}computers`,
+                `${BASE_URL}${ROUTES.COMPUTERS}/`,
+                `${BASE_URL}${ROUTES.COMPUTERS}`,
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
@@ -195,8 +198,8 @@ export class RLApp {
             </stencil-route>
             <stencil-route component="view-building"
               url={[
-                `${BASE_URL}buildings/`,
-                `${BASE_URL}buildings`,
+                `${BASE_URL}${ROUTES.BUILDINGS}/`,
+                `${BASE_URL}${ROUTES.BUILDINGS}`,
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
@@ -204,8 +207,8 @@ export class RLApp {
             </stencil-route>
             <stencil-route component="view-book"
               url={[
-                `${BASE_URL}books/`,
-                `${BASE_URL}books`,
+                `${BASE_URL}${ROUTES.BOOKS}/`,
+                `${BASE_URL}${ROUTES.BOOKS}`,
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
@@ -213,8 +216,8 @@ export class RLApp {
             </stencil-route>
             <stencil-route component="view-event"
               url={[
-                `${BASE_URL}events/`,
-                `${BASE_URL}events`,
+                `${BASE_URL}${ROUTES.EVENTS}/`,
+                `${BASE_URL}${ROUTES.EVENTS}`,
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
@@ -222,15 +225,15 @@ export class RLApp {
             </stencil-route>
             <stencil-route component="view-faq"
               url={[
-                `${BASE_URL}faqs/`,
-                `${BASE_URL}faqs`,
+                `${BASE_URL}${ROUTES.FAQS}/`,
+                `${BASE_URL}${ROUTES.FAQS}`,
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>
             </stencil-route>
             <stencil-route component="view-search"
-              url={[`${BASE_URL}sr/:query?`]}
+              url={[`${BASE_URL}search/:query?`]}
               componentProps={{
                 appLoaded: this.appLoaded,
               }}>

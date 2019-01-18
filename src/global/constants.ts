@@ -63,3 +63,13 @@ export const FLOORS_STORAGE_KEY = 'rl-floors';
 export const ELEMENTS_STORAGE_KEY = 'rl-elements';
 export const DETAILS_STORAGE_KEY = 'rl-details';
 export const SEARCH_HISTORY_STORAGE_KEY = 'rl-search-history';
+
+export enum ROUTES {
+  DIRECTORY = 'directory',
+  BOOKS = 'books',
+  COMPUTERS = 'computers',
+  BUILDINGS = 'buildings',
+  EVENTS = 'events',
+  FAQS = 'faqs',
+  SEARCH = 'search',
+}

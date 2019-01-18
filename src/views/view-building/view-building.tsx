@@ -1,7 +1,11 @@
 import { Component, Prop, State } from '@stencil/core';
 
 import { BASE_URL } from '../../global/config';
-import { BUILDINGS_STORAGE_KEY, FLOORS_STORAGE_KEY } from '../../global/constants';
+import {
+  BUILDINGS_STORAGE_KEY,
+  FLOORS_STORAGE_KEY,
+  ROUTES,
+} from '../../global/constants';
 import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
 import { loadData } from '../../utils/load-data';
 
@@ -86,7 +90,7 @@ export class ViewBuilding {
                 cardTitle={building.name}
                 cardMedia={`url("${building.image}")`}
                 buttons={[
-                  { name: 'Map It!', link: `${BASE_URL}directory/${building.code}` },
+                  { name: 'Map It!', link: `${BASE_URL}${ROUTES.DIRECTORY}/${building.code}` },
                 ]}
                 >
                 <div slot="primary">
