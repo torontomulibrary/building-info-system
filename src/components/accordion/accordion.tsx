@@ -87,6 +87,14 @@ export class Accordion {
     }
   }
 
+  hostData() {
+    return {
+      class: {
+        'rl-accordion': true,
+      },
+    };
+  }
+
   /**
    * Component render function.
    */
