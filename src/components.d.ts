@@ -25,6 +25,9 @@ import {
   MatchResults,
   RouterHistory,
 } from '@stencil/router';
+import {
+  MAP_TYPE,
+} from './global/constants';
 
 
 export namespace Components {
@@ -319,7 +322,7 @@ export namespace Components {
     * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded': boolean;
-    'mapType': string;
+    'mapType': MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
@@ -330,7 +333,7 @@ export namespace Components {
     * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded'?: boolean;
-    'mapType'?: string;
+    'mapType'?: MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
