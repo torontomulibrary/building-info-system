@@ -172,6 +172,12 @@ export class MapContainer {
     }
   }
 
+  _sidePanelClosed() {
+    if (this.activeElement) {
+      this._setActiveElement();
+    }
+  }
+
   onMapRendered() {
     if (this.mapEl) {
       if (!this.activeElement) {
@@ -206,7 +212,7 @@ export class MapContainer {
         onMapRendered={() => this.onMapRendered()}>
       </rl-map>,
 
-      <rl-side-sheet open={this.activeElement !== undefined}>
+      <rl-side-sheet open={this.activeElement !== undefined} onClosed={() => this._sidePanelClosed()}>
         <header class="rl-side-sheet__header">
           <span class="rl-side-sheet__title">
             <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
