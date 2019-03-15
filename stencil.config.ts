@@ -21,7 +21,8 @@ export const config: Config = {
         './src/global/_variables.scss',
         './src/global/_mixins.scss',
       ],
-      includePaths: ['./node_modules', './src/global']}),
+      includePaths: ['./node_modules', './src/global'],
+    }),
     postcss({
       plugins: [require('autoprefixer')],
     }),
