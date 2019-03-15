@@ -86,7 +86,7 @@ export class SearchBox {
    */
   onKeyDown(evt: KeyboardEvent) {
     const target = evt.target;
-    const key = evt.key;
+    const { keyCode, key } = evt;
 
     if (target && target instanceof HTMLInputElement &&
         target.classList.contains('rl-search__input') &&
@@ -106,6 +106,11 @@ export class SearchBox {
         }
 
         evt.preventDefault();
+      }
+    } else if (key === 'Escape' || keyCode === 27) {
+      this.focused = false;
+      if (this.searchInput) {
+        this.searchInput.value = '';
       }
     }
   }
@@ -128,6 +133,8 @@ export class SearchBox {
     const t = e.target;
 
     if (t !== null && t instanceof HTMLInputElement) {
+      this._checkFocus(e);
+
       if (this.searchElements !== undefined) {
         this.searchQuery = t.value;
         // this.updateSearchQuery(t.value);
