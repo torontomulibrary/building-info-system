@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property             | Attribute    | Description                                                                                                           | Type           | Default       |
-| -------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- | -------------- | ------------- |
-| `appLoaded`          | `app-loaded` | The global object of all application data. A global flag passed in to indicate if the application has loaded as well. | `boolean`      | `false`       |
-| `mapType`            | `map-type`   |                                                                                                                       | `string`       | `'directory'` |
-| `match` _(required)_ | --           | The results coming from `stencil-router` that contain any URL matches.                                                | `MatchResults` | `undefined`   |
+| Property             | Attribute    | Description                                                                                                           | Type                                                         | Default              |
+| -------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------------------- |
+| `appLoaded`          | `app-loaded` | The global object of all application data. A global flag passed in to indicate if the application has loaded as well. | `boolean`                                                    | `false`              |
+| `mapType`            | `map-type`   |                                                                                                                       | `MAP_TYPE.BOOKS \| MAP_TYPE.COMPUTERS \| MAP_TYPE.DIRECTORY` | `MAP_TYPE.DIRECTORY` |
+| `match` _(required)_ | --           | The results coming from `stencil-router` that contain any URL matches.                                                | `MatchResults`                                               | `undefined`          |
 
 
 ## Events
