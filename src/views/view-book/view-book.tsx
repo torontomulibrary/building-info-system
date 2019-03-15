@@ -3,7 +3,7 @@ import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
 import { BASE_URL } from '../../global/config';
-import { ROUTES, SEARCH_HISTORY_STORAGE_KEY } from '../../global/constants';
+import { LOCAL_STORAGE_KEY, ROUTES } from '../../global/constants';
 import { SearchHistory } from '../../interface';
 import { loadData } from '../../utils/load-data';
 
@@ -25,7 +25,7 @@ export class ViewBooks {
 
   componentWillLoad() {
     // Load search history.
-    loadData('history', SEARCH_HISTORY_STORAGE_KEY).then((history: SearchHistory) => {
+    loadData('history', LOCAL_STORAGE_KEY.SEARCH).then((history: SearchHistory) => {
       this.searches = history;
       this.loaded = true;
     }, reason => {

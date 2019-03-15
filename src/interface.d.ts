@@ -51,8 +51,9 @@ export interface Floor extends DescribedObject {
   image: string;
   function: string;
   icon: string;
-  elements: MapElementMap;
+  elements: MapElementDataMap;
   enabled: boolean;
+  hasComputers: boolean;
 }
 
 export interface Building extends DescribedObject {
@@ -63,12 +64,16 @@ export interface Building extends DescribedObject {
   enabled: boolean;
 }
 
-export interface MapElement extends DescribedObject {
+export interface MapElementData extends DescribedObject {
   details: MapElementDetailMap;
+  clickable?: boolean;
   floorId: number;
-  icons: string[];
+  icon: string;
   points: string;
   enabled: boolean;
+  category: number;
+  available?: boolean;
+  symbol?: string;
 }
 
 export interface MapElementDetail extends DescribedObject {
@@ -87,16 +92,37 @@ export interface MapElementDetailType extends DescribedObject {
   priority: string;
 }
 
+// export interface DetailType extends DescribedObject {
+//   category: number;
+//   cataloguePattern?: string;
+//   iconPath?: string;
+//   priority?: number;
+// }
+
+export interface ComputerAvailability {
+  avail: boolean,
+  name: string,
+}
+
+export interface ComputerLab {
+  compAvail: number,
+  compTotal: number,
+  locName: string,
+  comps: ComputerAvailability[],
+}
+
 export interface BuildingMap extends NumberMap<Building> {}
 export interface FloorMap extends NumberMap<Floor> {}
-export interface MapElementMap extends NumberMap<MapElement> {}
+export interface MapElementDataMap extends NumberMap<MapElementData> {}
 export interface MapElementDetailMap extends NumberMap<MapElementDetail> {}
 export interface MapElementDetailTypeMap extends NumberMap<MapElementDetailType> {}
+export interface ComputerLabMap extends NumberMap<ComputerLab> {}
+// export interface DetailTypeMap extends NumberMap<DetailType> {}
 
 export interface MapData {
   buildings: BuildingMap,
   floors: FloorMap,
-  elements: MapElementMap,
+  elements: MapElementDataMap,
   details: MapElementDetailMap,
 }
 
@@ -121,7 +147,7 @@ export interface AppData {
   bookDetails?: BookDetails,
   buildings: BuildingMap,
   details: MapElementDetailMap,
-  elements: MapElementMap,
+  elements: MapElementDataMap,
   events: CalEvent[],
   // eventUrl: string,
   faqs: FaqMap,

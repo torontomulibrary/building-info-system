@@ -4,6 +4,7 @@ import { Component, Element, Listen, State } from '@stencil/core';
 import { BASE_URL } from '../global/config';
 import {
   APP_TITLE,
+  MAP_TYPE,
   ROUTES,
 } from '../global/constants';
 
@@ -19,7 +20,7 @@ export class RLApp {
   private appPages = [
     {
       title: 'Home',
-      url: BASE_URL,
+      url: '',
       icon: 'home',
       component: 'view-home',
     },
@@ -174,7 +175,7 @@ export class RLApp {
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
-                mapType: 'directory',
+                mapType: MAP_TYPE.DIRECTORY,
               }}>
             </stencil-route>
             <stencil-route component="view-map"
@@ -183,7 +184,7 @@ export class RLApp {
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
-                mapType: 'book',
+                mapType: MAP_TYPE.BOOKS,
               }}>
             </stencil-route>
             <stencil-route component="view-map"
@@ -193,7 +194,7 @@ export class RLApp {
               ]}
               componentProps={{
                 appLoaded: this.appLoaded,
-                mapType: 'computer',
+                mapType: MAP_TYPE.COMPUTERS,
               }}>
             </stencil-route>
             <stencil-route component="view-building"

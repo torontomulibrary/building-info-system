@@ -10,25 +10,28 @@ import { MatchResults } from '@stencil/router';
 
 import { API_URL } from '../../global/config';
 import {
-  BUILDINGS_STORAGE_KEY,
-  DETAILS_STORAGE_KEY,
-  ELEMENTS_STORAGE_KEY,
-  FLOORS_STORAGE_KEY,
+  LOCAL_STORAGE_KEY,
+  MAP_TYPE,
 } from '../../global/constants';
 import {
   BookDetails,
   Building,
   BuildingMap,
+  ComputerAvailability,
+  ComputerLab,
+  ComputerLabMap,
+  // DetailTypeMap,
   Floor,
   FloorMap,
-  MapElement,
+  MapElementData,
+  MapElementDataMap,
   MapElementDetail,
   MapElementDetailMap,
-  MapElementMap,
 } from '../../interface';
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
+// import { MapElementDetail } from '../../interface';
 
 @Component({
   tag: 'view-map',
@@ -38,9 +41,11 @@ import { loadData } from '../../utils/load-data';
 export class ViewMap {
   private _blds!: BuildingMap;
   private _flrs!: FloorMap;
-  private _elms!: MapElementMap;
+  private _elms!: MapElementDataMap;
   private _dtls!: MapElementDetailMap;
+  // private _dtyps!: DetailTypeMap;
   private _book!: BookDetails;
+  private _compLabs!: ComputerLabMap;
 
   /**
    * Any URL matches for determining pre-selected building, floor and element.
@@ -68,6 +73,8 @@ export class ViewMap {
 
   @State() buildings?: BuildingMap;
 
+  @State() extraDetails: {} = {};
+
   /**
    * The global object of all application data.
    */
@@ -78,7 +85,7 @@ export class ViewMap {
    */
   @Prop() appLoaded = false;
 
-  @Prop() mapType = 'directory';
+  @Prop() mapType: MAP_TYPE = MAP_TYPE.DIRECTORY;
 
   /**
    * The results coming from `stencil-router` that contain any URL matches.
@@ -110,11 +117,11 @@ export class ViewMap {
         if (query.charAt(0) === 'b') {
           // Have a book record number.
           await fetchJSON(API_URL + 'books/' + query).then((d: BookDetails) => {
-            this._book = d;
+            this._book = this.extraDetails = d;
           });
           await loadData('books/' + query).then(
             (b: BookDetails) => {
-              this._book = b;
+              this._book = this.extraDetails = b;
           });
         } else {
           // Invalid record number.
@@ -123,29 +130,44 @@ export class ViewMap {
     }
 
     // Load buildings.
-    await loadData('buildings', BUILDINGS_STORAGE_KEY).then(
+    await loadData('buildings', LOCAL_STORAGE_KEY.BUILDINGS).then(
       (b: BuildingMap) => {
         this._blds = b;
     });
 
-    await loadData('floors', FLOORS_STORAGE_KEY).then(
+    // Load floor data.
+    await loadData('floors', LOCAL_STORAGE_KEY.FLOORS).then(
       (f: FloorMap) => {
         this._flrs = f;
     });
 
-    await loadData('elements', ELEMENTS_STORAGE_KEY).then(
-      (e: MapElementMap) => {
+    // Load map elements.
+    await loadData('elements', LOCAL_STORAGE_KEY.ELEMENTS).then(
+      (e: MapElementDataMap) => {
         this._elms = e;
     });
 
-    await loadData('details', DETAILS_STORAGE_KEY).then(
+    // Load map details.
+    await loadData('details', LOCAL_STORAGE_KEY.DETAILS).then(
       (d: MapElementDetailMap) => {
         this._dtls = d;
     });
 
+    // Load map detail types.
+    // await loadData('details/types', LOCAL_STORAGE_KEY.DETAIL_TYPES).then(
+    //   (d: DetailTypeMap) => {
+    //     this._dtyps = d;
+    // });
+
+    let compLabs: ComputerLab[] = [];
+    await loadData('computers', LOCAL_STORAGE_KEY.COMPUTERS).then(
+      (c: ComputerLab[]) => {
+        compLabs = c;
+    });
+
     Object.values(this._blds).forEach((b: Building) => {
-      b.enabled = (this.mapType === 'directory' ||
-          (this.mapType !== 'directory' && b.code === 'LIB')) ?
+      b.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
+          b.code === 'LIB') ?
           true : false;
       b.floors = Object.values(this._flrs || {}).reduce((ob: FloorMap, f: Floor) => {
         if (f.buildingId === b.id) ob[f.id] = f;
@@ -160,14 +182,16 @@ export class ViewMap {
     });
 
     Object.values(this._flrs).forEach((f: Floor) => {
-      f.enabled = (this.mapType === 'directory' ||
-          (this.mapType === 'book' && this._book &&
-          this._book.locations.indexOf(f.name) !== -1)) ?
-          true : false;
       f.elements = Object.values(this._elms || {}).reduce((ob, e) => {
         if (e.floorId === f.id) ob[e.id] = e;
         return ob;
-      }, {} as MapElement);
+      }, {} as MapElementData);
+
+      f.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
+          (this.mapType === MAP_TYPE.BOOKS && this._book &&
+          this._book.locations.indexOf(f.name) !== -1)) ||
+          this.floorHasComps(f, compLabs) ?
+          true : false;
 
       // Set the initial floor to the specified floor, or first floor of the
       // initial building.
@@ -186,38 +210,88 @@ export class ViewMap {
       }
     });
 
-    Object.values(this._elms).forEach((e: MapElement) => {
+    Object.values(this._elms).forEach((e: MapElementData) => {
       e.details = Object.values(this._dtls || {}).reduce((ob, d: MapElementDetail) => {
         if (this.paramMatches && d.code === this.paramMatches[0] &&
-            this.mapType === 'directory' && !this.initialElement) {
+            this.mapType === MAP_TYPE.DIRECTORY && !this.initialElement) {
           this.initialElement = d.elementId;
         }
         if (d.elementId === e.id) ob[d.id] = d;
         return ob;
       }, {} as MapElementDetail);
 
-      e.enabled = (this.mapType === 'directory' ||
-          (this.mapType === 'book' && this._book &&
-          this.bookOnShelf(this._book.callNo, e))) ?
+      e.enabled = ((this.mapType === MAP_TYPE.DIRECTORY && e.category !== 5) ||
+          (this.mapType === MAP_TYPE.BOOKS && this._book &&
+          this.bookOnShelf(this._book.callNo, e)) ||
+          (this.mapType === MAP_TYPE.COMPUTERS && (this.elementHasComps(e, compLabs) || e.category === 5))) ?
           true : false;
 
-      if (e.enabled && this.mapType === 'book' && !this.initialElement) {
+      if (e.enabled && this.mapType === MAP_TYPE.BOOKS && !this.initialElement) {
         this.initialElement = e.id;
       }
 
-      if (e.icons && e.icons.length) {
-        e.icons.forEach((path: string) => {
-          fetchIMG(path);
-        });
+      if (e.icon && typeof e.icon === 'string') {
+        // e.icons.forEach((path: string) => {
+          fetchIMG(e.icon);
+        // });
       }
     });
+
+    if (compLabs.length > 0) {
+      this._compLabs = {};
+      compLabs.forEach((l: ComputerLab) => {
+        Object.values(this._dtls).forEach((d: MapElementDetail) => {
+          if (d.code === l.locName) {
+            this._compLabs[d.elementId] = l;
+            this.extraDetails[d.code] = { available: l.compAvail, total: l.compTotal };
+            const comps = l.comps;
+            comps.forEach((c: ComputerAvailability) => {
+              Object.values(this._elms).forEach((e: MapElementData) => {
+                if (e.name === c.name) {
+                  e.available = c.avail;
+                  e.clickable = false;
+                }
+              });
+            });
+          }
+        });
+      });
+    }
 
     this.loaded = true;
     this.buildings = this._blds;
     // this.dataLoaded.emit(this.appData);
   }
 
-  bookOnShelf(callNo: string, shelf: MapElement) {
+  floorHasComps(floor: Floor, comps: ComputerLab[]) {
+    let hasComps = false;
+
+    comps.forEach((comp: ComputerLab) => {
+      if (Number(comp.locName.charAt(3)) === floor.number) {
+        hasComps = true;
+      }
+    });
+
+    return hasComps;
+  }
+
+  elementHasComps(el: MapElementData, comps: ComputerLab[]) {
+    let hasComps = false;
+
+    if (el.category === 4) {
+      comps.forEach((comp: ComputerLab) => {
+        Object.values(el.details).forEach((d: MapElementDetail) => {
+          if (comp.locName === d.code) {
+            hasComps = true;
+          }
+        });
+      });
+    }
+
+    return hasComps;
+  }
+
+  bookOnShelf(callNo: string, shelf: MapElementData) {
     let found = false;
     if (shelf.details) {
       Object.values(shelf.details).forEach((d: MapElementDetail) => {
@@ -251,7 +325,7 @@ export class ViewMap {
             initialBuilding={this.initialBuilding}
             initialFloor={this.initialFloor}
             initialElement={this.initialElement}
-            extraDetails={this._book}>
+            extraDetails={this.extraDetails}>
         </rl-map-container>,
       ]);
     }

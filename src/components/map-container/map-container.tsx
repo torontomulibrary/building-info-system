@@ -10,8 +10,8 @@ import {
   BuildingMap,
   Floor,
   FloorMap,
-  MapElement,
-  MapElementMap,
+  MapElementData,
+  MapElementDataMap,
 } from '../../interface';
 
 @Component({
@@ -40,12 +40,12 @@ export class MapContainer {
   /**
    * The currently active MapElement.
    */
-  @State() activeElement?: MapElement;
+  @State() activeElement?: MapElementData;
 
   /**
    * A list of all the Elements currently displayed on the Map.
    */
-  @State() activeElements!: MapElementMap;
+  @State() activeElements!: MapElementDataMap;
 
   /**
    * The currently active Floor.
@@ -145,7 +145,7 @@ export class MapContainer {
    *
    * @param element The Element object to set as the currently active Element.
    */
-  _setActiveElement(element?: MapElement) {
+  _setActiveElement(element?: MapElementData) {
     if (element) {
       this.activeElement = { ...element };
       // this.sideSheet_.open();
@@ -192,6 +192,8 @@ export class MapContainer {
 
   render() {
     const detail = this.activeElement && Object.values(this.activeElement.details)[0];
+    const firstDetail = this.activeElement && Object.values(this.activeElement.details)[0].code;
+    const extra = this.extraDetails && this.extraDetails[firstDetail];
 
     return ([
       <rl-map
@@ -223,7 +225,7 @@ export class MapContainer {
             <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">Description</div>
             {detail && detail.description || ''}
           </div>
-          {this.extraDetails && Object.entries(this.extraDetails).map(item =>
+          {extra && Object.entries(extra).map(item =>
             <div class="rl-side-sheet__section">
               <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">{item[0].charAt(0).toUpperCase() + item[0].slice(1)}</div>
               {typeof item[1] === 'boolean' ? item[1] ? 'Yes' : 'No' : item[1]}

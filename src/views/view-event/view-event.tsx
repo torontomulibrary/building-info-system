@@ -7,8 +7,8 @@ import {
   EVENT_URL,
 } from '../../global/config';
 import {
-  EVENTS_STORAGE_KEY,
   FULL_MONTHS,
+  LOCAL_STORAGE_KEY,
   MONTHS,
   ROUTES,
 } from '../../global/constants';
@@ -46,7 +46,7 @@ export class ViewEvent {
    * yet in the DOM.
    */
   componentWillLoad() {
-    get(EVENTS_STORAGE_KEY).then((events: CalEvent[]) => {
+    get(LOCAL_STORAGE_KEY.EVENTS).then((events: CalEvent[]) => {
       if (events) {
         events.forEach((evt: CalEvent, idx: number) => {
           evt.endTime = new Date(evt.endTime);
@@ -65,7 +65,7 @@ export class ViewEvent {
             const evts = parser.getFutureEvents(30);
             const newEvents = union(events, evts);
 
-            set(EVENTS_STORAGE_KEY, newEvents);
+            set(LOCAL_STORAGE_KEY.EVENTS, newEvents);
             this.events = newEvents;
           });
           parser.loadIcal(EVENT_URL);
@@ -77,7 +77,7 @@ export class ViewEvent {
 
         parser.subscribe(() => {
           const evts = parser.getFutureEvents(30);
-          set(EVENTS_STORAGE_KEY, evts);
+          set(LOCAL_STORAGE_KEY.EVENTS, evts);
           this.events = evts;
 
           this.loaded = true;

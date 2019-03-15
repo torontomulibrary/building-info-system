@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 
-import { FAQ_STORAGE_KEY } from '../../global/constants';
+import { LOCAL_STORAGE_KEY } from '../../global/constants';
 import { FaqMap } from '../../interface';
 import { loadData } from '../../utils/load-data';
 import { sanitize } from '../../utils/sanitize';
@@ -33,7 +33,7 @@ export class ViewFaq {
    */
   componentWillLoad() {
     // Start loading the FAQs.
-    loadData('faqs', FAQ_STORAGE_KEY).then((faqs: FaqMap) => {
+    loadData('faqs', LOCAL_STORAGE_KEY.FAQ).then((faqs: FaqMap) => {
       this.faqs = faqs;
       this.loaded = true;
     }, reason => {

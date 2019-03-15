@@ -2,8 +2,7 @@ import { Component, Prop, State } from '@stencil/core';
 
 import { BASE_URL } from '../../global/config';
 import {
-  BUILDINGS_STORAGE_KEY,
-  FLOORS_STORAGE_KEY,
+  LOCAL_STORAGE_KEY,
   ROUTES,
 } from '../../global/constants';
 import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
@@ -37,7 +36,7 @@ export class ViewBuilding {
    */
   async componentWillLoad() {
     // Start loading the Buildings.
-    loadData('buildings', BUILDINGS_STORAGE_KEY).then((blds: BuildingMap) => {
+    loadData('buildings', LOCAL_STORAGE_KEY.BUILDINGS).then((blds: BuildingMap) => {
       this.buildings = blds;
       this.loaded = true;
     }, reason => {
@@ -46,7 +45,7 @@ export class ViewBuilding {
 
     let floors: FloorMap;
 
-    await loadData('floors', FLOORS_STORAGE_KEY).then(
+    await loadData('floors', LOCAL_STORAGE_KEY.FLOORS).then(
       (f: FloorMap) => {
         floors = f;
     });
