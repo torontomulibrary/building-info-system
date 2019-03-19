@@ -1,7 +1,8 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { LOCAL_STORAGE_KEY } from '../../global/constants';
-import { FaqMap } from '../../interface';
+import { Faq, FaqMap } from '../../interface';
 import { loadData } from '../../utils/load-data';
 import { sanitize } from '../../utils/sanitize';
 
@@ -11,6 +12,8 @@ import { sanitize } from '../../utils/sanitize';
 })
 
 export class ViewFaq {
+  @Element() root!: HTMLElement;
+
   /**
    * Internal list of FAQs to display.
    */
@@ -21,17 +24,29 @@ export class ViewFaq {
    */
   @State() loaded = false;
 
+  @State() selectedFaq?: number;
+
   /**
    * Global flag indicating if the whole application has loaded.  If not, this
    * view should not display either.
    */
   @Prop() appLoaded = false;
 
+  @Prop() match!: MatchResults;
+
+  @Prop() history!: RouterHistory;
+
   /**
    * Lifecycle event fired when the component is first initialized and not
    * yet in the DOM.
    */
   componentWillLoad() {
+    if (this.match && this.match.params) {
+      if (this.match.params.faqId) {
+        this.selectedFaq = Number(this.match.params.faqId);
+      }
+    }
+
     // Start loading the FAQs.
     loadData('faqs', LOCAL_STORAGE_KEY.FAQ).then((faqs: FaqMap) => {
       this.faqs = faqs;
@@ -39,6 +54,12 @@ export class ViewFaq {
     }, reason => {
       console.log(reason);
     });
+  }
+
+  @Listen('afterExpand')
+  onAfterExpand() {
+    const active = this.root.querySelector('.rl-accordion-item--open') as HTMLRlAccordionItemElement;
+    this.selectedFaq = active ? active.index : undefined;
   }
 
   /**
@@ -59,16 +80,23 @@ export class ViewFaq {
    */
   render() {
     if (this.faqs) {
+      // Update page URL.
+      this.history.replace(`/faqs/${this.selectedFaq}`);
+
       return ([
         <stencil-route-title pageTitle="Frequently Asked Questions" />,
         <h1 class="rl-view__heading">Frequently asked questions</h1>,
         <div id="container" class="rl-view-faq__container">
           <rl-accordion>
-            {Object.values(this.faqs).map((faq, idx) =>
-              <rl-accordion-item class="rl-accordion-item rl-accordion-item--fade-in"
-                index={idx} delay={idx * 30}>
+            {Object.values(this.faqs).map((faq: Faq, idx) =>
+              <rl-accordion-item
+                class="rl-accordion-item rl-accordion-item--fade-in"
+                index={faq.id}
+                delay={idx * 30}
+                isOpen={this.selectedFaq === faq.id}
+              >
                 <div slot="header">{faq.question}</div>
-                <div slot="content">{sanitize(faq.answer)}</div>
+                <div slot="content">{sanitize(faq.answer || '')}</div>
               </rl-accordion-item>
             )}
           </rl-accordion>

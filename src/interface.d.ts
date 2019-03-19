@@ -28,6 +28,7 @@ export type DescribedObject = {
 export type NumberMap<T> = { [keys: number]: T }
 
 export interface Faq {
+  id: number;
   question?: string;
   answer?: string;
 }

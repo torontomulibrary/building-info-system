@@ -51,6 +51,10 @@ export namespace Components {
     */
     'index': number;
     /**
+    * A state tracking the current open/closed state of this item.
+    */
+    'isOpen': boolean;
+    /**
     * This function opens this item.
     */
     'open': () => void;
@@ -65,9 +69,16 @@ export namespace Components {
     */
     'index'?: number;
     /**
-    * An event that is emitted when this item changes its open/closed state.
+    * A state tracking the current open/closed state of this item.
     */
-    'onToggleItem'?: (event: CustomEvent) => void;
+    'isOpen'?: boolean;
+    /**
+    * Event emitted after the body's collapse animation has completed.
+    */
+    'onAfterCollapse'?: (event: CustomEvent) => void;
+    'onAfterExpand'?: (event: CustomEvent) => void;
+    'onClosed'?: (event: CustomEvent) => void;
+    'onOpened'?: (event: CustomEvent) => void;
   }
 
   interface RlAccordion {
@@ -312,12 +323,16 @@ export namespace Components {
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded': boolean;
+    'history': RouterHistory;
+    'match': MatchResults;
   }
   interface ViewFaqAttributes extends StencilHTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
+    'history': RouterHistory;
+    'match': MatchResults;
   }
 
   interface ViewHome {

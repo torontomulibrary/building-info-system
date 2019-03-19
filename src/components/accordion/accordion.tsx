@@ -79,7 +79,7 @@ export class Accordion {
    * `allowMultiple` flag is `false` then any currently active (open) item will
    * be closed.
    */
-  @Listen('toggleItem')
+  @Listen('opened')
   toggleItemHandler() {
     const active = this.root.querySelector('.rl-accordion-item--open') as HTMLRlAccordionItemElement;
     if (active && this.allowMultiple === false) {

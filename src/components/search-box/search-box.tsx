@@ -87,7 +87,7 @@ export class SearchBox {
   @Watch('faqData')
   _onFaqDataChange() {
     if (this.faqData) {
-      Object.entries(this.faqData).forEach((value: [string, FaqMap]) => {
+      Object.entries(this.faqData).forEach((value: [string, Faq]) => {
         if (this.documentIndexes.faq !== undefined) {
           this.documentIndexes.faq.add(Number(value[0]), value[1]);
         }
