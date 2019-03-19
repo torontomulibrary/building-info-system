@@ -11,6 +11,9 @@ import {
 import { DocumentIndex } from 'ndx';
 
 import {
+  CalEvent,
+  Faq,
+  FaqMap,
   MapElementDetail,
   MapElementDetailMap,
   SearchResults,
@@ -26,7 +29,16 @@ export class SearchBox {
    * @emits resultSelected
    */
 
-  private searchElements?: DocumentIndex<number, MapElementDetail>;
+  private documentIndexes: {
+    location: DocumentIndex<number, MapElementDetail>,
+    faq: DocumentIndex<number, Faq>,
+    event: DocumentIndex<number, CalEvent>,
+  } = {
+    location: new DocumentIndex(),
+    faq: new DocumentIndex(),
+    event: new DocumentIndex(),
+  };
+
   private searchInput?: HTMLInputElement;
   // private allElements!: MapElementMap;
 
@@ -37,7 +49,14 @@ export class SearchBox {
   @State() isOpen = false;
 
   @Prop() id = 'searchbox';
-  @State() searchResults: Array<SearchResults<number>> = [];
+  @State() searchResults: {
+    location: Array<SearchResults<number>>,
+    faq: Array<SearchResults<number>>,
+    event: Array<SearchResults<number>>,
+  } = {
+    location: [], faq: [], event: [],
+  };
+
   @State() searchQuery = '';
   @State() focused = false;
   @State() activeResult?: SearchResults<number>;
@@ -49,15 +68,28 @@ export class SearchBox {
 
   @Prop() showMenu = false;
 
-  @Event() resultSelected!: EventEmitter;
+  @Event() locationSelected!: EventEmitter;
+  @Event() faqSelected!: EventEmitter;
 
-  @Prop() searchData!: MapElementDetailMap;
-  @Watch('searchData')
-  _onSearchDataChange() {
-    if (this.searchData) {
-      Object.values(this.searchData).forEach((d: MapElementDetail) => {
-        if (this.searchElements !== undefined) {
-          this.searchElements.add(d.id, d);
+  @Prop() locationData!: MapElementDetailMap;
+  @Watch('locationData')
+  _onLocationDataChange() {
+    if (this.locationData) {
+      Object.values(this.locationData).forEach((d: MapElementDetail) => {
+        if (this.documentIndexes.location !== undefined) {
+          this.documentIndexes.location.add(d.id, d);
+        }
+      });
+    }
+  }
+
+  @Prop() faqData!: FaqMap;
+  @Watch('faqData')
+  _onFaqDataChange() {
+    if (this.faqData) {
+      Object.entries(this.faqData).forEach((value: [string, FaqMap]) => {
+        if (this.documentIndexes.faq !== undefined) {
+          this.documentIndexes.faq.add(Number(value[0]), value[1]);
         }
       });
     }
@@ -66,15 +98,17 @@ export class SearchBox {
   @Event() iconClick!: EventEmitter;
 
   componentWillLoad() {
-    this.searchElements = new DocumentIndex();
-    this.searchElements.addField('code');
-    this.searchElements.addField('name');
-    this.searchElements.addField('description');
+    this.documentIndexes.location.addField('code');
+    this.documentIndexes.location.addField('name');
+    this.documentIndexes.location.addField('description');
+
+    this.documentIndexes.faq.addField('question');
   }
 
   @Listen('window:click')
   _onGlobalClick(e: Event) {
-    this._checkFocus(e);
+    e = e;
+    // this._checkFocus(e);
   }
 
   /**
@@ -90,16 +124,16 @@ export class SearchBox {
 
     if (target && target instanceof HTMLInputElement &&
         target.classList.contains('rl-search__input') &&
-        this.searchResults && this.searchResults.length > 0) {
+        this.searchResults.location.length > 0) {
       if (key === 'ArrowUp' || key === 'ArrowDown') {
         if (this.activeResult === undefined) {
           this.activeResult = (key === 'ArrowDown') ?
               this.searchResults[0] :
-              this.searchResults[(this.searchResults.length - 1)];
+              this.searchResults[(this.searchResults.location.length - 1)];
         } else {
-          const index = this.searchResults.indexOf(this.activeResult);
+          const index = this.searchResults.location.indexOf(this.activeResult);
           const dir = (key === 'ArrowDown') ? 1 : -1;
-          const len = this.searchResults.length;
+          const len = this.searchResults.location.length;
           const newIndex = (index + len + dir) % len;
 
           this.activeResult = this.searchResults[newIndex];
@@ -119,12 +153,22 @@ export class SearchBox {
     this.iconClick.emit();
   }
 
-  _onResultClick(e: Event, detailId: number) {
-    this.resultSelected.emit(detailId);
+  _onLocationClick(e: Event, detailId: number) {
+    this.locationSelected.emit(detailId);
     this.focused = false;
     if (this.searchInput) {
       this.searchInput.value = '';
-      this.searchResults = [];
+      this.searchResults = { location: [], faq: [], event: [] };
+    }
+    e.stopImmediatePropagation();
+  }
+
+  _onFaqClick(e: Event, faqId: number) {
+    this.faqSelected.emit(faqId);
+    this.focused = false;
+    if (this.searchInput) {
+      this.searchInput.value = '';
+      this.searchResults = { location: [], faq: [], event: [] };
     }
     e.stopImmediatePropagation();
   }
@@ -135,11 +179,17 @@ export class SearchBox {
     if (t !== null && t instanceof HTMLInputElement) {
       this._checkFocus(e);
 
-      if (this.searchElements !== undefined) {
+      if (this.documentIndexes.location !== undefined) {
         this.searchQuery = t.value;
         // this.updateSearchQuery(t.value);
         // Limit to `n` results.
-        this.searchResults = this.searchElements.search(t.value).slice(0, 3);
+        this.searchResults.location = this.documentIndexes.location.search(t.value).slice(0, 3);
+      }
+      if (this.documentIndexes.faq !== undefined) {
+        this.searchQuery = t.value;
+        // this.updateSearchQuery(t.value);
+        // Limit to `n` results.
+        this.searchResults.faq = this.documentIndexes.faq.search(t.value).slice(0, 3);
       }
     }
   }
@@ -173,33 +223,61 @@ export class SearchBox {
     let items;
     this.suggestionHeight = 0;
 
-    if (this.searchResults && this.searchResults.length > 0) {
+    if (this.searchResults.location.length > 0) {
       // Render the searchResults as a single list.
       items = (
-        <ul ref={el => this.suggestionHeight = el ? el.clientHeight : 0}
-            class="mdc-list mdc-list--two-line" role="listbox">
-          {this.searchResults.map(i => {
-            const detail = this.searchData[i.docId];
-            const listClass = {
-              'mdc-list-item': true,
-              'mdc-list-item--selected': i === this.activeResult,
-              'rl-search__result_item': true,
-            };
-            return (
-              <li class={listClass} role="option" tabIndex={0}
-                  onClick={e => { this._onResultClick(e, i.docId); }}>
-                <span class="mdc-list-item__text">
-                  <span class="mdc-list-item__primary-text">
-                    {detail.name}
+        <div
+            class="mdc-list-group"
+            ref={el => this.suggestionHeight = el ? el.clientHeight : 0}>
+          <h3 class="mdc-list-group__subheader">Locations</h3>
+          <ul class="mdc-list mdc-list--two-line" role="listbox">
+            {this.searchResults.location.map(i => {
+              const detail = this.locationData[i.docId];
+              const listClass = {
+                'mdc-list-item': true,
+                'mdc-list-item--selected': i === this.activeResult,
+                'rl-search__result_item': true,
+              };
+              return (
+                <li class={listClass} role="option" tabIndex={0}
+                    onClick={e => { this._onLocationClick(e, i.docId); }}>
+                  <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">
+                      {detail.name}
+                    </span>
+                    <span class="mdc-list-item__secondary-text">
+                      {detail.code}
+                    </span>
                   </span>
-                  <span class="mdc-list-item__secondary-text">
-                    {detail.code}
+                </li>
+              );
+            })}
+          </ul>
+          <h3 class="mdc-list-group__subheader">FAQs</h3>
+          <ul class="mdc-list" role="listbox">
+            {this.searchResults.faq.map(i => {
+              const detail = this.faqData[i.docId];
+              const listClass = {
+                'mdc-list-item': true,
+                'mdc-list-item--selected': i === this.activeResult,
+                'rl-search__result_item': true,
+              };
+              return (
+                <li class={listClass} role="option" tabIndex={0}
+                    onClick={e => { this._onFaqClick(e, i.docId); }}>
+                  <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">
+                      {detail.question}
+                    </span>
+                    {/* <span class="mdc-list-item__secondary-text">
+                      {detail.code}
+                    </span> */}
                   </span>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       );
     } else {
       if (this.searchQuery !== '') {
@@ -233,7 +311,7 @@ export class SearchBox {
           placeholder={(this.showMenu && !this.focused) ? 'RULA Finder' : 'Search'}
           onInput={e => this._onSearchChange(e)}
           onFocus={_ => this.focused = true}
-          onBlur={_ => this.focused = false}
+          // onBlur={_ => this.focused = false}
           onKeyDown={e => { this.onKeyDown(e); }}></input>,
       <div class="material-icons rl-search__icon"
           onClick={_ => this._onIconClick()}

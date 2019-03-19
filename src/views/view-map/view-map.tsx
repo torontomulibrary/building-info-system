@@ -3,6 +3,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Method,
   Prop,
   State,
 } from '@stencil/core';
@@ -57,6 +58,8 @@ export class ViewMap {
   private initialFloor = -1;
 
   private initialElement?: number;
+
+  private _mapContainer!: HTMLRlMapContainerElement;
 
   /**
    * Root element of this component.
@@ -263,6 +266,11 @@ export class ViewMap {
     // this.dataLoaded.emit(this.appData);
   }
 
+  @Method()
+  setActiveElement(id: number) {
+    this._mapContainer.setActiveElement(this._elms[id]);
+  }
+
   floorHasComps(floor: Floor, comps: ComputerLab[]) {
     let hasComps = false;
 
@@ -321,11 +329,12 @@ export class ViewMap {
       return ([
         <stencil-route-title pageTitle="Directory" />,
         <rl-map-container
-            buildings={this.buildings}
-            initialBuilding={this.initialBuilding}
-            initialFloor={this.initialFloor}
-            initialElement={this.initialElement}
-            extraDetails={this.extraDetails}>
+          ref={el => this._mapContainer = el as HTMLRlMapContainerElement}
+          buildings={this.buildings}
+          initialBuilding={this.initialBuilding}
+          initialFloor={this.initialFloor}
+          initialElement={this.initialElement}
+          extraDetails={this.extraDetails}>
         </rl-map-container>,
       ]);
     }

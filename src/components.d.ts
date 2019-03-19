@@ -12,6 +12,8 @@ import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
   BuildingMap,
+  FaqMap,
+  MapElementData,
   MapElementDetailMap,
 } from './interface';
 import {
@@ -95,7 +97,8 @@ export namespace Components {
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
     */
     'appWidth': number;
-    'searchData': MapElementDetailMap;
+    'faqData': FaqMap;
+    'locationData': MapElementDetailMap;
   }
   interface RlAppBarAttributes extends StencilHTMLAttributes {
     'appTitle'?: string;
@@ -103,11 +106,14 @@ export namespace Components {
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
     */
     'appWidth'?: number;
+    'faqData': FaqMap;
+    'locationData': MapElementDetailMap;
     /**
     * Event fired when the menu button on the app bar is clicked.
     */
     'onMenuClicked'?: (event: CustomEvent) => void;
-    'searchData': MapElementDetailMap;
+    'onSearchFaqClicked'?: (event: CustomEvent) => void;
+    'onSearchLocationClicked'?: (event: CustomEvent) => void;
   }
 
   interface RlCard {
@@ -178,6 +184,7 @@ export namespace Components {
     'initialBuilding': number;
     'initialElement'?: number;
     'initialFloor': number;
+    'setActiveElement': (el: MapElementData) => void;
   }
   interface RlMapContainerAttributes extends StencilHTMLAttributes {
     'buildings': BuildingMap;
@@ -233,15 +240,18 @@ export namespace Components {
   }
 
   interface RlSearchBox {
+    'faqData': FaqMap;
     'id': string;
-    'searchData': MapElementDetailMap;
+    'locationData': MapElementDetailMap;
     'showMenu': boolean;
   }
   interface RlSearchBoxAttributes extends StencilHTMLAttributes {
+    'faqData': FaqMap;
     'id'?: string;
+    'locationData': MapElementDetailMap;
+    'onFaqSelected'?: (event: CustomEvent) => void;
     'onIconClick'?: (event: CustomEvent) => void;
-    'onResultSelected'?: (event: CustomEvent) => void;
-    'searchData': MapElementDetailMap;
+    'onLocationSelected'?: (event: CustomEvent) => void;
     'showMenu'?: boolean;
   }
 
@@ -327,6 +337,7 @@ export namespace Components {
     * The results coming from `stencil-router` that contain any URL matches.
     */
     'match': MatchResults;
+    'setActiveElement': (id: number) => void;
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
     /**

@@ -4,9 +4,12 @@ import { Component, Element, Listen, State } from '@stencil/core';
 import { BASE_URL } from '../global/config';
 import {
   APP_TITLE,
+  LOCAL_STORAGE_KEY,
   MAP_TYPE,
   ROUTES,
 } from '../global/constants';
+import { FaqMap, MapElementDetailMap } from '../interface';
+import { loadData } from '../utils/load-data';
 
 @Component({
   tag: 'rl-bis',
@@ -58,6 +61,9 @@ export class RLApp {
     },
   ];
 
+  private _locationData: {} = {};
+  private _faqData: {} = {};
+
   /**
    * Root element of this component.
    */
@@ -85,11 +91,21 @@ export class RLApp {
   /**
    * Lifecycle event fired after the component has rendered the first time.
    */
-  componentDidLoad() {
+  async componentDidLoad() {
     const el = document.getElementById('splash-screen');
     if (el && el.parentElement) {
       el.parentElement.removeChild(el);
     }
+
+    // Load map details.
+    await loadData('details', LOCAL_STORAGE_KEY.DETAILS).then(
+      (d: MapElementDetailMap) => {
+        this._locationData = d;
+    });
+
+    await loadData('faqs', LOCAL_STORAGE_KEY.FAQ).then((faqs: FaqMap) => {
+      this._faqData = faqs;
+    });
 
     this.appLoaded = true;
   }
@@ -103,19 +119,46 @@ export class RLApp {
   }
 
   /**
+   * Listen for a `searchLocationClicked` event from the search bar. This occurs
+   * when the user selects one of the locations from the search box.  The event
+   * `detail` will contain a reference to the selected item.
+   *
+   * @param e The triggering event
+   */
+  _onSearchLocationClicked(e: CustomEvent) {
+    const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
+    // const router = this.root.querySelector('stencil-router') as HTMLStencilRouterElement;
+    if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
+      // Map is open. Set active element.
+      viewMap.setActiveElement(this._locationData[e.detail]);
+    } else {
+      // Navigate to page and then set the active element.
+      const loc = this._locationData[e.detail];
+
+      // Hijack the current view to get the RouterHistory object.  It is only
+      // available within the context of the stencil-router and its children.
+      const view = this.root.querySelector('.rl-view') as any;
+      view.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
+    }
+    console.log(e.detail);
+  }
+
+  /**
    * Listen for a `resultSelected` event from the search bar. This occurs when
    * the user selects one of the results from the search box.  The event
    * `detail` will contain a reference to the selected item.
    *
    * @param e The triggering event
    */
-  @Listen('resultSelected')
-  _onResultSelected(e: CustomEvent) {
+  _onSearchFaqClicked(e: CustomEvent) {
     const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
-    if (viewMap && viewMap.hasOwnProperty('setActiveElementByDetail')) {
+    if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
+      viewMap.setActiveElement(this._locationData[e.detail]);
       // viewMap.setActiveElementByDetail(e.detail);
-      console.log(e.detail);
+    } else {
+      // Navigate to page and then set the active element.
     }
+    console.log(e.detail);
   }
 
   /**
@@ -138,7 +181,11 @@ export class RLApp {
       <rl-app-bar
           appTitle={APP_TITLE} appWidth={this.appWidth}
           onMenuClicked={_ => { this.drawerOpen = true; }}
-          searchData={{}}>
+          locationData={this._locationData}
+          faqData={this._faqData}
+          onSearchLocationClicked={e => this._onSearchLocationClicked(e)}
+          onSearchFaqClicked={e => this._onSearchFaqClicked(e)}
+        >
       </rl-app-bar>,
 
       <rl-drawer

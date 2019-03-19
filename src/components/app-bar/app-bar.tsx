@@ -1,7 +1,7 @@
 import { MDCTopAppBar } from '@material/top-app-bar/index';
 import { Component, Element, Event, EventEmitter, Prop } from '@stencil/core';
 
-import { MapElementDetailMap } from '../../interface';
+import { FaqMap, MapElementDetailMap } from '../../interface';
 
 @Component({
   tag: 'rl-app-bar',
@@ -24,12 +24,16 @@ export class AppBar {
 
   @Prop() appTitle = '';
 
-  @Prop() searchData!: MapElementDetailMap;
+  @Prop() locationData!: MapElementDetailMap;
+  @Prop() faqData!: FaqMap;
 
   /**
    * Event fired when the menu button on the app bar is clicked.
    */
   @Event() menuClicked!: EventEmitter;
+
+  @Event() searchLocationClicked!: EventEmitter;
+  @Event() searchFaqClicked!: EventEmitter;
 
   componentDidLoad() {
     this.mdcAppBar = new MDCTopAppBar(this.root);
@@ -40,8 +44,12 @@ export class AppBar {
     return(
       <section class="mdc-top-app-bar__section">
         <rl-search-box show-menu
-          searchData={this.searchData}
-          onIconClick={_ => this.menuClicked.emit() }></rl-search-box>
+          locationData={this.locationData}
+          faqData={this.faqData}
+          onIconClick={_ => this.menuClicked.emit() }
+          onLocationSelected={(e: CustomEvent) => this.searchLocationClicked.emit(e.detail)}
+          onFaqSelected={(e: CustomEvent) => this.searchFaqClicked.emit(e.detail)}
+        ></rl-search-box>
       </section>
     );
   }
@@ -58,7 +66,11 @@ export class AppBar {
       </section>,
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-middle">
         <rl-search-box
-          searchData={this.searchData}>
+          faqData={this.faqData}
+          locationData={this.locationData}
+          onLocationSelected={(e: CustomEvent) => this.searchLocationClicked.emit(e.detail)}
+          onFaqSelected={(e: CustomEvent) => this.searchFaqClicked.emit(e.detail)}
+        >
         </rl-search-box>
       </section>,
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"></section>,

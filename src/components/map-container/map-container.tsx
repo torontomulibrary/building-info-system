@@ -1,6 +1,7 @@
 import {
   Component,
   Element,
+  Method,
   Prop,
   State,
 } from '@stencil/core';
@@ -87,6 +88,11 @@ export class MapContainer {
 
   onElementDeselected() {
     this._setActiveElement();
+  }
+
+  @Method()
+  setActiveElement(el: MapElementData) {
+    this._setActiveElement(el);
   }
 
   /**
