@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State, Method } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { LOCAL_STORAGE_KEY } from '../../global/constants';
@@ -44,6 +44,13 @@ export class ViewFaq {
     if (this.match && this.match.params) {
       if (this.match.params.faqId) {
         this.selectedFaq = Number(this.match.params.faqId);
+        // Set the internal state of the current history item.
+        this.history.replace({
+          pathname: `/faqs/${this.selectedFaq}`,
+          state: { faqId: this.selectedFaq },
+          query: {},
+          key: '',
+        });
       }
     }
 
@@ -54,12 +61,41 @@ export class ViewFaq {
     }, reason => {
       console.log(reason);
     });
+
+    this.history.listen(h => {
+      console.log(h);
+    });
+  }
+
+  componentWillUpdate() {
+    // Handle when the parameter may change based on user history navigation.
+    const state = this.history.location.state;
+    if (state && state.faqId && this.selectedFaq !== state.faqId) {
+      // State needs to be updated/changed to match newly selected FAQ.
+      console.log(`Pushing history -- state: ${state.faqId} vs. sel: ${this.selectedFaq}`);
+      if (this.selectedFaq) {
+          this.history.push({
+            pathname: `/faqs/${this.selectedFaq}`,
+            state: { faqId: this.selectedFaq },
+            query: {},
+            key: '',
+          });
+        }
+    }
+    // console.log(this.history.location.state);
+    // this.selectedFaq = this.history.location.state.faqId;
   }
 
   @Listen('afterExpand')
   onAfterExpand() {
     const active = this.root.querySelector('.rl-accordion-item--open') as HTMLRlAccordionItemElement;
     this.selectedFaq = active ? active.index : undefined;
+  }
+
+  @Method()
+  setActiveFaq(faqId: number) {
+    // Set the newly selected FAQ.  State will handle all the updates.
+    this.selectedFaq = faqId;
   }
 
   /**
@@ -81,7 +117,14 @@ export class ViewFaq {
   render() {
     if (this.faqs) {
       // Update page URL.
-      this.history.replace(`/faqs/${this.selectedFaq}`);
+      // if (this.selectedFaq) {
+      //   this.history.push({
+      //     pathname: `/faqs/${this.selectedFaq}`,
+      //     state: { faqId: this.selectedFaq },
+      //     query: {},
+      //     key: '',
+      //   });
+      // }
 
       return ([
         <stencil-route-title pageTitle="Frequently Asked Questions" />,

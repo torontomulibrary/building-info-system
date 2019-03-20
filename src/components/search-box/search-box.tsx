@@ -8,7 +8,7 @@ import {
   State,
   Watch,
 } from '@stencil/core';
-import { DocumentIndex } from 'ndx';
+import { DocumentIndex } from 'ndx-compat';
 
 import {
   CalEvent,

@@ -137,6 +137,7 @@ export namespace Components {
     'icons'?: Array<{name: string}>;
     'mediaSize': 'contain' | 'cover';
     'noContent': boolean;
+    'noMedia': boolean;
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
   }
@@ -150,6 +151,7 @@ export namespace Components {
     'icons'?: Array<{name: string}>;
     'mediaSize'?: 'contain' | 'cover';
     'noContent'?: boolean;
+    'noMedia'?: boolean;
     'onCardClicked'?: (event: CustomEvent) => void;
     'titleInMedia'?: boolean;
     'wideMediaAspect'?: boolean;
@@ -325,6 +327,7 @@ export namespace Components {
     'appLoaded': boolean;
     'history': RouterHistory;
     'match': MatchResults;
+    'setActiveFaq': (faqId: number) => void;
   }
   interface ViewFaqAttributes extends StencilHTMLAttributes {
     /**

@@ -140,7 +140,6 @@ export class RLApp {
       const view = this.root.querySelector('.rl-view') as any;
       view.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
     }
-    console.log(e.detail);
   }
 
   /**
@@ -151,14 +150,15 @@ export class RLApp {
    * @param e The triggering event
    */
   _onSearchFaqClicked(e: CustomEvent) {
-    const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
-    if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
-      viewMap.setActiveElement(this._locationData[e.detail]);
+    const viewFaq = this.root.querySelector('.rl-view--faq') as HTMLViewFaqElement;
+    if (viewFaq && viewFaq.hasOwnProperty('setActiveFaq')) {
+      viewFaq.setActiveFaq(e.detail);
       // viewMap.setActiveElementByDetail(e.detail);
     } else {
       // Navigate to page and then set the active element.
+      const view = this.root.querySelector('.rl-view') as any;
+      view.history.push(`${BASE_URL}${ROUTES.FAQS}/${e.detail}`);
     }
-    console.log(e.detail);
   }
 
   /**

@@ -36,7 +36,7 @@ export class MapNav {
    * The MDCTabBar component used to pick and display the current Floor on
    * wide (non-mobile) screens.
    */
-  private floorTabs!: MDCTabBar;
+  private floorTabs?: MDCTabBar;
 
   /**
    * Root element of this component.

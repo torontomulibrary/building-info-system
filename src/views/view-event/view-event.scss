@@ -41,7 +41,7 @@
   }
 
   &__header {
-    @include mdc-card-media-aspect-ratio-base_;
+    // @include mdc-card-media-aspect-ratio-base_;
 
     position: relative;
     box-sizing: border-box;
