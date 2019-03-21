@@ -77,14 +77,13 @@
   }
 
   &__content {
-    box-sizing: border-box;
-    max-height: 0;
+    box-sizing: content-box;
     margin: 0;
     padding-right: 24px;
     padding-left: 24px;
     transition:
       mdc-animation-standard(padding-bottom, 280ms),
-      mdc-animation-standard(max-height, 280ms),
+      mdc-animation-standard(height, 280ms),
       mdc-animation-standard(padding-top, 280ms);
   }
 
@@ -103,7 +102,6 @@
     }
 
     .rl-accordion-item__content {
-      max-height: 50em;
       padding-top: 16px;
       padding-bottom: 16px;
     }

@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop, State, Method } from '@stencil/core';
+import { Component, Element, Listen, Method, Prop, State } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { LOCAL_STORAGE_KEY } from '../../global/constants';
@@ -24,6 +24,9 @@ export class ViewFaq {
    */
   @State() loaded = false;
 
+  /**
+   * The ID of the currently active (open) FAQ.
+   */
   @State() selectedFaq?: number;
 
   /**
@@ -32,8 +35,16 @@ export class ViewFaq {
    */
   @Prop() appLoaded = false;
 
+  /**
+   * Reference to the object passed in from Stencil containing any URL path
+   * variables that were matched by the router.
+   */
   @Prop() match!: MatchResults;
 
+  /**
+   * Reference to the stencil-router history object. Used to programmatically
+   * change the browser history when the selected FAQ changes.
+   */
   @Prop() history!: RouterHistory;
 
   /**
@@ -82,8 +93,6 @@ export class ViewFaq {
           });
         }
     }
-    // console.log(this.history.location.state);
-    // this.selectedFaq = this.history.location.state.faqId;
   }
 
   @Listen('afterExpand')
@@ -132,15 +141,15 @@ export class ViewFaq {
         <div id="container" class="rl-view-faq__container">
           <rl-accordion>
             {Object.values(this.faqs).map((faq: Faq, idx) =>
-              <rl-accordion-item
-                class="rl-accordion-item rl-accordion-item--fade-in"
-                index={faq.id}
-                delay={idx * 30}
-                isOpen={this.selectedFaq === faq.id}
-              >
-                <div slot="header">{faq.question}</div>
-                <div slot="content">{sanitize(faq.answer || '')}</div>
-              </rl-accordion-item>
+                <rl-accordion-item
+                  class="rl-accordion-item rl-accordion-item--fade-in"
+                  index={faq.id}
+                  delay={idx * 30}
+                  isOpen={this.selectedFaq === faq.id}
+                >
+                  <div slot="header">{faq.question}</div>
+                  <div slot="content">{sanitize(faq.answer || '')}</div>
+                </rl-accordion-item>
             )}
           </rl-accordion>
         </div>,

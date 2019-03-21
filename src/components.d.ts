@@ -325,7 +325,13 @@ export namespace Components {
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
     'history': RouterHistory;
+    /**
+    * Reference to the object passed in from Stencil containing any URL path variables that were matched by the router.
+    */
     'match': MatchResults;
     'setActiveFaq': (faqId: number) => void;
   }
@@ -334,7 +340,13 @@ export namespace Components {
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
     'history': RouterHistory;
+    /**
+    * Reference to the object passed in from Stencil containing any URL path variables that were matched by the router.
+    */
     'match': MatchResults;
   }
 

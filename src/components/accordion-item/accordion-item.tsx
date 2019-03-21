@@ -20,6 +20,11 @@ export class AccordionItem {
   private _button?: HTMLButtonElement;
 
   /**
+   * The height of the content element (slot).
+   */
+  private _contentHeight = 0;
+
+  /**
    * The root element of this component.
    */
   @Element() root!: HTMLElement;
@@ -54,8 +59,6 @@ export class AccordionItem {
    * entered into the DOM.
    */
   componentDidLoad() {
-    // this._button = this.root.querySelector('#rl-accordion-item__trigger-' + this.index);
-
     if (this._button) {
       MDCRipple.attachTo(this._button);
     }
@@ -118,7 +121,6 @@ export class AccordionItem {
             ref={el => this._button = el}
             id={`rl-accordion-item__trigger-${this.index}`}
             class="rl-accordion-item__trigger"
-            // onKeyPress={e => { this.onKeyPress(e); }}
             aria-controls={`rl-accordion-item__content-${this.index}`}
         >
           <span class="rl-accordion-item__title">
@@ -134,6 +136,16 @@ export class AccordionItem {
           aria-hidden={!this.isOpen}
           class="rl-accordion-item__content"
           tabindex={this.isOpen ? '0' : '-1'}
+          style={{ height: `${this.isOpen ? this._contentHeight : 0}px` }}
+          ref={el => {
+            if (el) {
+              // Get the child of this element (the content in the slot) and
+              // find it's height.  Use the height to determine how big this
+              // element should become when opened.
+              const slot = el.querySelector('[slot="content"]') as HTMLElement;
+              this._contentHeight = slot && slot.offsetHeight;
+            }
+          }}
       >
         <slot name="content" />
       </dd>,
