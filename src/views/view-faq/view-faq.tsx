@@ -72,10 +72,6 @@ export class ViewFaq {
     }, reason => {
       console.log(reason);
     });
-
-    this.history.listen(h => {
-      console.log(h);
-    });
   }
 
   componentWillUpdate() {

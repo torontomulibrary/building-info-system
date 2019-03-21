@@ -41,7 +41,10 @@
   }
 
   &__header {
-    // @include mdc-card-media-aspect-ratio-base_;
+    &::before {
+      display: block;
+      content: "";
+    }
 
     position: relative;
     box-sizing: border-box;
