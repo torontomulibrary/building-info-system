@@ -1,4 +1,5 @@
 @import "@material/ripple/mixins";
+@import "@material/typography/mdc-typography";
 
 .rl-expansion-panel {
   display: block;
@@ -28,6 +29,7 @@
     @include mdc-states-hover-opacity(0.1);
     @include mdc-states-focus-opacity(0.2);
     @include mdc-states-press-opacity(0.3);
+    @include mdc-typography(subtitle2);
 
     display: flex;
     position: relative;
@@ -51,6 +53,8 @@
   }
 
   & > &__content {
+    @include mdc-typography(body1);
+
     box-sizing: border-box;
     max-height: 0;
     margin: 0;

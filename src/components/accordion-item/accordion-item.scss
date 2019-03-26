@@ -1,6 +1,7 @@
 @import "@material/animation/functions";
 @import "@material/elevation/mixins";
 @import "@material/ripple/mixins";
+@import "@material/typography/mdc-typography";
 
 .rl-accordion-item {
   @include mdc-elevation(2);
@@ -53,6 +54,7 @@
     @include mdc-states-hover-opacity(0.1);
     @include mdc-states-focus-opacity(0.2);
     @include mdc-states-press-opacity(0.3);
+    @include mdc-typography(headline6);
 
     display: flex;
     position: relative;
@@ -77,6 +79,8 @@
   }
 
   &__content {
+    @include mdc-typography(body1);
+
     box-sizing: content-box;
     margin: 0;
     padding-right: 24px;
