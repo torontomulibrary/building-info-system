@@ -11,7 +11,8 @@ import { MatchResults } from '@stencil/router';
 
 import { API_URL } from '../../global/config';
 import {
-  LOCAL_STORAGE_KEY,
+  APP_DATA,
+  // LOCAL_STORAGE_KEY,
   MAP_TYPE,
 } from '../../global/constants';
 import {
@@ -29,6 +30,7 @@ import {
   MapElementDetail,
   MapElementDetailMap,
 } from '../../interface';
+import { dataService } from '../../utils/data-service';
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
@@ -133,40 +135,45 @@ export class ViewMap {
     }
 
     // Load buildings.
-    await loadData('buildings', LOCAL_STORAGE_KEY.BUILDINGS).then(
-      (b: BuildingMap) => {
-        this._blds = b;
-    });
+    this._blds = dataService.getData(APP_DATA.BUILDING);
+    // await loadData(APP_DATA.BUILDINGS).then(
+    //   (b: BuildingMap) => {
+    //     this._blds = b;
+    // });
 
     // Load floor data.
-    await loadData('floors', LOCAL_STORAGE_KEY.FLOORS).then(
-      (f: FloorMap) => {
-        this._flrs = f;
-    });
+    this._flrs = dataService.getData(APP_DATA.FLOORS);
+    // await loadData(APP_DATA.FLOORS).then(
+    //   (f: FloorMap) => {
+    //     this._flrs = f;
+    // });
 
     // Load map elements.
-    await loadData('elements', LOCAL_STORAGE_KEY.ELEMENTS).then(
-      (e: MapElementDataMap) => {
-        this._elms = e;
-    });
+    this._elms = dataService.getData(APP_DATA.ELEMENTS);
+    // await loadData(APP_DATA.ELEMENTS).then(
+    //   (e: MapElementDataMap) => {
+    //     this._elms = e;
+    // });
 
     // Load map details.
-    await loadData('details', LOCAL_STORAGE_KEY.DETAILS).then(
-      (d: MapElementDetailMap) => {
-        this._dtls = d;
-    });
+    this._dtls = dataService.getData(APP_DATA.DETAILS);
+    // await loadData(APP_DATA.DETAILS).then(
+    //   (d: MapElementDetailMap) => {
+    //     this._dtls = d;
+    // });
 
     // Load map detail types.
-    // await loadData('details/types', LOCAL_STORAGE_KEY.DETAIL_TYPES).then(
+    // await loadData('details/types', APP_DATA.DETAIL_TYPES).then(
     //   (d: DetailTypeMap) => {
     //     this._dtyps = d;
     // });
 
     let compLabs: ComputerLab[] = [];
-    await loadData('computers', LOCAL_STORAGE_KEY.COMPUTERS).then(
-      (c: ComputerLab[]) => {
-        compLabs = c;
-    });
+    compLabs = dataService.getData(APP_DATA.COMPUTERS);
+    // await loadData(APP_DATA.COMPUTERS).then(
+    //   (c: ComputerLab[]) => {
+    //     compLabs = c;
+    // });
 
     Object.values(this._blds).forEach((b: Building) => {
       b.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||

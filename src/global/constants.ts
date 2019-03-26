@@ -56,24 +56,19 @@ export const DEFAULT_MAX_SCALE = 3;
 // Default minimum scale (zoom) factor.
 export const DEFAULT_MIN_SCALE = 1;
 
-// export const FAQ_STORAGE_KEY = 'rl-faqs';
-// export const EVENTS_STORAGE_KEY = 'rl-events';
-// export const BUILDINGS_STORAGE_KEY = 'rl-buildings';
-// export const FLOORS_STORAGE_KEY = 'rl-floors';
-// export const ELEMENTS_STORAGE_KEY = 'rl-elements';
-// export const DETAILS_STORAGE_KEY = 'rl-details';
-// export const SEARCH_HISTORY_STORAGE_KEY = 'rl-search-history';
-
-export enum LOCAL_STORAGE_KEY {
-  FAQ = 'rl.ls.faqs',
-  EVENTS = 'rl.ls.events',
-  BUILDINGS = 'rl.ls.buildings',
-  FLOORS = 'rl.ls.floors',
-  ELEMENTS = 'rl.ls.elements',
-  DETAILS = 'rl.ls.details',
-  DETAIL_TYPES = 'rl.ls.detail-types',
-  COMPUTERS = 'rl.ls.computers',
-  SEARCH = 'rl.ls.search-history',
+/**
+ * Enumerated data endpoints.
+ */
+export enum APP_DATA {
+  BUILDING = 'buildings',
+  COMPUTERS = 'computers',
+  DETAILS = 'details',
+  ELEMENTS = 'elements',
+  EVENTS = 'events',
+  FAQS = 'faqs',
+  FLOORS = 'floors',
+  HISTORY = 'history',
+  // DETAIL_TYPES,
 }
 
 export enum ROUTES {
@@ -90,4 +85,8 @@ export enum MAP_TYPE {
   DIRECTORY = 'map.dir',
   COMPUTERS = 'map.comp',
   BOOKS = 'map.book',
+}
+
+export enum EVENTS {
+  DATA_LOADED = 'ds:loaded',
 }

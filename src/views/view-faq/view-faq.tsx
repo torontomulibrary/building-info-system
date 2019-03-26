@@ -1,9 +1,14 @@
 import { Component, Element, Listen, Method, Prop, State } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { LOCAL_STORAGE_KEY } from '../../global/constants';
+// import { LOCAL_STORAGE_KEY } from '../../global/constants';
+// import { DATA_KEY } from '../../global/constants';
+import { APP_DATA } from '../../global/constants';
 import { Faq, FaqMap } from '../../interface';
-import { loadData } from '../../utils/load-data';
+import { dataService } from '../../utils/data-service';
+// import { dataService } from '../../utils/data-service';
+// import { loadData } from '../../utils/load-data';
+// import { pubsub } from '../../utils/pub-sub';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -65,13 +70,8 @@ export class ViewFaq {
       }
     }
 
-    // Start loading the FAQs.
-    loadData('faqs', LOCAL_STORAGE_KEY.FAQ).then((faqs: FaqMap) => {
-      this.faqs = faqs;
-      this.loaded = true;
-    }, reason => {
-      console.log(reason);
-    });
+    this.faqs = dataService.getData(APP_DATA.FAQS);
+    this.loaded = true;
   }
 
   componentWillUpdate() {

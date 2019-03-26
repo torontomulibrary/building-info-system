@@ -3,9 +3,9 @@ import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
 import { BASE_URL } from '../../global/config';
-import { LOCAL_STORAGE_KEY, ROUTES } from '../../global/constants';
+import { APP_DATA, ROUTES } from '../../global/constants';
 import { SearchHistory } from '../../interface';
-import { loadData } from '../../utils/load-data';
+import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-book',
@@ -16,6 +16,7 @@ export class ViewBooks {
   @State() searches?: SearchHistory;
 
   @State() loaded = false;
+  @State() inDom = false;
 
   // @Prop({ mutable: true }) appData!: AppData;
 
@@ -24,13 +25,14 @@ export class ViewBooks {
   @Prop() appLoaded = false;
 
   componentWillLoad() {
+    this.searches = dataService.getData(APP_DATA.HISTORY);
     // Load search history.
-    loadData('history', LOCAL_STORAGE_KEY.SEARCH).then((history: SearchHistory) => {
-      this.searches = history;
-      this.loaded = true;
-    }, reason => {
-      console.log(reason);
-    });
+    // loadData('history', LOCAL_STORAGE_KEY.SEARCH).then((history: SearchHistory) => {
+    //   this.searches = history;
+    //   this.loaded = true;
+    // }, reason => {
+    //   console.log(reason);
+    // });
     // if (this.appData && this.appData.searches) {
     //   this.loaded = true;
     // } else {
@@ -45,6 +47,16 @@ export class ViewBooks {
     // }
   }
 
+  componentDidLoad() {
+    this.inDom = true;
+  }
+
+  componentDidUpdate() {
+    if (this.inDom) {
+      this.loaded = true;
+    }
+  }
+
   _cardClicked(e: CustomEvent) {
     e.preventDefault();
 
@@ -53,16 +65,21 @@ export class ViewBooks {
   }
 
   hostData() {
+    console.log(`host-data: ${this.loaded}`);
     return {
       class: {
         'rl-view': true,
         'rl-view--book': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
+        'rl-view--transition': this.inDom,
+      },
+      style: {
+        opacity: this.loaded && this.appLoaded ? 1 : 0,
       },
     };
   }
 
   render() {
+    console.log('rendered');
     // Render resent searches and popular books.
     if (this.searches) {
       return ([
