@@ -191,6 +191,13 @@ export namespace Components {
     'onToggled'?: (event: CustomEvent) => void;
   }
 
+  interface RlLoadProgress {
+    'open': boolean;
+  }
+  interface RlLoadProgressAttributes extends StencilHTMLAttributes {
+    'open'?: boolean;
+  }
+
   interface RlMapContainer {
     'buildings': BuildingMap;
     'extraDetails'?: {};
@@ -409,6 +416,7 @@ declare global {
     'RlCollection': Components.RlCollection;
     'RlDrawer': Components.RlDrawer;
     'RlExpansionPanel': Components.RlExpansionPanel;
+    'RlLoadProgress': Components.RlLoadProgress;
     'RlMapContainer': Components.RlMapContainer;
     'RlMapNav': Components.RlMapNav;
     'RlSearchBox': Components.RlSearchBox;
@@ -431,6 +439,7 @@ declare global {
     'rl-collection': Components.RlCollectionAttributes;
     'rl-drawer': Components.RlDrawerAttributes;
     'rl-expansion-panel': Components.RlExpansionPanelAttributes;
+    'rl-load-progress': Components.RlLoadProgressAttributes;
     'rl-map-container': Components.RlMapContainerAttributes;
     'rl-map-nav': Components.RlMapNavAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
@@ -491,6 +500,12 @@ declare global {
   var HTMLRlExpansionPanelElement: {
     prototype: HTMLRlExpansionPanelElement;
     new (): HTMLRlExpansionPanelElement;
+  };
+
+  interface HTMLRlLoadProgressElement extends Components.RlLoadProgress, HTMLStencilElement {}
+  var HTMLRlLoadProgressElement: {
+    prototype: HTMLRlLoadProgressElement;
+    new (): HTMLRlLoadProgressElement;
   };
 
   interface HTMLRlMapContainerElement extends Components.RlMapContainer, HTMLStencilElement {}
@@ -568,6 +583,7 @@ declare global {
     'rl-collection': HTMLRlCollectionElement
     'rl-drawer': HTMLRlDrawerElement
     'rl-expansion-panel': HTMLRlExpansionPanelElement
+    'rl-load-progress': HTMLRlLoadProgressElement
     'rl-map-container': HTMLRlMapContainerElement
     'rl-map-nav': HTMLRlMapNavElement
     'rl-search-box': HTMLRlSearchBoxElement
@@ -590,6 +606,7 @@ declare global {
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
+    'rl-load-progress': HTMLRlLoadProgressElement;
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;

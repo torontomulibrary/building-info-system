@@ -107,7 +107,7 @@
     "tslint": "^5.14.0",
     "tslint-ionic-rules": "0.0.21",
     "typescript": "^3.3.4000",
-    "workbox-build": "4.1.1"
+    "workbox-build": "3.4.1"
   },
   "author": "Ryerson University Library",
   "license": "MIT",

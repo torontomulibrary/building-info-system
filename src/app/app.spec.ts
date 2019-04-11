@@ -1,6 +1,6 @@
 import { RLApp } from './app';
 
-describe('map-editor', () => {
+describe('application', () => {
   it('builds', () => {
     expect(new RLApp()).toBeTruthy();
   });
