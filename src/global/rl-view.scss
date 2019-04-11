@@ -3,12 +3,13 @@
 
 .rl-view {
   display: block;
-  position: relative;
+  position: absolute;
   box-sizing: border-box;
   height: 100%;
   margin: 0 10%;
   padding-top: 32px;
-  opacity: 0;
+  // opacity: 0;
+  transition: opacity 2000ms ease-in;
   will-change: opacity;
 
   &__heading {
@@ -35,10 +36,5 @@
 
   &__container {
     padding-top: 32px;
-  }
-
-  &--loaded {
-    transition: opacity 200ms linear;
-    opacity: 1;
   }
 }

@@ -73,7 +73,7 @@ export class ViewBooks {
         'rl-view--transition': this.inDom,
       },
       style: {
-        opacity: this.loaded && this.appLoaded ? 1 : 0,
+        opacity: (this.loaded && this.appLoaded) ? 1 : 0,
       },
     };
   }
