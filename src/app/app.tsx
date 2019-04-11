@@ -100,29 +100,6 @@ export class RLApp {
       this.loaded = true;
     });
     dataService.initialize();
-    // pubsub.subscribe(PS_TOPIC.DATA_LOADED, () => {
-    //   this._faqData = dataService.getData(DATA_KEY.FAQ);
-    //   this._locationData = dataService.getData(DATA_KEY.DETAILS);
-    //   this.appLoaded = true;
-    // });
-
-    // const el = document.getElementById('splash-screen');
-    // if (el && el.parentElement) {
-    //   el.parentElement.removeChild(el);
-    // }
-
-    // Load map details.
-    // await loadData('details', LOCAL_STORAGE_KEY.DETAILS).then(
-    //   (d: MapElementDetailMap) => {
-    //     this._locationData = d;
-    // });
-
-    // await loadData('faqs', LOCAL_STORAGE_KEY.FAQ).then((faqs: FaqMap) => {
-    //   this._faqData = faqs;
-    // });
-
-    // this.appLoaded = true;
-    // this.appLoaded();
   }
 
   /**
@@ -192,21 +169,24 @@ export class RLApp {
    * Component render function.
    */
   render() {
-    if (this.loaded) {
+    const { _locationData, _faqData, appPages, appWidth, loaded } = this;
+    let { drawerOpen } = this;
+
+    if (loaded) {
       return ([
         <rl-app-bar
-            appTitle={APP_TITLE} appWidth={this.appWidth}
-            onMenuClicked={_ => { this.drawerOpen = true; }}
-            locationData={this._locationData}
-            faqData={this._faqData}
+            appTitle={APP_TITLE} appWidth={appWidth}
+            onMenuClicked={_ => { drawerOpen = true; }}
+            locationData={_locationData}
+            faqData={_faqData}
             onSearchLocationClicked={e => this._onSearchLocationClicked(e)}
             onSearchFaqClicked={e => this._onSearchFaqClicked(e)}
           >
         </rl-app-bar>,
 
         <rl-drawer
-            open={this.drawerOpen}
-            onDrawerClose={_ => { this.drawerOpen = false; }}>
+            open={drawerOpen}
+            onDrawerClose={_ => { drawerOpen = false; }}>
           <header class="rl-drawer__header">
             <div class="rl-drawer__header-content">
               <button class="material-icons mdc-top-app-bar__navigation-icon"
@@ -215,7 +195,7 @@ export class RLApp {
             </div>
           </header>
           <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
-            {this.appPages.map(page =>
+            {appPages.map(page =>
               <stencil-route-link activeClass="mdc-list-item--activated"
                   anchorClass="mdc-list-item" anchorTabIndex="0"
                   url={`${BASE_URL}${page.url}`} exact={page.url === ''}>
@@ -237,7 +217,7 @@ export class RLApp {
                   `${BASE_URL}${ROUTES.DIRECTORY}`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                   mapType: MAP_TYPE.DIRECTORY,
                 }}>
               </stencil-route>
@@ -246,7 +226,7 @@ export class RLApp {
                   `${BASE_URL}books/map/:callNo`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                   mapType: MAP_TYPE.BOOKS,
                 }}>
               </stencil-route>
@@ -256,7 +236,7 @@ export class RLApp {
                   `${BASE_URL}${ROUTES.COMPUTERS}`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                   mapType: MAP_TYPE.COMPUTERS,
                 }}>
               </stencil-route>
@@ -266,7 +246,7 @@ export class RLApp {
                   `${BASE_URL}${ROUTES.BUILDINGS}`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                 }}>
               </stencil-route>
               <stencil-route component="view-book"
@@ -275,7 +255,7 @@ export class RLApp {
                   `${BASE_URL}${ROUTES.BOOKS}`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                 }}>
               </stencil-route>
               <stencil-route component="view-event"
@@ -284,7 +264,7 @@ export class RLApp {
                   `${BASE_URL}${ROUTES.EVENTS}`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                 }}>
               </stencil-route>
               <stencil-route component="view-faq"
@@ -293,18 +273,18 @@ export class RLApp {
                   `${BASE_URL}${ROUTES.FAQS}`,
                 ]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                 }}>
               </stencil-route>
               <stencil-route component="view-search"
                 url={[`${BASE_URL}search/:query?`]}
                 componentProps={{
-                  appLoaded: this.loaded,
+                  appLoaded: loaded,
                 }}>
               </stencil-route>
               <stencil-route component="view-home" url={BASE_URL} exact
                   componentProps={{
-                    appLoaded: this.loaded,
+                    appLoaded: loaded,
                   }}>
               </stencil-route>
               <stencil-route routeRender={() => ([
