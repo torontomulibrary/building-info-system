@@ -66,6 +66,9 @@ export class AccordionItem {
     window.setTimeout(() => {
       this.root.classList.remove('rl-accordion-item--fade-in');
     }, this.delay);
+
+    const slot = this.root.querySelector('[slot="content"]') as HTMLElement;
+    this._contentHeight = slot && slot.offsetHeight;
   }
 
   /**
@@ -137,15 +140,15 @@ export class AccordionItem {
           class="rl-accordion-item__content"
           tabindex={this.isOpen ? '0' : '-1'}
           style={{ height: `${this.isOpen ? this._contentHeight : 0}px` }}
-          ref={el => {
-            if (el) {
-              // Get the child of this element (the content in the slot) and
-              // find it's height.  Use the height to determine how big this
-              // element should become when opened.
-              const slot = el.querySelector('[slot="content"]') as HTMLElement;
-              this._contentHeight = slot && slot.offsetHeight;
-            }
-          }}
+          // ref={el => {
+          //   if (el) {
+          //     // Get the child of this element (the content in the slot) and
+          //     // find it's height.  Use the height to determine how big this
+          //     // element should become when opened.
+          //     const slot = el.querySelector('[slot="content"]') as HTMLElement;
+          //     this._contentHeight = slot && slot.offsetHeight;
+          //   }
+          // }}
       >
         <slot name="content" />
       </dd>,
