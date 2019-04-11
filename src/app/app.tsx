@@ -169,24 +169,31 @@ export class RLApp {
    * Component render function.
    */
   render() {
-    const { _locationData, _faqData, appPages, appWidth, loaded } = this;
-    let { drawerOpen } = this;
+    const { _locationData, _faqData, appPages, loaded } = this;
 
     if (loaded) {
       return ([
         <rl-app-bar
-            appTitle={APP_TITLE} appWidth={appWidth}
-            onMenuClicked={_ => { drawerOpen = true; }}
-            locationData={_locationData}
-            faqData={_faqData}
-            onSearchLocationClicked={e => this._onSearchLocationClicked(e)}
-            onSearchFaqClicked={e => this._onSearchFaqClicked(e)}
+            type="fixed"
+            onMenuClicked={_ => { this.drawerOpen = true; }}
+            singleSection={this.appWidth < 500}
           >
+          {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
+          <rl-search-box slot="centerSection"
+            showMenu={this.appWidth < 500}
+            inputPlaceholder={APP_TITLE}
+            faqData={_faqData}
+            locationData={_locationData}
+            onIconClick={() => { this.drawerOpen = true; }}
+            onLocationSelected={(e: CustomEvent) => this._onSearchLocationClicked(e.detail)}
+            onFaqSelected={(e: CustomEvent) => this._onSearchFaqClicked(e.detail)}
+          >
+          </rl-search-box>
         </rl-app-bar>,
 
         <rl-drawer
-            open={drawerOpen}
-            onDrawerClose={_ => { drawerOpen = false; }}>
+            open={this.drawerOpen}
+            onDrawerClose={_ => { this.drawerOpen = false; }}>
           <header class="rl-drawer__header">
             <div class="rl-drawer__header-content">
               <button class="material-icons mdc-top-app-bar__navigation-icon"

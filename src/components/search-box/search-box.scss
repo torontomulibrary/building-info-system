@@ -60,8 +60,8 @@
     overflow: hidden;
   }
 
-  &--open {
-    @include mdc-elevation(4);
+  &--focused {
+    @include mdc-elevation(2);
 
     background-color: $mdc-theme-surface;
 
@@ -71,10 +71,14 @@
       &__icon {
         color: $mdc-theme-on-surface;
       }
+    }
+  }
 
-      &__results {
-        display: block;
-      }
+  &--open {
+    @include mdc-elevation(4);
+
+    .rl-search__results {
+      display: block;
     }
   }
 

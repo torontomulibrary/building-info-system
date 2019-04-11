@@ -68,6 +68,8 @@ export class SearchBox {
 
   @Prop() showMenu = false;
 
+  @Prop() inputPlaceholder = '';
+
   @Event() locationSelected!: EventEmitter;
   @Event() faqSelected!: EventEmitter;
 
@@ -149,8 +151,12 @@ export class SearchBox {
     }
   }
 
-  _onIconClick() {
-    this.iconClick.emit();
+  // _onIconClick() {
+  //   this.iconClick.emit();
+  // }
+
+  _onBlur() {
+    this.focused = false;
   }
 
   _onLocationClick(e: Event, detailId: number) {
@@ -298,7 +304,8 @@ export class SearchBox {
       role: 'search',
       class: {
         'rl-search': true,
-        'rl-search--open': (this.focused),
+        'rl-search--open': this.focused,
+        'rl-search--focused': this.focused || this.searchInput && this.searchInput.value !== '',
       },
     };
   }
@@ -308,14 +315,15 @@ export class SearchBox {
       <input id="rl-search-input" role="combobox" aria-autocomplete="list"
           ref={elm => this.searchInput = elm}
           aria-owns="rl-search-suggestions" class="rl-search__input"
-          placeholder={(this.showMenu && !this.focused) ? 'RULA Finder' : 'Search'}
+          placeholder={(this.showMenu && !this.focused) ? this.inputPlaceholder : 'Search'}
           onInput={e => this._onSearchChange(e)}
           onFocus={_ => this.focused = true}
-          // onBlur={_ => this.focused = false}
+          onBlur={_ => this._onBlur()}
           onKeyDown={e => { this.onKeyDown(e); }}></input>,
       <div class="material-icons rl-search__icon"
-          onClick={_ => this._onIconClick()}
-          role="button">
+          onClick={_ => this.iconClick.emit()}
+          role="button"
+          tabindex={this.showMenu ? '0' : undefined}>
         {this.showMenu ? 'menu' : 'search'}
       </div>,
       <div id="rl-search-suggestions" class="rl-search__results"

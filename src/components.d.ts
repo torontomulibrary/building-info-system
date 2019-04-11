@@ -11,14 +11,14 @@ import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
+  Color,
+} from './utils/color';
+import {
   BuildingMap,
   FaqMap,
   MapElementData,
   MapElementDetailMap,
 } from './interface';
-import {
-  Color,
-} from './utils/color';
 import {
   BuildingMap as BuildingMap2,
   FloorMap,
@@ -103,28 +103,30 @@ export namespace Components {
   }
 
   interface RlAppBar {
-    'appTitle': string;
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
     */
-    'appWidth': number;
-    'faqData': FaqMap;
-    'locationData': MapElementDetailMap;
+    'appTitle': string;
+    'centerTitle': boolean;
+    'dense': boolean;
+    'singleSection': boolean;
+    'type': 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
   interface RlAppBarAttributes extends StencilHTMLAttributes {
-    'appTitle'?: string;
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
     */
-    'appWidth'?: number;
-    'faqData': FaqMap;
-    'locationData': MapElementDetailMap;
+    'appTitle'?: string;
+    'centerTitle'?: boolean;
+    'dense'?: boolean;
     /**
     * Event fired when the menu button on the app bar is clicked.
     */
     'onMenuClicked'?: (event: CustomEvent) => void;
     'onSearchFaqClicked'?: (event: CustomEvent) => void;
     'onSearchLocationClicked'?: (event: CustomEvent) => void;
+    'singleSection'?: boolean;
+    'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
 
   interface RlCard {
@@ -262,12 +264,14 @@ export namespace Components {
   interface RlSearchBox {
     'faqData': FaqMap;
     'id': string;
+    'inputPlaceholder': string;
     'locationData': MapElementDetailMap;
     'showMenu': boolean;
   }
   interface RlSearchBoxAttributes extends StencilHTMLAttributes {
     'faqData': FaqMap;
     'id'?: string;
+    'inputPlaceholder'?: string;
     'locationData': MapElementDetailMap;
     'onFaqSelected'?: (event: CustomEvent) => void;
     'onIconClick'?: (event: CustomEvent) => void;
