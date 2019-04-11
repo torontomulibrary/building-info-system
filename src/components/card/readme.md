@@ -18,6 +18,7 @@
 | `icons`            | --                   |             | `undefined \| { name: string; }[]`               | `undefined`                |
 | `mediaSize`        | `media-size`         |             | `"contain" \| "cover"`                           | `'cover'`                  |
 | `noContent`        | `no-content`         |             | `boolean`                                        | `false`                    |
+| `noMedia`          | `no-media`           |             | `boolean`                                        | `false`                    |
 | `titleInMedia`     | `title-in-media`     |             | `boolean`                                        | `false`                    |
 | `wideMediaAspect`  | `wide-media-aspect`  |             | `boolean`                                        | `false`                    |
 
