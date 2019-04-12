@@ -154,6 +154,13 @@ export class MapContainer {
   _setActiveElement(element?: MapElementData) {
     if (element) {
       this.activeElement = { ...element };
+      if (this.activeFloor.id !== element.floorId) {
+        this._setActiveBuilding(Object.values(this.buildings).find((b: Building) => {
+          return b.floors[element.floorId] !== undefined;
+        }));
+
+        this._setActiveFloor(this.activeBuilding.floors[element.floorId]);
+      }
       // this.sideSheet_.open();
     } else {
       this.activeElement = undefined;

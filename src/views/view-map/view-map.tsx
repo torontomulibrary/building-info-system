@@ -296,7 +296,9 @@ export class ViewMap {
   setActiveDetail(id: number) {
     const state = this.history.location.state;
     const code = this._dtls[id].code;
-    if (state && state.code && code !== state.code) {
+    if (state === undefined ||
+        state && state.code === undefined ||
+        state && state.code && code !== state.code) {
       this.history.push({
         pathname: `/directory/${code}`,
         state: { code },
