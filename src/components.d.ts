@@ -7,17 +7,16 @@
 
 import '@stencil/core';
 
-import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
+import '@ryersonlibrary/web-components';
 import {
   Color,
 } from './utils/color';
 import {
   BuildingMap,
-  FaqMap,
   MapElementData,
-  MapElementDetailMap,
+  SearchResultItem,
 } from './interface';
 import {
   BuildingMap as BuildingMap2,
@@ -262,21 +261,33 @@ export namespace Components {
   }
 
   interface RlSearchBox {
-    'faqData': FaqMap;
+    'clearInput': () => void;
     'id': string;
     'inputPlaceholder': string;
-    'locationData': MapElementDetailMap;
+    'resultHeight': number;
+    'searchValue': string;
     'showMenu': boolean;
   }
   interface RlSearchBoxAttributes extends StencilHTMLAttributes {
-    'faqData': FaqMap;
     'id'?: string;
     'inputPlaceholder'?: string;
-    'locationData': MapElementDetailMap;
-    'onFaqSelected'?: (event: CustomEvent) => void;
     'onIconClick'?: (event: CustomEvent) => void;
-    'onLocationSelected'?: (event: CustomEvent) => void;
+    'onSearchChange'?: (event: CustomEvent) => void;
+    'resultHeight'?: number;
+    'searchValue'?: string;
     'showMenu'?: boolean;
+  }
+
+  interface RlSearchSuggestions {
+    'isEmptySearch': boolean;
+    'suggestions': SearchResultItem[];
+  }
+  interface RlSearchSuggestionsAttributes extends StencilHTMLAttributes {
+    'isEmptySearch'?: boolean;
+    'onFaqFlick'?: (event: CustomEvent) => void;
+    'onLocationClick'?: (event: CustomEvent) => void;
+    'onResultClick'?: (event: CustomEvent) => void;
+    'suggestions'?: SearchResultItem[];
   }
 
   interface RlSideSheet {
@@ -424,6 +435,7 @@ declare global {
     'RlMapContainer': Components.RlMapContainer;
     'RlMapNav': Components.RlMapNav;
     'RlSearchBox': Components.RlSearchBox;
+    'RlSearchSuggestions': Components.RlSearchSuggestions;
     'RlSideSheet': Components.RlSideSheet;
     'ViewBook': Components.ViewBook;
     'ViewBuilding': Components.ViewBuilding;
@@ -447,6 +459,7 @@ declare global {
     'rl-map-container': Components.RlMapContainerAttributes;
     'rl-map-nav': Components.RlMapNavAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
+    'rl-search-suggestions': Components.RlSearchSuggestionsAttributes;
     'rl-side-sheet': Components.RlSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
@@ -530,6 +543,12 @@ declare global {
     new (): HTMLRlSearchBoxElement;
   };
 
+  interface HTMLRlSearchSuggestionsElement extends Components.RlSearchSuggestions, HTMLStencilElement {}
+  var HTMLRlSearchSuggestionsElement: {
+    prototype: HTMLRlSearchSuggestionsElement;
+    new (): HTMLRlSearchSuggestionsElement;
+  };
+
   interface HTMLRlSideSheetElement extends Components.RlSideSheet, HTMLStencilElement {}
   var HTMLRlSideSheetElement: {
     prototype: HTMLRlSideSheetElement;
@@ -591,6 +610,7 @@ declare global {
     'rl-map-container': HTMLRlMapContainerElement
     'rl-map-nav': HTMLRlMapNavElement
     'rl-search-box': HTMLRlSearchBoxElement
+    'rl-search-suggestions': HTMLRlSearchSuggestionsElement
     'rl-side-sheet': HTMLRlSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
@@ -614,6 +634,7 @@ declare global {
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;
+    'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;

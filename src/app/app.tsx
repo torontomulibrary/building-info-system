@@ -1,6 +1,5 @@
 import '@ryersonlibrary/web-components';
 import { Component, Element, Listen, State } from '@stencil/core';
-// import { Store, Unsubscribe } from '@stencil/redux';
 
 import { BASE_URL } from '../global/config';
 import {
@@ -10,8 +9,15 @@ import {
   MAP_TYPE,
   ROUTES,
 } from '../global/constants';
-import { FaqMap, MapElementDetailMap } from '../interface';
+import {
+  Faq,
+  FaqMap,
+  MapElementDetail,
+  MapElementDetailMap,
+  SearchResultItem,
+} from '../interface';
 import { dataService } from '../utils/data-service';
+import { Search } from '../utils/search';
 
 @Component({
   tag: 'rl-bis',
@@ -63,13 +69,19 @@ export class RLApp {
     },
   ];
 
+  private docSearch = new Search();
+
   private _locationData: MapElementDetailMap = {};
   private _faqData: FaqMap = {};
+  @State() searchQuery = '';
+  @State() resultHeight = 0;
 
   /**
    * Root element of this component.
    */
   @Element() root!: HTMLStencilElement;
+
+  @State() searchResults: SearchResultItem[] = [];
 
   /**
    * Keep track of the app width in order to change the interface.
@@ -96,7 +108,21 @@ export class RLApp {
   async componentDidLoad() {
     dataService.listen(EVENTS.DATA_LOADED, () => {
       this._faqData = dataService.getData(APP_DATA.FAQS);
+
+      if (this._faqData) {
+        Object.values(this._faqData).forEach((f: Faq) => {
+          this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
+        });
+      }
+
       this._locationData = dataService.getData(APP_DATA.DETAILS);
+
+      if (this._locationData) {
+        Object.values(this._locationData).forEach((d: MapElementDetail) => {
+          this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
+        });
+      }
+
       this.loaded = true;
     });
     dataService.initialize();
@@ -110,6 +136,15 @@ export class RLApp {
     this.appWidth = window.innerWidth;
   }
 
+  _onSearchChange(e: Event) {
+    const t = e.target;
+
+    if (t !== null && t instanceof HTMLInputElement) {
+      this.searchQuery = t.value;
+      this.searchResults = this.docSearch.search(this.searchQuery, 6);
+    }
+  }
+
   /**
    * Listen for a `searchLocationClicked` event from the search bar. This occurs
    * when the user selects one of the locations from the search box.  The event
@@ -117,15 +152,14 @@ export class RLApp {
    *
    * @param e The triggering event
    */
-  _onSearchLocationClicked(e: CustomEvent) {
+  _onSearchLocationClicked(resultId) {
     const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
-    // const router = this.root.querySelector('stencil-router') as HTMLStencilRouterElement;
     if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
       // Map is open. Set active element.
-      viewMap.setActiveElement(this._locationData[e.detail].id);
+      viewMap.setActiveElement(this._locationData[resultId].id);
     } else {
       // Navigate to page and then set the active element.
-      const loc = this._locationData[e.detail];
+      const loc = this._locationData[resultId];
 
       // Hijack the current view to get the RouterHistory object.  It is only
       // available within the context of the stencil-router and its children.
@@ -141,16 +175,33 @@ export class RLApp {
    *
    * @param e The triggering event
    */
-  _onSearchFaqClicked(e: CustomEvent) {
+  _onSearchFaqClicked(resultId) {
     const viewFaq = this.root.querySelector('.rl-view--faq') as HTMLViewFaqElement;
     if (viewFaq && viewFaq.hasOwnProperty('setActiveFaq')) {
-      viewFaq.setActiveFaq(e.detail);
-      // viewMap.setActiveElementByDetail(e.detail);
+      viewFaq.setActiveFaq(resultId);
     } else {
       // Navigate to page and then set the active element.
       const view = this.root.querySelector('.rl-view') as any;
-      view.history.push(`${BASE_URL}${ROUTES.FAQS}/${e.detail}`);
+      view.history.push(`${BASE_URL}${ROUTES.FAQS}/${resultId}`);
     }
+  }
+
+  _onResultClick(e: CustomEvent) {
+    const resultID = e.detail.id as string;
+    const [ type, id ] = resultID.split('-');
+
+    switch (type) {
+      case 'd':
+        this._onSearchLocationClicked(id);
+        break;
+      case 'f':
+        this._onSearchFaqClicked(id);
+        break;
+      default:
+    }
+
+    this.searchQuery = '';
+    this.searchResults = [];
   }
 
   /**
@@ -169,7 +220,7 @@ export class RLApp {
    * Component render function.
    */
   render() {
-    const { _locationData, _faqData, appPages, loaded } = this;
+    const { appPages, loaded } = this;
 
     if (loaded) {
       return ([
@@ -179,15 +230,23 @@ export class RLApp {
             singleSection={this.appWidth < 500}
           >
           {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
-          <rl-search-box slot="centerSection"
+          <rl-search-box
+            // ref={el => { this._searchBox = el as HTMLRlSearchBoxElement; }}
+            slot="centerSection"
             showMenu={this.appWidth < 500}
             inputPlaceholder={APP_TITLE}
-            faqData={_faqData}
-            locationData={_locationData}
+            resultHeight={this.resultHeight}
             onIconClick={() => { this.drawerOpen = true; }}
-            onLocationSelected={(e: CustomEvent) => this._onSearchLocationClicked(e.detail)}
-            onFaqSelected={(e: CustomEvent) => this._onSearchFaqClicked(e.detail)}
+            onInput={(e: Event) => this._onSearchChange(e) }
+            searchValue={this.searchQuery}
           >
+          <rl-search-suggestions
+              slot="suggestions"
+              suggestions={this.searchResults}
+              isEmptySearch={this.searchQuery === ''}
+              onResultClick={this._onResultClick.bind(this)}
+          >
+          </rl-search-suggestions>
           </rl-search-box>
         </rl-app-bar>,
 

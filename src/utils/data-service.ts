@@ -126,10 +126,10 @@ class DataService extends Listenable {
     if (this._data.has(key)) {
       res = this._data.get(key);
       if (res) {
-        return res;
+        return { ...res };
       } else {
         return this.loadData(key).then(data => {
-          return data;
+          return { ...data };
         });
       }
     }

@@ -166,6 +166,15 @@ export interface BookDetails {
   title: string,
 }
 
+export type SearchResultType = 'question_answer' | 'event' | 'location_on' | 'book';
+
+export interface SearchResultItem {
+  id: string,
+  value: string,
+  type: SearchResultType,
+  detail?: string,
+}
+
 export * from './components';
 // export * from './components/map/map-interface';
 export * from './components/search-box/search-box-interface';
