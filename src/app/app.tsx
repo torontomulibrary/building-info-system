@@ -156,7 +156,7 @@ export class RLApp {
     const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
     if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
       // Map is open. Set active element.
-      viewMap.setActiveElement(this._locationData[resultId].id);
+      viewMap.setActiveDetail(this._locationData[resultId].id);
     } else {
       // Navigate to page and then set the active element.
       const loc = this._locationData[resultId];
@@ -192,10 +192,10 @@ export class RLApp {
 
     switch (type) {
       case 'd':
-        this._onSearchLocationClicked(id);
+        this._onSearchLocationClicked(Number(id));
         break;
       case 'f':
-        this._onSearchFaqClicked(id);
+        this._onSearchFaqClicked(Number(id));
         break;
       default:
     }

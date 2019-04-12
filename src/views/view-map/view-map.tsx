@@ -7,7 +7,7 @@ import {
   Prop,
   State,
 } from '@stencil/core';
-import { MatchResults } from '@stencil/router';
+import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { API_URL } from '../../global/config';
 import {
@@ -102,6 +102,12 @@ export class ViewMap {
    */
   @Event() dataLoaded!: EventEmitter;
 
+  /**
+   * Reference to the stencil-router history object. Used to programmatically
+   * change the browser history when the selected FAQ changes.
+   */
+  @Prop() history!: RouterHistory;
+
   async componentWillLoad() {
     // Check the URL value to see if any Building, Floor and or Location was
     // provided.  Must be in the form BLD[FLR][RM].
@@ -113,6 +119,14 @@ export class ViewMap {
         const query = this.match.params.roomNo;
         const re = /([A-Z]{3})(\d{2}(?=.{2,}|$)|\d{1})?.*/;
         this.paramMatches = re.exec(query);
+        if (this.paramMatches) {
+          this.history.replace({
+            pathname: `/directory/${this.paramMatches[0]}`,
+            state: { code: this.paramMatches[0] },
+            query: {},
+            key: '',
+          });
+        }
       } else {
         this.paramMatches = undefined;
       }
@@ -276,6 +290,22 @@ export class ViewMap {
   @Method()
   setActiveElement(id: number) {
     this._mapContainer.setActiveElement(this._elms[id]);
+  }
+
+  @Method()
+  setActiveDetail(id: number) {
+    const state = this.history.location.state;
+    const code = this._dtls[id].code;
+    if (state && state.code && code !== state.code) {
+      this.history.push({
+        pathname: `/directory/${code}`,
+        state: { code },
+        query: {},
+        key: '',
+      });
+    }
+
+    this._mapContainer.setActiveElement(this._elms[this._dtls[id].elementId]);
   }
 
   floorHasComps(floor: Floor, comps: ComputerLab[]) {
