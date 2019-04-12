@@ -384,11 +384,16 @@ export namespace Components {
     * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
     'mapType': MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
     'match': MatchResults;
+    'setActiveDetail': (id: number) => void;
     'setActiveElement': (id: number) => void;
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
@@ -396,6 +401,10 @@ export namespace Components {
     * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded'?: boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
     'mapType'?: MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
