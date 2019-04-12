@@ -28,7 +28,7 @@ export class ViewHome {
 
   render() {
     return ([
-      <stencil-route-title title="Home" />,
+      <stencil-route-title pageTitle="Home" />,
       <div>
         Welcome to the home screen.
         <a href="#">Tabbable link</a>

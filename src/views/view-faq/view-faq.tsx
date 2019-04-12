@@ -77,9 +77,10 @@ export class ViewFaq {
   componentWillUpdate() {
     // Handle when the parameter may change based on user history navigation.
     const state = this.history.location.state;
-    if (state && state.faqId && this.selectedFaq !== state.faqId) {
+    if (state === undefined ||
+        state && state.faqId === undefined ||
+        state && state.faqId && this.selectedFaq !== state.faqId) {
       // State needs to be updated/changed to match newly selected FAQ.
-      console.log(`Pushing history -- state: ${state.faqId} vs. sel: ${this.selectedFaq}`);
       if (this.selectedFaq) {
           this.history.push({
             pathname: `/faqs/${this.selectedFaq}`,
@@ -121,18 +122,10 @@ export class ViewFaq {
    */
   render() {
     if (this.faqs) {
-      // Update page URL.
-      // if (this.selectedFaq) {
-      //   this.history.push({
-      //     pathname: `/faqs/${this.selectedFaq}`,
-      //     state: { faqId: this.selectedFaq },
-      //     query: {},
-      //     key: '',
-      //   });
-      // }
+      const title = (this.selectedFaq ? `#${this.selectedFaq} | ` : '') + 'FAQs';
 
       return ([
-        <stencil-route-title pageTitle="Frequently Asked Questions" />,
+        <stencil-route-title pageTitle={title} />,
         <h1 class="rl-view__heading">Frequently asked questions</h1>,
         <div id="container" class="rl-view-faq__container">
           <rl-accordion>
