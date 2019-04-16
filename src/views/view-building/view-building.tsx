@@ -1,4 +1,5 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 
 import { BASE_URL } from '../../global/config';
 import {
@@ -15,6 +16,8 @@ import { dataService } from '../../utils/data-service';
 })
 
 export class ViewBuilding {
+  @Element() root!: HTMLElement;
+
   /**
    * Internal list of Buildings to display.
    */
@@ -30,6 +33,8 @@ export class ViewBuilding {
    * view should not display either.
    */
   @Prop() appLoaded = false;
+
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   /**
    * Lifecycle event fired when the component is first initialized and not
@@ -62,7 +67,15 @@ export class ViewBuilding {
   }
 
   componentDidLoad() {
-    if (this.buildings) {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
       this.loaded = true;
     }
   }

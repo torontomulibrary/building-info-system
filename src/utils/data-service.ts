@@ -91,7 +91,9 @@ class DataService extends Listenable {
   _completeLoad() {
     if (this._loadedData === Object.keys(APP_DATA).length) {
       this.dispatch(EVENTS.DATA_LOADED);
-      // pubsub.dispatch(PS_TOPIC.DATA_LOADED);
+      this.dispatch(EVENTS.ALL_DATA_LOADED);
+    } else {
+      this.dispatch(EVENTS.DATA_LOADED);
     }
   }
 

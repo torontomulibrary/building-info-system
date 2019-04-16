@@ -7,6 +7,7 @@ import {
   Prop,
   State,
 } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { API_URL } from '../../global/config';
@@ -107,6 +108,8 @@ export class ViewMap {
    * change the browser history when the selected FAQ changes.
    */
   @Prop() history!: RouterHistory;
+
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   async componentWillLoad() {
     // Check the URL value to see if any Building, Floor and or Location was
@@ -285,6 +288,20 @@ export class ViewMap {
     this.loaded = true;
     this.buildings = this._blds;
     // this.dataLoaded.emit(this.appData);
+  }
+
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
   }
 
   @Method()

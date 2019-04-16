@@ -1,14 +1,10 @@
 import { Component, Element, Listen, Method, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-// import { LOCAL_STORAGE_KEY } from '../../global/constants';
-// import { DATA_KEY } from '../../global/constants';
 import { APP_DATA } from '../../global/constants';
 import { Faq, FaqMap } from '../../interface';
 import { dataService } from '../../utils/data-service';
-// import { dataService } from '../../utils/data-service';
-// import { loadData } from '../../utils/load-data';
-// import { pubsub } from '../../utils/pub-sub';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -52,6 +48,8 @@ export class ViewFaq {
    */
   @Prop() history!: RouterHistory;
 
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   /**
    * Lifecycle event fired when the component is first initialized and not
    * yet in the DOM.
@@ -71,7 +69,20 @@ export class ViewFaq {
     }
 
     this.faqs = dataService.getData(APP_DATA.FAQS);
-    this.loaded = true;
+  }
+
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
   }
 
   componentWillUpdate() {
@@ -122,7 +133,7 @@ export class ViewFaq {
    */
   render() {
     if (this.faqs) {
-      const title = (this.selectedFaq ? `#${this.selectedFaq} | ` : '') + 'FAQs';
+      const title = (this.selectedFaq ? `${this.faqs[this.selectedFaq].question} | ` : '') + 'FAQs';
 
       return ([
         <stencil-route-title pageTitle={title} />,
@@ -133,7 +144,7 @@ export class ViewFaq {
                 <rl-accordion-item
                   class="rl-accordion-item rl-accordion-item--fade-in"
                   index={faq.id}
-                  delay={idx * 30}
+                  delay={idx * 15}
                   isOpen={this.selectedFaq === faq.id}
                 >
                   <div slot="header">{faq.question}</div>

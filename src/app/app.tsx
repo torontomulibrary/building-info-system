@@ -106,7 +106,7 @@ export class RLApp {
    * Lifecycle event fired after the component has rendered the first time.
    */
   async componentDidLoad() {
-    dataService.listen(EVENTS.DATA_LOADED, () => {
+    dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
       this._faqData = dataService.getData(APP_DATA.FAQS);
 
       if (this._faqData) {
@@ -363,9 +363,7 @@ export class RLApp {
         </main>,
       ]);
     } else {
-      return (
-        <rl-load-progress></rl-load-progress>
-      );
+      return undefined;
     }
   }
 }

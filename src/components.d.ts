@@ -192,12 +192,8 @@ export namespace Components {
     'onToggled'?: (event: CustomEvent) => void;
   }
 
-  interface RlLoadProgress {
-    'open': boolean;
-  }
-  interface RlLoadProgressAttributes extends StencilHTMLAttributes {
-    'open'?: boolean;
-  }
+  interface RlLoadProgress {}
+  interface RlLoadProgressAttributes extends StencilHTMLAttributes {}
 
   interface RlMapContainer {
     'buildings': BuildingMap;

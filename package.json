@@ -53,6 +53,7 @@
     "@material/elevation": "^1.0.0",
     "@material/icon-button": "^1.0.1",
     "@material/layout-grid": "^0.41.0",
+    "@material/linear-progress": "^1.1.0",
     "@material/list": "^1.0.1",
     "@material/ripple": "^1.0.1",
     "@material/rtl": "^0.42.0",

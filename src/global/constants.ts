@@ -89,4 +89,5 @@ export enum MAP_TYPE {
 
 export enum EVENTS {
   DATA_LOADED = 'ds:loaded',
+  ALL_DATA_LOADED = 'ds:allLoaded',
 }

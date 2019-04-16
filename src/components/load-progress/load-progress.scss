@@ -1,0 +1,33 @@
+@import "@material/linear-progress/mdc-linear-progress";
+@import "@material/theme/mdc-theme";
+
+.rl-load-progress {
+  @include mdc-theme-prop(background-color, "background");
+
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 2000ms ease-out;
+  opacity: 1;
+  will-change: opacity;
+  z-index: 1000;
+
+  &--done {
+    // display: flex;
+    opacity: 0;
+  }
+
+  .mdc-linear-progress {
+    @include mdc-linear-progress-bar-color(primary);
+
+    width: 512px;
+    height: 4px;
+    margin-top: 32px;
+  }
+}

@@ -1,4 +1,5 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
@@ -13,6 +14,8 @@ import { dataService } from '../../utils/data-service';
 })
 
 export class ViewBooks {
+  @Element() root!: HTMLElement;
+
   @State() searches?: SearchHistory;
 
   @State() loaded = false;
@@ -23,6 +26,8 @@ export class ViewBooks {
   @Prop() history!: RouterHistory;
 
   @Prop() appLoaded = false;
+
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   componentWillLoad() {
     this.searches = dataService.getData(APP_DATA.HISTORY);
@@ -48,11 +53,22 @@ export class ViewBooks {
   }
 
   componentDidLoad() {
-    this.inDom = true;
+    // this.inDom = true;
+    this.checkSize();
   }
 
-  componentDidUpdate() {
-    if (this.inDom) {
+  // componentDidUpdate() {
+  //   if (this.inDom) {
+  //     this.loaded = true;
+  //   }
+  // }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
       this.loaded = true;
     }
   }

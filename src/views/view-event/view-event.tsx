@@ -1,4 +1,5 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 // import union from 'lodash/union';
 
@@ -25,6 +26,8 @@ import { sanitize } from '../../utils/sanitize';
 })
 
 export class ViewEvent {
+  @Element() root!: HTMLElement;
+
   /**
    * Internal list of all Events to display.
    */
@@ -42,6 +45,8 @@ export class ViewEvent {
   @Prop() appLoaded = false;
 
   @Prop() history!: RouterHistory;
+
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   /**
    * Lifecycle event fired when the component is first initialized and not
@@ -90,6 +95,20 @@ export class ViewEvent {
     //     parser.loadIcal(EVENT_URL);
     //   }
     // });
+  }
+
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
   }
 
   /**
