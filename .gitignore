@@ -25,4 +25,6 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 .env
 
+src/global/_fonts.scss
 src/global/config.ts
+src/assets/font/*

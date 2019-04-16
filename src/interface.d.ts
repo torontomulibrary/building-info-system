@@ -28,6 +28,7 @@ export type DescribedObject = {
 export type NumberMap<T> = { [keys: number]: T }
 
 export interface Faq {
+  id: number;
   question?: string;
   answer?: string;
 }
@@ -163,6 +164,15 @@ export interface BookDetails {
   isOnline: string,
   locations: string[],
   title: string,
+}
+
+export type SearchResultType = 'question_answer' | 'event' | 'location_on' | 'book';
+
+export interface SearchResultItem {
+  id: string,
+  value: string,
+  type: SearchResultType,
+  detail?: string,
 }
 
 export * from './components';

@@ -34,6 +34,7 @@ export class Card {
   @Prop() hasPrimaryAction = false;
 
   @Prop() noContent = false;
+  @Prop() noMedia = false;
 
   @Prop() mediaSize: 'contain' | 'cover' = 'cover';
   @Prop() wideMediaAspect = false;
@@ -104,7 +105,7 @@ export class Card {
 
   _renderCard() {
     return ([
-      this._renderMedia(),
+      this.noMedia ? undefined : this._renderMedia(),
       this.noContent ?
         undefined : [
         <div class="rl-card__primary">

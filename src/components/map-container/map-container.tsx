@@ -1,6 +1,7 @@
 import {
   Component,
   Element,
+  Method,
   Prop,
   State,
 } from '@stencil/core';
@@ -89,6 +90,11 @@ export class MapContainer {
     this._setActiveElement();
   }
 
+  @Method()
+  setActiveElement(el: MapElementData) {
+    this._setActiveElement(el);
+  }
+
   /**
    * Sets the currently active Building object.  Also updates any other active
    * elements accordingly.
@@ -148,6 +154,13 @@ export class MapContainer {
   _setActiveElement(element?: MapElementData) {
     if (element) {
       this.activeElement = { ...element };
+      if (this.activeFloor.id !== element.floorId) {
+        this._setActiveBuilding(Object.values(this.buildings).find((b: Building) => {
+          return b.floors[element.floorId] !== undefined;
+        }));
+
+        this._setActiveFloor(this.activeBuilding.floors[element.floorId]);
+      }
       // this.sideSheet_.open();
     } else {
       this.activeElement = undefined;
@@ -169,6 +182,12 @@ export class MapContainer {
       const i = new Image();
       i.src = imgSrc === undefined ? this.activeFloor.floorplan : imgSrc;
       this.activeFloorplan = i;
+    }
+  }
+
+  _sidePanelClosed() {
+    if (this.activeElement) {
+      this._setActiveElement();
     }
   }
 
@@ -206,7 +225,7 @@ export class MapContainer {
         onMapRendered={() => this.onMapRendered()}>
       </rl-map>,
 
-      <rl-side-sheet open={this.activeElement !== undefined}>
+      <rl-side-sheet open={this.activeElement !== undefined} onClosed={() => this._sidePanelClosed()}>
         <header class="rl-side-sheet__header">
           <span class="rl-side-sheet__title">
             <div class="mdc-typography--body2">{detail && detail.code || ''}</div>

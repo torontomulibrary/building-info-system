@@ -53,24 +53,27 @@ export class RLDrawer {
   @Event() drawerClose!: EventEmitter;
 
   componentDidLoad() {
-    this.drawer = MDCDrawer.attachTo(this.root.querySelector('.mdc-drawer'));
-    this.drawer.listen('MDCDrawer:closed', () => {
-      this.drawerClose.emit();
-      this.oldTabStop.focus();
-    });
-
-    this.drawer.listen('MDCDrawer:opened', () => {
-      if (!this.noFocusTrap) {
-        this.setFocusTrap();
-      }
-    });
-
-    const links = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
-    Object.keys(links).map(key => {
-      links[Number(key)].addEventListener('click', () => {
-        this.drawer.open = false;
+    const el = this.root.querySelector('.mdc-drawer');
+    if (el) {
+      this.drawer = MDCDrawer.attachTo(el);
+      this.drawer.listen('MDCDrawer:closed', () => {
+        this.drawerClose.emit();
+        this.oldTabStop.focus();
       });
-    });
+
+      this.drawer.listen('MDCDrawer:opened', () => {
+        if (!this.noFocusTrap) {
+          this.setFocusTrap();
+        }
+      });
+
+      const links = this.root.querySelectorAll(FOCUSABLE_ELEMENTS);
+      Object.keys(links).map(key => {
+        links[Number(key)].addEventListener('click', () => {
+          this.drawer.open = false;
+        });
+      });
+    }
   }
 
   @Listen('keydown.tab')

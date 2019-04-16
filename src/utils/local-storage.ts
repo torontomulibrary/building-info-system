@@ -6,6 +6,8 @@ try {
 }
 
 export function set(key: string, value: any): Promise<void> {
+  key = `rl.ls.${key}`;
+
   return new Promise((resolve, reject) => {
     try {
       if (storage) {
@@ -19,6 +21,8 @@ export function set(key: string, value: any): Promise<void> {
 }
 
 export function remove(key: string): Promise<void> {
+  key = `rl.ls.${key}`;
+
   return new Promise((resolve, reject) => {
     try {
       if (storage !== undefined) {
@@ -32,6 +36,8 @@ export function remove(key: string): Promise<void> {
 }
 
 export function get(key: string): Promise<any | undefined> {
+  key = `rl.ls.${key}`;
+
   return new Promise((resolve, reject) => {
     try {
       if (storage) {

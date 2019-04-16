@@ -316,7 +316,7 @@ rules:
   # SCSS naming patterns, just like our CSS conventions above.
   # (note for $-vars we use a leading underscore for "private" variables)
   scss/dollar-variable-pattern:
-    - ^_?rl-.+
+    - ^_?(rl|mdc)-.+
     -
       ignore: local
   scss/at-function-pattern: ^rl-.+

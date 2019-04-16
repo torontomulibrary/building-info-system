@@ -1,6 +1,8 @@
+@import "fonts";
 @import "@material/elevation/mixins";
 @import "@material/layout-grid/mixins";
 @import "@material/textfield/mixins";
+@import "@material/typography/mdc-typography";
 
 .rl-search {
   display: block;
@@ -16,6 +18,8 @@
   }
 
   &__input {
+    @include mdc-typography-base();
+
     box-sizing: border-box;
     width: 100%;
     height: 48px;
@@ -57,11 +61,11 @@
     height: 0;
     transition: height 0.2s ease;
     border-radius: 0 0 4px 4px;
-    overflow: hidden;
+    // overflow: hidden;
   }
 
-  &--open {
-    @include mdc-elevation(4);
+  &--focused {
+    @include mdc-elevation(2);
 
     background-color: $mdc-theme-surface;
 
@@ -71,10 +75,14 @@
       &__icon {
         color: $mdc-theme-on-surface;
       }
+    }
+  }
 
-      &__results {
-        display: block;
-      }
+  &--open {
+    @include mdc-elevation(4);
+
+    .rl-search__results {
+      display: block;
     }
   }
 

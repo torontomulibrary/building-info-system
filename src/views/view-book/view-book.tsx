@@ -1,11 +1,12 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
 import { BASE_URL } from '../../global/config';
-import { LOCAL_STORAGE_KEY, ROUTES } from '../../global/constants';
+import { APP_DATA, ROUTES } from '../../global/constants';
 import { SearchHistory } from '../../interface';
-import { loadData } from '../../utils/load-data';
+import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-book',
@@ -13,9 +14,12 @@ import { loadData } from '../../utils/load-data';
 })
 
 export class ViewBooks {
+  @Element() root!: HTMLElement;
+
   @State() searches?: SearchHistory;
 
   @State() loaded = false;
+  @State() inDom = false;
 
   // @Prop({ mutable: true }) appData!: AppData;
 
@@ -23,14 +27,17 @@ export class ViewBooks {
 
   @Prop() appLoaded = false;
 
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   componentWillLoad() {
+    this.searches = dataService.getData(APP_DATA.HISTORY);
     // Load search history.
-    loadData('history', LOCAL_STORAGE_KEY.SEARCH).then((history: SearchHistory) => {
-      this.searches = history;
-      this.loaded = true;
-    }, reason => {
-      console.log(reason);
-    });
+    // loadData('history', LOCAL_STORAGE_KEY.SEARCH).then((history: SearchHistory) => {
+    //   this.searches = history;
+    //   this.loaded = true;
+    // }, reason => {
+    //   console.log(reason);
+    // });
     // if (this.appData && this.appData.searches) {
     //   this.loaded = true;
     // } else {
@@ -45,6 +52,27 @@ export class ViewBooks {
     // }
   }
 
+  componentDidLoad() {
+    // this.inDom = true;
+    this.checkSize();
+  }
+
+  // componentDidUpdate() {
+  //   if (this.inDom) {
+  //     this.loaded = true;
+  //   }
+  // }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
+  }
+
   _cardClicked(e: CustomEvent) {
     e.preventDefault();
 
@@ -53,16 +81,21 @@ export class ViewBooks {
   }
 
   hostData() {
+    console.log(`host-data: ${this.loaded}`);
     return {
       class: {
         'rl-view': true,
         'rl-view--book': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
+        'rl-view--transition': this.inDom,
+      },
+      style: {
+        opacity: (this.loaded && this.appLoaded) ? 1 : 0,
       },
     };
   }
 
   render() {
+    console.log('rendered');
     // Render resent searches and popular books.
     if (this.searches) {
       return ([

@@ -23,46 +23,46 @@ import * as util from './util';
  * of the screen.
  */
 export class SideSheet {
-  private oldFocus!: HTMLElement | null;
+  private _oldFocus!: HTMLElement | null;
 
   /**
    * Object used to trap user focus when this sheet is open.
    */
-  private focusTrap!: FocusTrap;
+  private _focusTrap!: FocusTrap;
 
   /**
    * The element that has focus when this detail panel is opened.
    */
-  private previousFocus!: Element | null;
+  private _previousFocus!: Element | null;
 
   /**
    * Root element of this component.
    */
-  @Element() root!: HTMLStencilElement;
+  @Element() _root!: HTMLStencilElement;
 
   /**
    * Flag indicating if this `sheet` is current opening or closing.
    */
-  @State() isAnimating = false;
+  @State() _isAnimating = false;
 
   /**
    * Flag indicating if this `sheet` is open and visible.
    */
-  @State() isOpen = false;
+  @State() _isOpen = false;
 
-  @Prop() open = false;
+  @Prop({ mutable: true }) open = false;
   @Watch('open')
   onOpenChange() {
-    if (this.isAnimating || this.open === this.isOpen) {
+    if (this._isAnimating || this.open === this._isOpen) {
       return;
     }
 
     if (this.open) {
-      this.previousFocus = document.activeElement;
+      this._previousFocus = document.activeElement;
     }
 
-    this.isAnimating = true;
-    this.isOpen = this.open;
+    this._isAnimating = true;
+    this._isOpen = this.open;
   }
 
   /**
@@ -80,12 +80,12 @@ export class SideSheet {
    * rendered the first time.
    */
   componentDidLoad() {
-    this.focusTrap = util.createFocusTrapInstance(this.root);
+    this._focusTrap = util.createFocusTrapInstance(this._root);
     this.onOpenChange();
 
     // Hack-y workaround since if initially open, does not animate and does not
     // fire `transitionend` event.
-    this.isAnimating = false;
+    this._isAnimating = false;
   }
 
   @Listen('keydown')
@@ -111,27 +111,27 @@ export class SideSheet {
       return;
     }
 
-    if (!this.isOpen) {
-      this.focusTrap.deactivate();
-      if (this.oldFocus) {
-        this.oldFocus.focus();
+    if (!this._isOpen) {
+      this._focusTrap.deactivate();
+      if (this._oldFocus) {
+        this._oldFocus.focus();
       }
       this.closed.emit();
 
-      if (this.root.contains(document.activeElement) &&
-          this.previousFocus && this.previousFocus.hasOwnProperty('focus') &&
-          this.previousFocus instanceof HTMLElement) {
-        this.previousFocus.focus();
+      if (this._root.contains(document.activeElement) &&
+          this._previousFocus && this._previousFocus.hasOwnProperty('focus') &&
+          this._previousFocus instanceof HTMLElement) {
+        this._previousFocus.focus();
       }
     } else {
       // TODO: Add support for pre-activated item to get focus.
-      // const activeItem = this.root.querySelector('rl-side-sheet')
-      this.oldFocus = document.activeElement as HTMLElement;
-      this.focusTrap.activate();
+      // const activeItem = this._root.querySelector('rl-side-sheet')
+      this._oldFocus = document.activeElement as HTMLElement;
+      this._focusTrap.activate();
       this.opened.emit();
     }
 
-    this.isAnimating = false;
+    this._isAnimating = false;
   }
 
   /**
@@ -141,8 +141,8 @@ export class SideSheet {
     return {
       class: {
         'rl-side-sheet': true,
-        'rl-side-sheet--open': this.isOpen,
-        'rl-side-sheet--animate': this.isAnimating,
+        'rl-side-sheet--open': this._isOpen,
+        'rl-side-sheet--animate': this._isAnimating,
       },
     };
   }

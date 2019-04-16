@@ -1,6 +1,8 @@
+// @import "fonts";
 @import "@material/animation/functions";
 @import "@material/elevation/mixins";
 @import "@material/ripple/mixins";
+@import "@material/typography/mdc-typography";
 
 .rl-accordion-item {
   @include mdc-elevation(2);
@@ -53,6 +55,7 @@
     @include mdc-states-hover-opacity(0.1);
     @include mdc-states-focus-opacity(0.2);
     @include mdc-states-press-opacity(0.3);
+    @include mdc-typography(headline6);
 
     display: flex;
     position: relative;
@@ -77,14 +80,15 @@
   }
 
   &__content {
-    box-sizing: border-box;
-    max-height: 0;
+    @include mdc-typography(body1);
+
+    box-sizing: content-box;
     margin: 0;
     padding-right: 24px;
     padding-left: 24px;
     transition:
       mdc-animation-standard(padding-bottom, 280ms),
-      mdc-animation-standard(max-height, 280ms),
+      mdc-animation-standard(height, 280ms),
       mdc-animation-standard(padding-top, 280ms);
   }
 
@@ -103,7 +107,6 @@
     }
 
     .rl-accordion-item__content {
-      max-height: 50em;
       padding-top: 16px;
       padding-bottom: 16px;
     }

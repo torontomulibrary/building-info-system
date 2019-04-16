@@ -11,12 +11,13 @@ import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
-  BuildingMap,
-  MapElementDetailMap,
-} from './interface';
-import {
   Color,
 } from './utils/color';
+import {
+  BuildingMap,
+  MapElementData,
+  SearchResultItem,
+} from './interface';
 import {
   BuildingMap as BuildingMap2,
   FloorMap,
@@ -49,6 +50,10 @@ export namespace Components {
     */
     'index': number;
     /**
+    * A state tracking the current open/closed state of this item.
+    */
+    'isOpen': boolean;
+    /**
     * This function opens this item.
     */
     'open': () => void;
@@ -63,9 +68,16 @@ export namespace Components {
     */
     'index'?: number;
     /**
-    * An event that is emitted when this item changes its open/closed state.
+    * A state tracking the current open/closed state of this item.
     */
-    'onToggleItem'?: (event: CustomEvent) => void;
+    'isOpen'?: boolean;
+    /**
+    * Event emitted after the body's collapse animation has completed.
+    */
+    'onAfterCollapse'?: (event: CustomEvent) => void;
+    'onAfterExpand'?: (event: CustomEvent) => void;
+    'onClosed'?: (event: CustomEvent) => void;
+    'onOpened'?: (event: CustomEvent) => void;
   }
 
   interface RlAccordion {
@@ -90,24 +102,30 @@ export namespace Components {
   }
 
   interface RlAppBar {
-    'appTitle': string;
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
     */
-    'appWidth': number;
-    'searchData': MapElementDetailMap;
+    'appTitle': string;
+    'centerTitle': boolean;
+    'dense': boolean;
+    'singleSection': boolean;
+    'type': 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
   interface RlAppBarAttributes extends StencilHTMLAttributes {
-    'appTitle'?: string;
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
     */
-    'appWidth'?: number;
+    'appTitle'?: string;
+    'centerTitle'?: boolean;
+    'dense'?: boolean;
     /**
     * Event fired when the menu button on the app bar is clicked.
     */
     'onMenuClicked'?: (event: CustomEvent) => void;
-    'searchData': MapElementDetailMap;
+    'onSearchFaqClicked'?: (event: CustomEvent) => void;
+    'onSearchLocationClicked'?: (event: CustomEvent) => void;
+    'singleSection'?: boolean;
+    'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
 
   interface RlCard {
@@ -120,6 +138,7 @@ export namespace Components {
     'icons'?: Array<{name: string}>;
     'mediaSize': 'contain' | 'cover';
     'noContent': boolean;
+    'noMedia': boolean;
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
   }
@@ -133,6 +152,7 @@ export namespace Components {
     'icons'?: Array<{name: string}>;
     'mediaSize'?: 'contain' | 'cover';
     'noContent'?: boolean;
+    'noMedia'?: boolean;
     'onCardClicked'?: (event: CustomEvent) => void;
     'titleInMedia'?: boolean;
     'wideMediaAspect'?: boolean;
@@ -172,12 +192,16 @@ export namespace Components {
     'onToggled'?: (event: CustomEvent) => void;
   }
 
+  interface RlLoadProgress {}
+  interface RlLoadProgressAttributes extends StencilHTMLAttributes {}
+
   interface RlMapContainer {
     'buildings': BuildingMap;
     'extraDetails'?: {};
     'initialBuilding': number;
     'initialElement'?: number;
     'initialFloor': number;
+    'setActiveElement': (el: MapElementData) => void;
   }
   interface RlMapContainerAttributes extends StencilHTMLAttributes {
     'buildings': BuildingMap;
@@ -233,16 +257,33 @@ export namespace Components {
   }
 
   interface RlSearchBox {
+    'clearInput': () => void;
     'id': string;
-    'searchData': MapElementDetailMap;
+    'inputPlaceholder': string;
+    'resultHeight': number;
+    'searchValue': string;
     'showMenu': boolean;
   }
   interface RlSearchBoxAttributes extends StencilHTMLAttributes {
     'id'?: string;
+    'inputPlaceholder'?: string;
     'onIconClick'?: (event: CustomEvent) => void;
-    'onResultSelected'?: (event: CustomEvent) => void;
-    'searchData': MapElementDetailMap;
+    'onSearchChange'?: (event: CustomEvent) => void;
+    'resultHeight'?: number;
+    'searchValue'?: string;
     'showMenu'?: boolean;
+  }
+
+  interface RlSearchSuggestions {
+    'isEmptySearch': boolean;
+    'suggestions': SearchResultItem[];
+  }
+  interface RlSearchSuggestionsAttributes extends StencilHTMLAttributes {
+    'isEmptySearch'?: boolean;
+    'onFaqFlick'?: (event: CustomEvent) => void;
+    'onLocationClick'?: (event: CustomEvent) => void;
+    'onResultClick'?: (event: CustomEvent) => void;
+    'suggestions'?: SearchResultItem[];
   }
 
   interface RlSideSheet {
@@ -302,12 +343,29 @@ export namespace Components {
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
+    /**
+    * Reference to the object passed in from Stencil containing any URL path variables that were matched by the router.
+    */
+    'match': MatchResults;
+    'setActiveFaq': (faqId: number) => void;
   }
   interface ViewFaqAttributes extends StencilHTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
+    /**
+    * Reference to the object passed in from Stencil containing any URL path variables that were matched by the router.
+    */
+    'match': MatchResults;
   }
 
   interface ViewHome {
@@ -322,17 +380,27 @@ export namespace Components {
     * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
     'mapType': MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
     'match': MatchResults;
+    'setActiveDetail': (id: number) => void;
+    'setActiveElement': (id: number) => void;
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
     /**
     * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded'?: boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
     'mapType'?: MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
@@ -368,9 +436,11 @@ declare global {
     'RlCollection': Components.RlCollection;
     'RlDrawer': Components.RlDrawer;
     'RlExpansionPanel': Components.RlExpansionPanel;
+    'RlLoadProgress': Components.RlLoadProgress;
     'RlMapContainer': Components.RlMapContainer;
     'RlMapNav': Components.RlMapNav;
     'RlSearchBox': Components.RlSearchBox;
+    'RlSearchSuggestions': Components.RlSearchSuggestions;
     'RlSideSheet': Components.RlSideSheet;
     'ViewBook': Components.ViewBook;
     'ViewBuilding': Components.ViewBuilding;
@@ -390,9 +460,11 @@ declare global {
     'rl-collection': Components.RlCollectionAttributes;
     'rl-drawer': Components.RlDrawerAttributes;
     'rl-expansion-panel': Components.RlExpansionPanelAttributes;
+    'rl-load-progress': Components.RlLoadProgressAttributes;
     'rl-map-container': Components.RlMapContainerAttributes;
     'rl-map-nav': Components.RlMapNavAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
+    'rl-search-suggestions': Components.RlSearchSuggestionsAttributes;
     'rl-side-sheet': Components.RlSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
@@ -452,6 +524,12 @@ declare global {
     new (): HTMLRlExpansionPanelElement;
   };
 
+  interface HTMLRlLoadProgressElement extends Components.RlLoadProgress, HTMLStencilElement {}
+  var HTMLRlLoadProgressElement: {
+    prototype: HTMLRlLoadProgressElement;
+    new (): HTMLRlLoadProgressElement;
+  };
+
   interface HTMLRlMapContainerElement extends Components.RlMapContainer, HTMLStencilElement {}
   var HTMLRlMapContainerElement: {
     prototype: HTMLRlMapContainerElement;
@@ -468,6 +546,12 @@ declare global {
   var HTMLRlSearchBoxElement: {
     prototype: HTMLRlSearchBoxElement;
     new (): HTMLRlSearchBoxElement;
+  };
+
+  interface HTMLRlSearchSuggestionsElement extends Components.RlSearchSuggestions, HTMLStencilElement {}
+  var HTMLRlSearchSuggestionsElement: {
+    prototype: HTMLRlSearchSuggestionsElement;
+    new (): HTMLRlSearchSuggestionsElement;
   };
 
   interface HTMLRlSideSheetElement extends Components.RlSideSheet, HTMLStencilElement {}
@@ -527,9 +611,11 @@ declare global {
     'rl-collection': HTMLRlCollectionElement
     'rl-drawer': HTMLRlDrawerElement
     'rl-expansion-panel': HTMLRlExpansionPanelElement
+    'rl-load-progress': HTMLRlLoadProgressElement
     'rl-map-container': HTMLRlMapContainerElement
     'rl-map-nav': HTMLRlMapNavElement
     'rl-search-box': HTMLRlSearchBoxElement
+    'rl-search-suggestions': HTMLRlSearchSuggestionsElement
     'rl-side-sheet': HTMLRlSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
@@ -549,9 +635,11 @@ declare global {
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
+    'rl-load-progress': HTMLRlLoadProgressElement;
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;
+    'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;

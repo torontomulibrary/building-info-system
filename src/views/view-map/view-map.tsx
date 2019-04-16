@@ -3,14 +3,17 @@ import {
   Element,
   Event,
   EventEmitter,
+  Method,
   Prop,
   State,
 } from '@stencil/core';
-import { MatchResults } from '@stencil/router';
+import { QueueApi } from '@stencil/core/dist/declarations';
+import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { API_URL } from '../../global/config';
 import {
-  LOCAL_STORAGE_KEY,
+  APP_DATA,
+  // LOCAL_STORAGE_KEY,
   MAP_TYPE,
 } from '../../global/constants';
 import {
@@ -28,6 +31,7 @@ import {
   MapElementDetail,
   MapElementDetailMap,
 } from '../../interface';
+import { dataService } from '../../utils/data-service';
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
@@ -57,6 +61,8 @@ export class ViewMap {
   private initialFloor = -1;
 
   private initialElement?: number;
+
+  private _mapContainer!: HTMLRlMapContainerElement;
 
   /**
    * Root element of this component.
@@ -97,6 +103,14 @@ export class ViewMap {
    */
   @Event() dataLoaded!: EventEmitter;
 
+  /**
+   * Reference to the stencil-router history object. Used to programmatically
+   * change the browser history when the selected FAQ changes.
+   */
+  @Prop() history!: RouterHistory;
+
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   async componentWillLoad() {
     // Check the URL value to see if any Building, Floor and or Location was
     // provided.  Must be in the form BLD[FLR][RM].
@@ -108,6 +122,14 @@ export class ViewMap {
         const query = this.match.params.roomNo;
         const re = /([A-Z]{3})(\d{2}(?=.{2,}|$)|\d{1})?.*/;
         this.paramMatches = re.exec(query);
+        if (this.paramMatches) {
+          this.history.replace({
+            pathname: `/directory/${this.paramMatches[0]}`,
+            state: { code: this.paramMatches[0] },
+            query: {},
+            key: '',
+          });
+        }
       } else {
         this.paramMatches = undefined;
       }
@@ -130,40 +152,45 @@ export class ViewMap {
     }
 
     // Load buildings.
-    await loadData('buildings', LOCAL_STORAGE_KEY.BUILDINGS).then(
-      (b: BuildingMap) => {
-        this._blds = b;
-    });
+    this._blds = dataService.getData(APP_DATA.BUILDING);
+    // await loadData(APP_DATA.BUILDINGS).then(
+    //   (b: BuildingMap) => {
+    //     this._blds = b;
+    // });
 
     // Load floor data.
-    await loadData('floors', LOCAL_STORAGE_KEY.FLOORS).then(
-      (f: FloorMap) => {
-        this._flrs = f;
-    });
+    this._flrs = dataService.getData(APP_DATA.FLOORS);
+    // await loadData(APP_DATA.FLOORS).then(
+    //   (f: FloorMap) => {
+    //     this._flrs = f;
+    // });
 
     // Load map elements.
-    await loadData('elements', LOCAL_STORAGE_KEY.ELEMENTS).then(
-      (e: MapElementDataMap) => {
-        this._elms = e;
-    });
+    this._elms = dataService.getData(APP_DATA.ELEMENTS);
+    // await loadData(APP_DATA.ELEMENTS).then(
+    //   (e: MapElementDataMap) => {
+    //     this._elms = e;
+    // });
 
     // Load map details.
-    await loadData('details', LOCAL_STORAGE_KEY.DETAILS).then(
-      (d: MapElementDetailMap) => {
-        this._dtls = d;
-    });
+    this._dtls = dataService.getData(APP_DATA.DETAILS);
+    // await loadData(APP_DATA.DETAILS).then(
+    //   (d: MapElementDetailMap) => {
+    //     this._dtls = d;
+    // });
 
     // Load map detail types.
-    // await loadData('details/types', LOCAL_STORAGE_KEY.DETAIL_TYPES).then(
+    // await loadData('details/types', APP_DATA.DETAIL_TYPES).then(
     //   (d: DetailTypeMap) => {
     //     this._dtyps = d;
     // });
 
     let compLabs: ComputerLab[] = [];
-    await loadData('computers', LOCAL_STORAGE_KEY.COMPUTERS).then(
-      (c: ComputerLab[]) => {
-        compLabs = c;
-    });
+    compLabs = dataService.getData(APP_DATA.COMPUTERS);
+    // await loadData(APP_DATA.COMPUTERS).then(
+    //   (c: ComputerLab[]) => {
+    //     compLabs = c;
+    // });
 
     Object.values(this._blds).forEach((b: Building) => {
       b.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
@@ -263,6 +290,43 @@ export class ViewMap {
     // this.dataLoaded.emit(this.appData);
   }
 
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
+  }
+
+  @Method()
+  setActiveElement(id: number) {
+    this._mapContainer.setActiveElement(this._elms[id]);
+  }
+
+  @Method()
+  setActiveDetail(id: number) {
+    const state = this.history.location.state;
+    const code = this._dtls[id].code;
+    if (state === undefined ||
+        state && state.code === undefined ||
+        state && state.code && code !== state.code) {
+      this.history.push({
+        pathname: `/directory/${code}`,
+        state: { code },
+        query: {},
+        key: '',
+      });
+    }
+
+    this._mapContainer.setActiveElement(this._elms[this._dtls[id].elementId]);
+  }
+
   floorHasComps(floor: Floor, comps: ComputerLab[]) {
     let hasComps = false;
 
@@ -321,11 +385,12 @@ export class ViewMap {
       return ([
         <stencil-route-title pageTitle="Directory" />,
         <rl-map-container
-            buildings={this.buildings}
-            initialBuilding={this.initialBuilding}
-            initialFloor={this.initialFloor}
-            initialElement={this.initialElement}
-            extraDetails={this.extraDetails}>
+          ref={el => this._mapContainer = el as HTMLRlMapContainerElement}
+          buildings={this.buildings}
+          initialBuilding={this.initialBuilding}
+          initialFloor={this.initialFloor}
+          initialElement={this.initialElement}
+          extraDetails={this.extraDetails}>
         </rl-map-container>,
       ]);
     }

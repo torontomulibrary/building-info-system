@@ -1,12 +1,14 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 
 import { BASE_URL } from '../../global/config';
 import {
-  LOCAL_STORAGE_KEY,
+  APP_DATA,
   ROUTES,
 } from '../../global/constants';
 import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
-import { loadData } from '../../utils/load-data';
+import { dataService } from '../../utils/data-service';
+// import { loadData } from '../../utils/load-data';
 
 @Component({
   tag: 'view-building',
@@ -14,6 +16,8 @@ import { loadData } from '../../utils/load-data';
 })
 
 export class ViewBuilding {
+  @Element() root!: HTMLElement;
+
   /**
    * Internal list of Buildings to display.
    */
@@ -30,25 +34,29 @@ export class ViewBuilding {
    */
   @Prop() appLoaded = false;
 
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   /**
    * Lifecycle event fired when the component is first initialized and not
    * yet in the DOM.
    */
   async componentWillLoad() {
+    this.buildings = dataService.getData(APP_DATA.BUILDING);
+    const floors: FloorMap = dataService.getData(APP_DATA.FLOORS);
     // Start loading the Buildings.
-    loadData('buildings', LOCAL_STORAGE_KEY.BUILDINGS).then((blds: BuildingMap) => {
-      this.buildings = blds;
-      this.loaded = true;
-    }, reason => {
-      console.log(reason);
-    });
+    // loadData('buildings', LOCAL_STORAGE_KEY.buildings).then((blds: BuildingMap) => {
+    //   this.buildings = blds;
+    //   this.loaded = true;
+    // }, reason => {
+    //   console.log(reason);
+    // });
 
-    let floors: FloorMap;
+    // let floors: FloorMap;
 
-    await loadData('floors', LOCAL_STORAGE_KEY.FLOORS).then(
-      (f: FloorMap) => {
-        floors = f;
-    });
+    // await loadData('floors', LOCAL_STORAGE_KEY.floors).then(
+    //   (f: FloorMap) => {
+    //     floors = f;
+    // });
 
     Object.values(this.buildings).forEach((b: Building) => {
       b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
@@ -56,6 +64,20 @@ export class ViewBuilding {
         return ob;
       }, {} as Floor);
     });
+  }
+
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
   }
 
   /**

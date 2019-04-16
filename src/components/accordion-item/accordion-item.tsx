@@ -1,5 +1,6 @@
 import { MDCRipple } from '@material/ripple/index';
-import { Component, Element, Event, EventEmitter, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Listen, Method, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 
 /**
  * A component used in tandem with `rl-accordion` and represents a single item
@@ -20,14 +21,21 @@ export class AccordionItem {
   private _button?: HTMLButtonElement;
 
   /**
+   * The height of the content element (slot).
+   */
+  @State() contentHeight = 0;
+
+  /**
    * The root element of this component.
    */
   @Element() root!: HTMLElement;
 
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   /**
    * A state tracking the current open/closed state of this item.
    */
-  @State() isOpen = false;
+  @Prop({ mutable: true }) isOpen = false;
 
   /**
    * A delay used to fade-in this item a specific amount of time after the
@@ -42,17 +50,18 @@ export class AccordionItem {
   @Prop() index = 0;
 
   /**
-   * An event that is emitted when this item changes its open/closed state.
+   * Event emitted after the body's collapse animation has completed.
    */
-  @Event() toggleItem!: EventEmitter;
+  @Event() afterCollapse!: EventEmitter;
+  @Event() afterExpand!: EventEmitter;
+  @Event() closed!: EventEmitter;
+  @Event() opened!: EventEmitter;
 
   /**
    * Component lifecycle function that is called when completely lodaded and
    * entered into the DOM.
    */
   componentDidLoad() {
-    // this._button = this.root.querySelector('#rl-accordion-item__trigger-' + this.index);
-
     if (this._button) {
       MDCRipple.attachTo(this._button);
     }
@@ -60,6 +69,8 @@ export class AccordionItem {
     window.setTimeout(() => {
       this.root.classList.remove('rl-accordion-item--fade-in');
     }, this.delay);
+
+    this.updateHeight();
   }
 
   /**
@@ -75,7 +86,29 @@ export class AccordionItem {
    */
   @Method()
   open() {
+    this.updateHeight();
     this.isOpen = true;
+  }
+
+  @Listen('transitionend')
+  onTransitionEnd() {
+    this.isOpen ? this.afterExpand.emit() : this.afterCollapse.emit();
+  }
+
+  updateHeight() {
+    const slot = this.root.querySelector('[slot="content"]') as HTMLElement;
+    this.contentHeight = slot && slot.offsetHeight;
+
+    if (slot.hasChildNodes && this.contentHeight === 0) {
+      // When this component is a child of a `stencil-router`, the component may
+      // 'render' but the route may still be display:none, making the height 0.
+      // So begin a RAF loop that keeps calling until this component is in the
+      // DOM with a non-zero height.  Don't bother with this if the slot doesn't
+      // have any actual content, zero height then makes sense!
+      this.queue.write(() => {
+        this.updateHeight();
+      });
+    }
   }
 
   /**
@@ -83,7 +116,7 @@ export class AccordionItem {
    */
   toggle() {
     this.isOpen = !this.isOpen;
-    this.toggleItem.emit();
+    this.isOpen ? this.opened.emit() : this.closed.emit();
   }
 
   /**
@@ -104,13 +137,14 @@ export class AccordionItem {
   render() {
     return ([
       <dt role="heading" aria-level="2" class="rl-accordion-item__header"
-          onClick={_ => { this.toggle(); }}>
+          onClick={_ => { this.toggle(); }}
+      >
         <button aria-expanded={this.isOpen ? 'true' : 'false'}
             ref={el => this._button = el}
             id={`rl-accordion-item__trigger-${this.index}`}
             class="rl-accordion-item__trigger"
-            // onKeyPress={e => { this.onKeyPress(e); }}
-            aria-controls={`rl-accordion-item__content-${this.index}`}>
+            aria-controls={`rl-accordion-item__content-${this.index}`}
+        >
           <span class="rl-accordion-item__title">
             <slot name="header" />
           </span>
@@ -122,8 +156,10 @@ export class AccordionItem {
       </dt>,
       <dd id={`rl-accordion-item__content-${this.index}`} role="region"
           aria-hidden={!this.isOpen}
-          // aria-labelledby={`rl-accordion-item__trigger-${this.index}`}
-          class="rl-accordion-item__content" tabindex={this.isOpen ? '0' : '-1'}>
+          class="rl-accordion-item__content"
+          tabindex={this.isOpen ? '0' : '-1'}
+          style={{ height: `${this.isOpen ? this.contentHeight : 0}px` }}
+      >
         <slot name="content" />
       </dd>,
     ]);

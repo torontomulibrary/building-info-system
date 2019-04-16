@@ -1,13 +1,15 @@
+// @import "fonts";
 @import "@material/layout-grid/mixins";
 @import "@material/typography/mixins";
 
 .rl-view {
   display: block;
-  position: relative;
+  position: absolute;
   box-sizing: border-box;
   height: 100%;
   margin: 0 10%;
   padding-top: 32px;
+  transition: opacity 180ms ease-in;
   opacity: 0;
   will-change: opacity;
 
@@ -38,7 +40,6 @@
   }
 
   &--loaded {
-    transition: opacity 200ms linear;
     opacity: 1;
   }
 }

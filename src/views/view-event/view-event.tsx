@@ -1,20 +1,23 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Element, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
-import union from 'lodash/union';
+// import union from 'lodash/union';
 
 import {
   BASE_URL,
-  EVENT_URL,
+  // EVENT_URL,
 } from '../../global/config';
 import {
+  APP_DATA,
   FULL_MONTHS,
-  LOCAL_STORAGE_KEY,
+  // LOCAL_STORAGE_KEY,
   MONTHS,
   ROUTES,
 } from '../../global/constants';
 import { CalEvent } from '../../interface';
-import { EventParser, formatTime } from '../../utils/event-parser';
-import { get, set } from '../../utils/local-storage';
+import { dataService } from '../../utils/data-service';
+import { formatTime } from '../../utils/event-parser';
+// import { get, set } from '../../utils/local-storage';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -23,6 +26,8 @@ import { sanitize } from '../../utils/sanitize';
 })
 
 export class ViewEvent {
+  @Element() root!: HTMLElement;
+
   /**
    * Internal list of all Events to display.
    */
@@ -41,51 +46,69 @@ export class ViewEvent {
 
   @Prop() history!: RouterHistory;
 
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   /**
    * Lifecycle event fired when the component is first initialized and not
    * yet in the DOM.
    */
   componentWillLoad() {
-    get(LOCAL_STORAGE_KEY.EVENTS).then((events: CalEvent[]) => {
-      if (events) {
-        events.forEach((evt: CalEvent, idx: number) => {
-          evt.endTime = new Date(evt.endTime);
-          evt.startTime = new Date(evt.startTime);
-          if (evt.endTime.valueOf() < new Date().valueOf()) {
-            // Remove the event if the end time has passed.
-            delete events[idx];
-          }
-        });
-        this.events = events;
+    this.events = dataService.getData(APP_DATA.EVENTS);
+    this.loaded = true;
+    // get(APP_DATA.EVENTS).then((events: CalEvent[]) => {
+    //   if (events) {
+    //     events.forEach((evt: CalEvent, idx: number) => {
+    //       evt.endTime = new Date(evt.endTime);
+    //       evt.startTime = new Date(evt.startTime);
+    //       if (evt.endTime.valueOf() < new Date().valueOf()) {
+    //         // Remove the event if the end time has passed.
+    //         delete events[idx];
+    //       }
+    //     });
+    //     this.events = events;
 
-        // Load additional events if the cached ones are depleted.
-        if (events.length < 50) {
-          const parser: EventParser = new EventParser();
-          parser.subscribe(() => {
-            const evts = parser.getFutureEvents(30);
-            const newEvents = union(events, evts);
+    //     // Load additional events if the cached ones are depleted.
+    //     if (events.length < 50) {
+    //       const parser: EventParser = new EventParser();
+    //       parser.subscribe(() => {
+    //         const evts = parser.getFutureEvents(30);
+    //         const newEvents = union(events, evts);
 
-            set(LOCAL_STORAGE_KEY.EVENTS, newEvents);
-            this.events = newEvents;
-          });
-          parser.loadIcal(EVENT_URL);
-        }
+    //         set(APP_DATA.EVENTS, newEvents);
+    //         this.events = newEvents;
+    //       });
+    //       parser.loadIcal(EVENT_URL);
+    //     }
 
-        this.loaded = true;
-      } else {
-        const parser: EventParser = new EventParser();
+    //     this.loaded = true;
+    //   } else {
+    //     const parser: EventParser = new EventParser();
 
-        parser.subscribe(() => {
-          const evts = parser.getFutureEvents(30);
-          set(LOCAL_STORAGE_KEY.EVENTS, evts);
-          this.events = evts;
+    //     parser.subscribe(() => {
+    //       const evts = parser.getFutureEvents(30);
+    //       set(APP_DATA.EVENTS, evts);
+    //       this.events = evts;
 
-          this.loaded = true;
-        });
+    //       this.loaded = true;
+    //     });
 
-        parser.loadIcal(EVENT_URL);
-      }
-    });
+    //     parser.loadIcal(EVENT_URL);
+    //   }
+    // });
+  }
+
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+    }
   }
 
   /**
@@ -217,7 +240,7 @@ export class ViewEvent {
                   <div class="rl-event__title mdc-typography--headline5">{event.title}</div>
                   <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
                 </div>
-                <div class="rl-event__actions mdc-card__actions mdc-card__actions--full-bleed">
+                <div class="rl-event__actions mdc-card__actions">
                   <a class="mdc-button mdc-card__action mdc-card__action--button rl-event__action"
                       aria-label={`Find ${event.location} on the map.`}
                       href={`${BASE_URL}${ROUTES.DIRECTORY}/${room}`}>

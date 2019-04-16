@@ -1,0 +1,21 @@
+/**
+ * Copy this file and fill it out to include custom font family and styles that
+ * override the built-in Material Typography styles (which uses the Roboto font).
+ * Rename this file `_font.scss` and leave it in the global directory.
+ *
+ * Any font files used should be put in the `src/assets/font` folder.  This will
+ * be included in builds.
+ */
+
+/* Fonts */
+@font-face {
+  font-family: font-family-name;
+  src: url("assets/font/font-file.woff");
+  font-style: normal;
+  font-weight: normal;
+}
+
+/**
+ * To override font styles for Material Typography, see:
+ * https://material.io/develop/web/components/typography/#overriding-styles
+ */
