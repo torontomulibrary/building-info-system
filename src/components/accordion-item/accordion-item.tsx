@@ -1,5 +1,6 @@
 import { MDCRipple } from '@material/ripple/index';
-import { Component, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Listen, Method, Prop, State } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 
 /**
  * A component used in tandem with `rl-accordion` and represents a single item
@@ -22,12 +23,14 @@ export class AccordionItem {
   /**
    * The height of the content element (slot).
    */
-  private _contentHeight = 0;
+  @State() contentHeight = 0;
 
   /**
    * The root element of this component.
    */
   @Element() root!: HTMLElement;
+
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   /**
    * A state tracking the current open/closed state of this item.
@@ -67,8 +70,7 @@ export class AccordionItem {
       this.root.classList.remove('rl-accordion-item--fade-in');
     }, this.delay);
 
-    const slot = this.root.querySelector('[slot="content"]') as HTMLElement;
-    this._contentHeight = slot && slot.offsetHeight;
+    this.updateHeight();
   }
 
   /**
@@ -84,12 +86,29 @@ export class AccordionItem {
    */
   @Method()
   open() {
+    this.updateHeight();
     this.isOpen = true;
   }
 
   @Listen('transitionend')
   onTransitionEnd() {
     this.isOpen ? this.afterExpand.emit() : this.afterCollapse.emit();
+  }
+
+  updateHeight() {
+    const slot = this.root.querySelector('[slot="content"]') as HTMLElement;
+    this.contentHeight = slot && slot.offsetHeight;
+
+    if (slot.hasChildNodes && this.contentHeight === 0) {
+      // When this component is a child of a `stencil-router`, the component may
+      // 'render' but the route may still be display:none, making the height 0.
+      // So begin a RAF loop that keeps calling until this component is in the
+      // DOM with a non-zero height.  Don't bother with this if the slot doesn't
+      // have any actual content, zero height then makes sense!
+      this.queue.write(() => {
+        this.updateHeight();
+      });
+    }
   }
 
   /**
@@ -139,16 +158,7 @@ export class AccordionItem {
           aria-hidden={!this.isOpen}
           class="rl-accordion-item__content"
           tabindex={this.isOpen ? '0' : '-1'}
-          style={{ height: `${this.isOpen ? this._contentHeight : 0}px` }}
-          // ref={el => {
-          //   if (el) {
-          //     // Get the child of this element (the content in the slot) and
-          //     // find it's height.  Use the height to determine how big this
-          //     // element should become when opened.
-          //     const slot = el.querySelector('[slot="content"]') as HTMLElement;
-          //     this._contentHeight = slot && slot.offsetHeight;
-          //   }
-          // }}
+          style={{ height: `${this.isOpen ? this.contentHeight : 0}px` }}
       >
         <slot name="content" />
       </dd>,

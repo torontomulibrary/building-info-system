@@ -7,9 +7,9 @@
 
 import '@stencil/core';
 
+import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
-import '@ryersonlibrary/web-components';
 import {
   Color,
 } from './utils/color';
