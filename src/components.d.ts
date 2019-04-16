@@ -7,6 +7,7 @@
 
 import '@stencil/core';
 
+import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
 import {
@@ -314,12 +315,20 @@ export namespace Components {
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
   }
   interface ViewBuildingAttributes extends StencilHTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
   }
 
   interface ViewEvent {
@@ -369,9 +378,17 @@ export namespace Components {
 
   interface ViewHome {
     'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
   }
   interface ViewHomeAttributes extends StencilHTMLAttributes {
     'appLoaded'?: boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
   }
 
   interface ViewMap {

@@ -159,7 +159,8 @@ export class RLApp {
 
       // Hijack the current view to get the RouterHistory object.  It is only
       // available within the context of the stencil-router and its children.
-      const view = this.root.querySelector('.rl-view');
+      // tslint:disable-next-line: no-unnecessary-type-assertion
+      const view = this.root.querySelector('.rl-view') as any;
       view.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
     }
   }
@@ -177,7 +178,8 @@ export class RLApp {
       viewFaq.setActiveFaq(resultId);
     } else {
       // Navigate to page and then set the active element.
-      const view = this.root.querySelector('.rl-view');
+      // tslint:disable-next-line: no-unnecessary-type-assertion
+      const view = this.root.querySelector('.rl-view') as any;
       view.history.push(`${BASE_URL}${ROUTES.FAQS}/${resultId}`);
     }
   }

@@ -1,5 +1,6 @@
 import { Component, Element, Prop, State } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
+import { RouterHistory } from '@stencil/router';
 
 @Component({
   tag: 'view-home',
@@ -14,6 +15,12 @@ export class ViewHome {
   // @Prop({ mutable: true }) appData!: AppData;
 
   @Prop() appLoaded = false;
+
+  /**
+   * Reference to the stencil-router history object. Used to programmatically
+   * change the browser history when the selected FAQ changes.
+   */
+  @Prop() history!: RouterHistory;
 
   @Prop({ context: 'queue' }) queue!: QueueApi;
 

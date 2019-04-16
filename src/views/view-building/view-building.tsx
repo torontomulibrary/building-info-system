@@ -1,5 +1,6 @@
 import { Component, Element, Prop, State } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
+import { RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../../global/config';
 import {
@@ -33,6 +34,12 @@ export class ViewBuilding {
    * view should not display either.
    */
   @Prop() appLoaded = false;
+
+  /**
+   * Reference to the stencil-router history object. Used to programmatically
+   * change the browser history when the selected FAQ changes.
+   */
+  @Prop() history!: RouterHistory;
 
   @Prop({ context: 'queue' }) queue!: QueueApi;
 
