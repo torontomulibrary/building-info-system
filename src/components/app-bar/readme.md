@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property                    | Attribute   | Description                                                                                                                         | Type                  | Default     |
-| --------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
-| `appTitle`                  | `app-title` |                                                                                                                                     | `string`              | `''`        |
-| `appWidth`                  | `app-width` | The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout). | `number`              | `0`         |
-| `faqData` _(required)_      | --          |                                                                                                                                     | `FaqMap`              | `undefined` |
-| `locationData` _(required)_ | --          |                                                                                                                                     | `MapElementDetailMap` | `undefined` |
+| Property        | Attribute        | Description                                                                                                                         | Type                                                                              | Default |
+| --------------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------- |
+| `appTitle`      | `app-title`      | The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout). | `string`                                                                          | `''`    |
+| `centerTitle`   | `center-title`   |                                                                                                                                     | `boolean`                                                                         | `false` |
+| `dense`         | `dense`          |                                                                                                                                     | `boolean`                                                                         | `false` |
+| `singleSection` | `single-section` |                                                                                                                                     | `boolean`                                                                         | `false` |
+| `type`          | `type`           |                                                                                                                                     | `"" \| "fixed" \| "prominent" \| "prominentFixed" \| "short" \| "shortCollapsed"` | `''`    |
 
 
 ## Events
