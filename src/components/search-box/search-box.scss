@@ -1,6 +1,8 @@
+@import "fonts";
 @import "@material/elevation/mixins";
 @import "@material/layout-grid/mixins";
 @import "@material/textfield/mixins";
+@import "@material/typography/mdc-typography";
 
 .rl-search {
   display: block;
@@ -16,6 +18,8 @@
   }
 
   &__input {
+    @include mdc-typography-base();
+
     box-sizing: border-box;
     width: 100%;
     height: 48px;
