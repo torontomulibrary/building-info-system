@@ -1,3 +1,48 @@
+# [0.4.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.2.1...v0.4.0) (2019-04-16)
+
+
+### Bug Fixes
+
+* **accordion:** correct content height ([1390907](https://github.com/ryersonlibrary/building-info-system/commit/1390907))
+* housecleaning ([a02623e](https://github.com/ryersonlibrary/building-info-system/commit/a02623e))
+* **app:** fix more linting errors ([2b95c6b](https://github.com/ryersonlibrary/building-info-system/commit/2b95c6b))
+* **app:** search result click now works ([877cba5](https://github.com/ryersonlibrary/building-info-system/commit/877cba5))
+* **app:** Update packages and fix resulting bugs ([66c7dfb](https://github.com/ryersonlibrary/building-info-system/commit/66c7dfb))
+* **card:** Card style fixed after material update ([a13b1f4](https://github.com/ryersonlibrary/building-info-system/commit/a13b1f4))
+* **map:** `setActiveDetail` now works ([4227585](https://github.com/ryersonlibrary/building-info-system/commit/4227585))
+* **search:** rename search-results to search-suggestions ([9323d12](https://github.com/ryersonlibrary/building-info-system/commit/9323d12))
+* **search-box:** closes when ESC key pressed ([6f45688](https://github.com/ryersonlibrary/building-info-system/commit/6f45688))
+* **sheet:** properly closes on `ESC` keypress ([2e474a2](https://github.com/ryersonlibrary/building-info-system/commit/2e474a2))
+* **view:** change how view fades in when loaded ([bc3b67c](https://github.com/ryersonlibrary/building-info-system/commit/bc3b67c))
+* **view:** page title now correct ([449fc90](https://github.com/ryersonlibrary/building-info-system/commit/449fc90))
+* **view-faq:** Accordion item content height now exact ([e75f817](https://github.com/ryersonlibrary/building-info-system/commit/e75f817))
+* fix accordion item initial height when starting open ([636925b](https://github.com/ryersonlibrary/building-info-system/commit/636925b))
+* use proper font in search input ([8877ed4](https://github.com/ryersonlibrary/building-info-system/commit/8877ed4))
+
+
+### Features
+
+* Add map types.  Add support for computer symbols. ([f3d873c](https://github.com/ryersonlibrary/building-info-system/commit/f3d873c))
+* **app:** Add custom font support with example scss file ([b2c7744](https://github.com/ryersonlibrary/building-info-system/commit/b2c7744))
+* **app:** add linear progress for first load and fade in on route switch ([1334dfa](https://github.com/ryersonlibrary/building-info-system/commit/1334dfa))
+* **app:** change app-bar structure ([e48e5f7](https://github.com/ryersonlibrary/building-info-system/commit/e48e5f7))
+* **app:** Use centralized dataService to load dataUse a central service to make any requests to the API for data.  Data is then avialable globally andmultiple requests aren't needed.BREAKING CHANGE: `loadData` signature is changed along with api endpoint constants ([fac5ad3](https://github.com/ryersonlibrary/building-info-system/commit/fac5ad3))
+* **app:** use new DataService ([fc0ed55](https://github.com/ryersonlibrary/building-info-system/commit/fc0ed55))
+* **faq:** select initially open FAQ using URL parameter ([8d095af](https://github.com/ryersonlibrary/building-info-system/commit/8d095af))
+* **search:** search broken into multiple files ([2b700d7](https://github.com/ryersonlibrary/building-info-system/commit/2b700d7))
+* **search:** search for directory locations working ([295e8de](https://github.com/ryersonlibrary/building-info-system/commit/295e8de))
+
+
+### BREAKING CHANGES
+
+* **app:** dataService now fires an event on each loaded resource and a new event when all
+resources loaded.
+* **search:** DOM of the App has changed.  Search has changed.
+* `MapElement` and `MapElementMap` type renamed to `MapElementData` and
+`MapElementDataMap` respectively.
+
+
+
 # [0.3.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.2.1...v0.3.0) (2019-03-15)
 
 
