@@ -109,19 +109,15 @@ export class RLApp {
     dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
       this._faqData = dataService.getData(APP_DATA.FAQS);
 
-      if (this._faqData) {
-        Object.values(this._faqData).forEach((f: Faq) => {
-          this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
-        });
-      }
+      Object.values(this._faqData).forEach((f: Faq) => {
+        this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
+      });
 
       this._locationData = dataService.getData(APP_DATA.DETAILS);
 
-      if (this._locationData) {
-        Object.values(this._locationData).forEach((d: MapElementDetail) => {
-          this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
-        });
-      }
+      Object.values(this._locationData).forEach((d: MapElementDetail) => {
+        this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
+      });
 
       this.loaded = true;
     });
@@ -163,7 +159,7 @@ export class RLApp {
 
       // Hijack the current view to get the RouterHistory object.  It is only
       // available within the context of the stencil-router and its children.
-      const view = this.root.querySelector('.rl-view') as any;
+      const view = this.root.querySelector('.rl-view');
       view.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
     }
   }
@@ -181,7 +177,7 @@ export class RLApp {
       viewFaq.setActiveFaq(resultId);
     } else {
       // Navigate to page and then set the active element.
-      const view = this.root.querySelector('.rl-view') as any;
+      const view = this.root.querySelector('.rl-view');
       view.history.push(`${BASE_URL}${ROUTES.FAQS}/${resultId}`);
     }
   }

@@ -30,8 +30,8 @@ class DataService extends Listenable {
         const val = APP_DATA[key];
 
         if (val === 'events') {
-          get(val).then((events: CalEvent[]) => {
-            if (events) {
+          get<CalEvent[]>(val).then((events?: CalEvent[]) => {
+            if (events !== undefined) {
               events.forEach((evt: CalEvent, idx: number) => {
                 evt.endTime = new Date(evt.endTime);
                 evt.startTime = new Date(evt.startTime);
@@ -52,8 +52,9 @@ class DataService extends Listenable {
                   const evts = parser.getFutureEvents(30);
                   const newEvents = union(events, evts);
 
-                  set(val, newEvents);
-                  // this._data[val] = newEvents;
+                  set(val, newEvents).catch(err => {
+                    console.error(`Error setting value in localStorage - ${err}`);
+                  });
                   this._data.set(val, newEvents);
                 });
                 parser.loadIcal(EVENT_URL);
@@ -66,7 +67,9 @@ class DataService extends Listenable {
 
               parser.subscribe(() => {
                 const evts = parser.getFutureEvents(30);
-                set(val, evts);
+                set(val, evts).catch(err => {
+                  console.error(`Error setting value in localStorage - ${err}`);
+                });
                 // this._data[val] = evts;
                 this._data.set(val, evts);
                 this._loadedData++;
@@ -75,6 +78,8 @@ class DataService extends Listenable {
 
               parser.loadIcal(EVENT_URL);
             }
+          }).catch(err => {
+            console.error(`Error occurred loading data - ${err}`);
           });
         } else {
           this.loadData(val).then(data => {
@@ -82,6 +87,8 @@ class DataService extends Listenable {
             this._data.set(val, data);
             this._loadedData++;
             this._completeLoad();
+          }).catch(err => {
+            console.error(`Error loading ${val} data - ${err}`);
           });
         }
       }
@@ -119,7 +126,9 @@ class DataService extends Listenable {
   }
 
   refreshData(path: string) {
-    this.fetchWrapper(path);
+    this.fetchWrapper(path).catch(err => {
+      console.error(`Error refreshing data (${path}) - ${err}`);
+    });
   }
 
   getData(key: APP_DATA) {

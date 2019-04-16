@@ -62,7 +62,8 @@ export class Listenable {
   unlisten(topic: string, fn: (value: any) => void) {
     if (this._observers.has(topic)) {
       const observer = this._observers.get(topic);
-      if (observer && observer.unsubscribe(fn)) {
+      if (observer !== undefined) {
+        observer.unsubscribe(fn);
         return true;
       }
     }

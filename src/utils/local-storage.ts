@@ -35,7 +35,7 @@ export function remove(key: string): Promise<void> {
   });
 }
 
-export function get(key: string): Promise<any | undefined> {
+export function get<T>(key: string): Promise<T | undefined> {
   key = `rl.ls.${key}`;
 
   return new Promise((resolve, reject) => {
