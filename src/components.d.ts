@@ -377,7 +377,7 @@ export namespace Components {
 
   interface ViewMap {
     /**
-    * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
+    * A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded': boolean;
     /**
@@ -394,7 +394,7 @@ export namespace Components {
   }
   interface ViewMapAttributes extends StencilHTMLAttributes {
     /**
-    * The global object of all application data. A global flag passed in to indicate if the application has loaded as well.
+    * A global flag passed in to indicate if the application has loaded as well.
     */
     'appLoaded'?: boolean;
     /**
