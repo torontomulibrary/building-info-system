@@ -62,18 +62,23 @@ export class Card {
         {this.buttons ?
           <div class="mdc-card__action-buttons">
             {this.buttons.map(b =>
-              <button class="mdc-button">
-                <a href={b.link}>{b.name}</a>
-              </button>
+              <stencil-route-link url={b.link}>
+                <button class="mdc-button">
+                  {b.name}
+                  {/* <a href={b.link}>{b.name}</a> */}
+                </button>
+              </stencil-route-link>
             )}
           </div> : undefined
         }
         {this.icons ?
           <div class="mdc-card__action-icons">
             {this.icons.map(i =>
-              <button class="mdc-icon-button">
-                <i class="material-icons mdc-icon-btton__icon">{i.name}</i>
-              </button>
+              // <stencil-route-link>
+                <button class="mdc-icon-button">
+                  <i class="material-icons mdc-icon-button__icon">{i.name}</i>
+                </button>
+              // </stencil-route-link>
             )}
           </div> : undefined
         }
