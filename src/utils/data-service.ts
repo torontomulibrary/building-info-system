@@ -13,7 +13,7 @@ import { Listenable } from './listenable';
 import { get, set } from './local-storage';
 
 class DataService extends Listenable {
-  private _data: Map<string, {}> = new Map();
+  private _data: Map<string, {} | []> = new Map();
   private _loadedData = 0;
 
   private _initialized = false;
@@ -137,10 +137,10 @@ class DataService extends Listenable {
     if (this._data.has(key)) {
       res = this._data.get(key);
       if (res) {
-        return { ...res };
+        return res;
       } else {
         return this.loadData(key).then(data => {
-          return { ...data };
+          return data;
         });
       }
     }

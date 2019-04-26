@@ -13,7 +13,6 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 import { API_URL } from '../../global/config';
 import {
   APP_DATA,
-  // LOCAL_STORAGE_KEY,
   MAP_TYPE,
 } from '../../global/constants';
 import {
@@ -23,7 +22,6 @@ import {
   ComputerAvailability,
   ComputerLab,
   ComputerLabMap,
-  // DetailTypeMap,
   Floor,
   FloorMap,
   MapElementData,
@@ -35,7 +33,6 @@ import { dataService } from '../../utils/data-service';
 import { fetchIMG, fetchJSON } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
-// import { MapElementDetail } from '../../interface';
 
 @Component({
   tag: 'view-map',
@@ -80,11 +77,6 @@ export class ViewMap {
   @State() buildings?: BuildingMap;
 
   @State() extraDetails: {} = {};
-
-  /**
-   * The global object of all application data.
-   */
-  // @Prop({ mutable: true }) appData!: AppData;
 
   /**
    * A global flag passed in to indicate if the application has loaded as well.
@@ -153,44 +145,18 @@ export class ViewMap {
 
     // Load buildings.
     this._blds = dataService.getData(APP_DATA.BUILDING);
-    // await loadData(APP_DATA.BUILDINGS).then(
-    //   (b: BuildingMap) => {
-    //     this._blds = b;
-    // });
 
     // Load floor data.
     this._flrs = dataService.getData(APP_DATA.FLOORS);
-    // await loadData(APP_DATA.FLOORS).then(
-    //   (f: FloorMap) => {
-    //     this._flrs = f;
-    // });
 
     // Load map elements.
     this._elms = dataService.getData(APP_DATA.ELEMENTS);
-    // await loadData(APP_DATA.ELEMENTS).then(
-    //   (e: MapElementDataMap) => {
-    //     this._elms = e;
-    // });
 
     // Load map details.
     this._dtls = dataService.getData(APP_DATA.DETAILS);
-    // await loadData(APP_DATA.DETAILS).then(
-    //   (d: MapElementDetailMap) => {
-    //     this._dtls = d;
-    // });
-
-    // Load map detail types.
-    // await loadData('details/types', APP_DATA.DETAIL_TYPES).then(
-    //   (d: DetailTypeMap) => {
-    //     this._dtyps = d;
-    // });
 
     let compLabs: ComputerLab[] = [];
     compLabs = dataService.getData(APP_DATA.COMPUTERS);
-    // await loadData(APP_DATA.COMPUTERS).then(
-    //   (c: ComputerLab[]) => {
-    //     compLabs = c;
-    // });
 
     Object.values(this._blds).forEach((b: Building) => {
       b.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
@@ -258,9 +224,7 @@ export class ViewMap {
       }
 
       if (e.icon && typeof e.icon === 'string') {
-        // e.icons.forEach((path: string) => {
-          fetchIMG(e.icon);
-        // });
+        fetchIMG(e.icon);
       }
     });
 
@@ -287,7 +251,6 @@ export class ViewMap {
 
     this.loaded = true;
     this.buildings = this._blds;
-    // this.dataLoaded.emit(this.appData);
   }
 
   componentDidLoad() {

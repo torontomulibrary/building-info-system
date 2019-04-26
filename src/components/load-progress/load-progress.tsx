@@ -23,7 +23,6 @@ export class LoadProgress {
   componentWillLoad() {
     dataService.listen(EVENTS.DATA_LOADED, () => {
       this._progress++;
-      console.log(`loaded ${this._progress} resources`);
       if (this._pb) {
         this._pb.progress = this._progress / this._max;
       }
