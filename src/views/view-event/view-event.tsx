@@ -54,47 +54,6 @@ export class ViewEvent {
    */
   componentWillLoad() {
     this.events = dataService.getData(APP_DATA.EVENTS);
-    this.loaded = true;
-    // get(APP_DATA.EVENTS).then((events: CalEvent[]) => {
-    //   if (events) {
-    //     events.forEach((evt: CalEvent, idx: number) => {
-    //       evt.endTime = new Date(evt.endTime);
-    //       evt.startTime = new Date(evt.startTime);
-    //       if (evt.endTime.valueOf() < new Date().valueOf()) {
-    //         // Remove the event if the end time has passed.
-    //         delete events[idx];
-    //       }
-    //     });
-    //     this.events = events;
-
-    //     // Load additional events if the cached ones are depleted.
-    //     if (events.length < 50) {
-    //       const parser: EventParser = new EventParser();
-    //       parser.subscribe(() => {
-    //         const evts = parser.getFutureEvents(30);
-    //         const newEvents = union(events, evts);
-
-    //         set(APP_DATA.EVENTS, newEvents);
-    //         this.events = newEvents;
-    //       });
-    //       parser.loadIcal(EVENT_URL);
-    //     }
-
-    //     this.loaded = true;
-    //   } else {
-    //     const parser: EventParser = new EventParser();
-
-    //     parser.subscribe(() => {
-    //       const evts = parser.getFutureEvents(30);
-    //       set(APP_DATA.EVENTS, evts);
-    //       this.events = evts;
-
-    //       this.loaded = true;
-    //     });
-
-    //     parser.loadIcal(EVENT_URL);
-    //   }
-    // });
   }
 
   componentDidLoad() {
@@ -218,7 +177,7 @@ export class ViewEvent {
     if (this.events) {
 
       return ([
-        <stencil-route-title title="Events" />,
+        <stencil-route-title pageTitle="Events" />,
         <h2 class="rl-view__heading">Upcoming events</h2>,
         <div class="rl-view__container mdc-layout-grid">
           <div class="mdc-layout-grid__inner" role="list">
