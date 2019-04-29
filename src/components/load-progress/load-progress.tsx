@@ -40,7 +40,9 @@ export class LoadProgress {
     this._pb.buffer = 1;
 
     this.root.addEventListener('transitionend', () => {
-      this.root.style.display = 'none';
+      if (this.done) {
+        this.root.style.display = 'none';
+      }
     });
   }
 
