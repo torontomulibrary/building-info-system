@@ -18,6 +18,19 @@ class DataService extends Listenable {
 
   private _initialized = false;
 
+  fetchCalendarEvents() {
+    return new Promise<CalEvent[]>(resolve => {
+      const parser: EventParser = new EventParser();
+
+      parser.subscribe(() => {
+        const events = parser.getFutureEvents(30);
+        resolve(events);
+      });
+
+      parser.loadIcal(EVENT_URL);
+    });
+  }
+
   initialize() {
     if (this._initialized) {
       return;
@@ -30,53 +43,48 @@ class DataService extends Listenable {
         const val = APP_DATA[key];
 
         if (val === 'events') {
-          get<CalEvent[]>(val).then((events?: CalEvent[]) => {
+          get<CalEvent[]>(val).then(async (events?: CalEvent[]) => {
             if (events !== undefined) {
-              events.forEach((evt: CalEvent, idx: number) => {
-                evt.endTime = new Date(evt.endTime);
-                evt.startTime = new Date(evt.startTime);
-                if (evt.endTime.valueOf() < new Date().valueOf()) {
-                  // Remove the event if the end time has passed.
-                  delete events[idx];
-                }
+              // Remove any outdated events.
+              const now = new Date().valueOf();
+              events = events.filter((evt: CalEvent) => {
+                const end = new Date(evt.endTime);
+                return end.valueOf() > now;
               });
 
-              // set(val, events);
-              // this._data[val] = events;
+              // Convert date strings to Date objects.
+              events.forEach((evt: CalEvent) => {
+                evt.endTime = new Date(evt.endTime);
+                evt.startTime = new Date(evt.startTime);
+              });
+
+              // Store updated events.
               this._data.set(val, events);
 
               // Load additional events if the cached ones are depleted.
               if (events.length < 50) {
-                const parser: EventParser = new EventParser();
-                parser.subscribe(() => {
-                  const evts = parser.getFutureEvents(30);
-                  const newEvents = union(events, evts);
+                const evts = await this.fetchCalendarEvents();
+                const newEvents = union(events, evts);
 
-                  set(val, newEvents).catch(err => {
-                    console.error(`Error setting value in localStorage - ${err}`);
-                  });
-                  this._data.set(val, newEvents);
+                set(val, newEvents).catch(err => {
+                  console.error(`Error setting value in localStorage - ${err}`);
                 });
-                parser.loadIcal(EVENT_URL);
+
+                this._data.set(val, newEvents);
               }
 
               this._loadedData++;
               this._completeLoad();
             } else {
-              const parser: EventParser = new EventParser();
+              const evts = await this.fetchCalendarEvents();
 
-              parser.subscribe(() => {
-                const evts = parser.getFutureEvents(30);
-                set(val, evts).catch(err => {
-                  console.error(`Error setting value in localStorage - ${err}`);
-                });
-                // this._data[val] = evts;
-                this._data.set(val, evts);
-                this._loadedData++;
-                this._completeLoad();
+              set(val, evts).catch(err => {
+                console.error(`Error setting value in localStorage - ${err}`);
               });
 
-              parser.loadIcal(EVENT_URL);
+              this._data.set(val, evts);
+              this._loadedData++;
+              this._completeLoad();
             }
           }).catch(err => {
             console.error(`Error occurred loading data - ${err}`);
