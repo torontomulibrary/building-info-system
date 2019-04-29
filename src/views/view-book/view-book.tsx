@@ -31,37 +31,11 @@ export class ViewBooks {
 
   componentWillLoad() {
     this.searches = dataService.getData(APP_DATA.HISTORY);
-    // Load search history.
-    // loadData('history', LOCAL_STORAGE_KEY.SEARCH).then((history: SearchHistory) => {
-    //   this.searches = history;
-    //   this.loaded = true;
-    // }, reason => {
-    //   console.log(reason);
-    // });
-    // if (this.appData && this.appData.searches) {
-    //   this.loaded = true;
-    // } else {
-    //   fetchJSON(API_URL + 'history').then((history: SearchHistory) => {
-    //     this.appData = { ...this.appData, searches: {
-    //       popular: history.popular,
-    //       recent: history.recent,
-    //     }};
-
-    //     this.loaded = true;
-    //   });
-    // }
   }
 
   componentDidLoad() {
-    // this.inDom = true;
     this.checkSize();
   }
-
-  // componentDidUpdate() {
-  //   if (this.inDom) {
-  //     this.loaded = true;
-  //   }
-  // }
 
   checkSize() {
     if (this.root.offsetHeight === 0) {
@@ -81,7 +55,6 @@ export class ViewBooks {
   }
 
   hostData() {
-    console.log(`host-data: ${this.loaded}`);
     return {
       class: {
         'rl-view': true,
@@ -95,7 +68,6 @@ export class ViewBooks {
   }
 
   render() {
-    console.log('rendered');
     // Render resent searches and popular books.
     if (this.searches) {
       return ([
