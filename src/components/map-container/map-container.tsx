@@ -191,7 +191,11 @@ export class MapContainer {
     }
   }
 
-  onMapRendered() {
+  // onMapRendered() {
+    
+  // }
+
+  componentDidUpdate() {
     if (this.mapEl) {
       if (!this.activeElement) {
         this.mapEl.clearActiveElement();
@@ -222,7 +226,8 @@ export class MapContainer {
         mapImage={this.activeFloor.floorplan}
         onElementSelected={e => this.onElementSelected(e.detail)}
         onElementDeselected={() => this.onElementDeselected()}
-        onMapRendered={() => this.onMapRendered()}>
+        // onMapRendered={() => this.onMapRendered()}>
+        >
       </rl-map>,
 
       <rl-side-sheet open={this.activeElement !== undefined} onClosed={() => this._sidePanelClosed()}>
