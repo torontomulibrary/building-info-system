@@ -1,3 +1,20 @@
+## [0.4.1](https://github.com/ryersonlibrary/building-info-system/compare/v0.4.0...v0.4.1) (2019-05-17)
+
+
+### Bug Fixes
+
+* **app:** DataService returns appropriate type. ([2fee78d](https://github.com/ryersonlibrary/building-info-system/commit/2fee78d))
+* **app:** LoadProgress hides properly ([0674ae4](https://github.com/ryersonlibrary/building-info-system/commit/0674ae4))
+* **card:** Card action button now StencilRouteLink ([499a5bc](https://github.com/ryersonlibrary/building-info-system/commit/499a5bc)), closes [#18](https://github.com/ryersonlibrary/building-info-system/issues/18)
+* **data:** Load events fixed ([7fca4c0](https://github.com/ryersonlibrary/building-info-system/commit/7fca4c0))
+* **map:** Remove use of mapRendered event ([1814ca7](https://github.com/ryersonlibrary/building-info-system/commit/1814ca7)), closes [#16](https://github.com/ryersonlibrary/building-info-system/issues/16)
+* Remove call to deprecated map function and fix element reselect bug ([b01091b](https://github.com/ryersonlibrary/building-info-system/commit/b01091b))
+* **search-box:** Change how search-box and suggestions work ([aa258a0](https://github.com/ryersonlibrary/building-info-system/commit/aa258a0))
+* **view-event:** Fix page title and font family ([5cf52ec](https://github.com/ryersonlibrary/building-info-system/commit/5cf52ec))
+* **view-map:** Change background color to match map images ([e890cce](https://github.com/ryersonlibrary/building-info-system/commit/e890cce))
+
+
+
 # [0.4.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.2.1...v0.4.0) (2019-04-16)
 
 
