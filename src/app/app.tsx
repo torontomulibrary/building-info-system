@@ -184,7 +184,8 @@ export class RLApp {
     }
   }
 
-  _onResultClick(e: CustomEvent) {
+  @Listen('suggestionClicked')
+  onSuggestionClicked(e: CustomEvent) {
     const resultID = e.detail.id as string;
     const [ type, id ] = resultID.split('-');
 
@@ -229,22 +230,14 @@ export class RLApp {
           >
           {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
           <rl-search-box
-            // ref={el => { this._searchBox = el as HTMLRlSearchBoxElement; }}
             slot="centerSection"
             showMenu={this.appWidth < 500}
-            inputPlaceholder={APP_TITLE}
+            placeholder={this.appWidth < 500 ? APP_TITLE : undefined}
             resultHeight={this.resultHeight}
             onIconClick={() => { this.drawerOpen = true; }}
-            onInput={(e: Event) => this._onSearchChange(e) }
             searchValue={this.searchQuery}
+            docSearch={this.docSearch}
           >
-          <rl-search-suggestions
-              slot="suggestions"
-              suggestions={this.searchResults}
-              isEmptySearch={this.searchQuery === ''}
-              onResultClick={this._onResultClick.bind(this)}
-          >
-          </rl-search-suggestions>
           </rl-search-box>
         </rl-app-bar>,
 

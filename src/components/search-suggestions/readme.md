@@ -7,19 +7,18 @@
 
 ## Properties
 
-| Property        | Attribute         | Description | Type                 | Default |
-| --------------- | ----------------- | ----------- | -------------------- | ------- |
-| `isEmptySearch` | `is-empty-search` |             | `boolean`            | `true`  |
-| `suggestions`   | --                |             | `SearchResultItem[]` | `[]`    |
+| Property        | Attribute         | Description | Type                  | Default     |
+| --------------- | ----------------- | ----------- | --------------------- | ----------- |
+| `activeResult`  | `active-result`   |             | `number \| undefined` | `undefined` |
+| `isEmptySearch` | `is-empty-search` |             | `boolean`             | `true`      |
+| `suggestions`   | --                |             | `SearchResultItem[]`  | `[]`        |
 
 
 ## Events
 
-| Event           | Description | Type                |
-| --------------- | ----------- | ------------------- |
-| `faqFlick`      |             | `CustomEvent<void>` |
-| `locationClick` |             | `CustomEvent<void>` |
-| `resultClick`   |             | `CustomEvent<void>` |
+| Event               | Description | Type                |
+| ------------------- | ----------- | ------------------- |
+| `suggestionClicked` |             | `CustomEvent<void>` |
 
 
 ----------------------------------------------

@@ -3,16 +3,12 @@ import {
   Element,
   Event,
   EventEmitter,
-  Listen,
   Prop,
   State,
 } from '@stencil/core';
 
 import {
-  // Faq,
-  // MapElementDetail,
   SearchResultItem,
-  // SearchResults,
 } from '../../interface';
 
 @Component({
@@ -24,56 +20,20 @@ export class SearchSuggestions {
 
   @Element() _root!: HTMLElement;
 
-  @State() activeResult?: number;
+  @Prop() activeResult?: number;
+  @State() activeItem?: HTMLLIElement;
+
   @State() totalHeight = 0;
 
   @Prop() isEmptySearch = true;
-  // @Prop() suggestions: [{
-  //   location: MapElementDetail[],
-  //   faq: Faq[],
-  //   event: Array<SearchResults<number>>,
-  // } = {
-  //   location: [], faq: [], event: [],
-  // };]
+
   @Prop() suggestions: SearchResultItem[] = [];
 
-  @Event() locationClick!: EventEmitter;
-  @Event() faqFlick!: EventEmitter;
-  @Event() resultClick!: EventEmitter;
+  @Event() suggestionClicked!: EventEmitter;
 
   componentDidUpdate() {
     const el = this._root.firstElementChild as HTMLElement;
     this.totalHeight = el && el.offsetHeight || 0;
-  }
-
-  @Listen('window:keydown')
-  onKeydown(evt: KeyboardEvent) {
-    // const target = evt.target;
-    const { key } = evt;
-
-    // if (target && target instanceof HTMLInputElement &&
-    //     target.classList.contains('rl-search__input') &&
-    //     this.suggestions.length > 0) {
-    if (key === 'ArrowUp' || key === 'ArrowDown') {
-      if (this.activeResult === undefined) {
-        this.activeResult = (key === 'ArrowDown') ?
-            0 : this.suggestions.length - 1;
-      } else {
-        const index = this.activeResult;
-        const dir = (key === 'ArrowDown') ? 1 : -1;
-        const len = this.suggestions.length;
-        this.activeResult = (index + len + dir) % len;
-      }
-
-      evt.preventDefault();
-    }
-    // }
-    // } else if (key === 'Escape' || keyCode === 27) {
-    //   // this.focused = false;
-    //   // if (this.searchInput) {
-    //   //   this.searchInput.value = '';
-    //   // }
-    // }
   }
 
   hostData() {
@@ -89,11 +49,9 @@ export class SearchSuggestions {
   }
 
   render() {
-    let items;
-
     if (this.suggestions.length > 0) {
       // Render the suggestions as a single list.
-      items = (
+      return (
         <ul class="mdc-list mdc-list--two-line mdc-list--dense" role="listbox">
           {this.suggestions.map((detail, i) => {
             const listClass = {
@@ -102,8 +60,8 @@ export class SearchSuggestions {
               'rl-search__result_item': true,
             };
             return (
-              <li class={listClass} role="option" tabIndex={0}
-                  onClick={e => { e.stopImmediatePropagation(); this.resultClick.emit(detail); }}>
+              <li class={listClass} role="option"
+                  onClick={e => { e.stopImmediatePropagation(); this.suggestionClicked.emit(detail); }}>
                 <span class="mdc-list-item__graphic material-icons"
                     aria-hidden="true">
                     {detail.type}
@@ -131,6 +89,6 @@ export class SearchSuggestions {
       }
     }
 
-    return items;
+    return undefined;
   }
 }

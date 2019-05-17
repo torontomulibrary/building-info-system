@@ -7,9 +7,9 @@
 
 import '@stencil/core';
 
-import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
+import '@ryersonlibrary/web-components';
 import {
   Color,
 } from './utils/color';
@@ -22,6 +22,9 @@ import {
   BuildingMap as BuildingMap2,
   FloorMap,
 } from './interface.js';
+import {
+  Search,
+} from './utils/search';
 import {
   MatchResults,
   RouterHistory,
@@ -258,31 +261,33 @@ export namespace Components {
 
   interface RlSearchBox {
     'clearInput': () => void;
+    'docSearch': Search;
     'id': string;
-    'inputPlaceholder': string;
+    'placeholder': string;
     'resultHeight': number;
     'searchValue': string;
     'showMenu': boolean;
   }
   interface RlSearchBoxAttributes extends StencilHTMLAttributes {
+    'docSearch': Search;
     'id'?: string;
-    'inputPlaceholder'?: string;
     'onIconClick'?: (event: CustomEvent) => void;
     'onSearchChange'?: (event: CustomEvent) => void;
+    'placeholder'?: string;
     'resultHeight'?: number;
     'searchValue'?: string;
     'showMenu'?: boolean;
   }
 
   interface RlSearchSuggestions {
+    'activeResult'?: number;
     'isEmptySearch': boolean;
     'suggestions': SearchResultItem[];
   }
   interface RlSearchSuggestionsAttributes extends StencilHTMLAttributes {
+    'activeResult'?: number;
     'isEmptySearch'?: boolean;
-    'onFaqFlick'?: (event: CustomEvent) => void;
-    'onLocationClick'?: (event: CustomEvent) => void;
-    'onResultClick'?: (event: CustomEvent) => void;
+    'onSuggestionClicked'?: (event: CustomEvent) => void;
     'suggestions'?: SearchResultItem[];
   }
 
