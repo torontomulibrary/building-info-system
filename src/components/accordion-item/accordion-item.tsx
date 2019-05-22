@@ -1,5 +1,5 @@
 import { MDCRipple } from '@material/ripple/index';
-import { Component, Element, Event, EventEmitter, Listen, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Listen, Method, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 
 /**
@@ -77,7 +77,7 @@ export class AccordionItem {
    * This function closes this item.
    */
   @Method()
-  close() {
+  async close() {
     this.isOpen = false;
   }
 
@@ -85,7 +85,7 @@ export class AccordionItem {
    * This function opens this item.
    */
   @Method()
-  open() {
+  async open() {
     this.updateHeight();
     this.isOpen = true;
   }

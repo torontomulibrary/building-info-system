@@ -1,5 +1,5 @@
 import '@ryersonlibrary/web-components';
-import { Component, Element, Listen, State } from '@stencil/core';
+import { Component, Element, Listen, State, h } from '@stencil/core';
 
 import { BASE_URL } from '../global/config';
 import {
@@ -79,7 +79,7 @@ export class RLApp {
   /**
    * Root element of this component.
    */
-  @Element() root!: HTMLStencilElement;
+  @Element() root!: HTMLRlBisElement;
 
   @State() searchResults: SearchResultItem[] = [];
 
@@ -127,7 +127,7 @@ export class RLApp {
   /**
    * Listen for and handle global `resize` events on the window.
    */
-  @Listen('window:resize')
+  @Listen('resize', { target: 'window' })
   handleResize() {
     this.appWidth = window.innerWidth;
   }

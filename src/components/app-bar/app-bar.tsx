@@ -1,5 +1,5 @@
 import { MDCTopAppBar } from '@material/top-app-bar/index';
-import { Component, Element, Event, EventEmitter, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, h } from '@stencil/core';
 
 // import { FaqMap, MapElementDetailMap } from '../../interface';
 
@@ -14,7 +14,7 @@ export class AppBar {
 
   private mdcAppBar!: MDCTopAppBar;
 
-  @Element() root!: HTMLStencilElement;
+  @Element() root!: HTMLRlAppBarElement;
 
   /**
    * The current width of the application.  Used to determine what kind of

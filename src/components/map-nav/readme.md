@@ -17,11 +17,24 @@
 
 ## Events
 
-| Event             | Description                                          | Type                |
-| ----------------- | ---------------------------------------------------- | ------------------- |
-| `buildingChanged` | An event emitted when the selected Building changes. | `CustomEvent<void>` |
-| `floorChanged`    | An event emitted when the selected Floor changes.    | `CustomEvent<void>` |
+| Event             | Description                                          | Type               |
+| ----------------- | ---------------------------------------------------- | ------------------ |
+| `buildingChanged` | An event emitted when the selected Building changes. | `CustomEvent<any>` |
+| `floorChanged`    | An event emitted when the selected Floor changes.    | `CustomEvent<any>` |
 
+
+## Dependencies
+
+### Used by
+
+ - [rl-map-container](../map-container)
+
+### Graph
+```mermaid
+graph TD;
+  rl-map-container --> rl-map-nav
+  style rl-map-nav fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

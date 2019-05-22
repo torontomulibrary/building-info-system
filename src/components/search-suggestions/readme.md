@@ -16,10 +16,23 @@
 
 ## Events
 
-| Event               | Description | Type                |
-| ------------------- | ----------- | ------------------- |
-| `suggestionClicked` |             | `CustomEvent<void>` |
+| Event               | Description | Type               |
+| ------------------- | ----------- | ------------------ |
+| `suggestionClicked` |             | `CustomEvent<any>` |
 
+
+## Dependencies
+
+### Used by
+
+ - [rl-search-box](../search-box)
+
+### Graph
+```mermaid
+graph TD;
+  rl-search-box --> rl-search-suggestions
+  style rl-search-suggestions fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

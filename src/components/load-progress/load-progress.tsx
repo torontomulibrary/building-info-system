@@ -1,5 +1,5 @@
 import { MDCLinearProgress } from '@material/linear-progress/index';
-import { Component, Element, State } from '@stencil/core';
+import { Component, Element, State, h } from '@stencil/core';
 
 import { APP_DATA, EVENTS } from '../../global/constants';
 import { dataService } from '../../utils/data-service';

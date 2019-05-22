@@ -14,33 +14,46 @@
 
 ## Events
 
-| Event     | Description | Type                |
-| --------- | ----------- | ------------------- |
-| `toggled` |             | `CustomEvent<void>` |
+| Event     | Description | Type               |
+| --------- | ----------- | ------------------ |
+| `toggled` |             | `CustomEvent<any>` |
 
 
 ## Methods
 
-### `close() => void`
+### `close() => Promise<void>`
 
 
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
-### `open() => void`
+### `open() => Promise<void>`
 
 
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Used by
+
+ - [view-building](../../views/view-building)
+
+### Graph
+```mermaid
+graph TD;
+  view-building --> rl-expansion-panel
+  style rl-expansion-panel fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

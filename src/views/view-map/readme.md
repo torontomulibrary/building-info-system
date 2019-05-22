@@ -17,45 +17,49 @@
 
 ## Events
 
-| Event        | Description                                                          | Type                |
-| ------------ | -------------------------------------------------------------------- | ------------------- |
-| `dataLoaded` | Event fired when the data specific to this view is finished loading. | `CustomEvent<void>` |
+| Event        | Description                                                          | Type               |
+| ------------ | -------------------------------------------------------------------- | ------------------ |
+| `dataLoaded` | Event fired when the data specific to this view is finished loading. | `CustomEvent<any>` |
 
 
 ## Methods
 
-### `setActiveDetail(id: number) => void`
+### `setActiveDetail(id: number) => Promise<void>`
 
 
-
-#### Parameters
-
-| Name | Type     | Description |
-| ---- | -------- | ----------- |
-| `id` | `number` |             |
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
-### `setActiveElement(id: number) => void`
+### `setActiveElement(id: number) => Promise<void>`
 
 
-
-#### Parameters
-
-| Name | Type     | Description |
-| ---- | -------- | ----------- |
-| `id` | `number` |             |
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Depends on
+
+- [rl-map-container](../../components/map-container)
+
+### Graph
+```mermaid
+graph TD;
+  view-map --> rl-map-container
+  rl-map-container --> rl-map
+  rl-map-container --> rl-side-sheet
+  rl-map-container --> rl-map-nav
+  style view-map fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

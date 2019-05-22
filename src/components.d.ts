@@ -5,11 +5,8 @@
  */
 
 
-import '@stencil/core';
-
-import '@ryersonlibrary/web-components';
-import '@stencil/router';
-import '@stencil/state-tunnel';
+import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
+import { JSX } from '@stencil/core';
 import {
   Color,
 } from './utils/color';
@@ -19,7 +16,7 @@ import {
   SearchResultItem,
 } from './interface';
 import {
-  BuildingMap as BuildingMap2,
+  BuildingMap as BuildingMap1,
   FloorMap,
 } from './interface.js';
 import {
@@ -35,15 +32,21 @@ import {
 
 
 export namespace Components {
-
-  interface RlBis {}
-  interface RlBisAttributes extends StencilHTMLAttributes {}
-
+  interface RlAccordion {
+    /**
+    * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
+    */
+    'allowMultiple': boolean;
+    /**
+    * An array of content displayed by the accordion.
+    */
+    'items': Array<{ [key: string]: string }>;
+  }
   interface RlAccordionItem {
     /**
     * This function closes this item.
     */
-    'close': () => void;
+    'close': () => Promise<void>;
     /**
     * A delay used to fade-in this item a specific amount of time after the component is rendered.
     */
@@ -59,51 +62,8 @@ export namespace Components {
     /**
     * This function opens this item.
     */
-    'open': () => void;
+    'open': () => Promise<void>;
   }
-  interface RlAccordionItemAttributes extends StencilHTMLAttributes {
-    /**
-    * A delay used to fade-in this item a specific amount of time after the component is rendered.
-    */
-    'delay'?: number;
-    /**
-    * An index number used to reference this item in the larger list of all items in the parent accordion.
-    */
-    'index'?: number;
-    /**
-    * A state tracking the current open/closed state of this item.
-    */
-    'isOpen'?: boolean;
-    /**
-    * Event emitted after the body's collapse animation has completed.
-    */
-    'onAfterCollapse'?: (event: CustomEvent) => void;
-    'onAfterExpand'?: (event: CustomEvent) => void;
-    'onClosed'?: (event: CustomEvent) => void;
-    'onOpened'?: (event: CustomEvent) => void;
-  }
-
-  interface RlAccordion {
-    /**
-    * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
-    */
-    'allowMultiple': boolean;
-    /**
-    * An array of content displayed by the accordion.
-    */
-    'items': Array<{ [key: string]: string }>;
-  }
-  interface RlAccordionAttributes extends StencilHTMLAttributes {
-    /**
-    * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
-    */
-    'allowMultiple'?: boolean;
-    /**
-    * An array of content displayed by the accordion.
-    */
-    'items'?: Array<{ [key: string]: string }>;
-  }
-
   interface RlAppBar {
     /**
     * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
@@ -114,23 +74,7 @@ export namespace Components {
     'singleSection': boolean;
     'type': 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
-  interface RlAppBarAttributes extends StencilHTMLAttributes {
-    /**
-    * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
-    */
-    'appTitle'?: string;
-    'centerTitle'?: boolean;
-    'dense'?: boolean;
-    /**
-    * Event fired when the menu button on the app bar is clicked.
-    */
-    'onMenuClicked'?: (event: CustomEvent) => void;
-    'onSearchFaqClicked'?: (event: CustomEvent) => void;
-    'onSearchLocationClicked'?: (event: CustomEvent) => void;
-    'singleSection'?: boolean;
-    'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
-  }
-
+  interface RlBis {}
   interface RlCard {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor': Color;
@@ -145,75 +89,29 @@ export namespace Components {
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
   }
-  interface RlCardAttributes extends StencilHTMLAttributes {
-    'buttons'?: Array<{name: string, link: string}>;
-    'cardColor'?: Color;
-    'cardData'?: { [keys: string]: string[] } | string;
-    'cardMedia'?: string;
-    'cardTitle'?: string;
-    'hasPrimaryAction'?: boolean;
-    'icons'?: Array<{name: string}>;
-    'mediaSize'?: 'contain' | 'cover';
-    'noContent'?: boolean;
-    'noMedia'?: boolean;
-    'onCardClicked'?: (event: CustomEvent) => void;
-    'titleInMedia'?: boolean;
-    'wideMediaAspect'?: boolean;
-  }
-
   interface RlCollection {
     'collectionTitle': string;
   }
-  interface RlCollectionAttributes extends StencilHTMLAttributes {
-    'collectionTitle'?: string;
-  }
-
   interface RlDrawer {
     /**
     * Flag indicating if the drawer is open.
     */
     'open': boolean;
   }
-  interface RlDrawerAttributes extends StencilHTMLAttributes {
-    /**
-    * An event emitted when this drawer closes.
-    */
-    'onDrawerClose'?: (event: CustomEvent) => void;
-    /**
-    * Flag indicating if the drawer is open.
-    */
-    'open': boolean;
-  }
-
   interface RlExpansionPanel {
-    'close': () => void;
+    'close': () => Promise<void>;
     'index': number;
-    'open': () => void;
+    'open': () => Promise<void>;
   }
-  interface RlExpansionPanelAttributes extends StencilHTMLAttributes {
-    'index'?: number;
-    'onToggled'?: (event: CustomEvent) => void;
-  }
-
   interface RlLoadProgress {}
-  interface RlLoadProgressAttributes extends StencilHTMLAttributes {}
-
   interface RlMapContainer {
     'buildings': BuildingMap;
     'extraDetails'?: {};
     'initialBuilding': number;
     'initialElement'?: number;
     'initialFloor': number;
-    'setActiveElement': (el: MapElementData) => void;
+    'setActiveElement': (el: MapElementData) => Promise<void>;
   }
-  interface RlMapContainerAttributes extends StencilHTMLAttributes {
-    'buildings': BuildingMap;
-    'extraDetails'?: {};
-    'initialBuilding': number;
-    'initialElement'?: number;
-    'initialFloor': number;
-  }
-
   interface RlMapNav {
     /**
     * The `id` of the currently active building.
@@ -232,7 +130,181 @@ export namespace Components {
     */
     'floors': FloorMap;
   }
-  interface RlMapNavAttributes extends StencilHTMLAttributes {
+  interface RlSearchBox {
+    'clearInput': () => Promise<void>;
+    'docSearch': Search;
+    'id': string;
+    'placeholder': string;
+    'resultHeight': number;
+    'searchValue': string;
+    'showMenu': boolean;
+  }
+  interface RlSearchSuggestions {
+    'activeResult'?: number;
+    'isEmptySearch': boolean;
+    'suggestions': SearchResultItem[];
+  }
+  interface RlSideSheet {
+    'open': boolean;
+  }
+  interface ViewBook {
+    'appLoaded': boolean;
+    'history': RouterHistory;
+  }
+  interface ViewBuilding {
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
+    'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
+  }
+  interface ViewEvent {
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
+    'appLoaded': boolean;
+    'history': RouterHistory;
+  }
+  interface ViewFaq {
+    /**
+    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
+    */
+    'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
+    /**
+    * Reference to the object passed in from Stencil containing any URL path variables that were matched by the router.
+    */
+    'match': MatchResults;
+    'setActiveFaq': (faqId: number) => Promise<void>;
+  }
+  interface ViewHome {
+    'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
+  }
+  interface ViewMap {
+    /**
+    * A global flag passed in to indicate if the application has loaded as well.
+    */
+    'appLoaded': boolean;
+    /**
+    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
+    */
+    'history': RouterHistory;
+    'mapType': MAP_TYPE;
+    /**
+    * The results coming from `stencil-router` that contain any URL matches.
+    */
+    'match': MatchResults;
+    'setActiveDetail': (id: number) => Promise<void>;
+    'setActiveElement': (id: number) => Promise<void>;
+  }
+  interface ViewSearch {
+    'appLoaded': boolean;
+    'history': RouterHistory;
+    'match': MatchResults;
+    'searchUrl'?: string;
+  }
+}
+
+declare namespace LocalJSX {
+  interface RlAccordion extends JSXBase.HTMLAttributes {
+    /**
+    * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
+    */
+    'allowMultiple'?: boolean;
+    /**
+    * An array of content displayed by the accordion.
+    */
+    'items'?: Array<{ [key: string]: string }>;
+  }
+  interface RlAccordionItem extends JSXBase.HTMLAttributes {
+    /**
+    * A delay used to fade-in this item a specific amount of time after the component is rendered.
+    */
+    'delay'?: number;
+    /**
+    * An index number used to reference this item in the larger list of all items in the parent accordion.
+    */
+    'index'?: number;
+    /**
+    * A state tracking the current open/closed state of this item.
+    */
+    'isOpen'?: boolean;
+    /**
+    * Event emitted after the body's collapse animation has completed.
+    */
+    'onAfterCollapse'?: (event: CustomEvent<any>) => void;
+    'onAfterExpand'?: (event: CustomEvent<any>) => void;
+    'onClosed'?: (event: CustomEvent<any>) => void;
+    'onOpened'?: (event: CustomEvent<any>) => void;
+  }
+  interface RlAppBar extends JSXBase.HTMLAttributes {
+    /**
+    * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
+    */
+    'appTitle'?: string;
+    'centerTitle'?: boolean;
+    'dense'?: boolean;
+    /**
+    * Event fired when the menu button on the app bar is clicked.
+    */
+    'onMenuClicked'?: (event: CustomEvent<any>) => void;
+    'onSearchFaqClicked'?: (event: CustomEvent<any>) => void;
+    'onSearchLocationClicked'?: (event: CustomEvent<any>) => void;
+    'singleSection'?: boolean;
+    'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
+  }
+  interface RlBis extends JSXBase.HTMLAttributes {}
+  interface RlCard extends JSXBase.HTMLAttributes {
+    'buttons'?: Array<{name: string, link: string}>;
+    'cardColor'?: Color;
+    'cardData'?: { [keys: string]: string[] } | string;
+    'cardMedia'?: string;
+    'cardTitle'?: string;
+    'hasPrimaryAction'?: boolean;
+    'icons'?: Array<{name: string}>;
+    'mediaSize'?: 'contain' | 'cover';
+    'noContent'?: boolean;
+    'noMedia'?: boolean;
+    'onCardClicked'?: (event: CustomEvent<any>) => void;
+    'titleInMedia'?: boolean;
+    'wideMediaAspect'?: boolean;
+  }
+  interface RlCollection extends JSXBase.HTMLAttributes {
+    'collectionTitle'?: string;
+  }
+  interface RlDrawer extends JSXBase.HTMLAttributes {
+    /**
+    * An event emitted when this drawer closes.
+    */
+    'onDrawerClose'?: (event: CustomEvent<any>) => void;
+    /**
+    * Flag indicating if the drawer is open.
+    */
+    'open': boolean;
+  }
+  interface RlExpansionPanel extends JSXBase.HTMLAttributes {
+    'index'?: number;
+    'onToggled'?: (event: CustomEvent<any>) => void;
+  }
+  interface RlLoadProgress extends JSXBase.HTMLAttributes {}
+  interface RlMapContainer extends JSXBase.HTMLAttributes {
+    'buildings': BuildingMap;
+    'extraDetails'?: {};
+    'initialBuilding': number;
+    'initialElement'?: number;
+    'initialFloor': number;
+  }
+  interface RlMapNav extends JSXBase.HTMLAttributes {
     /**
     * The `id` of the currently active building.
     */
@@ -252,80 +324,44 @@ export namespace Components {
     /**
     * An event emitted when the selected Building changes.
     */
-    'onBuildingChanged'?: (event: CustomEvent) => void;
+    'onBuildingChanged'?: (event: CustomEvent<any>) => void;
     /**
     * An event emitted when the selected Floor changes.
     */
-    'onFloorChanged'?: (event: CustomEvent) => void;
+    'onFloorChanged'?: (event: CustomEvent<any>) => void;
   }
-
-  interface RlSearchBox {
-    'clearInput': () => void;
-    'docSearch': Search;
-    'id': string;
-    'placeholder': string;
-    'resultHeight': number;
-    'searchValue': string;
-    'showMenu': boolean;
-  }
-  interface RlSearchBoxAttributes extends StencilHTMLAttributes {
+  interface RlSearchBox extends JSXBase.HTMLAttributes {
     'docSearch': Search;
     'id'?: string;
-    'onIconClick'?: (event: CustomEvent) => void;
-    'onSearchChange'?: (event: CustomEvent) => void;
+    'onIconClick'?: (event: CustomEvent<any>) => void;
+    'onSearchChange'?: (event: CustomEvent<any>) => void;
     'placeholder'?: string;
     'resultHeight'?: number;
     'searchValue'?: string;
     'showMenu'?: boolean;
   }
-
-  interface RlSearchSuggestions {
-    'activeResult'?: number;
-    'isEmptySearch': boolean;
-    'suggestions': SearchResultItem[];
-  }
-  interface RlSearchSuggestionsAttributes extends StencilHTMLAttributes {
+  interface RlSearchSuggestions extends JSXBase.HTMLAttributes {
     'activeResult'?: number;
     'isEmptySearch'?: boolean;
-    'onSuggestionClicked'?: (event: CustomEvent) => void;
+    'onSuggestionClicked'?: (event: CustomEvent<any>) => void;
     'suggestions'?: SearchResultItem[];
   }
-
-  interface RlSideSheet {
-    'open': boolean;
-  }
-  interface RlSideSheetAttributes extends StencilHTMLAttributes {
+  interface RlSideSheet extends JSXBase.HTMLAttributes {
     /**
     * Event fired when the `side-sheet` has finished closing.
     */
-    'onClosed'?: (event: CustomEvent) => void;
+    'onClosed'?: (event: CustomEvent<any>) => void;
     /**
     * Event fired when the `side-sheet` has finished opening.
     */
-    'onOpened'?: (event: CustomEvent) => void;
+    'onOpened'?: (event: CustomEvent<any>) => void;
     'open'?: boolean;
   }
-
-  interface ViewBook {
-    'appLoaded': boolean;
-    'history': RouterHistory;
-  }
-  interface ViewBookAttributes extends StencilHTMLAttributes {
+  interface ViewBook extends JSXBase.HTMLAttributes {
     'appLoaded'?: boolean;
     'history': RouterHistory;
   }
-
-  interface ViewBuilding {
-    /**
-    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
-    */
-    'appLoaded': boolean;
-    /**
-    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
-    */
-    'history': RouterHistory;
-  }
-  interface ViewBuildingAttributes extends StencilHTMLAttributes {
+  interface ViewBuilding extends JSXBase.HTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
@@ -335,38 +371,14 @@ export namespace Components {
     */
     'history': RouterHistory;
   }
-
-  interface ViewEvent {
-    /**
-    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
-    */
-    'appLoaded': boolean;
-    'history': RouterHistory;
-  }
-  interface ViewEventAttributes extends StencilHTMLAttributes {
+  interface ViewEvent extends JSXBase.HTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
     'history': RouterHistory;
   }
-
-  interface ViewFaq {
-    /**
-    * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
-    */
-    'appLoaded': boolean;
-    /**
-    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
-    */
-    'history': RouterHistory;
-    /**
-    * Reference to the object passed in from Stencil containing any URL path variables that were matched by the router.
-    */
-    'match': MatchResults;
-    'setActiveFaq': (faqId: number) => void;
-  }
-  interface ViewFaqAttributes extends StencilHTMLAttributes {
+  interface ViewFaq extends JSXBase.HTMLAttributes {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
@@ -380,40 +392,14 @@ export namespace Components {
     */
     'match': MatchResults;
   }
-
-  interface ViewHome {
-    'appLoaded': boolean;
-    /**
-    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
-    */
-    'history': RouterHistory;
-  }
-  interface ViewHomeAttributes extends StencilHTMLAttributes {
+  interface ViewHome extends JSXBase.HTMLAttributes {
     'appLoaded'?: boolean;
     /**
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
     'history': RouterHistory;
   }
-
-  interface ViewMap {
-    /**
-    * A global flag passed in to indicate if the application has loaded as well.
-    */
-    'appLoaded': boolean;
-    /**
-    * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
-    */
-    'history': RouterHistory;
-    'mapType': MAP_TYPE;
-    /**
-    * The results coming from `stencil-router` that contain any URL matches.
-    */
-    'match': MatchResults;
-    'setActiveDetail': (id: number) => void;
-    'setActiveElement': (id: number) => void;
-  }
-  interface ViewMapAttributes extends StencilHTMLAttributes {
+  interface ViewMap extends JSXBase.HTMLAttributes {
     /**
     * A global flag passed in to indicate if the application has loaded as well.
     */
@@ -430,77 +416,58 @@ export namespace Components {
     /**
     * Event fired when the data specific to this view is finished loading.
     */
-    'onDataLoaded'?: (event: CustomEvent) => void;
+    'onDataLoaded'?: (event: CustomEvent<any>) => void;
   }
-
-  interface ViewSearch {
-    'appLoaded': boolean;
-    'history': RouterHistory;
-    'match': MatchResults;
-    'searchUrl'?: string;
-  }
-  interface ViewSearchAttributes extends StencilHTMLAttributes {
+  interface ViewSearch extends JSXBase.HTMLAttributes {
     'appLoaded'?: boolean;
     'history': RouterHistory;
     'match': MatchResults;
     'searchUrl'?: string;
   }
+
+  interface IntrinsicElements {
+    'rl-accordion': RlAccordion;
+    'rl-accordion-item': RlAccordionItem;
+    'rl-app-bar': RlAppBar;
+    'rl-bis': RlBis;
+    'rl-card': RlCard;
+    'rl-collection': RlCollection;
+    'rl-drawer': RlDrawer;
+    'rl-expansion-panel': RlExpansionPanel;
+    'rl-load-progress': RlLoadProgress;
+    'rl-map-container': RlMapContainer;
+    'rl-map-nav': RlMapNav;
+    'rl-search-box': RlSearchBox;
+    'rl-search-suggestions': RlSearchSuggestions;
+    'rl-side-sheet': RlSideSheet;
+    'view-book': ViewBook;
+    'view-building': ViewBuilding;
+    'view-event': ViewEvent;
+    'view-faq': ViewFaq;
+    'view-home': ViewHome;
+    'view-map': ViewMap;
+    'view-search': ViewSearch;
+  }
 }
 
+export { LocalJSX as JSX };
+
+
+declare module "@stencil/core" {
+  export namespace JSX {
+    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+  }
+}
+
+
 declare global {
-  interface StencilElementInterfaces {
-    'RlBis': Components.RlBis;
-    'RlAccordionItem': Components.RlAccordionItem;
-    'RlAccordion': Components.RlAccordion;
-    'RlAppBar': Components.RlAppBar;
-    'RlCard': Components.RlCard;
-    'RlCollection': Components.RlCollection;
-    'RlDrawer': Components.RlDrawer;
-    'RlExpansionPanel': Components.RlExpansionPanel;
-    'RlLoadProgress': Components.RlLoadProgress;
-    'RlMapContainer': Components.RlMapContainer;
-    'RlMapNav': Components.RlMapNav;
-    'RlSearchBox': Components.RlSearchBox;
-    'RlSearchSuggestions': Components.RlSearchSuggestions;
-    'RlSideSheet': Components.RlSideSheet;
-    'ViewBook': Components.ViewBook;
-    'ViewBuilding': Components.ViewBuilding;
-    'ViewEvent': Components.ViewEvent;
-    'ViewFaq': Components.ViewFaq;
-    'ViewHome': Components.ViewHome;
-    'ViewMap': Components.ViewMap;
-    'ViewSearch': Components.ViewSearch;
-  }
-
-  interface StencilIntrinsicElements {
-    'rl-bis': Components.RlBisAttributes;
-    'rl-accordion-item': Components.RlAccordionItemAttributes;
-    'rl-accordion': Components.RlAccordionAttributes;
-    'rl-app-bar': Components.RlAppBarAttributes;
-    'rl-card': Components.RlCardAttributes;
-    'rl-collection': Components.RlCollectionAttributes;
-    'rl-drawer': Components.RlDrawerAttributes;
-    'rl-expansion-panel': Components.RlExpansionPanelAttributes;
-    'rl-load-progress': Components.RlLoadProgressAttributes;
-    'rl-map-container': Components.RlMapContainerAttributes;
-    'rl-map-nav': Components.RlMapNavAttributes;
-    'rl-search-box': Components.RlSearchBoxAttributes;
-    'rl-search-suggestions': Components.RlSearchSuggestionsAttributes;
-    'rl-side-sheet': Components.RlSideSheetAttributes;
-    'view-book': Components.ViewBookAttributes;
-    'view-building': Components.ViewBuildingAttributes;
-    'view-event': Components.ViewEventAttributes;
-    'view-faq': Components.ViewFaqAttributes;
-    'view-home': Components.ViewHomeAttributes;
-    'view-map': Components.ViewMapAttributes;
-    'view-search': Components.ViewSearchAttributes;
-  }
 
 
-  interface HTMLRlBisElement extends Components.RlBis, HTMLStencilElement {}
-  var HTMLRlBisElement: {
-    prototype: HTMLRlBisElement;
-    new (): HTMLRlBisElement;
+
+  interface HTMLRlAccordionElement extends Components.RlAccordion, HTMLStencilElement {}
+  var HTMLRlAccordionElement: {
+    prototype: HTMLRlAccordionElement;
+    new (): HTMLRlAccordionElement;
   };
 
   interface HTMLRlAccordionItemElement extends Components.RlAccordionItem, HTMLStencilElement {}
@@ -509,16 +476,16 @@ declare global {
     new (): HTMLRlAccordionItemElement;
   };
 
-  interface HTMLRlAccordionElement extends Components.RlAccordion, HTMLStencilElement {}
-  var HTMLRlAccordionElement: {
-    prototype: HTMLRlAccordionElement;
-    new (): HTMLRlAccordionElement;
-  };
-
   interface HTMLRlAppBarElement extends Components.RlAppBar, HTMLStencilElement {}
   var HTMLRlAppBarElement: {
     prototype: HTMLRlAppBarElement;
     new (): HTMLRlAppBarElement;
+  };
+
+  interface HTMLRlBisElement extends Components.RlBis, HTMLStencilElement {}
+  var HTMLRlBisElement: {
+    prototype: HTMLRlBisElement;
+    new (): HTMLRlBisElement;
   };
 
   interface HTMLRlCardElement extends Components.RlCard, HTMLStencilElement {}
@@ -624,34 +591,10 @@ declare global {
   };
 
   interface HTMLElementTagNameMap {
-    'rl-bis': HTMLRlBisElement
-    'rl-accordion-item': HTMLRlAccordionItemElement
-    'rl-accordion': HTMLRlAccordionElement
-    'rl-app-bar': HTMLRlAppBarElement
-    'rl-card': HTMLRlCardElement
-    'rl-collection': HTMLRlCollectionElement
-    'rl-drawer': HTMLRlDrawerElement
-    'rl-expansion-panel': HTMLRlExpansionPanelElement
-    'rl-load-progress': HTMLRlLoadProgressElement
-    'rl-map-container': HTMLRlMapContainerElement
-    'rl-map-nav': HTMLRlMapNavElement
-    'rl-search-box': HTMLRlSearchBoxElement
-    'rl-search-suggestions': HTMLRlSearchSuggestionsElement
-    'rl-side-sheet': HTMLRlSideSheetElement
-    'view-book': HTMLViewBookElement
-    'view-building': HTMLViewBuildingElement
-    'view-event': HTMLViewEventElement
-    'view-faq': HTMLViewFaqElement
-    'view-home': HTMLViewHomeElement
-    'view-map': HTMLViewMapElement
-    'view-search': HTMLViewSearchElement
-  }
-
-  interface ElementTagNameMap {
-    'rl-bis': HTMLRlBisElement;
-    'rl-accordion-item': HTMLRlAccordionItemElement;
     'rl-accordion': HTMLRlAccordionElement;
+    'rl-accordion-item': HTMLRlAccordionItemElement;
     'rl-app-bar': HTMLRlAppBarElement;
+    'rl-bis': HTMLRlBisElement;
     'rl-card': HTMLRlCardElement;
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
@@ -671,13 +614,6 @@ declare global {
     'view-search': HTMLViewSearchElement;
   }
 
-
-  export namespace JSX {
-    export interface Element {}
-    export interface IntrinsicElements extends StencilIntrinsicElements {
-      [tagName: string]: any;
-    }
-  }
-  export interface HTMLAttributes extends StencilHTMLAttributes {}
-
+  interface ElementTagNameMap extends HTMLElementTagNameMap {}
 }
+

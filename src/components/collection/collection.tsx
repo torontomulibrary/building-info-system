@@ -1,4 +1,4 @@
-import { Component, Element, Prop } from '@stencil/core';
+import { Component, Element, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'rl-collection',
@@ -9,7 +9,7 @@ export class Collection {
    * @emits resultSelected
    */
 
-  @Element() root!: HTMLStencilElement;
+  @Element() root!: HTMLRlCollectionElement;
 
   @Prop() collectionTitle = '';
 

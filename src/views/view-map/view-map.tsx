@@ -6,6 +6,7 @@ import {
   Method,
   Prop,
   State,
+  h,
 } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
@@ -64,7 +65,7 @@ export class ViewMap {
   /**
    * Root element of this component.
    */
-  @Element() root!: HTMLStencilElement;
+  @Element() root!: HTMLViewMapElement;
 
   @State() loaded = false;
 
@@ -268,12 +269,12 @@ export class ViewMap {
   }
 
   @Method()
-  setActiveElement(id: number) {
+  async setActiveElement(id: number) {
     this._mapContainer.setActiveElement(this._elms[id]);
   }
 
   @Method()
-  setActiveDetail(id: number) {
+  async setActiveDetail(id: number) {
     const state = this.history.location.state;
     const code = this._dtls[id].code;
     if (state === undefined ||

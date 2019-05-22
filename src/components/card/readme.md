@@ -25,10 +25,27 @@
 
 ## Events
 
-| Event         | Description | Type                |
-| ------------- | ----------- | ------------------- |
-| `cardClicked` |             | `CustomEvent<void>` |
+| Event         | Description | Type               |
+| ------------- | ----------- | ------------------ |
+| `cardClicked` |             | `CustomEvent<any>` |
 
+
+## Dependencies
+
+### Used by
+
+ - [view-book](../../views/view-book)
+ - [view-building](../../views/view-building)
+ - [view-search](../../views/view-search)
+
+### Graph
+```mermaid
+graph TD;
+  view-book --> rl-card
+  view-building --> rl-card
+  view-search --> rl-card
+  style rl-card fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

@@ -16,22 +16,31 @@
 
 ## Methods
 
-### `setActiveFaq(faqId: number) => void`
+### `setActiveFaq(faqId: number) => Promise<void>`
 
 
-
-#### Parameters
-
-| Name    | Type     | Description |
-| ------- | -------- | ----------- |
-| `faqId` | `number` |             |
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Depends on
+
+- [rl-accordion](../../components/accordion)
+- [rl-accordion-item](../../components/accordion-item)
+
+### Graph
+```mermaid
+graph TD;
+  view-faq --> rl-accordion
+  view-faq --> rl-accordion-item
+  style view-faq fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

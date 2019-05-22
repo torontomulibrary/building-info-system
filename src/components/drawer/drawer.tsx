@@ -1,5 +1,5 @@
 import { MDCDrawer } from '@material/drawer/index';
-import { Component, Element, Event, EventEmitter, Listen, Prop, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Listen, Prop, Watch, h } from '@stencil/core';
 
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
 
@@ -76,9 +76,10 @@ export class RLDrawer {
     }
   }
 
-  @Listen('keydown.tab')
+  @Listen('keydown')
   handleTab(ev: KeyboardEvent) {
     const TAB_KEYCODE = '9';
+
     if (this.drawer.open && ev.key === TAB_KEYCODE) {
       if (ev.shiftKey) {
         if (this.firstTabStop && ev.target === this.firstTabStop) {

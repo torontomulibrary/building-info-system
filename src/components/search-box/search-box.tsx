@@ -7,6 +7,7 @@ import {
   Method,
   Prop,
   State,
+  h,
 } from '@stencil/core';
 
 import {
@@ -52,14 +53,14 @@ export class SearchBox {
   @Event() iconClick!: EventEmitter;
 
   @Method()
-  clearInput() {
+  async clearInput() {
     if (this.searchInput) {
       this.searchInput.value = '';
     }
   }
 
-  @Listen('window:click')
-  @Listen('window:focus', { capture: true })
+  @Listen('click', { target: 'window' })
+  @Listen('focus', { capture: true, target: 'window' })
   _checkFocus(e: Event) {
     const target = e.target as Element;
 

@@ -18,22 +18,38 @@
 
 ## Methods
 
-### `setActiveElement(el: MapElementData) => void`
+### `setActiveElement(el: MapElementData) => Promise<void>`
 
 
-
-#### Parameters
-
-| Name | Type             | Description |
-| ---- | ---------------- | ----------- |
-| `el` | `MapElementData` |             |
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Used by
+
+ - [view-map](../../views/view-map)
+
+### Depends on
+
+- rl-map
+- [rl-side-sheet](../site-sheet)
+- [rl-map-nav](../map-nav)
+
+### Graph
+```mermaid
+graph TD;
+  rl-map-container --> rl-map
+  rl-map-container --> rl-side-sheet
+  rl-map-container --> rl-map-nav
+  view-map --> rl-map-container
+  style rl-map-container fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

@@ -16,36 +16,49 @@
 
 ## Events
 
-| Event           | Description                                                      | Type                |
-| --------------- | ---------------------------------------------------------------- | ------------------- |
-| `afterCollapse` | Event emitted after the body's collapse animation has completed. | `CustomEvent<void>` |
-| `afterExpand`   |                                                                  | `CustomEvent<void>` |
-| `closed`        |                                                                  | `CustomEvent<void>` |
-| `opened`        |                                                                  | `CustomEvent<void>` |
+| Event           | Description                                                      | Type               |
+| --------------- | ---------------------------------------------------------------- | ------------------ |
+| `afterCollapse` | Event emitted after the body's collapse animation has completed. | `CustomEvent<any>` |
+| `afterExpand`   |                                                                  | `CustomEvent<any>` |
+| `closed`        |                                                                  | `CustomEvent<any>` |
+| `opened`        |                                                                  | `CustomEvent<any>` |
 
 
 ## Methods
 
-### `close() => void`
+### `close() => Promise<void>`
 
 This function closes this item.
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
-### `open() => void`
+### `open() => Promise<void>`
 
 This function opens this item.
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Used by
+
+ - [view-faq](../../views/view-faq)
+
+### Graph
+```mermaid
+graph TD;
+  view-faq --> rl-accordion-item
+  style rl-accordion-item fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

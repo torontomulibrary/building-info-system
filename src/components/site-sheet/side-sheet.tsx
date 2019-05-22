@@ -7,6 +7,7 @@ import {
   Prop,
   State,
   Watch,
+  h,
 } from '@stencil/core';
 import { FocusTrap } from 'focus-trap';
 
@@ -38,7 +39,7 @@ export class SideSheet {
   /**
    * Root element of this component.
    */
-  @Element() _root!: HTMLStencilElement;
+  @Element() _root!: HTMLRlSideSheetElement;
 
   /**
    * Flag indicating if this `sheet` is current opening or closing.

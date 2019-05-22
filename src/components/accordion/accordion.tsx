@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop } from '@stencil/core';
+import { Component, Element, Listen, Prop, h } from '@stencil/core';
 
 /**
  * A component that can be used to display a list of header/content items.

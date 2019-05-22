@@ -13,6 +13,21 @@
 | `history` _(required)_ | --           | Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes. | `RouterHistory` | `undefined` |
 
 
+## Dependencies
+
+### Depends on
+
+- [rl-card](../../components/card)
+- [rl-expansion-panel](../../components/expansion-panel)
+
+### Graph
+```mermaid
+graph TD;
+  view-building --> rl-card
+  view-building --> rl-expansion-panel
+  style view-building fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

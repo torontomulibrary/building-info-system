@@ -18,12 +18,25 @@
 
 ## Events
 
-| Event                   | Description                                                 | Type                |
-| ----------------------- | ----------------------------------------------------------- | ------------------- |
-| `menuClicked`           | Event fired when the menu button on the app bar is clicked. | `CustomEvent<void>` |
-| `searchFaqClicked`      |                                                             | `CustomEvent<void>` |
-| `searchLocationClicked` |                                                             | `CustomEvent<void>` |
+| Event                   | Description                                                 | Type               |
+| ----------------------- | ----------------------------------------------------------- | ------------------ |
+| `menuClicked`           | Event fired when the menu button on the app bar is clicked. | `CustomEvent<any>` |
+| `searchFaqClicked`      |                                                             | `CustomEvent<any>` |
+| `searchLocationClicked` |                                                             | `CustomEvent<any>` |
 
+
+## Dependencies
+
+### Used by
+
+ - [rl-bis](../../app)
+
+### Graph
+```mermaid
+graph TD;
+  rl-bis --> rl-app-bar
+  style rl-app-bar fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

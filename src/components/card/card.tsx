@@ -6,6 +6,7 @@ import {
   Prop,
   State,
   Watch,
+  h,
 } from '@stencil/core';
 
 import { Color } from '../../utils/color';
@@ -16,7 +17,7 @@ import { Color } from '../../utils/color';
 })
 
 export class Card {
-  @Element() root!: HTMLStencilElement;
+  @Element() root!: HTMLRlCardElement;
 
   @State() protectionFadeColor = new Color(255, 255, 255, 0.2);
   @State() protectionColor = new Color(255, 255, 255, 0.8);

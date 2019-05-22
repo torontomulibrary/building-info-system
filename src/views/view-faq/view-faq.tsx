@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Method, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
@@ -110,7 +110,7 @@ export class ViewFaq {
   }
 
   @Method()
-  setActiveFaq(faqId: number) {
+  async setActiveFaq(faqId: number) {
     // Set the newly selected FAQ.  State will handle all the updates.
     this.selectedFaq = faqId;
   }

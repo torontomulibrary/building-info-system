@@ -19,24 +19,42 @@
 
 ## Events
 
-| Event          | Description | Type                |
-| -------------- | ----------- | ------------------- |
-| `iconClick`    |             | `CustomEvent<void>` |
-| `searchChange` |             | `CustomEvent<void>` |
+| Event          | Description | Type               |
+| -------------- | ----------- | ------------------ |
+| `iconClick`    |             | `CustomEvent<any>` |
+| `searchChange` |             | `CustomEvent<any>` |
 
 
 ## Methods
 
-### `clearInput() => void`
+### `clearInput() => Promise<void>`
 
 
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Used by
+
+ - [rl-bis](../../app)
+
+### Depends on
+
+- [rl-search-suggestions](../search-suggestions)
+
+### Graph
+```mermaid
+graph TD;
+  rl-search-box --> rl-search-suggestions
+  rl-bis --> rl-search-box
+  style rl-search-box fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

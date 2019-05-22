@@ -1,5 +1,5 @@
 import { MDCRipple } from '@material/ripple/index';
-import { Component, Element, Event, EventEmitter, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Method, Prop, State, h } from '@stencil/core';
 
 /**
  * A component providing an element with header and content where the header
@@ -34,12 +34,12 @@ export class RLExpansionPanel {
   }
 
   @Method()
-  close() {
+  async close() {
     this.isOpen = false;
   }
 
   @Method()
-  open() {
+  async open() {
     this.isOpen = true;
   }
 

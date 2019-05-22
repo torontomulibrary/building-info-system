@@ -4,6 +4,7 @@ import {
   Method,
   Prop,
   State,
+  h,
 } from '@stencil/core';
 
 import {
@@ -31,7 +32,7 @@ export class MapContainer {
   /**
    * Root element of this component.
    */
-  @Element() root!: HTMLStencilElement;
+  @Element() root!: HTMLRlMapContainerElement;
 
   /**
    * The currently active Building.
@@ -91,7 +92,7 @@ export class MapContainer {
   }
 
   @Method()
-  setActiveElement(el: MapElementData) {
+  async setActiveElement(el: MapElementData) {
     this._setActiveElement(el);
   }
 
