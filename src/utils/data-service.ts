@@ -18,12 +18,12 @@ class DataService extends Listenable {
 
   private _initialized = false;
 
-  fetchCalendarEvents() {
+  fetchCalendarEvents(num = 30, start?: Date) {
     return new Promise<CalEvent[]>(resolve => {
       const parser: EventParser = new EventParser();
 
       parser.subscribe(() => {
-        const events = parser.getFutureEvents(30);
+        const events = parser.getFutureEvents(num, start);
         resolve(events);
       });
 
@@ -62,8 +62,9 @@ class DataService extends Listenable {
               this._data.set(val, events);
 
               // Load additional events if the cached ones are depleted.
-              if (events.length < 50) {
-                const evts = await this.fetchCalendarEvents();
+              if (events.length < 20) {
+                const start = events[events.length - 1].endTime;
+                const evts = await this.fetchCalendarEvents(10, start);
                 const newEvents = union(events, evts);
 
                 set(val, newEvents).catch(err => {

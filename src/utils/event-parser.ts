@@ -223,12 +223,13 @@ export class EventParser {
    * @returns A shallow copy of all the events with an end time after the
    * current time.
    */
-  getFutureEvents(num: number = Number.MAX_SAFE_INTEGER): CalEvent[] {
+  getFutureEvents(num: number = Number.MAX_SAFE_INTEGER, start?: Date): CalEvent[] {
     const events: CalEvent[] = [];
-    const now = new Date();
+    const cutoff = start ? start : new Date();
+    // const now = new Date();
 
     this.events.map(event => {
-      if (event.endTime && event.endTime >= now && events.length < num) {
+      if (event.endTime && event.endTime > cutoff && events.length < num) {
         events.push(event);
       }
     });
