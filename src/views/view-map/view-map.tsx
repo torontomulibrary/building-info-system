@@ -228,7 +228,7 @@ export class ViewMap {
       }
     });
 
-    if (compLabs.length > 0) {
+    if (this.mapType === MAP_TYPE.COMPUTERS && compLabs.length > 0) {
       this._compLabs = {};
       compLabs.forEach((l: ComputerLab) => {
         Object.values(this._dtls).forEach((d: MapElementDetail) => {
@@ -293,11 +293,17 @@ export class ViewMap {
   floorHasComps(floor: Floor, comps: ComputerLab[]) {
     let hasComps = false;
 
-    comps.forEach((comp: ComputerLab) => {
+    for (const comp of comps) {
+      if (comp.locName.indexOf(this._blds[floor.buildingId].code) === -1) {
+        hasComps = false;
+        break;
+      }
+
       if (Number(comp.locName.charAt(3)) === floor.number) {
         hasComps = true;
+        break;
       }
-    });
+    }
 
     return hasComps;
   }
