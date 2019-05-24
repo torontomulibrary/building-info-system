@@ -205,8 +205,8 @@ export class MapContainer {
 
   render() {
     const detail = this.activeElement && Object.values(this.activeElement.details)[0];
-    const firstDetail = this.activeElement && Object.values(this.activeElement.details)[0].code;
-    const extra = this.extraDetails && this.extraDetails[firstDetail];
+    // const firstDetail = this.activeElement && Object.values(this.activeElement.details)[0].code;
+    const extra = this.extraDetails; // && this.extraDetails[firstDetail];
 
     return ([
       <rl-map
