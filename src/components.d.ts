@@ -7,9 +7,9 @@
 
 import '@stencil/core';
 
-import '@ryersonlibrary/web-components';
 import '@stencil/router';
 import '@stencil/state-tunnel';
+import '@ryersonlibrary/web-components';
 import {
   Color,
 } from './utils/color';
@@ -259,6 +259,9 @@ export namespace Components {
     'onFloorChanged'?: (event: CustomEvent) => void;
   }
 
+  interface RlScrollingCarousel {}
+  interface RlScrollingCarouselAttributes extends StencilHTMLAttributes {}
+
   interface RlSearchBox {
     'clearInput': () => void;
     'docSearch': Search;
@@ -290,6 +293,9 @@ export namespace Components {
     'onSuggestionClicked'?: (event: CustomEvent) => void;
     'suggestions'?: SearchResultItem[];
   }
+
+  interface RlSection_with_header {}
+  interface RlSection_with_headerAttributes extends StencilHTMLAttributes {}
 
   interface RlSideSheet {
     'open': boolean;
@@ -460,8 +466,10 @@ declare global {
     'RlLoadProgress': Components.RlLoadProgress;
     'RlMapContainer': Components.RlMapContainer;
     'RlMapNav': Components.RlMapNav;
+    'RlScrollingCarousel': Components.RlScrollingCarousel;
     'RlSearchBox': Components.RlSearchBox;
     'RlSearchSuggestions': Components.RlSearchSuggestions;
+    'RlSection_with_header': Components.RlSection_with_header;
     'RlSideSheet': Components.RlSideSheet;
     'ViewBook': Components.ViewBook;
     'ViewBuilding': Components.ViewBuilding;
@@ -484,8 +492,10 @@ declare global {
     'rl-load-progress': Components.RlLoadProgressAttributes;
     'rl-map-container': Components.RlMapContainerAttributes;
     'rl-map-nav': Components.RlMapNavAttributes;
+    'rl-scrolling-carousel': Components.RlScrollingCarouselAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
     'rl-search-suggestions': Components.RlSearchSuggestionsAttributes;
+    'rl-section_with_header': Components.RlSection_with_headerAttributes;
     'rl-side-sheet': Components.RlSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
@@ -563,6 +573,12 @@ declare global {
     new (): HTMLRlMapNavElement;
   };
 
+  interface HTMLRlScrollingCarouselElement extends Components.RlScrollingCarousel, HTMLStencilElement {}
+  var HTMLRlScrollingCarouselElement: {
+    prototype: HTMLRlScrollingCarouselElement;
+    new (): HTMLRlScrollingCarouselElement;
+  };
+
   interface HTMLRlSearchBoxElement extends Components.RlSearchBox, HTMLStencilElement {}
   var HTMLRlSearchBoxElement: {
     prototype: HTMLRlSearchBoxElement;
@@ -573,6 +589,12 @@ declare global {
   var HTMLRlSearchSuggestionsElement: {
     prototype: HTMLRlSearchSuggestionsElement;
     new (): HTMLRlSearchSuggestionsElement;
+  };
+
+  interface HTMLRlSection_with_headerElement extends Components.RlSection_with_header, HTMLStencilElement {}
+  var HTMLRlSection_with_headerElement: {
+    prototype: HTMLRlSection_with_headerElement;
+    new (): HTMLRlSection_with_headerElement;
   };
 
   interface HTMLRlSideSheetElement extends Components.RlSideSheet, HTMLStencilElement {}
@@ -635,8 +657,10 @@ declare global {
     'rl-load-progress': HTMLRlLoadProgressElement
     'rl-map-container': HTMLRlMapContainerElement
     'rl-map-nav': HTMLRlMapNavElement
+    'rl-scrolling-carousel': HTMLRlScrollingCarouselElement
     'rl-search-box': HTMLRlSearchBoxElement
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement
+    'rl-section_with_header': HTMLRlSection_with_headerElement
     'rl-side-sheet': HTMLRlSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
@@ -659,8 +683,10 @@ declare global {
     'rl-load-progress': HTMLRlLoadProgressElement;
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
+    'rl-scrolling-carousel': HTMLRlScrollingCarouselElement;
     'rl-search-box': HTMLRlSearchBoxElement;
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
+    'rl-section_with_header': HTMLRlSection_with_headerElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
