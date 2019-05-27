@@ -1,5 +1,7 @@
 @import "rl-view";
 
-.rl-view--home {
-  display: block;
+.rl-view.rl-view--home {
+  width: 100%;
+  margin: 0;
+  padding: 16px;
 }
