@@ -1,8 +1,8 @@
 import { Component, Element } from '@stencil/core';
 
 @Component({
-  tag: 'rl-section_with_header',
-  styleUrl: 'section_with_header.scss',
+  tag: 'rl-section-with-header',
+  styleUrl: 'section-with-header.scss',
   shadow: true,
 })
 export class ScrollingCarousel {
@@ -11,7 +11,7 @@ export class ScrollingCarousel {
   hostData() {
     return {
       class: {
-        'rl-section_with_header': true,
+        'rl-section-with-header': true,
       },
     };
   }

@@ -294,8 +294,8 @@ export namespace Components {
     'suggestions'?: SearchResultItem[];
   }
 
-  interface RlSection_with_header {}
-  interface RlSection_with_headerAttributes extends StencilHTMLAttributes {}
+  interface RlSectionWithHeader {}
+  interface RlSectionWithHeaderAttributes extends StencilHTMLAttributes {}
 
   interface RlSideSheet {
     'open': boolean;
@@ -469,7 +469,7 @@ declare global {
     'RlScrollingCarousel': Components.RlScrollingCarousel;
     'RlSearchBox': Components.RlSearchBox;
     'RlSearchSuggestions': Components.RlSearchSuggestions;
-    'RlSection_with_header': Components.RlSection_with_header;
+    'RlSectionWithHeader': Components.RlSectionWithHeader;
     'RlSideSheet': Components.RlSideSheet;
     'ViewBook': Components.ViewBook;
     'ViewBuilding': Components.ViewBuilding;
@@ -495,7 +495,7 @@ declare global {
     'rl-scrolling-carousel': Components.RlScrollingCarouselAttributes;
     'rl-search-box': Components.RlSearchBoxAttributes;
     'rl-search-suggestions': Components.RlSearchSuggestionsAttributes;
-    'rl-section_with_header': Components.RlSection_with_headerAttributes;
+    'rl-section-with-header': Components.RlSectionWithHeaderAttributes;
     'rl-side-sheet': Components.RlSideSheetAttributes;
     'view-book': Components.ViewBookAttributes;
     'view-building': Components.ViewBuildingAttributes;
@@ -591,10 +591,10 @@ declare global {
     new (): HTMLRlSearchSuggestionsElement;
   };
 
-  interface HTMLRlSection_with_headerElement extends Components.RlSection_with_header, HTMLStencilElement {}
-  var HTMLRlSection_with_headerElement: {
-    prototype: HTMLRlSection_with_headerElement;
-    new (): HTMLRlSection_with_headerElement;
+  interface HTMLRlSectionWithHeaderElement extends Components.RlSectionWithHeader, HTMLStencilElement {}
+  var HTMLRlSectionWithHeaderElement: {
+    prototype: HTMLRlSectionWithHeaderElement;
+    new (): HTMLRlSectionWithHeaderElement;
   };
 
   interface HTMLRlSideSheetElement extends Components.RlSideSheet, HTMLStencilElement {}
@@ -660,7 +660,7 @@ declare global {
     'rl-scrolling-carousel': HTMLRlScrollingCarouselElement
     'rl-search-box': HTMLRlSearchBoxElement
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement
-    'rl-section_with_header': HTMLRlSection_with_headerElement
+    'rl-section-with-header': HTMLRlSectionWithHeaderElement
     'rl-side-sheet': HTMLRlSideSheetElement
     'view-book': HTMLViewBookElement
     'view-building': HTMLViewBuildingElement
@@ -686,7 +686,7 @@ declare global {
     'rl-scrolling-carousel': HTMLRlScrollingCarouselElement;
     'rl-search-box': HTMLRlSearchBoxElement;
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
-    'rl-section_with_header': HTMLRlSection_with_headerElement;
+    'rl-section-with-header': HTMLRlSectionWithHeaderElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
