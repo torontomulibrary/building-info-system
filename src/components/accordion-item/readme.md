@@ -36,6 +36,16 @@ Type: `void`
 
 
 
+### `focusTitle() => void`
+
+
+
+#### Returns
+
+Type: `void`
+
+
+
 ### `open() => void`
 
 This function opens this item.
