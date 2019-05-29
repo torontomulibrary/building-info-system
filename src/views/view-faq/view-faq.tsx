@@ -117,7 +117,7 @@ export class ViewFaq {
       this.selectedFaq = t.index;
       t.focusTitle();
 
-      if (t.getBoundingClientRect().bottom > window.innerHeight) {
+      if (t.getBoundingClientRect().top > window.innerHeight) {
         t.scrollIntoView();
       }
     }
