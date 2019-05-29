@@ -84,21 +84,24 @@ export class ViewSearch {
     const books = this.searchResults && this.searchResults['books'];
     if (books) {
       return (
-        <rl-collection collectionTitle="Books">
-          {books.map(b =>
-            <rl-card
-              cardTitle={b.Title[0]}
-              cardData={b}
-              titleInMedia
-              noContent
-              hasPrimaryAction
-              cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
-              cardColor={new Color(12, 34, 56, 0.8)}
-              onCardClicked={evt => this._bookCardClicked(evt)}
-              style={{ width: '256px' }}>
-            </rl-card>
-          )}
-         </rl-collection>
+        <rl-section-with-header>
+          <h3 slot="title" role="heading" aria-level="2">Books</h3>
+          <rl-scrolling-carousel>
+            {books.map(b =>
+              <rl-card
+                cardTitle={b.Title[0]}
+                cardData={b}
+                titleInMedia
+                noContent
+                hasPrimaryAction
+                cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
+                cardColor={new Color(12, 34, 56, 0.8)}
+                onCardClicked={evt => this._bookCardClicked(evt)}
+                style={{ width: '256px' }}>
+              </rl-card>
+            )}
+          </rl-scrolling-carousel>
+        </rl-section-with-header>
       );
     } else {
       return undefined;

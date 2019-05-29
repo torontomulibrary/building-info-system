@@ -84,34 +84,36 @@ export class ViewBooks {
             </div>
           </div>
         </div>,
-        <rl-collection collectionTitle="Recently Searched">
-          {this.searches.recent.map(s =>
-            <rl-card
-              cardData={s.value}
-              hasPrimaryAction
-              onCardClicked={ev => this._cardClicked(ev)}>
-              <div slot="primary">
-                {s.value}
-              </div>
-            </rl-card>
-          )}
-        </rl-collection>,
-        <rl-collection collectionTitle="Frequently Searched">
-          {this.searches.popular.map(s =>
-            <rl-card
-              cardData={s.value}
-              hasPrimaryAction
-              onCardClicked={ev => this._cardClicked(ev.detail)}>
-              <div slot="primary">
-                {s.value}
-              </div>
-            </rl-card>
-          )}
-        </rl-collection>,
-        <rl-collection collectionTitle="Popular Books">
-          <rl-card></rl-card>
-          <rl-card></rl-card>
-        </rl-collection>,
+        <rl-section-with-header>
+          <h3 slot="title" role="heading" arial-level="2">Recent Searches</h3>
+          <rl-scrolling-carousel>
+            {this.searches.recent.map(s =>
+              <rl-card
+                cardData={s.value}
+                hasPrimaryAction
+                onCardClicked={ev => this._cardClicked(ev)}>
+                <div slot="primary">
+                  {s.value}
+                </div>
+              </rl-card>
+            )}
+          </rl-scrolling-carousel>
+        </rl-section-with-header>,
+        <rl-section-with-header>
+          <h3 slot="title" role="heading" arial-level="2">Frequent Searches</h3>
+          <rl-scrolling-carousel>
+            {this.searches.popular.map(s =>
+              <rl-card
+                cardData={s.value}
+                hasPrimaryAction
+                onCardClicked={ev => this._cardClicked(ev.detail)}>
+                <div slot="primary">
+                  {s.value}
+                </div>
+              </rl-card>
+            )}
+          </rl-scrolling-carousel>
+        </rl-section-with-header>,
       ]);
     }
 
