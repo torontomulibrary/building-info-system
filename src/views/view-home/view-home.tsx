@@ -2,7 +2,8 @@ import { Component, Element, Prop, State } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
-import { APP_DATA } from '../../global/constants';
+import { BASE_URL } from '../../global/config';
+import { APP_DATA, ROUTES } from '../../global/constants';
 import { ComputerLab, SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
@@ -95,7 +96,7 @@ export class ViewHome {
         <h3 slot="title" role="heading" arial-level="2">Computer Availability</h3>
         <div style={{ width: '632px' }}>
           {this.labs.map(lab => (
-            <stencil-route-link url={`/computers/${lab.locName}`}>
+            <stencil-route-link url={`${BASE_URL}${ROUTES.COMPUTERS}/${lab.locName}`}>
               <div>{lab.compAvail} available in {lab.locName}</div>
             </stencil-route-link>
           ))}

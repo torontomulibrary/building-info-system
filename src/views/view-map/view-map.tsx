@@ -10,10 +10,11 @@ import {
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { API_URL } from '../../global/config';
+import { BASE_URL } from '../../global/config';
 import {
   APP_DATA,
   MAP_TYPE,
+  ROUTES,
 } from '../../global/constants';
 import {
   BookDetails,
@@ -30,7 +31,7 @@ import {
   MapElementDetailMap,
 } from '../../interface';
 import { dataService } from '../../utils/data-service';
-import { fetchIMG, fetchJSON } from '../../utils/fetch';
+import { fetchIMG } from '../../utils/fetch';
 import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
 
@@ -44,7 +45,6 @@ export class ViewMap {
   private _flrs!: FloorMap;
   private _elms!: MapElementDataMap;
   private _dtls!: MapElementDetailMap;
-  // private _dtyps!: DetailTypeMap;
   private _book!: BookDetails;
   private _compLabs!: ComputerLabMap;
 
@@ -110,13 +110,13 @@ export class ViewMap {
     // and RM is the 'room number'.  The `room number` is actually the full
     // location code (e.g. SLC508)
     if (this.match && this.match.params) {
-      if (this.match.params.roomNo) {
-        const query = this.match.params.roomNo;
-        const re = /([A-Z]{3})(\d{2}(?=.{2,}|$)|\d{1})?.*/;
+      if (this.match.params.roomNo || this.match.params.labNo) {
+        const query = this.match.params.roomNo || this.match.params.labNo;
+        const re = /([A-Z]{3})(\d{2}(?=\d{2,}|$|\D*$)|\d{1})?.*/;
         this.paramMatches = re.exec(query);
         if (this.paramMatches) {
           this.history.replace({
-            pathname: `/directory/${this.paramMatches[0]}`,
+            pathname: `${BASE_URL}${this.mapType === MAP_TYPE.COMPUTERS ? ROUTES.COMPUTERS : ROUTES.DIRECTORY}/${this.paramMatches[0]}`,
             state: { code: this.paramMatches[0] },
             query: {},
             key: '',
@@ -130,9 +130,6 @@ export class ViewMap {
         const query = this.match.params.callNo;
         if (query.charAt(0) === 'b') {
           // Have a book record number.
-          await fetchJSON(API_URL + 'books/' + query).then((d: BookDetails) => {
-            this._book = this.extraDetails = d;
-          });
           await loadData('books/' + query).then(
             (b: BookDetails) => {
               this._book = this.extraDetails = b;
@@ -181,9 +178,8 @@ export class ViewMap {
       }, {} as MapElementData);
 
       f.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
-          (this.mapType === MAP_TYPE.BOOKS && this._book &&
-          this._book.locations.indexOf(f.name) !== -1)) ||
-          this.floorHasComps(f, compLabs) ?
+          (this.mapType === MAP_TYPE.BOOKS && this._book && this._book.locations.indexOf(f.name) !== -1)) ||
+          (this.mapType === MAP_TYPE.COMPUTERS && this.floorHasComps(f, compLabs)) ?
           true : false;
 
       // Set the initial floor to the specified floor, or first floor of the
@@ -206,7 +202,8 @@ export class ViewMap {
     Object.values(this._elms).forEach((e: MapElementData) => {
       e.details = Object.values(this._dtls || {}).reduce((ob, d: MapElementDetail) => {
         if (this.paramMatches && d.code === this.paramMatches[0] &&
-            this.mapType === MAP_TYPE.DIRECTORY && !this.initialElement) {
+            (this.mapType === MAP_TYPE.DIRECTORY || this.mapType === MAP_TYPE.COMPUTERS) &&
+            !this.initialElement) {
           this.initialElement = d.elementId;
         }
         if (d.elementId === e.id) ob[d.id] = d;
@@ -280,7 +277,7 @@ export class ViewMap {
         state && state.code === undefined ||
         state && state.code && code !== state.code) {
       this.history.push({
-        pathname: `/directory/${code}`,
+        pathname: `/${this.mapType === MAP_TYPE.COMPUTERS ? ROUTES.COMPUTERS : ROUTES.DIRECTORY}/${code}`,
         state: { code },
         query: {},
         key: '',

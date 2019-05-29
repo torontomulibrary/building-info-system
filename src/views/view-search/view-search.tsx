@@ -50,7 +50,7 @@ export class ViewSearch {
     } else {
       // If no search query is provided, redirect to the home page.  There is
       // no point displaying a search page for an empty search!
-      this.history.push('/', {});
+      this.history.push(BASE_URL, {});
     }
   }
 

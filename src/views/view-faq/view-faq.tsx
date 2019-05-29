@@ -2,7 +2,8 @@ import { Component, Element, Listen, Method, Prop, State } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { APP_DATA } from '../../global/constants';
+import { BASE_URL } from '../../global/config';
+import { APP_DATA, ROUTES } from '../../global/constants';
 import { Faq, FaqMap } from '../../interface';
 import { dataService } from '../../utils/data-service';
 import { sanitize } from '../../utils/sanitize';
@@ -60,7 +61,7 @@ export class ViewFaq {
         this.selectedFaq = Number(this.match.params.faqId);
         // Set the internal state of the current history item.
         this.history.replace({
-          pathname: `/faqs/${this.selectedFaq}`,
+          pathname: `${BASE_URL}${ROUTES.FAQS}/${this.selectedFaq}`,
           state: { faqId: this.selectedFaq },
           query: {},
           key: '',
@@ -94,7 +95,7 @@ export class ViewFaq {
       // State needs to be updated/changed to match newly selected FAQ.
       if (this.selectedFaq) {
           this.history.push({
-            pathname: `/faqs/${this.selectedFaq}`,
+            pathname: `${BASE_URL}${ROUTES.FAQS}/${this.selectedFaq}`,
             state: { faqId: this.selectedFaq },
             query: {},
             key: '',
