@@ -1,10 +1,8 @@
-@import "fonts";
+@import "rl-view";
 @import "@material/card/mixins";
 @import "@material/elevation/mixins";
-// @import "@material/layout-grid/mdc-layout-grid";
 @import "@material/rtl/mixins";
 @import "@material/shape/mixins";
-@import "rl-view";
 
 @mixin rl-event-colourize($color, $url) {
   .rl-event { border-color: darken($color, 25%); }

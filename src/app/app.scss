@@ -1,4 +1,3 @@
-@import "fonts";
 @import "@material/animation/variables";
 // Material Components used throughout the app.  Import here rather than in
 // individual locations to avoid duplication.
@@ -36,7 +35,6 @@
       top: $rl-top-bar-mobile-height;
       height: calc(100vh - #{$rl-top-bar-mobile-height});
     }
-    //stencil-router > div { display: inline; }
   }
 }
 
