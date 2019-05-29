@@ -48,6 +48,7 @@ export namespace Components {
     * A delay used to fade-in this item a specific amount of time after the component is rendered.
     */
     'delay': number;
+    'focusTitle': () => void;
     /**
     * An index number used to reference this item in the larger list of all items in the parent accordion.
     */

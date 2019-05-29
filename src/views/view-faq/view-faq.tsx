@@ -89,25 +89,46 @@ export class ViewFaq {
   componentWillUpdate() {
     // Handle when the parameter may change based on user history navigation.
     const state = this.history.location.state;
-    if (state === undefined ||
-        state && state.faqId === undefined ||
-        state && state.faqId && this.selectedFaq !== state.faqId) {
-      // State needs to be updated/changed to match newly selected FAQ.
-      if (this.selectedFaq) {
-          this.history.push({
-            pathname: `${BASE_URL}${ROUTES.FAQS}/${this.selectedFaq}`,
-            state: { faqId: this.selectedFaq },
-            query: {},
-            key: '',
-          });
-        }
+    const path = `${BASE_URL}${ROUTES.FAQS}/`;
+
+    if (this.selectedFaq !== undefined) {
+      // A FAQ is active, ensure the current route state matches.
+      if (state === undefined || state && state.faqId === undefined ||
+          state && state.faqId && this.selectedFaq !== state.faqId) {
+        // State needs to be updated/changed to match newly selected FAQ.
+        this.history.push({
+          pathname: `${path}${this.selectedFaq}`,
+          state: { faqId: this.selectedFaq },
+          query: {},
+          key: '',
+        });
+      }
+    } else {
+      if (state !== undefined) {
+        this.history.push({ pathname: path, state: undefined, query: {}, key: '' });
+      }
     }
   }
 
   @Listen('afterExpand')
-  onAfterExpand() {
-    const active = this.root.querySelector('.rl-accordion-item--open') as HTMLRlAccordionItemElement;
-    this.selectedFaq = active ? active.index : undefined;
+  onAfterExpand(evt: Event) {
+    const t = evt.target as HTMLRlAccordionItemElement;
+    if (t !== null) {
+      this.selectedFaq = t.index;
+      t.focusTitle();
+
+      if (t.getBoundingClientRect().bottom > window.innerHeight) {
+        t.scrollIntoView();
+      }
+    }
+  }
+
+  @Listen('afterCollapse')
+  onAfterCollapse(evt: Event) {
+    const t = evt.target as HTMLRlAccordionItemElement;
+    if (t !== null && t.index === this.selectedFaq) {
+      this.selectedFaq = undefined;
+    }
   }
 
   @Method()
