@@ -162,6 +162,21 @@ export namespace Components {
     'wideMediaAspect'?: boolean;
   }
 
+  interface RlCluster {
+    'columns': number;
+    'data': any;
+    'hasMore': boolean;
+    'heading': string;
+    'type'?: string;
+  }
+  interface RlClusterAttributes extends StencilHTMLAttributes {
+    'columns'?: number;
+    'data'?: any;
+    'hasMore'?: boolean;
+    'heading'?: string;
+    'type'?: string;
+  }
+
   interface RlCollection {
     'collectionTitle': string;
   }
@@ -461,6 +476,7 @@ declare global {
     'RlAccordion': Components.RlAccordion;
     'RlAppBar': Components.RlAppBar;
     'RlCard': Components.RlCard;
+    'RlCluster': Components.RlCluster;
     'RlCollection': Components.RlCollection;
     'RlDrawer': Components.RlDrawer;
     'RlExpansionPanel': Components.RlExpansionPanel;
@@ -487,6 +503,7 @@ declare global {
     'rl-accordion': Components.RlAccordionAttributes;
     'rl-app-bar': Components.RlAppBarAttributes;
     'rl-card': Components.RlCardAttributes;
+    'rl-cluster': Components.RlClusterAttributes;
     'rl-collection': Components.RlCollectionAttributes;
     'rl-drawer': Components.RlDrawerAttributes;
     'rl-expansion-panel': Components.RlExpansionPanelAttributes;
@@ -536,6 +553,12 @@ declare global {
   var HTMLRlCardElement: {
     prototype: HTMLRlCardElement;
     new (): HTMLRlCardElement;
+  };
+
+  interface HTMLRlClusterElement extends Components.RlCluster, HTMLStencilElement {}
+  var HTMLRlClusterElement: {
+    prototype: HTMLRlClusterElement;
+    new (): HTMLRlClusterElement;
   };
 
   interface HTMLRlCollectionElement extends Components.RlCollection, HTMLStencilElement {}
@@ -652,6 +675,7 @@ declare global {
     'rl-accordion': HTMLRlAccordionElement
     'rl-app-bar': HTMLRlAppBarElement
     'rl-card': HTMLRlCardElement
+    'rl-cluster': HTMLRlClusterElement
     'rl-collection': HTMLRlCollectionElement
     'rl-drawer': HTMLRlDrawerElement
     'rl-expansion-panel': HTMLRlExpansionPanelElement
@@ -678,6 +702,7 @@ declare global {
     'rl-accordion': HTMLRlAccordionElement;
     'rl-app-bar': HTMLRlAppBarElement;
     'rl-card': HTMLRlCardElement;
+    'rl-cluster': HTMLRlClusterElement;
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;

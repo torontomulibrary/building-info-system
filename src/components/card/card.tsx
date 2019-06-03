@@ -126,7 +126,7 @@ export class Card {
     return {
       class: {
         'rl-card': true,
-        'mdc-card': true,
+        // 'mdc-card': true,
       },
     };
   }

@@ -3,10 +3,9 @@
 
 .rl-view {
   display: block;
-  position: absolute;
   box-sizing: border-box;
   height: 100%;
-  margin: 0 10%;
+  margin: 0 96px;
   padding-top: 32px;
   transition: opacity 180ms ease-in;
   opacity: 0;

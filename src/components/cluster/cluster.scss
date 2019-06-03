@@ -1,0 +1,86 @@
+
+.rl-lane {
+  &__button {
+    position: absolute;
+    top: 0;
+    width: 48px;
+    height: 100%;
+
+    .icon {
+      display: none;
+      position: relative;
+      top: calc(50% - 24px);
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      vertical-align: middle;
+    }
+
+    &.prev {
+      left: -40px;
+    }
+
+    &.next {
+      right: -40px;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    margin: 0 0 -8px;
+    padding: 0 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+.rl-cluster {
+  display: block;
+  position: relative;
+  margin: 32px auto 0 auto;
+  padding: 0;
+
+  &__header {
+    display: flex;
+    position: relative;
+    align-items: center;
+    box-sizing: border-box;
+    height: 36px;
+    margin: 0 8px 4px 8px;
+
+    &--inner {
+      flex: 1;
+      height: 100%;
+      margin-left: 16px;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    outline: none;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 24px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: default;
+    overflow: hidden;
+  }
+
+  &:hover {
+    &.has-prev .rl-lane__button.prev .icon,
+    &.has-next .rl-lane__button.next .icon { display: inline-block; }
+  }
+
+  &.has-prev:hover .rl-lane__button.prev,
+  &.has-next:hover .rl-lane__button.next {
+    cursor: pointer;
+  }
+}
+
+@for $i from 3 through 8 {
+  .rl-cluster[columns="#{$i}"] .rl-card {
+    width: calc((100% / #{$i}) - 16px);
+  }
+}

@@ -1,9 +1,8 @@
-import { Component, Prop, State, Watch } from '@stencil/core';
+import { Component, Element, Listen, Prop, State, Watch } from '@stencil/core';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/config';
 import { ROUTES } from '../../global/constants';
-import { Color } from '../../utils/color';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -12,7 +11,10 @@ import { fetchJSON } from '../../utils/fetch';
 })
 
 export class ViewSearch {
+  @Element() root!: HTMLViewSearchElement;
+
   @State() loaded = false;
+  @State() clusterColumns = 5;
 
   /**
    * The query currently being searched for.
@@ -54,6 +56,12 @@ export class ViewSearch {
     }
   }
 
+  @Listen('window:resize')
+  onresize() {
+    const width = this.root.clientWidth - 128;
+    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
+  }
+
   @Prop() searchUrl?: string;
 
   @Prop() appLoaded = false;
@@ -84,24 +92,12 @@ export class ViewSearch {
     const books = this.searchResults && this.searchResults['books'];
     if (books) {
       return (
-        <rl-section-with-header>
-          <h3 slot="title" role="heading" aria-level="2">Books</h3>
-          <rl-scrolling-carousel>
-            {books.map(b =>
-              <rl-card
-                cardTitle={b.Title[0]}
-                cardData={b}
-                titleInMedia
-                noContent
-                hasPrimaryAction
-                cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
-                cardColor={new Color(12, 34, 56, 0.8)}
-                onCardClicked={evt => this._bookCardClicked(evt)}
-                style={{ width: '256px' }}>
-              </rl-card>
-            )}
-          </rl-scrolling-carousel>
-        </rl-section-with-header>
+        <rl-cluster
+          heading="Books"
+          type="books"
+          columns={this.clusterColumns}
+          data={books}>
+        </rl-cluster>
       );
     } else {
       return undefined;

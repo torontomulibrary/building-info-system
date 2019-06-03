@@ -5,13 +5,15 @@
 .rl-card {
   @include mdc-elevation(1);
 
-  display: flex;
+  display: inline-block;
   position: relative;
+  flex-direction: column;
   flex-shrink: 0;
   box-sizing: border-box;
-  min-width: 200px;
   margin: 24px 8px;
   transition: box-shadow 180ms $mdc-animation-standard-curve-timing-function;
+  border-radius: 4px;
+  background-color: var(--mdc-theme-surface, #fff);
   will-change: box-shadow;
 
   &__media-text {

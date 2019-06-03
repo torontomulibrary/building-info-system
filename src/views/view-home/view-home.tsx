@@ -1,9 +1,8 @@
-import { Component, Element, Prop, State } from '@stencil/core';
+import { Component, Element, Listen, Prop, State } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
-import { BASE_URL } from '../../global/config';
-import { APP_DATA, ROUTES } from '../../global/constants';
+import { APP_DATA } from '../../global/constants';
 import { ComputerLab, SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
@@ -18,6 +17,7 @@ export class ViewHome {
   @State() loaded = false;
   @State() searches?: SearchHistory;
   @State() labs?: ComputerLab[] = [];
+  @State() clusterColumns = 5;
 
   @Prop() appLoaded = false;
 
@@ -36,6 +36,17 @@ export class ViewHome {
 
   componentDidLoad() {
     this.checkSize();
+    this.updateWidth();
+  }
+
+  updateWidth() {
+    const width = this.root.clientWidth - 128;
+    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
+  }
+
+  @Listen('window:resize')
+  onresize() {
+    this.updateWidth();
   }
 
   checkSize() {
@@ -63,45 +74,26 @@ export class ViewHome {
       return;
     }
 
-    // const compAvail = this.labs.reduce((val, lab) => val += lab.compAvail, 0);
-    // const compTotal = this.labs.reduce((val, lab) => val += lab.compTotal, 0);
-
     return ([
       <stencil-route-title pageTitle="Home" />,
-      <rl-section-with-header>
-        <h3 slot="title" role="heading" arial-level="2">Recent Books</h3>
-        <div style={{ width: '632px' }}>
-          <rl-scrolling-carousel>
-            {this.searches.recent.map(s =>
-              <rl-card cardData={s.value} hasPrimaryAction>
-                <div slot="primary">{s.value}</div>
-              </rl-card>
-            )}
-          </rl-scrolling-carousel>
-        </div>
-      </rl-section-with-header>,
-      <rl-section-with-header>
-        <h3 slot="title" role="heading" arial-level="2">Popular Books</h3>
-        <div style={{ width: '632px' }}>
-          <rl-scrolling-carousel>
-            {this.searches.popular.map(s =>
-              <rl-card cardData={s.value} hasPrimaryAction>
-                <div slot="primary">{s.value}</div>
-              </rl-card>
-            )}
-          </rl-scrolling-carousel>
-        </div>
-      </rl-section-with-header>,
-      <rl-section-with-header>
-        <h3 slot="title" role="heading" arial-level="2">Computer Availability</h3>
-        <div style={{ width: '632px' }}>
-          {this.labs.map(lab => (
-            <stencil-route-link url={`${BASE_URL}${ROUTES.COMPUTERS}/${lab.locName}`}>
-              <div>{lab.compAvail} available in {lab.locName}</div>
-            </stencil-route-link>
-          ))}
-        </div>
-      </rl-section-with-header>,
+      <rl-cluster
+        heading="Recent Books"
+        type="search"
+        columns={this.clusterColumns}
+        data={this.searches.recent}>
+      </rl-cluster>,
+      <rl-cluster
+        heading="Popular Books"
+        type="search"
+        columns={this.clusterColumns}
+        data={this.searches.popular}>
+      </rl-cluster>,
+      <rl-cluster
+        heading="Computer Availability"
+        type="computer"
+        columns={this.clusterColumns}
+        data={this.labs}>
+      </rl-cluster>,
     ]);
   }
 }
