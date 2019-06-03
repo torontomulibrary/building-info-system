@@ -280,7 +280,7 @@ export class RLApp {
               </stencil-route>
               <stencil-route component="view-map"
                 url={[
-                  `${BASE_URL}books/map/:callNo`,
+                  `${BASE_URL}${ROUTES.BOOKS}/map/:callNo`,
                 ]}
                 componentProps={{
                   appLoaded: loaded,
@@ -289,7 +289,7 @@ export class RLApp {
               </stencil-route>
               <stencil-route component="view-map"
                 url={[
-                  `${BASE_URL}${ROUTES.COMPUTERS}/`,
+                  `${BASE_URL}${ROUTES.COMPUTERS}/:labNo?`,
                   `${BASE_URL}${ROUTES.COMPUTERS}`,
                 ]}
                 componentProps={{
@@ -334,7 +334,7 @@ export class RLApp {
                 }}>
               </stencil-route>
               <stencil-route component="view-search"
-                url={[`${BASE_URL}search/:query?`]}
+                url={[`${BASE_URL}${ROUTES.SEARCH}/:query?`]}
                 componentProps={{
                   appLoaded: loaded,
                 }}>

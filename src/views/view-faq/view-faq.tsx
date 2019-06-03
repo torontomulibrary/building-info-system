@@ -2,7 +2,8 @@ import { Component, Element, Listen, Method, Prop, State, h } from '@stencil/cor
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import { APP_DATA } from '../../global/constants';
+import { BASE_URL } from '../../global/config';
+import { APP_DATA, ROUTES } from '../../global/constants';
 import { Faq, FaqMap } from '../../interface';
 import { dataService } from '../../utils/data-service';
 import { sanitize } from '../../utils/sanitize';
@@ -60,7 +61,7 @@ export class ViewFaq {
         this.selectedFaq = Number(this.match.params.faqId);
         // Set the internal state of the current history item.
         this.history.replace({
-          pathname: `/faqs/${this.selectedFaq}`,
+          pathname: `${BASE_URL}${ROUTES.FAQS}/${this.selectedFaq}`,
           state: { faqId: this.selectedFaq },
           query: {},
           key: '',
@@ -88,25 +89,46 @@ export class ViewFaq {
   componentWillUpdate() {
     // Handle when the parameter may change based on user history navigation.
     const state = this.history.location.state;
-    if (state === undefined ||
-        state && state.faqId === undefined ||
-        state && state.faqId && this.selectedFaq !== state.faqId) {
-      // State needs to be updated/changed to match newly selected FAQ.
-      if (this.selectedFaq) {
-          this.history.push({
-            pathname: `/faqs/${this.selectedFaq}`,
-            state: { faqId: this.selectedFaq },
-            query: {},
-            key: '',
-          });
-        }
+    const path = `${BASE_URL}${ROUTES.FAQS}/`;
+
+    if (this.selectedFaq !== undefined) {
+      // A FAQ is active, ensure the current route state matches.
+      if (state === undefined || state && state.faqId === undefined ||
+          state && state.faqId && this.selectedFaq !== state.faqId) {
+        // State needs to be updated/changed to match newly selected FAQ.
+        this.history.push({
+          pathname: `${path}${this.selectedFaq}`,
+          state: { faqId: this.selectedFaq },
+          query: {},
+          key: '',
+        });
+      }
+    } else {
+      if (state !== undefined) {
+        this.history.push({ pathname: path, state: undefined, query: {}, key: '' });
+      }
     }
   }
 
   @Listen('afterExpand')
-  onAfterExpand() {
-    const active = this.root.querySelector('.rl-accordion-item--open') as HTMLRlAccordionItemElement;
-    this.selectedFaq = active ? active.index : undefined;
+  onAfterExpand(evt: Event) {
+    const t = evt.target as HTMLRlAccordionItemElement;
+    if (t !== null) {
+      this.selectedFaq = t.index;
+      t.focusTitle();
+
+      if (t.getBoundingClientRect().top > window.innerHeight) {
+        t.scrollIntoView();
+      }
+    }
+  }
+
+  @Listen('afterCollapse')
+  onAfterCollapse(evt: Event) {
+    const t = evt.target as HTMLRlAccordionItemElement;
+    if (t !== null && t.index === this.selectedFaq) {
+      this.selectedFaq = undefined;
+    }
   }
 
   @Method()

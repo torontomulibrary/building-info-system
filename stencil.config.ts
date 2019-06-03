@@ -20,6 +20,7 @@ export const config: Config = {
       injectGlobalPaths: [
         './src/global/_variables.scss',
         './src/global/_mixins.scss',
+        './src/global/_fonts.scss',
       ],
       includePaths: ['./node_modules', './src/global'],
     }),

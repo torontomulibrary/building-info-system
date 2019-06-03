@@ -1,6 +1,10 @@
-import { Component, Element, Prop, State, h } from '@stencil/core';
+import { Component, Element, Listen, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
+
+import { APP_DATA } from '../../global/constants';
+import { ComputerLab, SearchHistory } from '../../interface';
+import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-home',
@@ -11,8 +15,9 @@ export class ViewHome {
   @Element() root!: HTMLElement;
 
   @State() loaded = false;
-
-  // @Prop({ mutable: true }) appData!: AppData;
+  @State() searches?: SearchHistory;
+  @State() labs?: ComputerLab[] = [];
+  @State() clusterColumns = 5;
 
   @Prop() appLoaded = false;
 
@@ -24,8 +29,24 @@ export class ViewHome {
 
   @Prop({ context: 'queue' }) queue!: QueueApi;
 
+  componentWillLoad() {
+    this.searches = dataService.getData(APP_DATA.HISTORY);
+    this.labs = dataService.getData(APP_DATA.COMPUTERS);
+  }
+
   componentDidLoad() {
     this.checkSize();
+    this.updateWidth();
+  }
+
+  updateWidth() {
+    const width = this.root.clientWidth - 128;
+    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
+  }
+
+  @Listen('window:resize')
+  onresize() {
+    this.updateWidth();
   }
 
   checkSize() {
@@ -49,13 +70,30 @@ export class ViewHome {
   }
 
   render() {
+    if (this.searches === undefined || this.labs === undefined) {
+      return;
+    }
+
     return ([
       <stencil-route-title pageTitle="Home" />,
-      <div>
-        Welcome to the home screen.
-        <a href="#">Tabbable link</a>
-        <slot />
-      </div>,
+      <rl-cluster
+        heading="Recent Books"
+        type="search"
+        columns={this.clusterColumns}
+        data={this.searches.recent}>
+      </rl-cluster>,
+      <rl-cluster
+        heading="Popular Books"
+        type="search"
+        columns={this.clusterColumns}
+        data={this.searches.popular}>
+      </rl-cluster>,
+      <rl-cluster
+        heading="Computer Availability"
+        type="computer"
+        columns={this.clusterColumns}
+        data={this.labs}>
+      </rl-cluster>,
     ]);
   }
 }

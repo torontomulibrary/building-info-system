@@ -1,5 +1,15 @@
 import { MDCRipple } from '@material/ripple/index';
-import { Component, Element, Event, EventEmitter, Listen, Method, Prop, State, h } from '@stencil/core';
+import {
+  Component,
+  Element,
+  Event,
+  EventEmitter,
+  Listen,
+  Method,
+  Prop,
+  State,
+  h,
+} from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 
 /**
@@ -91,8 +101,11 @@ export class AccordionItem {
   }
 
   @Listen('transitionend')
-  onTransitionEnd() {
-    this.isOpen ? this.afterExpand.emit() : this.afterCollapse.emit();
+  onTransitionEnd(evt: TransitionEvent) {
+    // Ignore transition events for other properties (like opacity and margin).
+    if (evt.propertyName === 'height') {
+      this.isOpen ? this.afterExpand.emit() : this.afterCollapse.emit();
+    }
   }
 
   updateHeight() {
@@ -117,6 +130,13 @@ export class AccordionItem {
   toggle() {
     this.isOpen = !this.isOpen;
     this.isOpen ? this.opened.emit() : this.closed.emit();
+  }
+
+  @Method()
+  focusTitle() {
+    if (this._button !== undefined) {
+      this._button.focus();
+    }
   }
 
   /**

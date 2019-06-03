@@ -77,7 +77,9 @@ export class MapContainer {
   componentWillLoad() {
     this._setActiveBuilding(this.buildings[this.initialBuilding]);
     this._setActiveFloor(this.activeFloors[this.initialFloor]);
+  }
 
+  componentDidLoad() {
     if (this.initialElement) {
       this._setActiveElement(this.activeElements[this.initialElement]);
     }
@@ -206,8 +208,12 @@ export class MapContainer {
 
   render() {
     const detail = this.activeElement && Object.values(this.activeElement.details)[0];
-    const firstDetail = this.activeElement && Object.values(this.activeElement.details)[0].code;
-    const extra = this.extraDetails && this.extraDetails[firstDetail];
+    let extra = {};
+
+    if (this.extraDetails !== undefined) {
+      const firstDetail = this.activeElement && Object.values(this.activeElement.details)[0].code;
+      extra = this.extraDetails[firstDetail];
+    }
 
     return ([
       <rl-map

@@ -4,17 +4,15 @@
   --rl-map-element-font-size: 48px;
 }
 
-.rl-map-symbol--computer {
-  fill: #600;
-  fill-rule: evenodd;
-}
+.rl-svg__symbol {
+  &--computer {
+    fill: #800;
+    stroke: #300;
+    fill-rule: evenodd;
 
-.rl-map {
-  &-marker {
-    &--available {
-      .rl-map-symbol--computer {
-        fill: #060;
-      }
+    &-alt {
+      fill: #080;
+      stroke: #030;
     }
   }
 }

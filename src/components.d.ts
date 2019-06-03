@@ -5,8 +5,11 @@
  */
 
 
-import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-import { JSX } from '@stencil/core';
+import '@stencil/core';
+
+import '@stencil/router';
+import '@stencil/state-tunnel';
+import '@ryersonlibrary/web-components';
 import {
   Color,
 } from './utils/color';
@@ -51,6 +54,7 @@ export namespace Components {
     * A delay used to fade-in this item a specific amount of time after the component is rendered.
     */
     'delay': number;
+    'focusTitle': () => void;
     /**
     * An index number used to reference this item in the larger list of all items in the parent accordion.
     */
@@ -279,7 +283,26 @@ declare namespace LocalJSX {
     'titleInMedia'?: boolean;
     'wideMediaAspect'?: boolean;
   }
-  interface RlCollection extends JSXBase.HTMLAttributes {
+
+  interface RlCluster {
+    'columns': number;
+    'data': any;
+    'hasMore': boolean;
+    'heading': string;
+    'type'?: string;
+  }
+  interface RlClusterAttributes extends StencilHTMLAttributes {
+    'columns'?: number;
+    'data'?: any;
+    'hasMore'?: boolean;
+    'heading'?: string;
+    'type'?: string;
+  }
+
+  interface RlCollection {
+    'collectionTitle': string;
+  }
+  interface RlCollectionAttributes extends StencilHTMLAttributes {
     'collectionTitle'?: string;
   }
   interface RlDrawer extends JSXBase.HTMLAttributes {
@@ -330,7 +353,20 @@ declare namespace LocalJSX {
     */
     'onFloorChanged'?: (event: CustomEvent<any>) => void;
   }
-  interface RlSearchBox extends JSXBase.HTMLAttributes {
+
+  interface RlScrollingCarousel {}
+  interface RlScrollingCarouselAttributes extends StencilHTMLAttributes {}
+
+  interface RlSearchBox {
+    'clearInput': () => void;
+    'docSearch': Search;
+    'id': string;
+    'placeholder': string;
+    'resultHeight': number;
+    'searchValue': string;
+    'showMenu': boolean;
+  }
+  interface RlSearchBoxAttributes extends StencilHTMLAttributes {
     'docSearch': Search;
     'id'?: string;
     'onIconClick'?: (event: CustomEvent<any>) => void;
@@ -346,7 +382,14 @@ declare namespace LocalJSX {
     'onSuggestionClicked'?: (event: CustomEvent<any>) => void;
     'suggestions'?: SearchResultItem[];
   }
-  interface RlSideSheet extends JSXBase.HTMLAttributes {
+
+  interface RlSectionWithHeader {}
+  interface RlSectionWithHeaderAttributes extends StencilHTMLAttributes {}
+
+  interface RlSideSheet {
+    'open': boolean;
+  }
+  interface RlSideSheetAttributes extends StencilHTMLAttributes {
     /**
     * Event fired when the `side-sheet` has finished closing.
     */
@@ -450,12 +493,59 @@ declare namespace LocalJSX {
   }
 }
 
-export { LocalJSX as JSX };
+declare global {
+  interface StencilElementInterfaces {
+    'RlBis': Components.RlBis;
+    'RlAccordionItem': Components.RlAccordionItem;
+    'RlAccordion': Components.RlAccordion;
+    'RlAppBar': Components.RlAppBar;
+    'RlCard': Components.RlCard;
+    'RlCluster': Components.RlCluster;
+    'RlCollection': Components.RlCollection;
+    'RlDrawer': Components.RlDrawer;
+    'RlExpansionPanel': Components.RlExpansionPanel;
+    'RlLoadProgress': Components.RlLoadProgress;
+    'RlMapContainer': Components.RlMapContainer;
+    'RlMapNav': Components.RlMapNav;
+    'RlScrollingCarousel': Components.RlScrollingCarousel;
+    'RlSearchBox': Components.RlSearchBox;
+    'RlSearchSuggestions': Components.RlSearchSuggestions;
+    'RlSectionWithHeader': Components.RlSectionWithHeader;
+    'RlSideSheet': Components.RlSideSheet;
+    'ViewBook': Components.ViewBook;
+    'ViewBuilding': Components.ViewBuilding;
+    'ViewEvent': Components.ViewEvent;
+    'ViewFaq': Components.ViewFaq;
+    'ViewHome': Components.ViewHome;
+    'ViewMap': Components.ViewMap;
+    'ViewSearch': Components.ViewSearch;
+  }
 
-
-declare module "@stencil/core" {
-  export namespace JSX {
-    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+  interface StencilIntrinsicElements {
+    'rl-bis': Components.RlBisAttributes;
+    'rl-accordion-item': Components.RlAccordionItemAttributes;
+    'rl-accordion': Components.RlAccordionAttributes;
+    'rl-app-bar': Components.RlAppBarAttributes;
+    'rl-card': Components.RlCardAttributes;
+    'rl-cluster': Components.RlClusterAttributes;
+    'rl-collection': Components.RlCollectionAttributes;
+    'rl-drawer': Components.RlDrawerAttributes;
+    'rl-expansion-panel': Components.RlExpansionPanelAttributes;
+    'rl-load-progress': Components.RlLoadProgressAttributes;
+    'rl-map-container': Components.RlMapContainerAttributes;
+    'rl-map-nav': Components.RlMapNavAttributes;
+    'rl-scrolling-carousel': Components.RlScrollingCarouselAttributes;
+    'rl-search-box': Components.RlSearchBoxAttributes;
+    'rl-search-suggestions': Components.RlSearchSuggestionsAttributes;
+    'rl-section-with-header': Components.RlSectionWithHeaderAttributes;
+    'rl-side-sheet': Components.RlSideSheetAttributes;
+    'view-book': Components.ViewBookAttributes;
+    'view-building': Components.ViewBuildingAttributes;
+    'view-event': Components.ViewEventAttributes;
+    'view-faq': Components.ViewFaqAttributes;
+    'view-home': Components.ViewHomeAttributes;
+    'view-map': Components.ViewMapAttributes;
+    'view-search': Components.ViewSearchAttributes;
   }
 }
 
@@ -494,6 +584,12 @@ declare global {
     new (): HTMLRlCardElement;
   };
 
+  interface HTMLRlClusterElement extends Components.RlCluster, HTMLStencilElement {}
+  var HTMLRlClusterElement: {
+    prototype: HTMLRlClusterElement;
+    new (): HTMLRlClusterElement;
+  };
+
   interface HTMLRlCollectionElement extends Components.RlCollection, HTMLStencilElement {}
   var HTMLRlCollectionElement: {
     prototype: HTMLRlCollectionElement;
@@ -530,6 +626,12 @@ declare global {
     new (): HTMLRlMapNavElement;
   };
 
+  interface HTMLRlScrollingCarouselElement extends Components.RlScrollingCarousel, HTMLStencilElement {}
+  var HTMLRlScrollingCarouselElement: {
+    prototype: HTMLRlScrollingCarouselElement;
+    new (): HTMLRlScrollingCarouselElement;
+  };
+
   interface HTMLRlSearchBoxElement extends Components.RlSearchBox, HTMLStencilElement {}
   var HTMLRlSearchBoxElement: {
     prototype: HTMLRlSearchBoxElement;
@@ -540,6 +642,12 @@ declare global {
   var HTMLRlSearchSuggestionsElement: {
     prototype: HTMLRlSearchSuggestionsElement;
     new (): HTMLRlSearchSuggestionsElement;
+  };
+
+  interface HTMLRlSectionWithHeaderElement extends Components.RlSectionWithHeader, HTMLStencilElement {}
+  var HTMLRlSectionWithHeaderElement: {
+    prototype: HTMLRlSectionWithHeaderElement;
+    new (): HTMLRlSectionWithHeaderElement;
   };
 
   interface HTMLRlSideSheetElement extends Components.RlSideSheet, HTMLStencilElement {}
@@ -591,19 +699,51 @@ declare global {
   };
 
   interface HTMLElementTagNameMap {
+    'rl-bis': HTMLRlBisElement
+    'rl-accordion-item': HTMLRlAccordionItemElement
+    'rl-accordion': HTMLRlAccordionElement
+    'rl-app-bar': HTMLRlAppBarElement
+    'rl-card': HTMLRlCardElement
+    'rl-cluster': HTMLRlClusterElement
+    'rl-collection': HTMLRlCollectionElement
+    'rl-drawer': HTMLRlDrawerElement
+    'rl-expansion-panel': HTMLRlExpansionPanelElement
+    'rl-load-progress': HTMLRlLoadProgressElement
+    'rl-map-container': HTMLRlMapContainerElement
+    'rl-map-nav': HTMLRlMapNavElement
+    'rl-scrolling-carousel': HTMLRlScrollingCarouselElement
+    'rl-search-box': HTMLRlSearchBoxElement
+    'rl-search-suggestions': HTMLRlSearchSuggestionsElement
+    'rl-section-with-header': HTMLRlSectionWithHeaderElement
+    'rl-side-sheet': HTMLRlSideSheetElement
+    'view-book': HTMLViewBookElement
+    'view-building': HTMLViewBuildingElement
+    'view-event': HTMLViewEventElement
+    'view-faq': HTMLViewFaqElement
+    'view-home': HTMLViewHomeElement
+    'view-map': HTMLViewMapElement
+    'view-search': HTMLViewSearchElement
+  }
+
+  interface ElementTagNameMap {
+    'rl-bis': HTMLRlBisElement;
+    'rl-accordion-item': HTMLRlAccordionItemElement;
     'rl-accordion': HTMLRlAccordionElement;
     'rl-accordion-item': HTMLRlAccordionItemElement;
     'rl-app-bar': HTMLRlAppBarElement;
     'rl-bis': HTMLRlBisElement;
     'rl-card': HTMLRlCardElement;
+    'rl-cluster': HTMLRlClusterElement;
     'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
     'rl-load-progress': HTMLRlLoadProgressElement;
     'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
+    'rl-scrolling-carousel': HTMLRlScrollingCarouselElement;
     'rl-search-box': HTMLRlSearchBoxElement;
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
+    'rl-section-with-header': HTMLRlSectionWithHeaderElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
     'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
