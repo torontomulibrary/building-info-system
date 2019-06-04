@@ -1,6 +1,8 @@
 import { Config } from '@stencil/core';
 import { postcss } from '@stencil/postcss';
 import { sass } from '@stencil/sass';
+import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
 
 export const config: Config = {
   enableCache: true,
@@ -16,6 +18,8 @@ export const config: Config = {
     },
   ],
   plugins: [
+    globals(),
+    builtins(),
     sass({
       injectGlobalPaths: [
         './src/global/_variables.scss',

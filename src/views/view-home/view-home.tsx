@@ -44,7 +44,7 @@ export class ViewHome {
     this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
   }
 
-  @Listen('window:resize')
+  @Listen('resize', { target: 'window' })
   onresize() {
     this.updateWidth();
   }

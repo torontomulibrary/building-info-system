@@ -133,7 +133,7 @@ export class AccordionItem {
   }
 
   @Method()
-  focusTitle() {
+  async focusTitle() {
     if (this._button !== undefined) {
       this._button.focus();
     }
