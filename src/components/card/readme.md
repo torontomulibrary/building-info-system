@@ -34,16 +34,21 @@
 
 ### Used by
 
+ - [rl-cluster](../cluster)
  - [view-book](../../views/view-book)
  - [view-building](../../views/view-building)
- - [view-search](../../views/view-search)
+
+### Depends on
+
+- stencil-route-link
 
 ### Graph
 ```mermaid
 graph TD;
+  rl-card --> stencil-route-link
+  rl-cluster --> rl-card
   view-book --> rl-card
   view-building --> rl-card
-  view-search --> rl-card
   style rl-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

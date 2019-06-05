@@ -49,11 +49,13 @@ Type: `Promise<void>`
 
 ### Depends on
 
+- stencil-route-title
 - [rl-map-container](../../components/map-container)
 
 ### Graph
 ```mermaid
 graph TD;
+  view-map --> stencil-route-title
   view-map --> rl-map-container
   rl-map-container --> rl-map
   rl-map-container --> rl-side-sheet

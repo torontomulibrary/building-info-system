@@ -17,14 +17,17 @@
 
 ### Depends on
 
+- stencil-route-title
 - [rl-card](../../components/card)
 - [rl-expansion-panel](../../components/expansion-panel)
 
 ### Graph
 ```mermaid
 graph TD;
+  view-building --> stencil-route-title
   view-building --> rl-card
   view-building --> rl-expansion-panel
+  rl-card --> stencil-route-link
   style view-building fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -19,14 +19,17 @@
 
 ### Depends on
 
-- [rl-collection](../../components/collection)
-- [rl-card](../../components/card)
+- [rl-cluster](../../components/cluster)
+- stencil-route-title
 
 ### Graph
 ```mermaid
 graph TD;
-  view-search --> rl-collection
-  view-search --> rl-card
+  view-search --> rl-cluster
+  view-search --> stencil-route-title
+  rl-cluster --> rl-card
+  rl-cluster --> stencil-route-link
+  rl-card --> stencil-route-link
   style view-search fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

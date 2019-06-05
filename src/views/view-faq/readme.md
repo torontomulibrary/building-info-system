@@ -31,12 +31,14 @@ Type: `Promise<void>`
 
 ### Depends on
 
+- stencil-route-title
 - [rl-accordion](../../components/accordion)
 - [rl-accordion-item](../../components/accordion-item)
 
 ### Graph
 ```mermaid
 graph TD;
+  view-faq --> stencil-route-title
   view-faq --> rl-accordion
   view-faq --> rl-accordion-item
   style view-faq fill:#f9f,stroke:#333,stroke-width:4px

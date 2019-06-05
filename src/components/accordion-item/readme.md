@@ -36,18 +36,17 @@ Type: `Promise<void>`
 
 
 
-### `open() => Promise<void>`
-### `focusTitle() => void`
+### `focusTitle() => Promise<void>`
 
 
 
 #### Returns
 
-Type: `void`
+Type: `Promise<void>`
 
 
 
-### `open() => void`
+### `open() => Promise<void>`
 
 This function opens this item.
 

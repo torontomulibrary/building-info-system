@@ -17,14 +17,15 @@
 
 ### Depends on
 
-- [rl-collection](../../components/collection)
+- stencil-route-title
 - [rl-card](../../components/card)
 
 ### Graph
 ```mermaid
 graph TD;
-  view-book --> rl-collection
+  view-book --> stencil-route-title
   view-book --> rl-card
+  rl-card --> stencil-route-link
   style view-book fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
