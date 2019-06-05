@@ -149,11 +149,11 @@ export class RLApp {
    *
    * @param e The triggering event
    */
-  _onSearchLocationClicked(resultId) {
+  async _onSearchLocationClicked(resultId) {
     const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
     if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
       // Map is open. Set active element.
-      viewMap.setActiveDetail(this._locationData[resultId].id);
+      await viewMap.setActiveDetail(this._locationData[resultId].id);
     } else {
       // Navigate to page and then set the active element.
       const loc = this._locationData[resultId];
@@ -173,10 +173,10 @@ export class RLApp {
    *
    * @param e The triggering event
    */
-  _onSearchFaqClicked(resultId) {
+  async _onSearchFaqClicked(resultId) {
     const viewFaq = this.root.querySelector('.rl-view--faq') as HTMLViewFaqElement;
     if (viewFaq && viewFaq.hasOwnProperty('setActiveFaq')) {
-      viewFaq.setActiveFaq(resultId);
+      await viewFaq.setActiveFaq(resultId);
     } else {
       // Navigate to page and then set the active element.
       // tslint:disable-next-line: no-unnecessary-type-assertion
@@ -186,16 +186,16 @@ export class RLApp {
   }
 
   @Listen('suggestionClicked')
-  onSuggestionClicked(e: CustomEvent) {
+  async onSuggestionClicked(e: CustomEvent) {
     const resultID = e.detail.id as string;
     const [ type, id ] = resultID.split('-');
 
     switch (type) {
       case 'd':
-        this._onSearchLocationClicked(Number(id));
+        await this._onSearchLocationClicked(Number(id));
         break;
       case 'f':
-        this._onSearchFaqClicked(Number(id));
+        await this._onSearchFaqClicked(Number(id));
         break;
       default:
     }
