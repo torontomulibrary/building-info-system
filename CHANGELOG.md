@@ -1,3 +1,43 @@
+# [0.5.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.4.0...v0.5.0) (2019-06-05)
+
+
+### Bug Fixes
+
+* **app:** DataService returns appropriate type. ([2fee78d](https://github.com/ryersonlibrary/building-info-system/commit/2fee78d))
+* **app:** LoadProgress hides properly ([0674ae4](https://github.com/ryersonlibrary/building-info-system/commit/0674ae4))
+* **app:** paths changed to use global constants and crucial BASE_PATH ([ce9fa44](https://github.com/ryersonlibrary/building-info-system/commit/ce9fa44))
+* **app:** resolve small linting issues ([a6ad658](https://github.com/ryersonlibrary/building-info-system/commit/a6ad658))
+* **app:** section-with-header typos ([4ef1962](https://github.com/ryersonlibrary/building-info-system/commit/4ef1962))
+* **app:** views use new scrolling carousel component over collection ([a29d517](https://github.com/ryersonlibrary/building-info-system/commit/a29d517))
+* **app:** working towards stencil-1 compatibility ([84f3087](https://github.com/ryersonlibrary/building-info-system/commit/84f3087))
+* **App:** Changes needed to work with stencil-one ([fc0ee90](https://github.com/ryersonlibrary/building-info-system/commit/fc0ee90))
+* **card:** Card action button now StencilRouteLink ([499a5bc](https://github.com/ryersonlibrary/building-info-system/commit/499a5bc)), closes [#18](https://github.com/ryersonlibrary/building-info-system/issues/18)
+* **css:** move font overrides to global scss scope ([0fb5398](https://github.com/ryersonlibrary/building-info-system/commit/0fb5398))
+* **data:** Load events fixed ([7fca4c0](https://github.com/ryersonlibrary/building-info-system/commit/7fca4c0))
+* **Events:** Refresh of cached events works properly ([7c989e1](https://github.com/ryersonlibrary/building-info-system/commit/7c989e1)), closes [#19](https://github.com/ryersonlibrary/building-info-system/issues/19)
+* **index:** update paths to be absolute not relative to url ([b89c1da](https://github.com/ryersonlibrary/building-info-system/commit/b89c1da))
+* **map:** Remove use of mapRendered event ([1814ca7](https://github.com/ryersonlibrary/building-info-system/commit/1814ca7)), closes [#16](https://github.com/ryersonlibrary/building-info-system/issues/16)
+* **map-container:** Extra details for books now display properly ([708f816](https://github.com/ryersonlibrary/building-info-system/commit/708f816))
+* **map-container:** initialElement properly selects and computer details fixed ([386fa5e](https://github.com/ryersonlibrary/building-info-system/commit/386fa5e))
+* **search:** Search working again as it was using stencil-1.0 ([ffdde20](https://github.com/ryersonlibrary/building-info-system/commit/ffdde20))
+* **search-box:** Change how search-box and suggestions work ([aa258a0](https://github.com/ryersonlibrary/building-info-system/commit/aa258a0))
+* **view-event:** Fix page title and font family ([5cf52ec](https://github.com/ryersonlibrary/building-info-system/commit/5cf52ec))
+* **view-faq:** scroll into view when top is beyond viewport ([4ff8597](https://github.com/ryersonlibrary/building-info-system/commit/4ff8597))
+* Remove call to deprecated map function and fix element reselect bug ([b01091b](https://github.com/ryersonlibrary/building-info-system/commit/b01091b))
+* **view-map:** Change background color to match map images ([e890cce](https://github.com/ryersonlibrary/building-info-system/commit/e890cce))
+* **view-map:** computers parsed only when mapType matches ([cb07126](https://github.com/ryersonlibrary/building-info-system/commit/cb07126))
+* **view-map:** Styles use new symbol names from web-components/map component ([8a54bde](https://github.com/ryersonlibrary/building-info-system/commit/8a54bde))
+
+
+### Features
+
+* **app:** Add Cluster component, modeled after Google Play Music ([46c7698](https://github.com/ryersonlibrary/building-info-system/commit/46c7698))
+* **app:** add scrolling carousel component ([f56a534](https://github.com/ryersonlibrary/building-info-system/commit/f56a534))
+* **app:** add section-with-header component ([87ae4f2](https://github.com/ryersonlibrary/building-info-system/commit/87ae4f2))
+* **view-faq:** faq selection now working completely ([c04041d](https://github.com/ryersonlibrary/building-info-system/commit/c04041d))
+
+
+
 ## [0.4.1](https://github.com/ryersonlibrary/building-info-system/compare/v0.4.0...v0.4.1) (2019-05-17)
 
 

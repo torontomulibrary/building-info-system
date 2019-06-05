@@ -1,6 +1,6 @@
 {
   "name": "@ryersonlibrary/building-info-system",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "An information and wayfinding web application for buildings.",
   "keywords": [
     "ryerson",
@@ -97,7 +97,7 @@
     "ndx-compat": "^1.0.0",
     "ndx-query": "^1.0.0",
     "node-sass": "^4.12.0",
-    "puppeteer": "1.11.0",
+    "puppeteer": "1.14.0",
     "pwa-helpers": "^0.9.1",
     "semver": "^5.6.0",
     "stylelint": "^9.10.1",
