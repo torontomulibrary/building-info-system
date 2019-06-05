@@ -1,8 +1,6 @@
 import '@ryersonlibrary/web-components';
 import { Component, Element, Listen, State, h } from '@stencil/core';
-// import words from 'lodash/words.js';
-// import { addDocumentToIndex, createIndex } from 'ndx';
-// import { QueryResult, query } from 'ndx-query';
+import '@stencil/router';
 
 import { BASE_URL } from '../global/config';
 import {
@@ -18,7 +16,6 @@ import {
   MapElementDetail,
   MapElementDetailMap,
   SearchResultItem,
-  // SearchResultType,
 } from '../interface';
 import { dataService } from '../utils/data-service';
 import { Search } from '../utils/search';
@@ -74,7 +71,6 @@ export class RLApp {
   ];
 
   private docSearch = new Search();
-  // private docIndex = this._createDocumentIndex(['value', 'detail']);
 
   private _locationData: MapElementDetailMap = {};
   private _faqData: FaqMap = {};
@@ -116,14 +112,12 @@ export class RLApp {
 
       Object.values(this._faqData).forEach((f: Faq) => {
         this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
-        // this._indexDocument(`f-${f.id}`, 'question_answer', f.question);
       });
 
       this._locationData = dataService.getData(APP_DATA.DETAILS);
 
       Object.values(this._locationData).forEach((d: MapElementDetail) => {
         this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
-        // this._indexDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
       });
 
       this.loaded = true;
@@ -139,38 +133,12 @@ export class RLApp {
     this.appWidth = window.innerWidth;
   }
 
-  // _createDocumentIndex(fields) {
-  //   const index = createIndex<string>(fields.length);
-  //   const fieldAccessors = fields.map(f => (doc: SearchResultItem) => doc[f]);
-  //   const fieldBoosts = fields.map(_ => 1);
-  //   const termFilter = (term: string) => term.toLowerCase();
-
-  //   return {
-  //     add: (doc: SearchResultItem) => {
-  //       addDocumentToIndex<string, SearchResultItem>(index, fieldAccessors, words, termFilter, doc.id, doc);
-  //     },
-  //     search: (q: string, limit?: number) => {
-  //       return query(index, fieldBoosts, 1.2, 0.75, words, termFilter,
-  //           undefined, q)
-  //         .slice(0, limit)
-  //         .map((res: QueryResult<string>) => index.docs.get(res.key));
-  //     },
-  //   };
-  // }
-
-  // _indexDocument(id: string, type: SearchResultType, value = '', detail?: string) {
-  //   const newDoc = { id, type, value, detail };
-  //   // this._documents.set(id, newDoc);
-  //   this.docIndex.add(newDoc);
-  // }
-
   _onSearchChange(e: Event) {
     const t = e.target;
 
     if (t !== null && t instanceof HTMLInputElement) {
       this.searchQuery = t.value;
       this.searchResults = this.docSearch.search(this.searchQuery, 6);
-      // this.searchResults = this.docIndex.search(this.searchQuery, 6);
     }
   }
 
@@ -269,7 +237,6 @@ export class RLApp {
             resultHeight={this.resultHeight}
             onIconClick={() => { this.drawerOpen = true; }}
             searchValue={this.searchQuery}
-            // searchResults={this.searchResults}
             docSearch={this.docSearch}
           >
           </rl-search-box>

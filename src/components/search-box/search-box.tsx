@@ -117,7 +117,7 @@ export class SearchBox {
 
     if (t !== null && t instanceof HTMLInputElement) {
       this.searchValue = t.value;
-      // this.searchResults = this.docSearch.search(this.searchValue, 6);
+      this.searchResults = this.docSearch.search(this.searchValue, 6);
     }
   }
 
