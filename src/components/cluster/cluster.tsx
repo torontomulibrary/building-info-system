@@ -75,22 +75,18 @@ export class Cluster {
       case 'books':
         return ([
           <div class="rl-lane__content">
-            {this.data.map((b: any, i: number) => {
-              if (i >= this.firstVisible) {
-                return (
-                  <rl-card
-                    cardTitle={b.Title[0]}
-                    cardData={b}
-                    titleInMedia
-                    noContent
-                    hasPrimaryAction
-                    cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
-                    >
-                  </rl-card>
-                );
-              } else {
-                return undefined;
-              }
+            {this.data.map(b => {
+              return (
+                <rl-card
+                  cardTitle={b.Title[0]}
+                  cardData={b}
+                  titleInMedia
+                  noContent
+                  hasPrimaryAction
+                  cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
+                  >
+                </rl-card>
+              );
             })}
           </div>,
         ]);

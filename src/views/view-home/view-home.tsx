@@ -36,7 +36,7 @@ export class ViewHome {
 
   componentDidLoad() {
     this.checkSize();
-    this.updateWidth();
+    // this.updateWidth();
   }
 
   updateWidth() {
@@ -56,6 +56,7 @@ export class ViewHome {
       });
     } else {
       this.loaded = true;
+      this.updateWidth();
     }
   }
 

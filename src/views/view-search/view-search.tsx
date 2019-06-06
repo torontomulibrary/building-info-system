@@ -1,4 +1,5 @@
 import { Component, Element, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/config';
@@ -56,6 +57,8 @@ export class ViewSearch {
     }
   }
 
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   @Listen('resize', { target: 'window' })
   onresize() {
     const width = this.root.clientWidth - 128;
@@ -76,6 +79,26 @@ export class ViewSearch {
     // Needed to call with the initial value.  The @Watch decorator is not
     // called when the component loads with the first value.
     this.onMatchChanged(this.match);
+  }
+
+  componentDidLoad() {
+    this.checkSize();
+  }
+
+  updateWidth() {
+    const width = this.root.clientWidth - 128;
+    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
+  }
+
+  checkSize() {
+    if (this.root.offsetHeight === 0) {
+      this.queue.write(() => {
+        this.checkSize();
+      });
+    } else {
+      this.loaded = true;
+      this.updateWidth();
+    }
   }
 
   _bookCardClicked(e: CustomEvent) {

@@ -20,6 +20,7 @@ export class ViewBooks {
 
   @State() loaded = false;
   @State() inDom = false;
+  @State() clusterColumns = 5;
 
   // @Prop({ mutable: true }) appData!: AppData;
 
@@ -44,7 +45,13 @@ export class ViewBooks {
       });
     } else {
       this.loaded = true;
+      this.updateWidth();
     }
+  }
+
+  updateWidth() {
+    const width = this.root.clientWidth - 128;
+    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
   }
 
   _cardClicked(e: CustomEvent) {
@@ -84,36 +91,18 @@ export class ViewBooks {
             </div>
           </div>
         </div>,
-        <rl-section-with-header>
-          <h3 slot="title" role="heading" arial-level="2">Recent Searches</h3>
-          <rl-scrolling-carousel>
-            {this.searches.recent.map(s =>
-              <rl-card
-                cardData={s.value}
-                hasPrimaryAction
-                onCardClicked={ev => this._cardClicked(ev)}>
-                <div slot="primary">
-                  {s.value}
-                </div>
-              </rl-card>
-            )}
-          </rl-scrolling-carousel>
-        </rl-section-with-header>,
-        <rl-section-with-header>
-          <h3 slot="title" role="heading" arial-level="2">Frequent Searches</h3>
-          <rl-scrolling-carousel>
-            {this.searches.popular.map(s =>
-              <rl-card
-                cardData={s.value}
-                hasPrimaryAction
-                onCardClicked={ev => this._cardClicked(ev.detail)}>
-                <div slot="primary">
-                  {s.value}
-                </div>
-              </rl-card>
-            )}
-          </rl-scrolling-carousel>
-        </rl-section-with-header>,
+        <rl-cluster
+          heading="Recent Books"
+          type="search"
+          columns={this.clusterColumns}
+          data={this.searches.recent}>
+        </rl-cluster>,
+        <rl-cluster
+          heading="Popular Books"
+          type="search"
+          columns={this.clusterColumns}
+          data={this.searches.popular}>
+        </rl-cluster>,
       ]);
     }
 
