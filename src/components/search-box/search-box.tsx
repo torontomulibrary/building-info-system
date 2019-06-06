@@ -124,7 +124,7 @@ export class SearchBox {
   _isDecendant(parent: Element, child: Element) {
     let node = child.parentNode;
 
-    while (node !== null) {
+    while (node) {
       if (node === parent) {
         return true;
       }
