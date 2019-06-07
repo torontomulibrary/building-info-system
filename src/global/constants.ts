@@ -77,8 +77,9 @@ export enum ROUTES {
   COMPUTERS = 'computers',
   BUILDINGS = 'buildings',
   EVENTS = 'events',
-  FAQS = 'faqs',
+  FAQS = 'faq',
   SEARCH = 'search',
+  HOME = 'home',
 }
 
 export enum MAP_TYPE {

@@ -43,14 +43,13 @@ export namespace Components {
   }
   interface RlAccordionItem {
     /**
-    * This function closes this item.
+    * Close the `accordion-item`.
     */
     'close': () => Promise<void>;
     /**
     * A delay used to fade-in this item a specific amount of time after the component is rendered.
     */
     'delay': number;
-    'focusTitle': () => Promise<void>;
     /**
     * An index number used to reference this item in the larger list of all items in the parent accordion.
     */
@@ -60,7 +59,7 @@ export namespace Components {
     */
     'isOpen': boolean;
     /**
-    * This function opens this item.
+    * Open the `accordion-item`.
     */
     'open': () => Promise<void>;
   }
@@ -410,8 +409,17 @@ declare namespace LocalJSX {
     * Event emitted after the body's collapse animation has completed.
     */
     'onAfterCollapse'?: (event: CustomEvent<any>) => void;
+    /**
+    * Event emitted after the body's expand animation has completed.
+    */
     'onAfterExpand'?: (event: CustomEvent<any>) => void;
+    /**
+    * Event emitted when the item is closed.
+    */
     'onClosed'?: (event: CustomEvent<any>) => void;
+    /**
+    * Event emitted when the item is opened.
+    */
     'onOpened'?: (event: CustomEvent<any>) => void;
   }
   interface RlAppBar extends JSXBase.HTMLAttributes<HTMLRlAppBarElement> {

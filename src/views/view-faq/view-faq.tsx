@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Method, Prop, State, h } from '@stencil/core';
+import { Component, Element, Method, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
@@ -14,7 +14,10 @@ import { sanitize } from '../../utils/sanitize';
 })
 
 export class ViewFaq {
-  @Element() root!: HTMLElement;
+  /**
+   * Reference to the root element.
+   */
+  @Element() root!: HTMLViewFaqElement;
 
   /**
    * Internal list of FAQs to display.
@@ -56,82 +59,66 @@ export class ViewFaq {
    * yet in the DOM.
    */
   componentWillLoad() {
-    if (this.match && this.match.params) {
-      if (this.match.params.faqId) {
-        this.selectedFaq = Number(this.match.params.faqId);
-        // Set the internal state of the current history item.
-        this.history.replace({
-          pathname: `${BASE_URL}${ROUTES.FAQS}/${this.selectedFaq}`,
-          state: { faqId: this.selectedFaq },
-          query: {},
-          key: '',
-        });
-      }
-    }
-
     this.faqs = dataService.getData(APP_DATA.FAQS);
   }
 
+  /**
+   * Lifecycle event fired when the component has finished loading and is
+   * rendered into the DOM.
+   */
   componentDidLoad() {
-    this.checkSize();
+    this._checkSize();
   }
 
-  checkSize() {
+  /**
+   * Lifecycle event fired when part of the component (or child components)
+   * has updated but before rendering has taken place.
+   */
+  componentWillUpdate() {
+    this._loadAndVerifySelectedFaq();
+  }
+
+  /**
+   * Check the current URL parameters to see if a selected FAQ has been given
+   * as well as validate what is given.  In the case of an invalid option,
+   * remove the option all together and leave no FAQ selected.
+   */
+  private _loadAndVerifySelectedFaq() {
+    if (this.match && this.match.params && this.match.params.faqId) {
+      const newFaq = Number(this.match.params.faqId);
+
+      if (newFaq !== this.selectedFaq) {
+        this.selectedFaq = newFaq;
+      }
+
+      if (this.selectedFaq !== undefined && (isNaN(this.selectedFaq) || this.selectedFaq <= 0 ||
+      (this.faqs && Object.keys(this.faqs).indexOf(`${this.selectedFaq}`) === -1))) {
+        this.selectedFaq = undefined;
+        this.history.replace(`${BASE_URL}${ROUTES.FAQS}`);
+      }
+    }
+  }
+
+  /**
+   * Check the rendered height of this component.  When it actually has a height
+   * it is in the DOM AND has a display other than `none`.  Only then is the
+   * view loaded and can be faded in.
+   */
+  private _checkSize() {
     if (this.root.offsetHeight === 0) {
       this.queue.write(() => {
-        this.checkSize();
+        this._checkSize();
       });
     } else {
       this.loaded = true;
     }
   }
 
-  componentWillUpdate() {
-    // Handle when the parameter may change based on user history navigation.
-    const state = this.history.location.state;
-    const path = `${BASE_URL}${ROUTES.FAQS}/`;
-
-    if (this.selectedFaq !== undefined) {
-      // A FAQ is active, ensure the current route state matches.
-      if (state === undefined || state && state.faqId === undefined ||
-          state && state.faqId && this.selectedFaq !== state.faqId) {
-        // State needs to be updated/changed to match newly selected FAQ.
-        this.history.push({
-          pathname: `${path}${this.selectedFaq}`,
-          state: { faqId: this.selectedFaq },
-          query: {},
-          key: '',
-        });
-      }
-    } else {
-      if (state !== undefined) {
-        this.history.push({ pathname: path, state: undefined, query: {}, key: '' });
-      }
-    }
-  }
-
-  @Listen('afterExpand')
-  onAfterExpand(evt: Event) {
-    const t = evt.target as HTMLRlAccordionItemElement;
-    if (t !== null) {
-      this.selectedFaq = t.index;
-      t.focusTitle();
-
-      if (t.getBoundingClientRect().top > window.innerHeight) {
-        t.scrollIntoView();
-      }
-    }
-  }
-
-  @Listen('afterCollapse')
-  onAfterCollapse(evt: Event) {
-    const t = evt.target as HTMLRlAccordionItemElement;
-    if (t !== null && t.index === this.selectedFaq) {
-      this.selectedFaq = undefined;
-    }
-  }
-
   @Method()
+  /**
+   * Change the FAQ that is currently active
+   * @deprecated Specify the selected FAQ by changing the URL.
+   */
   async setActiveFaq(faqId: number) {
     // Set the newly selected FAQ.  State will handle all the updates.
     this.selectedFaq = faqId;

@@ -12,6 +12,8 @@ import {
 } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 
+import { ROUTES } from '../../global/constants';
+
 /**
  * A component used in tandem with `rl-accordion` and represents a single item
  * of an accordion list.  A single `accordion-item` has header and content
@@ -22,7 +24,6 @@ import { QueueApi } from '@stencil/core/dist/declarations';
   tag: 'rl-accordion-item',
   styleUrl: 'accordion-item.scss',
 })
-
 export class AccordionItem {
   /**
    * The button used as the header, and allows the user to toggle the open
@@ -38,8 +39,11 @@ export class AccordionItem {
   /**
    * The root element of this component.
    */
-  @Element() root!: HTMLElement;
+  @Element() root!: HTMLRlAccordionItemElement;
 
+  /**
+   * Queue object used to schecule actions that are executed on animation frames.
+   */
   @Prop({ context: 'queue' }) queue!: QueueApi;
 
   /**
@@ -63,13 +67,25 @@ export class AccordionItem {
    * Event emitted after the body's collapse animation has completed.
    */
   @Event() afterCollapse!: EventEmitter;
+
+  /**
+   * Event emitted after the body's expand animation has completed.
+   */
   @Event() afterExpand!: EventEmitter;
+
+  /**
+   * Event emitted when the item is closed.
+   */
   @Event() closed!: EventEmitter;
+
+  /**
+   * Event emitted when the item is opened.
+   */
   @Event() opened!: EventEmitter;
 
   /**
-   * Component lifecycle function that is called when completely lodaded and
-   * entered into the DOM.
+   * Lifecycle event fired when the component has finished loading and is
+   * rendered into the DOM.
    */
   componentDidLoad() {
     if (this._button) {
@@ -84,7 +100,19 @@ export class AccordionItem {
   }
 
   /**
-   * This function closes this item.
+   * Lifecycle event fired when part of the component (or child components)
+   * has updated and the changes have been rendered.
+   */
+  componentDidUpdate() {
+    const btn = this.root.querySelector('.rl-accordion-item__trigger') as HTMLButtonElement;
+
+    if (btn && this.isOpen) {
+      btn.focus();
+    }
+  }
+
+  /**
+   * Close the `accordion-item`.
    */
   @Method()
   async close() {
@@ -92,7 +120,7 @@ export class AccordionItem {
   }
 
   /**
-   * This function opens this item.
+   * Open the `accordion-item`.
    */
   @Method()
   async open() {
@@ -101,6 +129,10 @@ export class AccordionItem {
   }
 
   @Listen('transitionend')
+  /**
+   * Handle when a transition has finished and the after transition events
+   * need to be fired.
+   */
   onTransitionEnd(evt: TransitionEvent) {
     // Ignore transition events for other properties (like opacity and margin).
     if (evt.propertyName === 'height') {
@@ -108,16 +140,22 @@ export class AccordionItem {
     }
   }
 
+  /**
+   * Function that is called to re-calculate how tall the item content should
+   * be when open.  Will call itself again until its height is non-zero.  A zero
+   * height occurs if the component is a child of an element that has is set to
+   * `display: none`.  This can occur when using `stencil-router` and switching
+   * routes.
+   */
   updateHeight() {
     const slot = this.root.querySelector('[slot="content"]') as HTMLElement;
     this.contentHeight = slot && slot.offsetHeight;
 
-    if (slot.hasChildNodes && this.contentHeight === 0) {
-      // When this component is a child of a `stencil-router`, the component may
-      // 'render' but the route may still be display:none, making the height 0.
-      // So begin a RAF loop that keeps calling until this component is in the
-      // DOM with a non-zero height.  Don't bother with this if the slot doesn't
-      // have any actual content, zero height then makes sense!
+    /**
+     * Loop (on animation frame) until a non-zero height is found or the item
+     * is closed again.
+     */
+    if (slot.hasChildNodes && this.contentHeight === 0 || !this.isOpen) {
       this.queue.write(() => {
         this.updateHeight();
       });
@@ -125,18 +163,11 @@ export class AccordionItem {
   }
 
   /**
-   * Toggles the current state of this item.
+   * Toggles the current state of the `accordion-item`.
    */
   toggle() {
     this.isOpen = !this.isOpen;
     this.isOpen ? this.opened.emit() : this.closed.emit();
-  }
-
-  @Method()
-  async focusTitle() {
-    if (this._button !== undefined) {
-      this._button.focus();
-    }
   }
 
   /**
@@ -157,13 +188,12 @@ export class AccordionItem {
   render() {
     return ([
       <dt role="heading" aria-level="2" class="rl-accordion-item__header"
-          onClick={_ => { this.toggle(); }}
       >
-        <button aria-expanded={this.isOpen ? 'true' : 'false'}
-            ref={el => this._button = el}
-            id={`rl-accordion-item__trigger-${this.index}`}
-            class="rl-accordion-item__trigger"
-            aria-controls={`rl-accordion-item__content-${this.index}`}
+        <stencil-route-link
+          anchorClass="rl-accordion-item__trigger"
+          aria-controls={`rl-accordion-item__content-${this.index}`}
+          url={`${ROUTES.FAQS}/${this.index}`}
+          custom="button"
         >
           <span class="rl-accordion-item__title">
             <slot name="header" />
@@ -172,7 +202,7 @@ export class AccordionItem {
               aria-hidden="true">
             expand_more
           </span>
-        </button>
+        </stencil-route-link>
       </dt>,
       <dd id={`rl-accordion-item__content-${this.index}`} role="region"
           aria-hidden={!this.isOpen}
