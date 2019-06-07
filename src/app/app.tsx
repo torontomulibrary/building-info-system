@@ -1,8 +1,6 @@
 import '@ryersonlibrary/web-components';
-import { Component, Element, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Element, Listen, State, h } from '@stencil/core';
 import '@stencil/router';
-// tslint:disable-next-line:no-duplicate-imports
-import { RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../global/config';
 import {
@@ -111,8 +109,6 @@ export class RLApp {
    */
   @State() loaded = false;
 
-  @Prop() history?: RouterHistory;
-
   /**
    * Lifecycle event fired after the component has rendered the first time.
    */
@@ -171,10 +167,8 @@ export class RLApp {
       // Hijack the current view to get the RouterHistory object.  It is only
       // available within the context of the stencil-router and its children.
       // tslint:disable-next-line: no-unnecessary-type-assertion
-      // const view = this.root.querySelector('.rl-view') as any;
-      if (this.history !== undefined) {
-        this.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
-      }
+      const view = this.root.querySelector('.rl-view') as any;
+      view.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
     }
   }
 
@@ -186,10 +180,8 @@ export class RLApp {
    * @param e The triggering event
    */
   async _onSearchFaqClicked(resultId) {
-    // const view = this.root.querySelector('.rl-view') as any;
-    if (this.history !== undefined) {
-      this.history.push(`${BASE_URL}${ROUTES.FAQ}/${resultId}`);
-    }
+    const view = this.root.querySelector('.rl-view') as any;
+    view.history.push(`${BASE_URL}${ROUTES.FAQ}/${resultId}`);
   }
 
   @Listen('suggestionClicked')

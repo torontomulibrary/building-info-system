@@ -7,10 +7,6 @@
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
-  MatchResults,
-  RouterHistory,
-} from '@stencil/router';
-import {
   Color,
 } from './utils/color';
 import {
@@ -25,6 +21,10 @@ import {
 import {
   Search,
 } from './utils/search';
+import {
+  MatchResults,
+  RouterHistory,
+} from '@stencil/router';
 import {
   MAP_TYPE,
 } from './global/constants';
@@ -73,9 +73,7 @@ export namespace Components {
     'singleSection': boolean;
     'type': 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
-  interface RlBis {
-    'history'?: RouterHistory;
-  }
+  interface RlBis {}
   interface RlCard {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor': Color;
@@ -440,9 +438,7 @@ declare namespace LocalJSX {
     'singleSection'?: boolean;
     'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
-  interface RlBis extends JSXBase.HTMLAttributes<HTMLRlBisElement> {
-    'history'?: RouterHistory;
-  }
+  interface RlBis extends JSXBase.HTMLAttributes<HTMLRlBisElement> {}
   interface RlCard extends JSXBase.HTMLAttributes<HTMLRlCardElement> {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor'?: Color;
