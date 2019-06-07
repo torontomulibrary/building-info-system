@@ -327,7 +327,7 @@ export class RLApp {
               </stencil-route>
               <stencil-route component="view-faq"
                 url={[
-                  `${BASE_URL}${ROUTES.FAQS}/:faqId?`,
+                  `${BASE_URL}${ROUTES.FAQ}/:faqId?`,
                   `${BASE_URL}${ROUTES.FAQS}`,
                 ]}
                 componentProps={{

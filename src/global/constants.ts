@@ -77,7 +77,8 @@ export enum ROUTES {
   COMPUTERS = 'computers',
   BUILDINGS = 'buildings',
   EVENTS = 'events',
-  FAQS = 'faq',
+  FAQS = 'faqs',
+  FAQ = 'faq',
   SEARCH = 'search',
   HOME = 'home',
 }

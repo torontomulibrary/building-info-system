@@ -87,12 +87,12 @@ export class ViewFaq {
     if (this.match && this.match.params && this.match.params.faqId) {
       const newFaq = Number(this.match.params.faqId);
 
-      if (newFaq !== this.selectedFaq) {
-        this.selectedFaq = newFaq;
-      }
+      this.selectedFaq = newFaq !== this.selectedFaq ? newFaq : undefined;
 
-      if (this.selectedFaq !== undefined && (isNaN(this.selectedFaq) || this.selectedFaq <= 0 ||
-      (this.faqs && Object.keys(this.faqs).indexOf(`${this.selectedFaq}`) === -1))) {
+      if (this.selectedFaq === undefined ||
+          this.selectedFaq !== undefined &&
+          (isNaN(this.selectedFaq) || this.selectedFaq <= 0 ||
+          (this.faqs && Object.keys(this.faqs).indexOf(`${this.selectedFaq}`) === -1))) {
         this.selectedFaq = undefined;
         this.history.replace(`${BASE_URL}${ROUTES.FAQS}`);
       }

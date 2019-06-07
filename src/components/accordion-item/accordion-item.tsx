@@ -192,7 +192,7 @@ export class AccordionItem {
         <stencil-route-link
           anchorClass="rl-accordion-item__trigger"
           aria-controls={`rl-accordion-item__content-${this.index}`}
-          url={`${ROUTES.FAQS}/${this.index}`}
+          url={`${ROUTES.FAQ}/${this.index}`}
           custom="button"
         >
           <span class="rl-accordion-item__title">
