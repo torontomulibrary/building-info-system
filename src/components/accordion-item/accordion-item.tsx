@@ -12,7 +12,7 @@ import {
 } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 
-import { ROUTES } from '../../global/constants';
+// import { ROUTES } from '../../global/constants';
 
 /**
  * A component used in tandem with `rl-accordion` and represents a single item
@@ -155,7 +155,7 @@ export class AccordionItem {
      * Loop (on animation frame) until a non-zero height is found or the item
      * is closed again.
      */
-    if (slot.hasChildNodes && this.contentHeight === 0 || !this.isOpen) {
+    if (slot.hasChildNodes && this.contentHeight === 0) {
       this.queue.write(() => {
         this.updateHeight();
       });
@@ -167,7 +167,7 @@ export class AccordionItem {
    */
   toggle() {
     this.isOpen = !this.isOpen;
-    this.isOpen ? this.opened.emit() : this.closed.emit();
+    this.isOpen ? this.opened.emit(this.index) : this.closed.emit(this.index);
   }
 
   /**
@@ -189,11 +189,18 @@ export class AccordionItem {
     return ([
       <dt role="heading" aria-level="2" class="rl-accordion-item__header"
       >
-        <stencil-route-link
+        {/* <stencil-route-link
           anchorClass="rl-accordion-item__trigger"
           aria-controls={`rl-accordion-item__content-${this.index}`}
           url={`${ROUTES.FAQ}/${this.index}`}
           custom="button"
+        > */}
+        <button aria-expanded={this.isOpen ? 'true' : 'false'}
+            ref={el => this._button = el}
+            id={`rl-accordion-item__trigger-${this.index}`}
+            class="rl-accordion-item__trigger"
+            aria-controls={`rl-accordion-item__content-${this.index}`}
+            onClick={_ => this.toggle()}
         >
           <span class="rl-accordion-item__title">
             <slot name="header" />
@@ -202,7 +209,8 @@ export class AccordionItem {
               aria-hidden="true">
             expand_more
           </span>
-        </stencil-route-link>
+        {/* </stencil-route-link> */}
+        </button>
       </dt>,
       <dd id={`rl-accordion-item__content-${this.index}`} role="region"
           aria-hidden={!this.isOpen}

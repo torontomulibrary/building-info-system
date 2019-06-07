@@ -1,4 +1,4 @@
-import { Component, Element, Method, Prop, State, h } from '@stencil/core';
+import { Component, Element, Listen, Method, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
@@ -88,14 +88,18 @@ export class ViewFaq {
       const newFaq = Number(this.match.params.faqId);
 
       this.selectedFaq = newFaq !== this.selectedFaq ? newFaq : undefined;
+      // if (this.selectedFaq !== newFaq) {
+      //   this.selectedFaq = newFaq;
+      // }
 
-      if (this.selectedFaq === undefined ||
-          this.selectedFaq !== undefined &&
+      if (this.selectedFaq !== undefined &&
           (isNaN(this.selectedFaq) || this.selectedFaq <= 0 ||
           (this.faqs && Object.keys(this.faqs).indexOf(`${this.selectedFaq}`) === -1))) {
         this.selectedFaq = undefined;
         this.history.replace(`${BASE_URL}${ROUTES.FAQS}`);
       }
+    } else {
+      this.selectedFaq = undefined;
     }
   }
 
@@ -112,6 +116,16 @@ export class ViewFaq {
     } else {
       this.loaded = true;
     }
+  }
+
+  @Listen('opened')
+  _handleFaqOpened(ev: CustomEvent) {
+    this.history.push(`${BASE_URL}${ROUTES.FAQ}/${ev.detail}`);
+  }
+
+  @Listen('closed')
+  _handleFaqClosed() {
+    this.history.push(`${BASE_URL}${ROUTES.FAQS}`);
   }
 
   @Method()
