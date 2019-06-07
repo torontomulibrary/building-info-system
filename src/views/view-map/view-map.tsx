@@ -84,7 +84,7 @@ export class ViewMap {
    */
   @Prop() appLoaded = false;
 
-  @Prop() mapType: MAP_TYPE = MAP_TYPE.DIRECTORY;
+  @Prop() mapType: MAP_TYPE = MAP_TYPE.LOCN;
 
   /**
    * The results coming from `stencil-router` that contain any URL matches.
@@ -117,7 +117,7 @@ export class ViewMap {
         this.paramMatches = re.exec(query);
         if (this.paramMatches) {
           this.history.replace({
-            pathname: `${BASE_URL}${this.mapType === MAP_TYPE.COMPUTERS ? ROUTES.COMPUTERS : ROUTES.DIRECTORY}/${this.paramMatches[0]}`,
+            pathname: `${BASE_URL}${this.mapType === MAP_TYPE.COMP ? ROUTES.COMPUTERS : ROUTES.DIRECTORY}/${this.paramMatches[0]}`,
             state: { code: this.paramMatches[0] },
             query: {},
             key: '',
@@ -157,7 +157,7 @@ export class ViewMap {
     compLabs = dataService.getData(APP_DATA.COMPUTERS);
 
     Object.values(this._blds).forEach((b: Building) => {
-      b.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
+      b.enabled = (this.mapType === MAP_TYPE.LOCN ||
           b.code === 'LIB') ?
           true : false;
       b.floors = Object.values(this._flrs || {}).reduce((ob: FloorMap, f: Floor) => {
@@ -178,9 +178,9 @@ export class ViewMap {
         return ob;
       }, {} as MapElementData);
 
-      f.enabled = (this.mapType === MAP_TYPE.DIRECTORY ||
-          (this.mapType === MAP_TYPE.BOOKS && this._book && this._book.locations.indexOf(f.name) !== -1)) ||
-          (this.mapType === MAP_TYPE.COMPUTERS && this.floorHasComps(f, compLabs)) ?
+      f.enabled = (this.mapType === MAP_TYPE.LOCN ||
+          (this.mapType === MAP_TYPE.BOOK && this._book && this._book.locations.indexOf(f.name) !== -1)) ||
+          (this.mapType === MAP_TYPE.COMP && this.floorHasComps(f, compLabs)) ?
           true : false;
 
       // Set the initial floor to the specified floor, or first floor of the
@@ -203,7 +203,7 @@ export class ViewMap {
     Object.values(this._elms).forEach((e: MapElementData) => {
       e.details = Object.values(this._dtls || {}).reduce((ob, d: MapElementDetail) => {
         if (this.paramMatches && d.code === this.paramMatches[0] &&
-            (this.mapType === MAP_TYPE.DIRECTORY || this.mapType === MAP_TYPE.COMPUTERS) &&
+            (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP) &&
             !this.initialElement) {
           this.initialElement = d.elementId;
         }
@@ -211,13 +211,13 @@ export class ViewMap {
         return ob;
       }, {} as MapElementDetail);
 
-      e.enabled = ((this.mapType === MAP_TYPE.DIRECTORY && e.category !== 5) ||
-          (this.mapType === MAP_TYPE.BOOKS && this._book &&
+      e.enabled = ((this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
+          (this.mapType === MAP_TYPE.BOOK && this._book &&
           this.bookOnShelf(this._book.callNo, e)) ||
-          (this.mapType === MAP_TYPE.COMPUTERS && (this.elementHasComps(e, compLabs) || e.category === 5))) ?
+          (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e, compLabs) || e.category === 5))) ?
           true : false;
 
-      if (e.enabled && this.mapType === MAP_TYPE.BOOKS && !this.initialElement) {
+      if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.initialElement) {
         this.initialElement = e.id;
       }
 
@@ -226,7 +226,7 @@ export class ViewMap {
       }
     });
 
-    if (this.mapType === MAP_TYPE.COMPUTERS && compLabs.length > 0) {
+    if (this.mapType === MAP_TYPE.COMP && compLabs.length > 0) {
       this._compLabs = {};
       compLabs.forEach((l: ComputerLab) => {
         Object.values(this._dtls).forEach((d: MapElementDetail) => {
@@ -278,7 +278,7 @@ export class ViewMap {
         state && state.code === undefined ||
         state && state.code && code !== state.code) {
       this.history.push({
-        pathname: `/${this.mapType === MAP_TYPE.COMPUTERS ? ROUTES.COMPUTERS : ROUTES.DIRECTORY}/${code}`,
+        pathname: `/${this.mapType === MAP_TYPE.COMP ? ROUTES.COMPUTERS : ROUTES.DIRECTORY}/${code}`,
         state: { code },
         query: {},
         key: '',

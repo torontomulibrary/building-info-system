@@ -1,6 +1,8 @@
 import '@ryersonlibrary/web-components';
-import { Component, Element, Listen, State, h } from '@stencil/core';
+import { Component, Element, Listen, Prop, State, h } from '@stencil/core';
 import '@stencil/router';
+// tslint:disable-next-line:no-duplicate-imports
+import { RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../global/config';
 import {
@@ -29,45 +31,51 @@ export class RLApp {
   /**
    * Object containing all the pages used for the nav menu of the App.
    */
-  private appPages = [
+  private appRoutes = [
     {
-      title: 'Home',
-      url: '',
-      icon: 'home',
-      component: 'view-home',
-    },
-    {
-      title: 'Directory',
-      url: ROUTES.DIRECTORY,
-      icon: 'map',
-    },
-    {
-      title: 'Books',
-      url: ROUTES.BOOKS,
-      icon: 'import_contacts',
+      urls: [
+        `${BASE_URL}${ROUTES.MAP}/:mapType?/:id?`,
+        `${BASE_URL}${ROUTES.MAP}`,
+      ],
       component: 'view-map',
-      params: ':roomNo?',
     },
     {
-      title: 'Computers',
-      url: ROUTES.COMPUTERS,
-      icon: 'computer',
+      urls: [
+        `${BASE_URL}${ROUTES.BUILDINGS}/:bldName`,
+        `${BASE_URL}${ROUTES.BUILDINGS}`,
+      ],
+      component: 'view-building',
     },
     {
-      title: 'Buildings',
-      url: ROUTES.BUILDINGS,
-      icon: 'business',
+      urls: [
+        `${BASE_URL}${ROUTES.EVENTS}/`,
+        `${BASE_URL}${ROUTES.EVENTS}`,
+      ],
+      component: 'view-event',
     },
     {
-      title: 'Events',
-      url: ROUTES.EVENTS,
-      icon: 'event',
+      urls: [
+        `${BASE_URL}${ROUTES.FAQ}/:faqId?`,
+        `${BASE_URL}${ROUTES.FAQS}`,
+      ],
+      component: 'view-faq',
     },
     {
-      title: 'FAQs',
-      url: ROUTES.FAQS,
-      icon: 'question_answer',
+      urls: [`${BASE_URL}${ROUTES.HOME}`],
+      component: 'view-home',
+      exact: true,
+      props: {},
     },
+  ];
+
+  private appLinks = [
+    { title: 'Home', url: ROUTES.HOME, icon: 'home', exact: true },
+    { title: 'Directory', url: `${ROUTES.MAP}/${MAP_TYPE.LOCN}`, icon: 'map' },
+    { title: 'Books', url: `${ROUTES.MAP}/${MAP_TYPE.BOOK}`, icon: 'import_contacts' },
+    { title: 'Computers', url: `${ROUTES.MAP}/${MAP_TYPE.COMP}`, icon: 'computer' },
+    { title: 'Buildings', url: ROUTES.BUILDINGS, icon: 'business' },
+    { title: 'Events', url: ROUTES.EVENTS, icon: 'event' },
+    { title: 'FAQs', url: ROUTES.FAQS, icon: 'question_answer' },
   ];
 
   private docSearch = new Search();
@@ -102,6 +110,8 @@ export class RLApp {
    * Global flag indicating if the whole application has loaded.
    */
   @State() loaded = false;
+
+  @Prop() history?: RouterHistory;
 
   /**
    * Lifecycle event fired after the component has rendered the first time.
@@ -161,8 +171,10 @@ export class RLApp {
       // Hijack the current view to get the RouterHistory object.  It is only
       // available within the context of the stencil-router and its children.
       // tslint:disable-next-line: no-unnecessary-type-assertion
-      const view = this.root.querySelector('.rl-view') as any;
-      view.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
+      // const view = this.root.querySelector('.rl-view') as any;
+      if (this.history !== undefined) {
+        this.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
+      }
     }
   }
 
@@ -174,14 +186,9 @@ export class RLApp {
    * @param e The triggering event
    */
   async _onSearchFaqClicked(resultId) {
-    const viewFaq = this.root.querySelector('.rl-view--faq') as HTMLViewFaqElement;
-    if (viewFaq && viewFaq.hasOwnProperty('setActiveFaq')) {
-      await viewFaq.setActiveFaq(resultId);
-    } else {
-      // Navigate to page and then set the active element.
-      // tslint:disable-next-line: no-unnecessary-type-assertion
-      const view = this.root.querySelector('.rl-view') as any;
-      view.history.push(`${BASE_URL}${ROUTES.FAQS}/${resultId}`);
+    // const view = this.root.querySelector('.rl-view') as any;
+    if (this.history !== undefined) {
+      this.history.push(`${BASE_URL}${ROUTES.FAQ}/${resultId}`);
     }
   }
 
@@ -220,140 +227,71 @@ export class RLApp {
    * Component render function.
    */
   render() {
-    const { appPages, loaded } = this;
+    const { appLinks, appRoutes, loaded } = this;
 
     if (loaded) {
-      return ([
-        <rl-app-bar
-            type="fixed"
-            onMenuClicked={_ => { this.drawerOpen = true; }}
-            singleSection={this.appWidth < 500}
-          >
-          {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
-          <rl-search-box
-            slot="centerSection"
-            showMenu={this.appWidth < 500}
-            placeholder={this.appWidth < 500 ? APP_TITLE : undefined}
-            resultHeight={this.resultHeight}
-            onIconClick={() => { this.drawerOpen = true; }}
-            searchValue={this.searchQuery}
-            docSearch={this.docSearch}
-          >
-          </rl-search-box>
-        </rl-app-bar>,
+      return (
+        <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`} historyType="hash">
+          <rl-app-bar
+              type="fixed"
+              onMenuClicked={_ => { this.drawerOpen = true; }}
+              singleSection={this.appWidth < 500}
+            >
+            {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
+            <rl-search-box
+              slot="centerSection"
+              showMenu={this.appWidth < 500}
+              placeholder={this.appWidth < 500 ? APP_TITLE : undefined}
+              resultHeight={this.resultHeight}
+              onIconClick={() => { this.drawerOpen = true; }}
+              searchValue={this.searchQuery}
+              docSearch={this.docSearch}
+            >
+            </rl-search-box>
+          </rl-app-bar>
 
-        <rl-drawer
-            open={this.drawerOpen}
-            onDrawerClose={_ => { this.drawerOpen = false; }}>
-          <header class="rl-drawer__header">
-            <div class="rl-drawer__header-content">
-              <button class="material-icons mdc-top-app-bar__navigation-icon"
-                aria-label="Close navigation menu.">close</button>
-              <span class="mdc-top-app-bar__title">{APP_TITLE}</span>
-            </div>
-          </header>
-          <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
-            {appPages.map(page =>
-              <stencil-route-link activeClass="mdc-list-item--activated"
-                  anchorClass="mdc-list-item" anchorTabIndex="0"
-                  url={`${BASE_URL}${page.url}`} exact={page.url === ''}>
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">
-                  {page.icon}
-                </i>
-                {page.title}
-              </stencil-route-link>
-            )}
-          </nav>
-        </rl-drawer>,
+          <rl-drawer
+              open={this.drawerOpen}
+              onDrawerClose={_ => { this.drawerOpen = false; }}>
+            <header class="rl-drawer__header">
+              <div class="rl-drawer__header-content">
+                <button class="material-icons mdc-top-app-bar__navigation-icon"
+                  aria-label="Close navigation menu.">close</button>
+                <span class="mdc-top-app-bar__title">{APP_TITLE}</span>
+              </div>
+            </header>
+            <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
+              {appLinks.map(link =>
+                <stencil-route-link activeClass="mdc-list-item--activated"
+                    anchorClass="mdc-list-item" anchorTabIndex="0"
+                    url={`${BASE_URL}${link.url}`} exact={link.exact}>
+                  <i class="material-icons mdc-list-item__graphic" aria-hidden="true">
+                    {link.icon}
+                  </i>
+                  {link.title}
+                </stencil-route-link>
+              )}
+            </nav>
+          </rl-drawer>
 
-        <main class="rl-main-content">
-          <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`} historyType="hash">
+          <main class="rl-main-content">
             <stencil-route-switch>
-              <stencil-route component="view-map"
-                url={[
-                  `${BASE_URL}${ROUTES.DIRECTORY}/:roomNo?`,
-                  `${BASE_URL}${ROUTES.DIRECTORY}`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                  mapType: MAP_TYPE.DIRECTORY,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-map"
-                url={[
-                  `${BASE_URL}${ROUTES.BOOKS}/map/:callNo`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                  mapType: MAP_TYPE.BOOKS,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-map"
-                url={[
-                  `${BASE_URL}${ROUTES.COMPUTERS}/:labNo?`,
-                  `${BASE_URL}${ROUTES.COMPUTERS}`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                  mapType: MAP_TYPE.COMPUTERS,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-building"
-                url={[
-                  `${BASE_URL}${ROUTES.BUILDINGS}/`,
-                  `${BASE_URL}${ROUTES.BUILDINGS}`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-book"
-                url={[
-                  `${BASE_URL}${ROUTES.BOOKS}/`,
-                  `${BASE_URL}${ROUTES.BOOKS}`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-event"
-                url={[
-                  `${BASE_URL}${ROUTES.EVENTS}/`,
-                  `${BASE_URL}${ROUTES.EVENTS}`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-faq"
-                url={[
-                  `${BASE_URL}${ROUTES.FAQ}/:faqId?`,
-                  `${BASE_URL}${ROUTES.FAQS}`,
-                ]}
-                componentProps={{
-                  appLoaded: loaded,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-search"
-                url={[`${BASE_URL}${ROUTES.SEARCH}/:query?`]}
-                componentProps={{
-                  appLoaded: loaded,
-                }}>
-              </stencil-route>
-              <stencil-route component="view-home" url={`${BASE_URL}${ROUTES.HOME}`} exact
-                  componentProps={{
-                    appLoaded: loaded,
-                  }}>
-              </stencil-route>
+              {appRoutes.map(route =>
+                <stencil-route component={route.component}
+                  url={route.urls}
+                  componentProps={{ appLoaded: loaded }}
+                >
+                </stencil-route>
+              )}
               <stencil-route routeRender={() => ([
                 <span>Undefined route</span>,
                 <stencil-router-redirect url={`${BASE_URL}${ROUTES.HOME}`} />,
               ])}>
               </stencil-route>
             </stencil-route-switch>
-          </stencil-router>
-        </main>,
-      ]);
+          </main>
+        </stencil-router>
+      );
     } else {
       return undefined;
     }

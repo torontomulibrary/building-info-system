@@ -72,7 +72,8 @@ export enum APP_DATA {
 }
 
 export enum ROUTES {
-  DIRECTORY = 'directory',
+  DIRECTORY = 'map/location',
+  MAP = 'map',
   BOOKS = 'books',
   COMPUTERS = 'computers',
   BUILDINGS = 'buildings',
@@ -84,9 +85,9 @@ export enum ROUTES {
 }
 
 export enum MAP_TYPE {
-  DIRECTORY = 'map.dir',
-  COMPUTERS = 'map.comp',
-  BOOKS = 'map.book',
+  LOCN = 'location',
+  COMP = 'lab',
+  BOOK = 'book',
 }
 
 export enum EVENTS {

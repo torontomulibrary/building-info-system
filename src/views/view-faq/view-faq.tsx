@@ -135,7 +135,7 @@ export class ViewFaq {
    */
   async setActiveFaq(faqId: number) {
     // Set the newly selected FAQ.  State will handle all the updates.
-    this.selectedFaq = faqId;
+    this.history.push(`${BASE_URL}${ROUTES.FAQ}/${faqId}`);
   }
 
   /**
