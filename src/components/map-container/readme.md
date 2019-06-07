@@ -38,7 +38,7 @@ Type: `Promise<void>`
 ### Depends on
 
 - rl-map
-- [rl-side-sheet](../site-sheet)
+- [rl-side-sheet](../side-sheet)
 - [rl-map-nav](../map-nav)
 
 ### Graph

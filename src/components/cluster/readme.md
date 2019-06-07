@@ -20,6 +20,7 @@
 
 ### Used by
 
+ - [view-book](../../views/view-book)
  - [view-home](../../views/view-home)
  - [view-search](../../views/view-search)
 
@@ -34,6 +35,7 @@ graph TD;
   rl-cluster --> rl-card
   rl-cluster --> stencil-route-link
   rl-card --> stencil-route-link
+  view-book --> rl-cluster
   view-home --> rl-cluster
   view-search --> rl-cluster
   style rl-cluster fill:#f9f,stroke:#333,stroke-width:4px

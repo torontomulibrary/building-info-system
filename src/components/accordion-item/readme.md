@@ -19,26 +19,16 @@
 | Event           | Description                                                      | Type               |
 | --------------- | ---------------------------------------------------------------- | ------------------ |
 | `afterCollapse` | Event emitted after the body's collapse animation has completed. | `CustomEvent<any>` |
-| `afterExpand`   |                                                                  | `CustomEvent<any>` |
-| `closed`        |                                                                  | `CustomEvent<any>` |
-| `opened`        |                                                                  | `CustomEvent<any>` |
+| `afterExpand`   | Event emitted after the body's expand animation has completed.   | `CustomEvent<any>` |
+| `closed`        | Event emitted when the item is closed.                           | `CustomEvent<any>` |
+| `opened`        | Event emitted when the item is opened.                           | `CustomEvent<any>` |
 
 
 ## Methods
 
 ### `close() => Promise<void>`
 
-This function closes this item.
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `focusTitle() => Promise<void>`
-
-
+Close the `accordion-item`.
 
 #### Returns
 
@@ -48,7 +38,7 @@ Type: `Promise<void>`
 
 ### `open() => Promise<void>`
 
-This function opens this item.
+Open the `accordion-item`.
 
 #### Returns
 
@@ -63,9 +53,14 @@ Type: `Promise<void>`
 
  - [view-faq](../../views/view-faq)
 
+### Depends on
+
+- stencil-route-link
+
 ### Graph
 ```mermaid
 graph TD;
+  rl-accordion-item --> stencil-route-link
   view-faq --> rl-accordion-item
   style rl-accordion-item fill:#f9f,stroke:#333,stroke-width:4px
 ```
