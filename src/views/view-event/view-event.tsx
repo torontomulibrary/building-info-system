@@ -1,23 +1,19 @@
 import { Component, Element, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
-// import union from 'lodash/union';
 
 import {
   BASE_URL,
-  // EVENT_URL,
 } from '../../global/config';
 import {
   APP_DATA,
   FULL_MONTHS,
-  // LOCAL_STORAGE_KEY,
   MONTHS,
   ROUTES,
 } from '../../global/constants';
 import { CalEvent } from '../../interface';
 import { dataService } from '../../utils/data-service';
 import { formatTime } from '../../utils/event-parser';
-// import { get, set } from '../../utils/local-storage';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
