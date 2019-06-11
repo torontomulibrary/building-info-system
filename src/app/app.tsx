@@ -61,6 +61,13 @@ export class RLApp {
       component: 'view-faq',
     },
     {
+      urls: [
+        `${BASE_URL}${ROUTES.SEARCH}/:query?`,
+        `${BASE_URL}${ROUTES.FAQS}`,
+      ],
+      component: 'view-faq',
+    },
+    {
       urls: [`${BASE_URL}${ROUTES.HOME}`],
       component: 'view-home',
       exact: true,
@@ -160,18 +167,18 @@ export class RLApp {
    * @param e The triggering event
    */
   async _onSearchLocationClicked(resultId) {
-    const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
-    if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
+    // const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
+    // if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
       // Map is open. Set active element.
-      await viewMap.setActiveDetail(this._locationData[resultId].id);
-    } else {
+      // await viewMap.setActiveDetail(this._locationData[resultId].id);
+    // } else {
       // Navigate to page and then set the active element.
-      const loc = this._locationData[resultId];
+    const loc = this._locationData[resultId];
 
-      if (this.history !== undefined) {
-        this.history.push(`${BASE_URL}${ROUTES.DIRECTORY}/${loc.code}`);
-      }
+    if (this.history !== undefined) {
+      this.history.push(`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${loc.code}`);
     }
+    // }
   }
 
   /**

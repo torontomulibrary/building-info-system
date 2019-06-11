@@ -25,9 +25,6 @@ import {
 import {
   Search,
 } from './utils/search';
-import {
-  MAP_TYPE,
-} from './global/constants';
 
 
 export namespace Components {
@@ -124,11 +121,11 @@ export namespace Components {
     /**
     * The `id` of the currently active building.
     */
-    'activeBuilding': number;
+    'activeBuildingId': number;
     /**
     * The `id` of the currently active floor.
     */
-    'activeFloor': number;
+    'activeFloorId': number;
     /**
     * An id-indexed map of the buildings.
     */
@@ -207,13 +204,10 @@ export namespace Components {
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
     'history': RouterHistory;
-    'mapType': MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */
     'match': MatchResults;
-    'setActiveDetail': (id: number) => Promise<void>;
-    'setActiveElement': (id: number) => Promise<void>;
   }
   interface ViewSearch {
     'appLoaded': boolean;
@@ -494,11 +488,11 @@ declare namespace LocalJSX {
     /**
     * The `id` of the currently active building.
     */
-    'activeBuilding': number;
+    'activeBuildingId': number;
     /**
     * The `id` of the currently active floor.
     */
-    'activeFloor': number;
+    'activeFloorId': number;
     /**
     * An id-indexed map of the buildings.
     */
@@ -594,7 +588,6 @@ declare namespace LocalJSX {
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
     'history': RouterHistory;
-    'mapType'?: MAP_TYPE;
     /**
     * The results coming from `stencil-router` that contain any URL matches.
     */

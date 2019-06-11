@@ -5,6 +5,7 @@ import { RouterHistory } from '@stencil/router';
 import { BASE_URL } from '../../global/config';
 import {
   APP_DATA,
+  MAP_TYPE,
   ROUTES,
 } from '../../global/constants';
 import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
@@ -119,7 +120,7 @@ export class ViewBuilding {
                 cardMedia={building.image}
                 mediaSize="cover"
                 buttons={[
-                  { name: 'Map It!', link: `${BASE_URL}${ROUTES.DIRECTORY}/${building.code}` },
+                  { name: 'Map It!', link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${building.code}` },
                 ]}
                 >
                 <div slot="primary">

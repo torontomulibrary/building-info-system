@@ -41,18 +41,18 @@ export class MapNav {
   /**
    * Root element of this component.
    */
-  @Element() root!: HTMLElement;
+  @Element() root!: HTMLRlMapNavElement;
 
   /**
    * The `id` of the currently active building.
    */
-  @Prop() activeBuilding!: number;
+  @Prop() activeBuildingId!: number;
 
   /**
    * The `id` of the currently active floor.
    */
-  @Prop() activeFloor!: number;
-  @Watch('activeFloor')
+  @Prop() activeFloorId!: number;
+  @Watch('activeFloorId')
   onActiveFloorChanged(newFloor?: number) {
     if (this.floorTabs && newFloor) {
       // Update the active (selected) floor tab.
@@ -143,7 +143,7 @@ export class MapNav {
         <select class="mdc-select__native-control">
           {buildings.map((b: Building) =>
             <option value={b.id} disabled={!b.enabled}
-                selected={this.activeBuilding === b.id}>
+                selected={this.activeBuildingId === b.id}>
               {b.name}
             </option>
           )}
@@ -159,12 +159,12 @@ export class MapNav {
             <div class="mdc-tab-scroller__scroll-content">
               {floors.map((f: Floor) =>
               <button role="tab" disabled={!f.enabled}
-                  tabindex={f.id === this.activeFloor ? '0' : '-1'}
-                  class={`mdc-tab ${f.id === this.activeFloor ? 'mdc-tab--active' : ''}`}>
+                  tabindex={f.id === this.activeFloorId ? '0' : '-1'}
+                  class={`mdc-tab ${f.id === this.activeFloorId ? 'mdc-tab--active' : ''}`}>
                 <span class="mdc-tab__content">
                   <span>{f.name}</span>
                 </span>
-                <span class={`mdc-tab-indicator ${f.id === this.activeFloor ? 'mdc-tab-indicator--active' : ''}`}>
+                <span class={`mdc-tab-indicator ${f.id === this.activeFloorId ? 'mdc-tab-indicator--active' : ''}`}>
                   <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                 </span>
                 <span class="mdc-tab__ripple"></span>
@@ -178,7 +178,7 @@ export class MapNav {
         <select class="mdc-select__native-control">
           {floors.reverse().map((f: Floor) =>
             <option value={f.id} disabled={!f.enabled}
-                selected={this.activeFloor === f.id}>
+                selected={this.activeFloorId === f.id}>
               {f.name}
             </option>
           )}

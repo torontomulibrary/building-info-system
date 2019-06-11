@@ -8,6 +8,7 @@ import {
 import {
   APP_DATA,
   FULL_MONTHS,
+  MAP_TYPE,
   MONTHS,
   ROUTES,
 } from '../../global/constants';
@@ -198,7 +199,7 @@ export class ViewEvent {
                 <div class="rl-event__actions mdc-card__actions">
                   <a class="mdc-button mdc-card__action mdc-card__action--button rl-event__action"
                       aria-label={`Find ${event.location} on the map.`}
-                      href={`${BASE_URL}${ROUTES.DIRECTORY}/${room}`}>
+                      href={`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${room}`}>
                     <span class="mdc-button__label">
                       Find on map
                     </span>

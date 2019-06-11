@@ -255,8 +255,8 @@ export class MapContainer {
       </rl-side-sheet>,
 
       <rl-map-nav
-        activeBuilding={this.activeBuilding.id}
-        activeFloor={this.activeFloor.id}
+        activeBuildingId={this.activeBuilding.id}
+        activeFloorId={this.activeFloor.id}
         buildings={this.buildings}
         floors={this.activeBuilding.floors}
         onBuildingChanged={ev => this._setActiveBuilding(this.buildings[ev.detail])}
