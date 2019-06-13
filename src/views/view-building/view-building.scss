@@ -6,54 +6,54 @@
 @import "@material/typography/mixins";
 
 .rl-card {
-  @include mdc-shape-radius(2px);
-  @include mdc-elevation(2);
-  @include mdc-card-container-layout_;
+  // @include mdc-shape-radius(2px);
+  // @include mdc-elevation(2);
+  // @include mdc-card-container-layout_;
 
-  &__header {
-    // @include mdc-card-media-aspect-ratio-base_;
+  // &__header {
+  //   // @include mdc-card-media-aspect-ratio-base_;
 
-    position: relative;
-    box-sizing: border-box;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+  //   position: relative;
+  //   box-sizing: border-box;
+  //   background-repeat: no-repeat;
+  //   background-position: center;
+  //   background-size: cover;
 
-    &--16-9::before {
-      padding-top: 56.25%;
-    }
+  //   &--16-9::before {
+  //     padding-top: 56.25%;
+  //   }
 
-    &:first-child {
-      border-top-left-radius: inherit;
-      border-top-right-radius: inherit;
-    }
+  //   &:first-child {
+  //     border-top-left-radius: inherit;
+  //     border-top-right-radius: inherit;
+  //   }
 
-    &:last-child {
-      border-bottom-left-radius: inherit;
-      border-bottom-right-radius: inherit;
-    }
-  }
+  //   &:last-child {
+  //     border-bottom-left-radius: inherit;
+  //     border-bottom-right-radius: inherit;
+  //   }
+  // }
 
-  &__text-protection {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.95) 5%, rgba(255, 255, 255, 0.1));
-  }
+  // &__text-protection {
+  //   position: absolute;
+  //   top: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   background-image: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.95) 5%, rgba(255, 255, 255, 0.1));
+  // }
 
-  &__header-content {
-    display: flex;
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    bottom: 16px;
-    left: 16px;
-    flex-direction: column;
-    justify-content: flex-end;
-    box-sizing: border-box;
-  }
+  // &__header-content {
+  //   display: flex;
+  //   position: absolute;
+  //   top: 16px;
+  //   right: 16px;
+  //   bottom: 16px;
+  //   left: 16px;
+  //   flex-direction: column;
+  //   justify-content: flex-end;
+  //   box-sizing: border-box;
+  // }
 
   &__content {
     padding: 20px 16px;

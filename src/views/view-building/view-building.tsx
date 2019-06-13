@@ -96,6 +96,7 @@ export class ViewBuilding {
                   cardTitle={building.name}
                   cardMedia={building.image}
                   mediaSize="cover"
+                  hasPrimaryAction={true}
                   buttons={[
                     { name: 'Map It!', link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${building.code}` },
                   ]}
