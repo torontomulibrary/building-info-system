@@ -91,9 +91,6 @@ export namespace Components {
     'heading': string;
     'type'?: string;
   }
-  interface RlCollection {
-    'collectionTitle': string;
-  }
   interface RlDrawer {
     /**
     * Flag indicating if the drawer is open.
@@ -245,12 +242,6 @@ declare global {
     new (): HTMLRlClusterElement;
   };
 
-  interface HTMLRlCollectionElement extends Components.RlCollection, HTMLStencilElement {}
-  var HTMLRlCollectionElement: {
-    prototype: HTMLRlCollectionElement;
-    new (): HTMLRlCollectionElement;
-  };
-
   interface HTMLRlDrawerElement extends Components.RlDrawer, HTMLStencilElement {}
   var HTMLRlDrawerElement: {
     prototype: HTMLRlDrawerElement;
@@ -341,7 +332,6 @@ declare global {
     'rl-bis': HTMLRlBisElement;
     'rl-card': HTMLRlCardElement;
     'rl-cluster': HTMLRlClusterElement;
-    'rl-collection': HTMLRlCollectionElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
     'rl-load-progress': HTMLRlLoadProgressElement;
@@ -440,9 +430,6 @@ declare namespace LocalJSX {
     'hasMore'?: boolean;
     'heading'?: string;
     'type'?: string;
-  }
-  interface RlCollection extends JSXBase.HTMLAttributes<HTMLRlCollectionElement> {
-    'collectionTitle'?: string;
   }
   interface RlDrawer extends JSXBase.HTMLAttributes<HTMLRlDrawerElement> {
     /**
@@ -586,7 +573,6 @@ declare namespace LocalJSX {
     'rl-bis': RlBis;
     'rl-card': RlCard;
     'rl-cluster': RlCluster;
-    'rl-collection': RlCollection;
     'rl-drawer': RlDrawer;
     'rl-expansion-panel': RlExpansionPanel;
     'rl-load-progress': RlLoadProgress;
