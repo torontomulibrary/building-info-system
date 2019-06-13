@@ -123,7 +123,7 @@ export class RLApp {
   /**
    * Lifecycle event fired after the component has rendered the first time.
    */
-  async componentDidLoad() {
+  componentWillLoad() {
     dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
       this._faqData = dataService.getData(APP_DATA.FAQS);
 
@@ -167,18 +167,11 @@ export class RLApp {
    * @param e The triggering event
    */
   async _onSearchLocationClicked(resultId) {
-    // const viewMap = this.root.querySelector('.rl-view--map') as HTMLViewMapElement;
-    // if (viewMap && viewMap.hasOwnProperty('setActiveElement')) {
-      // Map is open. Set active element.
-      // await viewMap.setActiveDetail(this._locationData[resultId].id);
-    // } else {
-      // Navigate to page and then set the active element.
     const loc = this._locationData[resultId];
 
     if (this.history !== undefined) {
       this.history.push(`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${loc.code}`);
     }
-    // }
   }
 
   /**

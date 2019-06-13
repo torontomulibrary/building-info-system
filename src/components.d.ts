@@ -15,17 +15,14 @@ import {
 } from './utils/color';
 import {
   BuildingMap,
-  MapElementData,
-  SearchResultItem,
-} from './interface';
-import {
-  BuildingMap as BuildingMap1,
   FloorMap,
 } from './interface.js';
 import {
   Search,
 } from './utils/search';
-
+import {
+  SearchResultItem,
+} from './interface';
 
 export namespace Components {
   interface RlAccordion {
@@ -109,14 +106,6 @@ export namespace Components {
     'open': () => Promise<void>;
   }
   interface RlLoadProgress {}
-  interface RlMapContainer {
-    'buildings': BuildingMap;
-    'extraDetails'?: {};
-    'initialBuilding': number;
-    'initialElement'?: number;
-    'initialFloor': number;
-    'setActiveElement': (el: MapElementData) => Promise<void>;
-  }
   interface RlMapNav {
     /**
     * The `id` of the currently active building.
@@ -280,12 +269,6 @@ declare global {
     new (): HTMLRlLoadProgressElement;
   };
 
-  interface HTMLRlMapContainerElement extends Components.RlMapContainer, HTMLStencilElement {}
-  var HTMLRlMapContainerElement: {
-    prototype: HTMLRlMapContainerElement;
-    new (): HTMLRlMapContainerElement;
-  };
-
   interface HTMLRlMapNavElement extends Components.RlMapNav, HTMLStencilElement {}
   var HTMLRlMapNavElement: {
     prototype: HTMLRlMapNavElement;
@@ -362,7 +345,6 @@ declare global {
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
     'rl-load-progress': HTMLRlLoadProgressElement;
-    'rl-map-container': HTMLRlMapContainerElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
@@ -477,13 +459,6 @@ declare namespace LocalJSX {
     'onToggled'?: (event: CustomEvent<any>) => void;
   }
   interface RlLoadProgress extends JSXBase.HTMLAttributes<HTMLRlLoadProgressElement> {}
-  interface RlMapContainer extends JSXBase.HTMLAttributes<HTMLRlMapContainerElement> {
-    'buildings': BuildingMap;
-    'extraDetails'?: {};
-    'initialBuilding': number;
-    'initialElement'?: number;
-    'initialFloor': number;
-  }
   interface RlMapNav extends JSXBase.HTMLAttributes<HTMLRlMapNavElement> {
     /**
     * The `id` of the currently active building.
@@ -615,7 +590,6 @@ declare namespace LocalJSX {
     'rl-drawer': RlDrawer;
     'rl-expansion-panel': RlExpansionPanel;
     'rl-load-progress': RlLoadProgress;
-    'rl-map-container': RlMapContainer;
     'rl-map-nav': RlMapNav;
     'rl-search-box': RlSearchBox;
     'rl-search-suggestions': RlSearchSuggestions;
