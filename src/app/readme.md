@@ -5,6 +5,13 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property  | Attribute | Description | Type                         | Default     |
+| --------- | --------- | ----------- | ---------------------------- | ----------- |
+| `history` | --        |             | `RouterHistory \| undefined` | `undefined` |
+
+
 ## Dependencies
 
 ### Depends on

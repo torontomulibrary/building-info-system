@@ -53,14 +53,9 @@ Type: `Promise<void>`
 
  - [view-faq](../../views/view-faq)
 
-### Depends on
-
-- stencil-route-link
-
 ### Graph
 ```mermaid
 graph TD;
-  rl-accordion-item --> stencil-route-link
   view-faq --> rl-accordion-item
   style rl-accordion-item fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -41,7 +41,6 @@ graph TD;
   view-faq --> stencil-route-title
   view-faq --> rl-accordion
   view-faq --> rl-accordion-item
-  rl-accordion-item --> stencil-route-link
   style view-faq fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

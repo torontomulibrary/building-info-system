@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property                      | Attribute         | Description                                | Type          | Default     |
-| ----------------------------- | ----------------- | ------------------------------------------ | ------------- | ----------- |
-| `activeBuilding` _(required)_ | `active-building` | The `id` of the currently active building. | `number`      | `undefined` |
-| `activeFloor` _(required)_    | `active-floor`    | The `id` of the currently active floor.    | `number`      | `undefined` |
-| `buildings` _(required)_      | --                | An id-indexed map of the buildings.        | `BuildingMap` | `undefined` |
-| `floors` _(required)_         | --                | An id-indexed map of floors.               | `FloorMap`    | `undefined` |
+| Property                        | Attribute            | Description                                | Type          | Default     |
+| ------------------------------- | -------------------- | ------------------------------------------ | ------------- | ----------- |
+| `activeBuildingId` _(required)_ | `active-building-id` | The `id` of the currently active building. | `number`      | `undefined` |
+| `activeFloorId` _(required)_    | `active-floor-id`    | The `id` of the currently active floor.    | `number`      | `undefined` |
+| `buildings` _(required)_        | --                   | An id-indexed map of the buildings.        | `BuildingMap` | `undefined` |
+| `floors` _(required)_           | --                   | An id-indexed map of floors.               | `FloorMap`    | `undefined` |
 
 
 ## Events
@@ -27,12 +27,12 @@
 
 ### Used by
 
- - [rl-map-container](../map-container)
+ - [view-map](../../views/view-map)
 
 ### Graph
 ```mermaid
 graph TD;
-  rl-map-container --> rl-map-nav
+  view-map --> rl-map-nav
   style rl-map-nav fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

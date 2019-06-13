@@ -24,12 +24,12 @@
 
 ### Used by
 
- - [rl-map-container](../map-container)
+ - [view-map](../../views/view-map)
 
 ### Graph
 ```mermaid
 graph TD;
-  rl-map-container --> rl-side-sheet
+  view-map --> rl-side-sheet
   style rl-side-sheet fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
