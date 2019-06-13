@@ -3,6 +3,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Host,
   Listen,
   Prop,
   State,
@@ -136,24 +137,17 @@ export class SideSheet {
   }
 
   /**
-   * Updates host element attributes.
-   */
-  hostData() {
-    return {
-      class: {
-        'rl-side-sheet': true,
-        'rl-side-sheet--open': this._isOpen,
-        'rl-side-sheet--animate': this._isAnimating,
-      },
-    };
-  }
-
-  /**
    * Renders the component.
    */
   render() {
     return (
-      <slot />
+      <Host class={{
+        'rl-side-sheet': true,
+        'rl-side-sheet--open': this._isOpen,
+        'rl-side-sheet--animate': this._isAnimating,
+      }}>
+        <slot />
+      </Host>
     );
   }
 }

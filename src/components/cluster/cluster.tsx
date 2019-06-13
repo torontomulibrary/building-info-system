@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 
 import { BASE_URL } from '../../global/config';
 import { ROUTES } from '../../global/constants';
@@ -25,16 +25,6 @@ export class Cluster {
     if (this.data) {
       this.maxColumns = Math.min(this.data.length, this.maxColumns);
     }
-  }
-
-  hostData() {
-    return {
-      class: {
-        'rl-cluster': true,
-        'has-prev': this.firstVisible > 0 && this.columns < this.data.length,
-        'has-next': (this.firstVisible + this.columns) < this.data.length,
-      },
-    };
   }
 
   // @Listen('click')
@@ -116,28 +106,34 @@ export class Cluster {
   }
 
   render() {
-    return ([
-      <div class="rl-cluster__header">
-        <div class="rl-cluster__header--inner">
-          <h2 class="rl-cluster__title">{this.heading}</h2>
+    return (
+      <Host class={{
+        'rl-cluster': true,
+        'has-prev': this.firstVisible > 0 && this.columns < this.data.length,
+        'has-next': (this.firstVisible + this.columns) < this.data.length,
+      }}>
+        <div class="rl-cluster__header">
+          <div class="rl-cluster__header--inner">
+            <h2 class="rl-cluster__title">{this.heading}</h2>
+          </div>
+          {this.hasMore ? <button class="mdc-button">See More</button> : undefined}
         </div>
-        {this.hasMore ? <button class="mdc-button">See More</button> : undefined}
-      </div>,
-      <div class="rl-lane__button prev" onClick={e => this.handleClick(e)}>
-        <svg class="icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
-          <g class="style-scope iron-icon">
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-          </g>
-        </svg>
-      </div>,
-      this.renderContent(),
-      <div class="rl-lane__button next" onClick={e => this.handleClick(e)}>
-        <svg class="icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
-          <g class="style-scope iron-icon">
-            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-          </g>
-        </svg>
-      </div>,
-    ]);
+        <div class="rl-lane__button prev" onClick={e => this.handleClick(e)}>
+          <svg class="icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <g class="style-scope iron-icon">
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+            </g>
+          </svg>
+        </div>
+        {this.renderContent()}
+        <div class="rl-lane__button next" onClick={e => this.handleClick(e)}>
+          <svg class="icon" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+            <g class="style-scope iron-icon">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+            </g>
+          </svg>
+        </div>
+      </Host>
+    );
   }
 }

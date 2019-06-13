@@ -3,6 +3,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Host,
   Prop,
   State,
   h,
@@ -72,7 +73,6 @@ export class ViewMap {
    * building, building and floor, or building, floor and element.
    */
   @State() query = '';
-
 
   @State() activeBuildingId!: number;
   @State() activeFloorId!: number;
@@ -372,84 +372,68 @@ export class ViewMap {
     return found;
   }
 
-  hostData() {
-    return {
-      class: {
-        'rl-view': true,
-        'rl-view--map': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
-      },
-    };
-  }
-
   render() {
     const { _buildingData, loaded, _element, extraDetails } = this;
     const detail: MapElementDetail = _element && Object.values(_element.details)[0];
-
-    // let extra = {};
-
-    // if (this.extraDetails !== undefined) {
-      // const firstDetail = _element && Object.values(_element.details)[0].code;
-      // extra = this.extraDetails[firstDetail];
-      // extra = this.extraDetails;
-    // }
 
     if (loaded && _buildingData) {
       const { _building, _floorplan } = this;
       const subtitle = this.activeElementId ? detail.code : `${_building.code}${this._floor.number}`;
 
-      return ([
-        <stencil-route-title pageTitle={`${subtitle} | Directory`} />,
-        <rl-map
-          class="rl-map"
-          elements={this._floor.elements}
-          mapImage={_floorplan}
-          onElementSelected={e => {
-            const elCode = Object.values(e.detail.details as MapElementDetailMap)[0].code;
-            this.history.push(`/${ROUTES.MAP}/${this.mapType}/${elCode}`);
-          }}
-          onElementDeselected={() => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`)}
-          activeElementId={this.activeElementId}
-        >
-        </rl-map>,
+      return (
+        <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
+          <stencil-route-title pageTitle={`${subtitle} | Directory`} />,
+          <rl-map
+            class="rl-map"
+            elements={this._floor.elements}
+            mapImage={_floorplan}
+            onElementSelected={e => {
+              const elCode = Object.values(e.detail.details as MapElementDetailMap)[0].code;
+              this.history.push(`/${ROUTES.MAP}/${this.mapType}/${elCode}`);
+            }}
+            onElementDeselected={() => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`)}
+            activeElementId={this.activeElementId}
+          >
+          </rl-map>
 
-        <rl-side-sheet open={this.activeElementId !== undefined}>
-          <header class="rl-side-sheet__header">
-            <span class="rl-side-sheet__title">
-              <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
-              <div class="mdc-typography--headline6">{detail && detail.name || ''}</div>
-            </span>
-            <button
-              class="material-icons rl-side-sheet__close"
-              aria-label="Close detail panel."
-              tabindex={_element ? '0' : '-1'}>
-              close
-            </button>
-          </header>
-          <div class="rl-side-sheet__content">
-            <div class="rl-side-sheet__section">
-              <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">Description</div>
-              {detail && detail.description || ''}
-            </div>
-            {extraDetails && Object.entries(extraDetails).map(item =>
+          <rl-side-sheet open={this.activeElementId !== undefined}>
+            <header class="rl-side-sheet__header">
+              <span class="rl-side-sheet__title">
+                <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
+                <div class="mdc-typography--headline6">{detail && detail.name || ''}</div>
+              </span>
+              <button
+                class="material-icons rl-side-sheet__close"
+                aria-label="Close detail panel."
+                tabindex={_element ? '0' : '-1'}>
+                close
+              </button>
+            </header>
+            <div class="rl-side-sheet__content">
               <div class="rl-side-sheet__section">
-                <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">{item[0].charAt(0).toUpperCase() + item[0].slice(1)}</div>
-                {typeof item[1] === 'boolean' ? item[1] ? 'Yes' : 'No' : item[1]}
+                <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">Description</div>
+                {detail && detail.description || ''}
               </div>
-            )}
-          </div>
-        </rl-side-sheet>,
+              {extraDetails && Object.entries(extraDetails).map(item =>
+                <div class="rl-side-sheet__section">
+                  <div class="rl-side-sheet__subtitle mdc-typography--subtitle2">{item[0].charAt(0).toUpperCase() + item[0].slice(1)}</div>
+                  {typeof item[1] === 'boolean' ? item[1] ? 'Yes' : 'No' : item[1]}
+                </div>
+              )}
+            </div>
+          </rl-side-sheet>
 
-        <rl-map-nav
-          activeBuildingId={this.activeBuildingId}
-          activeFloorId={this.activeFloorId}
-          buildings={this._buildingData}
-          floors={_building.floors}
-          onBuildingChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${ev.detail}`)}
-          onFloorChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${ev.detail}`)}
-        >
-        </rl-map-nav>,
-      ]);
+          <rl-map-nav
+            activeBuildingId={this.activeBuildingId}
+            activeFloorId={this.activeFloorId}
+            buildings={this._buildingData}
+            floors={_building.floors}
+            onBuildingChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${ev.detail}`)}
+            onFloorChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${ev.detail}`)}
+          >
+          </rl-map-nav>
+        </Host>
+      );
     }
 
     return (<div>Loading...</div>);

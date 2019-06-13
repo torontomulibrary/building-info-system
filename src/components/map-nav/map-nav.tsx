@@ -1,6 +1,6 @@
 import { MDCSelect } from '@material/select/index';
 import { MDCTabBar } from '@material/tab-bar/index';
-import { Component, Element, Event, EventEmitter, Prop, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
 import {
   Building,
@@ -133,57 +133,59 @@ export class MapNav {
     const buildings = Object.values(this.buildings);
     const floors = Object.values(this.floors);
 
-    return ([
-      <div class="mdc-select mdc-select--buildings">
-        <i class="mdc-select__dropdown-icon"></i>
-        <select class="mdc-select__native-control">
-          {buildings.map((b: Building) =>
-            <option value={b.code} disabled={!b.enabled}
-              selected={this.activeBuildingId === b.id}>
-              {b.name}
-            </option>
-          )}
-        </select>
-        <div class="mdc-floating-label mdc-floating-label--float-above">
-          Current Building
+    return (
+      <Host class="rl-map-nav">
+        <div class="mdc-select mdc-select--buildings">
+          <i class="mdc-select__dropdown-icon"></i>
+          <select class="mdc-select__native-control">
+            {buildings.map((b: Building) =>
+              <option value={b.code} disabled={!b.enabled}
+                selected={this.activeBuildingId === b.id}>
+                {b.name}
+              </option>
+            )}
+          </select>
+          <div class="mdc-floating-label mdc-floating-label--float-above">
+            Current Building
+          </div>
+          <div class="mdc-line-ripple"></div>
         </div>
-        <div class="mdc-line-ripple"></div>
-      </div>,
-      <div class="mdc-tab-bar" id="tab-bar" role="tablist">
-        <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
-          <div class="mdc-tab-scroller__scroll-area">
-            <div class="mdc-tab-scroller__scroll-content">
-              {floors.map((f: Floor) =>
-                <button role="tab" disabled={!f.enabled}
-                  tabindex={f.id === this.activeFloorId ? '0' : '-1'}
-                  class={`mdc-tab ${f.id === this.activeFloorId ? 'mdc-tab--active' : ''}`}>
-                  <span class="mdc-tab__content">
-                    <span>{f.name}</span>
-                  </span>
-                  <span class={`mdc-tab-indicator ${f.id === this.activeFloorId ? 'mdc-tab-indicator--active' : ''}`}>
-                    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                  </span>
-                  <span class="mdc-tab__ripple"></span>
-                </button>
-              )}
+        <div class="mdc-tab-bar" id="tab-bar" role="tablist">
+          <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
+            <div class="mdc-tab-scroller__scroll-area">
+              <div class="mdc-tab-scroller__scroll-content">
+                {floors.map((f: Floor) =>
+                  <button role="tab" disabled={!f.enabled}
+                    tabindex={f.id === this.activeFloorId ? '0' : '-1'}
+                    class={`mdc-tab ${f.id === this.activeFloorId ? 'mdc-tab--active' : ''}`}>
+                    <span class="mdc-tab__content">
+                      <span>{f.name}</span>
+                    </span>
+                    <span class={`mdc-tab-indicator ${f.id === this.activeFloorId ? 'mdc-tab-indicator--active' : ''}`}>
+                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                    </span>
+                    <span class="mdc-tab__ripple"></span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>,
-      <div class="mdc-select mdc-select--floors">
-        <select class="mdc-select__native-control">
-          {floors.reverse().map((f: Floor) =>
-            <option value={f.number} disabled={!f.enabled}
-              selected={this.activeFloorId === f.id}>
-              {f.name}
-            </option>
-          )}
-        </select>
-        <div class="mdc-floating-label mdc-floating-label--float-above">
-          Current Floor
+        <div class="mdc-select mdc-select--floors">
+          <select class="mdc-select__native-control">
+            {floors.reverse().map((f: Floor) =>
+              <option value={f.number} disabled={!f.enabled}
+                selected={this.activeFloorId === f.id}>
+                {f.name}
+              </option>
+            )}
+          </select>
+          <div class="mdc-floating-label mdc-floating-label--float-above">
+            Current Floor
+          </div>
+          <div class="mdc-line-ripple"></div>
         </div>
-        <div class="mdc-line-ripple"></div>
-      </div>,
-    ]);
+      </Host>
+    );
   }
 }

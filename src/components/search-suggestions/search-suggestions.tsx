@@ -3,6 +3,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Host,
   Prop,
   State,
   h,
@@ -37,59 +38,63 @@ export class SearchSuggestions {
     this.totalHeight = el && el.offsetHeight || 0;
   }
 
-  hostData() {
-    return {
-      id: 'rl-search-suggestions',
-      class: {
-        'rl-search__results': true,
-      },
-      style: {
-        height: `${this.totalHeight}px`,
-      },
-    };
-  }
+  // hostData() {
+  //   return {
+  //     id: 'rl-search-suggestions',
+  //     class: {
+  //       'rl-search__results': true,
+  //     },
+  //     style: {
+  //       height: `${this.totalHeight}px`,
+  //     },
+  //   };
+  // }
 
   render() {
     if (this.suggestions.length > 0) {
       // Render the suggestions as a single list.
       return (
-        <ul class="mdc-list mdc-list--two-line mdc-list--dense" role="listbox">
-          {this.suggestions.map((detail, i) => {
-            const listClass = {
-              'mdc-list-item': true,
-              'mdc-list-item--selected': i === this.activeResult,
-              'rl-search__result_item': true,
-            };
-            return (
-              <li class={listClass} role="option"
-                  onClick={e => { e.stopImmediatePropagation(); this.suggestionClicked.emit(detail); }}>
-                <span class="mdc-list-item__graphic material-icons"
-                    aria-hidden="true">
-                    {detail.type}
-                </span>
-                <span class="mdc-list-item__text">
-                  <span class="mdc-list-item__primary-text">
-                    {detail.value}
+        <Host id="rl-search-suggestions" class="rl-search__results" style={{ height: `${this.totalHeight}px` }}>
+          <ul class="mdc-list mdc-list--two-line mdc-list--dense" role="listbox">
+            {this.suggestions.map((detail, i) => {
+              const listClass = {
+                'mdc-list-item': true,
+                'mdc-list-item--selected': i === this.activeResult,
+                'rl-search__result_item': true,
+              };
+              return (
+                <li class={listClass} role="option"
+                    onClick={e => { e.stopImmediatePropagation(); this.suggestionClicked.emit(detail); }}>
+                  <span class="mdc-list-item__graphic material-icons"
+                      aria-hidden="true">
+                      {detail.type}
                   </span>
-                  <span class="mdc-list-item__secondary-text">
-                    {detail.type}
+                  <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">
+                      {detail.value}
+                    </span>
+                    <span class="mdc-list-item__secondary-text">
+                      {detail.type}
+                    </span>
                   </span>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+                </li>
+              );
+            })}
+          </ul>
+        </Host>
       );
     } else {
       if (!this.isEmptySearch) {
         return (
-          <div class="rl-search__no-results">
-            No results were found.
-          </div>
+          <Host id="rl-search-suggestions" class="rl-search__results" style={{ height: `${this.totalHeight}px` }}>
+            <div class="rl-search__no-results">
+              No results were found.
+            </div>
+          </Host>
         );
       }
     }
 
-    return undefined;
+    return (<Host id="rl-search-suggestions" class="rl-search__results" style={{ height: `${this.totalHeight}px` }} />);
   }
 }

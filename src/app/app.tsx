@@ -1,5 +1,5 @@
 import '@ryersonlibrary/web-components';
-import { Component, Element, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core';
 import '@stencil/router';
 // tslint:disable-next-line:no-duplicate-imports
 import { RouterHistory, injectHistory } from '@stencil/router';
@@ -207,18 +207,6 @@ export class RLApp {
   }
 
   /**
-   * Dynamically sets host element attributes.
-   */
-  hostData() {
-    return {
-      class: {
-        'rl-bis': true,
-        'rl-bis--loaded': this.loaded,
-      },
-    };
-  }
-
-  /**
    * Component render function.
    */
   render() {
@@ -226,7 +214,7 @@ export class RLApp {
 
     if (loaded) {
       return (
-        <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`} historyType="hash">
+        <Host class={{ 'rl-bis': true, 'rl-bis--loaded': this.loaded }}>
           <rl-app-bar
               type="fixed"
               onMenuClicked={_ => { this.drawerOpen = true; }}
@@ -270,25 +258,27 @@ export class RLApp {
           </rl-drawer>
 
           <main class="rl-main-content">
-            <stencil-route-switch>
-              {appRoutes.map(route =>
-                <stencil-route component={route.component}
-                  url={route.urls}
-                  componentProps={{ appLoaded: loaded }}
-                >
+            <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`} historyType="hash">
+              <stencil-route-switch>
+                {appRoutes.map(route =>
+                  <stencil-route component={route.component}
+                    url={route.urls}
+                    componentProps={{ appLoaded: loaded }}
+                  >
+                  </stencil-route>
+                )}
+                <stencil-route routeRender={() => ([
+                  <span>Undefined route</span>,
+                  <stencil-router-redirect url={`${BASE_URL}${ROUTES.HOME}`} />,
+                ])}>
                 </stencil-route>
-              )}
-              <stencil-route routeRender={() => ([
-                <span>Undefined route</span>,
-                <stencil-router-redirect url={`${BASE_URL}${ROUTES.HOME}`} />,
-              ])}>
-              </stencil-route>
-            </stencil-route-switch>
+              </stencil-route-switch>
+            </stencil-router>
           </main>
-        </stencil-router>
+        </Host>
       );
     } else {
-      return undefined;
+      return (<Host class={{ 'rl-bis': true, 'rl-bis--loaded': this.loaded }} />);
     }
   }
 }

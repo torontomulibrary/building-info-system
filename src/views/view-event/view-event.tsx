@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
@@ -155,61 +155,54 @@ export class ViewEvent {
   }
 
   /**
-   * Dynamically sets host element attributes.
-   */
-  hostData() {
-    return {
-      class: {
-        'rl-view': true,
-        'rl-view--events': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
-      },
-    };
-  }
-
-  /**
    * Component render function.
    */
   render() {
     if (this.events) {
 
-      return ([
-        <stencil-route-title pageTitle="Events" />,
-        <h2 class="rl-view__heading">Upcoming events</h2>,
-        <div class="rl-view__container mdc-layout-grid">
-          <div class="mdc-layout-grid__inner" role="list">
-            {this.events.map((event: CalEvent, index: number) => {
-              const room = event.location.replace(/\s/g, '').slice(0, 6);
-              return (
-              <div class={`${event.group} rl-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
-                  data-fade-delay={(index + 1) * 20} fade-in
-                  aria-label={this.eventLabel(event)}>
-                <div class="rl-event__header rl-event__header--16-9">
-                <div class="rl-event__text-protection"></div>
-                  <div class="rl-event__header-content">
-                    <div class="rl-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
-                    <div class="rl-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
-                    <div class="rl-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
+      return (
+        <Host class={{
+          'rl-view': true,
+          'rl-view--events': true,
+          'rl-view--loaded': this.loaded && this.appLoaded,
+        }}>
+          <stencil-route-title pageTitle="Events" />
+          <h2 class="rl-view__heading">Upcoming events</h2>
+          <div class="rl-view__container mdc-layout-grid">
+            <div class="mdc-layout-grid__inner" role="list">
+              {this.events.map((event: CalEvent, index: number) => {
+                const room = event.location.replace(/\s/g, '').slice(0, 6);
+                return (
+                <div class={`${event.group} rl-event mdc-layout-grid__cell--span-4`} role="listitem" tabindex="0"
+                    data-fade-delay={(index + 1) * 20} fade-in
+                    aria-label={this.eventLabel(event)}>
+                  <div class="rl-event__header rl-event__header--16-9">
+                  <div class="rl-event__text-protection"></div>
+                    <div class="rl-event__header-content">
+                      <div class="rl-event__date mdc-typography--headline6">{this.eventDate(event)}</div>
+                      <div class="rl-event__time mdc-typography--subtitle2">{this.eventDuration(event)}</div>
+                      <div class="rl-event__location mdc-typography--subtitle1">{event.location ? event.location : ''}</div>
+                    </div>
                   </div>
-                </div>
-                <div class="rl-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
-                  <div class="rl-event__title mdc-typography--headline5">{event.title}</div>
-                  <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
-                </div>
-                <div class="rl-event__actions mdc-card__actions">
-                  <a class="mdc-button mdc-card__action mdc-card__action--button rl-event__action"
-                      aria-label={`Find ${event.location} on the map.`}
-                      href={`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${room}`}>
-                    <span class="mdc-button__label">
-                      Find on map
-                    </span>
-                  </a>
-                </div>
-              </div>);
-            })}
+                  <div class="rl-event__detail" aria-label={`Details: ${sanitize(event.description)}`}>
+                    <div class="rl-event__title mdc-typography--headline5">{event.title}</div>
+                    <div class="mdc-typography--body1" innerHTML={sanitize(event.description)}></div>
+                  </div>
+                  <div class="rl-event__actions mdc-card__actions">
+                    <a class="mdc-button mdc-card__action mdc-card__action--button rl-event__action"
+                        aria-label={`Find ${event.location} on the map.`}
+                        href={`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${room}`}>
+                      <span class="mdc-button__label">
+                        Find on map
+                      </span>
+                    </a>
+                  </div>
+                </div>);
+              })}
+            </div>
           </div>
-        </div>,
-      ]);
+        </Host>
+      );
     }
 
     return (

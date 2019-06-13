@@ -1,5 +1,5 @@
 import { MDCLinearProgress } from '@material/linear-progress/index';
-import { Component, Element, State, h } from '@stencil/core';
+import { Component, Element, Host, State, h } from '@stencil/core';
 
 import { APP_DATA, EVENTS } from '../../global/constants';
 import { dataService } from '../../utils/data-service';
@@ -46,30 +46,26 @@ export class LoadProgress {
     });
   }
 
-  hostData() {
-    return {
-      class: {
+  render() {
+    return (
+      <Host class={{
         'rl-load-progress': true,
         'rl-load-progress--done': this.done,
-      },
-    };
-  }
-
-  render() {
-    return ([
-      <div>
-        App Loading...
-      </div>,
-      <div ref={el => this._pbEl = el as HTMLElement} role="progressbar" class="mdc-linear-progress">
-        <div class="mdc-linear-progress__buffering-dots"></div>
-        <div class="mdc-linear-progress__buffer"></div>
-        <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-          <span class="mdc-linear-progress__bar-inner"></span>
+      }}>
+        <div>
+          App Loading...
         </div>
-        <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-          <span class="mdc-linear-progress__bar-inner"></span>
+        <div ref={el => this._pbEl = el as HTMLElement} role="progressbar" class="mdc-linear-progress">
+          <div class="mdc-linear-progress__buffering-dots"></div>
+          <div class="mdc-linear-progress__buffer"></div>
+          <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+            <span class="mdc-linear-progress__bar-inner"></span>
+          </div>
+          <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+            <span class="mdc-linear-progress__bar-inner"></span>
+          </div>
         </div>
-      </div>,
-    ]);
+      </Host>
+    );
   }
 }

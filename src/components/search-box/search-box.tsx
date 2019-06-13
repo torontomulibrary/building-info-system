@@ -3,6 +3,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Host,
   Listen,
   Method,
   Prop,
@@ -35,9 +36,6 @@ export class SearchBox {
 
   @State() focused = false;
   @State() activeResult?: number;
-
-  // @State() bookResultsRaw = '';
-  // @State() bookResultsParsed: any;
 
   @Prop() showMenu = false;
 
@@ -134,40 +132,34 @@ export class SearchBox {
     return false;
   }
 
-  hostData() {
-    return {
-      role: 'search',
-      class: {
+  render() {
+    return (
+      <Host role="search" class={{
         'rl-search': true,
         'rl-search--open': this.focused,
         'rl-search--focused': this.focused || this.searchValue !== '',
-      },
-      onKeyDown: (e: KeyboardEvent) => this.onKeyDown(e),
-    };
-  }
-
-  render() {
-    return ([
-      <input id="rl-search-input" role="combobox" aria-autocomplete="list"
-          ref={elm => this.searchInput = elm}
-          aria-owns="rl-search-suggestions" class="rl-search__input"
-          placeholder={this.placeholder}
-          autocomplete="off"
-          value={this.searchValue}
-      >
-      </input>,
-      <div class="material-icons rl-search__icon"
-          onClick={_ => this.iconClick.emit()}
-          role="button"
-          tabindex={this.showMenu ? '0' : undefined}>
-        {this.showMenu ? 'menu' : 'search'}
-      </div>,
-      <rl-search-suggestions
-        suggestions={this.searchResults}
-        isEmptySearch={this.searchValue === ''}
-        activeResult={this.activeResult}
-      >
-      </rl-search-suggestions>,
-    ]);
+      }} onKeyDown={(e: KeyboardEvent) => this.onKeyDown(e)}>
+        <input id="rl-search-input" role="combobox" aria-autocomplete="list"
+            ref={elm => this.searchInput = elm}
+            aria-owns="rl-search-suggestions" class="rl-search__input"
+            placeholder={this.placeholder}
+            autocomplete="off"
+            value={this.searchValue}
+        >
+        </input>
+        <div class="material-icons rl-search__icon"
+            onClick={_ => this.iconClick.emit()}
+            role="button"
+            tabindex={this.showMenu ? '0' : undefined}>
+          {this.showMenu ? 'menu' : 'search'}
+        </div>
+        <rl-search-suggestions
+          suggestions={this.searchResults}
+          isEmptySearch={this.searchValue === ''}
+          activeResult={this.activeResult}
+        >
+        </rl-search-suggestions>
+      </Host>
+    );
   }
 }

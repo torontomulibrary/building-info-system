@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
@@ -36,7 +36,6 @@ export class ViewHome {
 
   componentDidLoad() {
     this.checkSize();
-    // this.updateWidth();
   }
 
   updateWidth() {
@@ -60,41 +59,37 @@ export class ViewHome {
     }
   }
 
-  hostData() {
-    return {
-      class: {
-        'rl-view': true,
-        'rl-view--home': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
-      },
-    };
-  }
-
   render() {
     if (this.searches === undefined || this.labs === undefined) {
       return;
     }
 
-    return ([
-      <stencil-route-title pageTitle="Home" />,
-      <rl-cluster
-        heading="Recent Books"
-        type="search"
-        columns={this.clusterColumns}
-        data={this.searches.recent}>
-      </rl-cluster>,
-      <rl-cluster
-        heading="Popular Books"
-        type="search"
-        columns={this.clusterColumns}
-        data={this.searches.popular}>
-      </rl-cluster>,
-      <rl-cluster
-        heading="Computer Availability"
-        type="computer"
-        columns={this.clusterColumns}
-        data={this.labs}>
-      </rl-cluster>,
-    ]);
+    return (
+      <Host class={{
+        'rl-view': true,
+        'rl-view--home': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
+      }}>
+        <stencil-route-title pageTitle="Home" />
+        <rl-cluster
+          heading="Recent Books"
+          type="search"
+          columns={this.clusterColumns}
+          data={this.searches.recent}>
+        </rl-cluster>
+        <rl-cluster
+          heading="Popular Books"
+          type="search"
+          columns={this.clusterColumns}
+          data={this.searches.popular}>
+        </rl-cluster>
+        <rl-cluster
+          heading="Computer Availability"
+          type="computer"
+          columns={this.clusterColumns}
+          data={this.labs}>
+        </rl-cluster>
+      </Host>
+    );
   }
 }

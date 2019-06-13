@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
@@ -61,49 +61,44 @@ export class ViewBooks {
     this.history.push(`${BASE_URL}${ROUTES.SEARCH}/${card.cardData}`);
   }
 
-  hostData() {
-    return {
-      class: {
-        'rl-view': true,
-        'rl-view--book': true,
-        'rl-view--transition': this.inDom,
-      },
-      style: {
-        opacity: (this.loaded && this.appLoaded) ? 1 : 0,
-      },
-    };
-  }
-
   render() {
     // Render resent searches and popular books.
     if (this.searches) {
-      return ([
-        <stencil-route-title pageTitle="Books" />,
-        <div class="mdc-layout-grid">
-          <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop"></div>
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop">
-              Welcome to the Ryerson Library Book Finder.  Use it to find where the
-              book you're looking for is in the Library.  Below are some common search
-              terms and popular books.  To look for a specific book, use the search
-              bar above.
-              <slot />
+      return (
+        <Host style={{
+          opacity: (this.loaded && this.appLoaded) ? '1' : '0',
+        }} class={{
+          'rl-view': true,
+          'rl-view--book': true,
+          'rl-view--transition': this.inDom,
+        }}>
+          <stencil-route-title pageTitle="Books" />,
+          <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+              <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop"></div>
+              <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-desktop">
+                Welcome to the Ryerson Library Book Finder.  Use it to find where the
+                book you're looking for is in the Library.  Below are some common search
+                terms and popular books.  To look for a specific book, use the search
+                bar above.
+                <slot />
+              </div>
             </div>
           </div>
-        </div>,
-        <rl-cluster
-          heading="Recent Books"
-          type="search"
-          columns={this.clusterColumns}
-          data={this.searches.recent}>
-        </rl-cluster>,
-        <rl-cluster
-          heading="Popular Books"
-          type="search"
-          columns={this.clusterColumns}
-          data={this.searches.popular}>
-        </rl-cluster>,
-      ]);
+          <rl-cluster
+            heading="Recent Books"
+            type="search"
+            columns={this.clusterColumns}
+            data={this.searches.recent}>
+          </rl-cluster>
+          <rl-cluster
+            heading="Popular Books"
+            type="search"
+            columns={this.clusterColumns}
+            data={this.searches.popular}>
+          </rl-cluster>
+        </Host>
+      );
     }
 
     return (<div>Loading...</div>);

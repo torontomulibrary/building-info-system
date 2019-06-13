@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Method, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Method, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
@@ -88,9 +88,6 @@ export class ViewFaq {
       const newFaq = Number(this.match.params.faqId);
 
       this.selectedFaq = newFaq !== this.selectedFaq ? newFaq : undefined;
-      // if (this.selectedFaq !== newFaq) {
-      //   this.selectedFaq = newFaq;
-      // }
 
       if (this.selectedFaq !== undefined &&
           (isNaN(this.selectedFaq) || this.selectedFaq <= 0 ||
@@ -139,44 +136,37 @@ export class ViewFaq {
   }
 
   /**
-   * Dynamically sets host element attributes.
-   */
-  hostData() {
-    return {
-      class: {
-        'rl-view': true,
-        'rl-view--faq': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
-      },
-    };
-  }
-
-  /**
    * Component render function.
    */
   render() {
     if (this.faqs) {
       const title = (this.selectedFaq ? `${this.faqs[this.selectedFaq].question} | ` : '') + 'FAQs';
 
-      return ([
-        <stencil-route-title pageTitle={title} />,
-        <h1 class="rl-view__heading">Frequently asked questions</h1>,
-        <div id="container" class="rl-view-faq__container">
-          <rl-accordion>
-            {Object.values(this.faqs).map((faq: Faq, idx) =>
-                <rl-accordion-item
-                  class="rl-accordion-item rl-accordion-item--fade-in"
-                  index={faq.id}
-                  delay={idx * 15}
-                  isOpen={this.selectedFaq === faq.id}
-                >
-                  <div slot="header">{faq.question}</div>
-                  <div slot="content">{sanitize(faq.answer || '')}</div>
-                </rl-accordion-item>
-            )}
-          </rl-accordion>
-        </div>,
-      ]);
+      return (
+        <Host class={{
+          'rl-view': true,
+          'rl-view--faq': true,
+          'rl-view--loaded': this.loaded && this.appLoaded,
+        }}>
+          <stencil-route-title pageTitle={title} />
+          <h1 class="rl-view__heading">Frequently asked questions</h1>
+          <div id="container" class="rl-view-faq__container">
+            <rl-accordion>
+              {Object.values(this.faqs).map((faq: Faq, idx) =>
+                  <rl-accordion-item
+                    class="rl-accordion-item rl-accordion-item--fade-in"
+                    index={faq.id}
+                    delay={idx * 15}
+                    isOpen={this.selectedFaq === faq.id}
+                  >
+                    <div slot="header">{faq.question}</div>
+                    <div slot="content">{sanitize(faq.answer || '')}</div>
+                  </rl-accordion-item>
+              )}
+            </rl-accordion>
+          </div>
+        </Host>
+      );
     }
 
     return (<div>Loading...</div>);

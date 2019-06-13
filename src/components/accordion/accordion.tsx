@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Prop, h } from '@stencil/core';
 
 /**
  * A component that can be used to display a list of header/content items.
@@ -87,23 +87,17 @@ export class Accordion {
     }
   }
 
-  hostData() {
-    return {
-      class: {
-        'rl-accordion': true,
-      },
-    };
-  }
-
   /**
    * Component render function.
    */
   render() {
     return (
-      <dl role="presentation" class="rl-accordion-group"
-          onKeyDown={e => { this.onKeyDown(e); }}>
-        <slot />
-      </dl>
+      <Host class="rl-accordion">
+        <dl role="presentation" class="rl-accordion-group"
+            onKeyDown={e => { this.onKeyDown(e); }}>
+          <slot />
+        </dl>
+      </Host>
     );
   }
 }

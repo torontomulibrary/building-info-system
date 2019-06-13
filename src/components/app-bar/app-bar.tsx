@@ -1,5 +1,5 @@
 import { MDCTopAppBar } from '@material/top-app-bar/index';
-import { Component, Element, Event, EventEmitter, Prop, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
 // import { FaqMap, MapElementDetailMap } from '../../interface';
 
@@ -82,27 +82,24 @@ export class AppBar {
     ]);
   }
 
-  hostData() {
-    const { centerTitle, dense, type } = this;
-    return {
-      class: {
-        'mdc-top-app-bar': true,
-        'mdc-top-app-bar--fixed': type === 'fixed' || type === 'prominentFixed',
-        'mdc-top-app-bar--short': type === 'shortCollapsed' || type === 'short',
-        'mdc-top-app-bar--short-collapsed': type === 'shortCollapsed',
-        'mdc-top-app-bar--prominent': type === 'prominent' || type === 'prominentFixed',
-        'mdc-top-app-bar--dense': dense,
-        'mdc-top-app-bar--center-title': centerTitle,
-      },
-      role: 'banner',
-    };
-  }
-
   render() {
+    const { centerTitle, dense, type } = this;
+    const rootClass = {
+      'mdc-top-app-bar': true,
+      'mdc-top-app-bar--fixed': type === 'fixed' || type === 'prominentFixed',
+      'mdc-top-app-bar--short': type === 'shortCollapsed' || type === 'short',
+      'mdc-top-app-bar--short-collapsed': type === 'shortCollapsed',
+      'mdc-top-app-bar--prominent': type === 'prominent' || type === 'prominentFixed',
+      'mdc-top-app-bar--dense': dense,
+      'mdc-top-app-bar--center-title': centerTitle,
+    };
+
     return (
-      <div class="mdc-top-app-bar__row">
-        {this.singleSection ? this.renderSingleSection() : this.renderFullBar() }
-      </div>
+      <Host role="banner" class={rootClass}>
+        <div class="mdc-top-app-bar__row">
+          {this.singleSection ? this.renderSingleSection() : this.renderFullBar() }
+        </div>
+      </Host>
     );
   }
 }

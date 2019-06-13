@@ -3,6 +3,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Host,
   Prop,
   State,
   Watch,
@@ -123,24 +124,17 @@ export class Card {
     ]);
   }
 
-  hostData() {
-    return {
-      class: {
-        'rl-card': true,
-        // 'mdc-card': true,
-      },
-    };
-  }
-
   render() {
-    return ([
-      this.hasPrimaryAction ?
-        <div class="mdc-card__primary-action"
-            onClick={() => this.cardClicked.emit(this)}>
-          {this._renderCard()}
-        </div> :
-        this._renderCard(),
-      this._renderActions(),
-    ]);
+    return (
+      <Host class="rl-card">
+        {this.hasPrimaryAction ?
+          <div class="mdc-card__primary-action"
+              onClick={() => this.cardClicked.emit(this)}>
+            {this._renderCard()}
+          </div> :
+          this._renderCard()}
+        {this._renderActions()}
+      </Host>
+    );
   }
 }

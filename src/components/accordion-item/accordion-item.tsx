@@ -4,6 +4,7 @@ import {
   Element,
   Event,
   EventEmitter,
+  Host,
   Listen,
   Method,
   Prop,
@@ -171,55 +172,40 @@ export class AccordionItem {
   }
 
   /**
-   * Component function used to dynamically update any element attributes.
-   */
-  hostData() {
-    return {
-      class: {
-        'rl-accordion-item': true,
-        'rl-accordion-item--open': this.isOpen,
-      },
-    };
-  }
-
-  /**
    * Component render function.
    */
   render() {
-    return ([
-      <dt role="heading" aria-level="2" class="rl-accordion-item__header"
-      >
-        {/* <stencil-route-link
-          anchorClass="rl-accordion-item__trigger"
-          aria-controls={`rl-accordion-item__content-${this.index}`}
-          url={`${ROUTES.FAQ}/${this.index}`}
-          custom="button"
-        > */}
-        <button aria-expanded={this.isOpen ? 'true' : 'false'}
+    return (
+      <Host class={{ 'rl-accordion-item': true, 'rl-accordion-item--open': this.isOpen }}>
+        <dt role="heading" aria-level="2" class="rl-accordion-item__header">
+          <button
+            aria-expanded={this.isOpen ? 'true' : 'false'}
             ref={el => this._button = el}
             id={`rl-accordion-item__trigger-${this.index}`}
             class="rl-accordion-item__trigger"
             aria-controls={`rl-accordion-item__content-${this.index}`}
             onClick={_ => this.toggle()}
-        >
-          <span class="rl-accordion-item__title">
-            <slot name="header" />
-          </span>
-          <span class="rl-accordion-item__icon material-icons"
+          >
+            <span class="rl-accordion-item__title">
+              <slot name="header" />
+            </span>
+            <span class="rl-accordion-item__icon material-icons"
               aria-hidden="true">
-            expand_more
-          </span>
-        {/* </stencil-route-link> */}
-        </button>
-      </dt>,
-      <dd id={`rl-accordion-item__content-${this.index}`} role="region"
+              expand_more
+            </span>
+          </button>
+        </dt>
+        <dd
+          id={`rl-accordion-item__content-${this.index}`}
+          role="region"
           aria-hidden={!this.isOpen}
           class="rl-accordion-item__content"
           tabindex={this.isOpen ? '0' : '-1'}
           style={{ height: `${this.isOpen ? this.contentHeight : 0}px` }}
-      >
-        <slot name="content" />
-      </dd>,
-    ]);
+        >
+          <slot name="content" />
+        </dd>
+      </Host>
+    );
   }
 }

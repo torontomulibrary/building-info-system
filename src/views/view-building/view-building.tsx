@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
@@ -10,7 +10,6 @@ import {
 } from '../../global/constants';
 import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
 import { dataService } from '../../utils/data-service';
-// import { loadData } from '../../utils/load-data';
 
 @Component({
   tag: 'view-building',
@@ -51,20 +50,6 @@ export class ViewBuilding {
   async componentWillLoad() {
     this.buildings = dataService.getData(APP_DATA.BUILDING);
     const floors: FloorMap = dataService.getData(APP_DATA.FLOORS);
-    // Start loading the Buildings.
-    // loadData('buildings', LOCAL_STORAGE_KEY.buildings).then((blds: BuildingMap) => {
-    //   this.buildings = blds;
-    //   this.loaded = true;
-    // }, reason => {
-    //   console.log(reason);
-    // });
-
-    // let floors: FloorMap;
-
-    // await loadData('floors', LOCAL_STORAGE_KEY.floors).then(
-    //   (f: FloorMap) => {
-    //     floors = f;
-    // });
 
     Object.values(this.buildings).forEach((b: Building) => {
       b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
@@ -89,63 +74,56 @@ export class ViewBuilding {
   }
 
   /**
-   * Dynamically sets host element attributes.
-   */
-  hostData() {
-    return {
-      class: {
-        'rl-view': true,
-        'rl-view--buildings': true,
-        'rl-view--loaded': this.loaded && this.appLoaded,
-      },
-    };
-  }
-
-  /**
    * Component render function.
    */
   render() {
     if (this.buildings) {
 
-      return ([
-        <stencil-route-title pageTitle="Buildings" />,
-        <h2 class="rl-view__heading">Building Information</h2>,
-        <div class="rl-view__container mdc-layout-grid">
-          <div class="mdc-layout-grid__inner">
-            {Object.values(this.buildings).map((building: Building) =>
-              <rl-card
-                class="rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"
-                titleInMedia={true}
-                cardTitle={building.name}
-                cardMedia={building.image}
-                mediaSize="cover"
-                buttons={[
-                  { name: 'Map It!', link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${building.code}` },
-                ]}
-                >
-                <div slot="primary">
-                  <rl-expansion-panel index={1}>
-                    <div slot="header">{building.description}</div>
-                    <div slot="content">
-                      {Object.keys(building.floors).map(id => {
-                        const floor = building.floors[id];
-                        return (
-                        <rl-expansion-panel index={floor.id}>
-                          <div slot="header">{floor.name}</div>
-                          <div slot="content">
-                            <div>{floor.description}</div>
-                          </div>
-                        </rl-expansion-panel>
-                        );
-                      })}
-                    </div>
-                  </rl-expansion-panel>
-                </div>
-              </rl-card>
-            )}
+      return (
+        <Host class={{
+          'rl-view': true,
+          'rl-view--buildings': true,
+          'rl-view--loaded': this.loaded && this.appLoaded,
+        }}>
+          <stencil-route-title pageTitle="Buildings" />
+          <h2 class="rl-view__heading">Building Information</h2>
+          <div class="rl-view__container mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+              {Object.values(this.buildings).map((building: Building) =>
+                <rl-card
+                  class="rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"
+                  titleInMedia={true}
+                  cardTitle={building.name}
+                  cardMedia={building.image}
+                  mediaSize="cover"
+                  buttons={[
+                    { name: 'Map It!', link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${building.code}` },
+                  ]}
+                  >
+                  <div slot="primary">
+                    <rl-expansion-panel index={1}>
+                      <div slot="header">{building.description}</div>
+                      <div slot="content">
+                        {Object.keys(building.floors).map(id => {
+                          const floor = building.floors[id];
+                          return (
+                          <rl-expansion-panel index={floor.id}>
+                            <div slot="header">{floor.name}</div>
+                            <div slot="content">
+                              <div>{floor.description}</div>
+                            </div>
+                          </rl-expansion-panel>
+                          );
+                        })}
+                      </div>
+                    </rl-expansion-panel>
+                  </div>
+                </rl-card>
+              )}
+            </div>
           </div>
-        </div>,
-      ]);
+        </Host>
+      );
     }
 
     return (<div>Loading...</div>);
