@@ -1,5 +1,5 @@
 import { MDCDrawer } from '@material/drawer/index';
-import { Component, Element, Event, EventEmitter, Listen, Prop, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Listen, Prop, Watch, h } from '@stencil/core';
 
 import { FOCUSABLE_ELEMENTS } from '../../global/constants';
 
@@ -114,20 +114,16 @@ export class RLDrawer {
     this.oldTabStop = document.activeElement as HTMLElement;
   }
 
-  hostData() {
-    return {
-      role: 'aisde',
-    };
-  }
-
   render() {
-    return ([
-      <div class="mdc-drawer mdc-drawer--modal">
-        <aside class="mdc-drawer__drawer" role="navigation">
-          <slot />
-        </aside>
-      </div>,
-      <div class="mdc-drawer-scrim"></div>,
-    ]);
+    return (
+      <Host role="aside">
+        <div class="mdc-drawer mdc-drawer--modal">
+          <aside class="mdc-drawer__drawer" role="navigation">
+            <slot />
+          </aside>
+        </div>
+        <div class="mdc-drawer-scrim"></div>
+      </Host>
+    );
   }
 }

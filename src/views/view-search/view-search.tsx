@@ -1,4 +1,4 @@
-import { Component, Element, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
@@ -127,23 +127,19 @@ export class ViewSearch {
     }
   }
 
-  hostData() {
-    return {
-      class: {
+  render() {
+    return (
+      <Host class={{
         'rl-view': true,
         'rl-view--search': true,
         'rl-view--loaded': this.loaded && this.appLoaded,
-      },
-    };
-  }
-
-  render() {
-    return ([
-      <stencil-route-title title="Search" />,
-      <div>
-        Welcome to the search results.
-        {this._renderBooks()}
-      </div>,
-    ]);
+      }}>
+        <stencil-route-title title="Search" />
+        <div>
+          Welcome to the search results.
+          {this._renderBooks()}
+        </div>
+      </Host>
+    );
   }
 }

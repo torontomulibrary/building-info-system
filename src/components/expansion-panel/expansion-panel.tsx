@@ -1,5 +1,5 @@
 import { MDCRipple } from '@material/ripple/index';
-import { Component, Element, Event, EventEmitter, Method, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 
 /**
  * A component providing an element with header and content where the header
@@ -48,36 +48,32 @@ export class RLExpansionPanel {
     this.toggled.emit();
   }
 
-  hostData() {
-    return {
-      class: {
+  render() {
+    return (
+      <Host class={{
         'rl-expansion-panel': true,
         'rl-expansion-panel--open': this.isOpen,
-      },
-    };
-  }
-
-  render() {
-    return ([
-      <dt class="rl-expansion-panel__header" onClick={_ => { this.toggle(); }}>
-        <button aria-expanded={this.isOpen ? 'true' : 'false'}
-            ref={el => this._button = el}
-            id={`rl-expansion-panel__trigger-${this.index}`}
-            class="rl-expansion-panel__trigger"
-            aria-controls={`rl-expansion-panel__content-${this.index}`}>
-          <span class="rl-expansion-panel__title">
-            <slot name="header" />
-          </span>
-          <span class="rl-expansion-panel__icon material-icons"
-              aria-hidden="true">
-            expand_more
-          </span>
-        </button>
-      </dt>,
-      <dd id={`rl-expansion-panel__content-${this.index}`}
-          class="rl-expansion-panel__content">
-        <slot name="content" />
-      </dd>,
-    ]);
+      }}>
+        <dt class="rl-expansion-panel__header" onClick={_ => { this.toggle(); }}>
+          <button aria-expanded={this.isOpen ? 'true' : 'false'}
+              ref={el => this._button = el}
+              id={`rl-expansion-panel__trigger-${this.index}`}
+              class="rl-expansion-panel__trigger"
+              aria-controls={`rl-expansion-panel__content-${this.index}`}>
+            <span class="rl-expansion-panel__title">
+              <slot name="header" />
+            </span>
+            <span class="rl-expansion-panel__icon material-icons"
+                aria-hidden="true">
+              expand_more
+            </span>
+          </button>
+        </dt>
+        <dd id={`rl-expansion-panel__content-${this.index}`}
+            class="rl-expansion-panel__content">
+          <slot name="content" />
+        </dd>
+      </Host>
+    );
   }
 }

@@ -121,14 +121,6 @@ export class MapNav {
     }
   }
 
-  hostData() {
-    return {
-      class: {
-        'rl-map-nav': true,
-      },
-    };
-  }
-
   render() {
     const buildings = Object.values(this.buildings);
     const floors = Object.values(this.floors);

@@ -38,18 +38,6 @@ export class SearchSuggestions {
     this.totalHeight = el && el.offsetHeight || 0;
   }
 
-  // hostData() {
-  //   return {
-  //     id: 'rl-search-suggestions',
-  //     class: {
-  //       'rl-search__results': true,
-  //     },
-  //     style: {
-  //       height: `${this.totalHeight}px`,
-  //     },
-  //   };
-  // }
-
   render() {
     if (this.suggestions.length > 0) {
       // Render the suggestions as a single list.
