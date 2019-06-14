@@ -61,11 +61,11 @@ export class RLApp {
       component: 'view-faq',
     },
     {
+      // Do not allow URLs with just the base search path (no query).
       urls: [
         `${BASE_URL}${ROUTES.SEARCH}/:query?`,
-        `${BASE_URL}${ROUTES.FAQS}`,
       ],
-      component: 'view-faq',
+      component: 'view-search',
     },
     {
       urls: [`${BASE_URL}${ROUTES.HOME}`],
