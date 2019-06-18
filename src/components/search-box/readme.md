@@ -7,14 +7,13 @@
 
 ## Properties
 
-| Property                 | Attribute       | Description | Type      | Default       |
-| ------------------------ | --------------- | ----------- | --------- | ------------- |
-| `docSearch` _(required)_ | --              |             | `Search`  | `undefined`   |
-| `id`                     | `id`            |             | `string`  | `'searchbox'` |
-| `placeholder`            | `placeholder`   |             | `string`  | `'Search'`    |
-| `resultHeight`           | `result-height` |             | `number`  | `0`           |
-| `searchValue`            | `search-value`  |             | `string`  | `''`          |
-| `showMenu`               | `show-menu`     |             | `boolean` | `false`       |
+| Property                 | Attribute       | Description | Type      | Default     |
+| ------------------------ | --------------- | ----------- | --------- | ----------- |
+| `docSearch` _(required)_ | --              |             | `Search`  | `undefined` |
+| `placeholder`            | `placeholder`   |             | `string`  | `'Search'`  |
+| `resultHeight`           | `result-height` |             | `number`  | `0`         |
+| `searchValue`            | `search-value`  |             | `string`  | `''`        |
+| `showMenu`               | `show-menu`     |             | `boolean` | `false`     |
 
 
 ## Events

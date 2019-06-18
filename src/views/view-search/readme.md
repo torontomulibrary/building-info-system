@@ -29,7 +29,6 @@ graph TD;
   view-search --> stencil-route-title
   rl-cluster --> rl-card
   rl-cluster --> stencil-route-link
-  rl-card --> stencil-route-link
   style view-search fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

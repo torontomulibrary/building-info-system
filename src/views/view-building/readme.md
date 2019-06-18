@@ -27,7 +27,6 @@ graph TD;
   view-building --> stencil-route-title
   view-building --> rl-card
   view-building --> rl-expansion-panel
-  rl-card --> stencil-route-link
   style view-building fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

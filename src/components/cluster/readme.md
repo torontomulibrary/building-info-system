@@ -34,7 +34,6 @@
 graph TD;
   rl-cluster --> rl-card
   rl-cluster --> stencil-route-link
-  rl-card --> stencil-route-link
   view-book --> rl-cluster
   view-home --> rl-cluster
   view-search --> rl-cluster
