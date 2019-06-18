@@ -32,8 +32,6 @@ export class SearchBox {
 
   @Element() root!: HTMLElement;
 
-  @Prop() id = 'searchbox';
-
   @State() focused = false;
   @State() activeResult?: number;
 

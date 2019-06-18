@@ -126,7 +126,6 @@ export namespace Components {
   interface RlSearchBox {
     'clearInput': () => Promise<void>;
     'docSearch': Search;
-    'id': string;
     'placeholder': string;
     'resultHeight': number;
     'searchValue': string;
@@ -477,7 +476,6 @@ declare namespace LocalJSX {
   }
   interface RlSearchBox extends JSXBase.HTMLAttributes<HTMLRlSearchBoxElement> {
     'docSearch': Search;
-    'id'?: string;
     'onIconClick'?: (event: CustomEvent<any>) => void;
     'onSearchChange'?: (event: CustomEvent<any>) => void;
     'placeholder'?: string;
