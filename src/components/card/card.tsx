@@ -50,8 +50,6 @@ export class Card {
     this.protectionFadeColor.setAlpha(0.5);
   }
 
-  // @Event() cardClicked!: EventEmitter;
-
   componentWillLoad() {
     this.onColorChange();
   }

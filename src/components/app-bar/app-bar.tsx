@@ -1,8 +1,6 @@
 import { MDCTopAppBar } from '@material/top-app-bar/index';
 import { Component, Element, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
-// import { FaqMap, MapElementDetailMap } from '../../interface';
-
 @Component({
   tag: 'rl-app-bar',
   styleUrl: 'app-bar.scss',
@@ -17,29 +15,30 @@ export class AppBar {
   @Element() root!: HTMLRlAppBarElement;
 
   /**
-   * The current width of the application.  Used to determine what kind of
-   * interface should be displayed (reduced or full-width layout).
+   * The type of this `app-bar` used to determine style and function.
    */
-  // @Prop() appWidth = 0;
-
-  @Prop() appTitle = '';
-
-  // @Prop() locationData!: MapElementDetailMap;
-  // @Prop() faqData!: FaqMap;
-
   @Prop() type: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '' = '';
 
+  /**
+   * Use dense bar styling (reduced height).
+   */
   @Prop() dense = false;
+
+  /**
+   * Center the title within the `app-bar`.
+   */
   @Prop() centerTitle = false;
+
+  /**
+   * Use one single section to hold all buttons and the title rather than three
+   * distinc sections.
+   */
   @Prop() singleSection = false;
 
   /**
    * Event fired when the menu button on the app bar is clicked.
    */
   @Event() menuClicked!: EventEmitter;
-
-  @Event() searchLocationClicked!: EventEmitter;
-  @Event() searchFaqClicked!: EventEmitter;
 
   componentDidLoad() {
     this.mdcAppBar = new MDCTopAppBar(this.root);

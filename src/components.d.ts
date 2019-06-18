@@ -59,12 +59,20 @@ export namespace Components {
   }
   interface RlAppBar {
     /**
-    * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
+    * Center the title within the `app-bar`.
     */
-    'appTitle': string;
     'centerTitle': boolean;
+    /**
+    * Use dense bar styling (reduced height).
+    */
     'dense': boolean;
+    /**
+    * Use one single section to hold all buttons and the title rather than three distinc sections.
+    */
     'singleSection': boolean;
+    /**
+    * The type of this `app-bar` used to determine style and function.
+    */
     'type': 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
   interface RlBis {
@@ -393,18 +401,24 @@ declare namespace LocalJSX {
   }
   interface RlAppBar extends JSXBase.HTMLAttributes<HTMLRlAppBarElement> {
     /**
-    * The current width of the application.  Used to determine what kind of interface should be displayed (reduced or full-width layout).
+    * Center the title within the `app-bar`.
     */
-    'appTitle'?: string;
     'centerTitle'?: boolean;
+    /**
+    * Use dense bar styling (reduced height).
+    */
     'dense'?: boolean;
     /**
     * Event fired when the menu button on the app bar is clicked.
     */
     'onMenuClicked'?: (event: CustomEvent<any>) => void;
-    'onSearchFaqClicked'?: (event: CustomEvent<any>) => void;
-    'onSearchLocationClicked'?: (event: CustomEvent<any>) => void;
+    /**
+    * Use one single section to hold all buttons and the title rather than three distinc sections.
+    */
     'singleSection'?: boolean;
+    /**
+    * The type of this `app-bar` used to determine style and function.
+    */
     'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
   interface RlBis extends JSXBase.HTMLAttributes<HTMLRlBisElement> {

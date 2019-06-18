@@ -7,7 +7,6 @@ import { getAncestorByClass } from '../../utils/dom';
 @Component({
   tag: 'rl-cluster',
   styleUrl: 'cluster.scss',
-  // shadow: true,
 })
 export class Cluster {
   @Element() root!: HTMLRlClusterElement;
@@ -27,7 +26,6 @@ export class Cluster {
     }
   }
 
-  // @Listen('click')
   handleClick(e: Event) {
     const tgt = e.target as HTMLElement;
 
