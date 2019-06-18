@@ -214,8 +214,9 @@ export class ViewMap {
         if (this.mapType === MAP_TYPE.BOOK) {
           // Redirect to book search page.
           console.log('Invalid book, redirect home');
-          this.history.replace(`${BASE_URL}${ROUTES.HOME}`, { error: 'Invalid book reference number, please search for a different book.' });
+          this.history.replace(`${BASE_URL}${ROUTES.HOME}`);
           resolve();
+          return; // Return early.
         }
       }
 
