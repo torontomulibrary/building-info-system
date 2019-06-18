@@ -34,7 +34,7 @@ export class RLApp {
   private appRoutes = [
     {
       urls: [
-        `${BASE_URL}${ROUTES.MAP}/:mapType?/:id?`,
+        `${BASE_URL}${ROUTES.MAP}/:mapType?/:id?/:ref?`,
         `${BASE_URL}${ROUTES.MAP}`,
       ],
       component: 'view-map',

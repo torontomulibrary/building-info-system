@@ -157,12 +157,19 @@ export interface AppData {
   // searchUrl: string,
 }
 
+export interface BookAvailability {
+  statusMessage: string,
+  location: string,
+  callNumber: string,
+  shelf: string,
+}
+
 export interface BookDetails {
-  author: string,
-  availability: string[],
-  callNo: string,
-  isOnline: string,
-  locations: string[],
+  author: string[],
+  availability: BookAvailability[],
+  iSBN: string[],
+  publicationYear: string,
+  thumbnail_m: string,
   title: string,
 }
 

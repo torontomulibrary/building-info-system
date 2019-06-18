@@ -18,6 +18,7 @@ import {
   ROUTES,
 } from '../../global/constants';
 import {
+  BookAvailability,
   BookDetails,
   Building,
   BuildingMap,
@@ -33,7 +34,6 @@ import {
 } from '../../interface';
 import { dataService } from '../../utils/data-service';
 import { fetchIMG } from '../../utils/fetch';
-import { compareLCCN } from '../../utils/lccn';
 import { loadData } from '../../utils/load-data';
 
 @Component({
@@ -46,7 +46,7 @@ export class ViewMap {
   private _floorData!: FloorMap;
   private _elementData!: MapElementDataMap;
   private _detailData!: MapElementDetailMap;
-  private _bookData!: BookDetails;
+  private _bookData?: BookDetails;
   private _compLabs!: ComputerLabMap;
 
   private _building!: Building;
@@ -56,6 +56,7 @@ export class ViewMap {
 
   private extraDetails: {} = {};
 
+  private oldParams: { [key: string]: string } = {};
   /**
    * Any URL matches for determining pre-selected building, floor and element.
    */
@@ -74,9 +75,9 @@ export class ViewMap {
    */
   @State() query = '';
 
-  @State() activeBuildingId!: number;
-  @State() activeFloorId!: number;
-  @State() activeElementId?: number;
+  private activeBuildingId!: number;
+  private activeFloorId!: number;
+  private activeElementId?: number;
 
   /**
    * A global flag passed in to indicate if the application has loaded as well.
@@ -106,8 +107,8 @@ export class ViewMap {
   componentWillLoad() {
     this._loadData();
 
-    this._parseParameters();
-    this.loaded = true;
+    return this._parseParameters();
+    // this.loaded = true;
   }
 
   componentDidLoad() {
@@ -115,7 +116,7 @@ export class ViewMap {
   }
 
   componentWillUpdate() {
-    this._parseParameters();
+    return this._parseParameters();
   }
 
   checkSize() {
@@ -128,135 +129,158 @@ export class ViewMap {
     }
   }
 
-  private async _parseParameters() {
+  private _parseParameters() {
     // Check the URL value to see if any Building, Floor and or Location was
     // provided.  Must be in the form BLD[FLR][RM].
     // Where BLD is the three letter building code, FLR is the floor number,
     // and RM is the 'room number'.  The `room number` is actually the full
     // location code (e.g. SLC508)
-    if (this.match && this.match.params) {
-      const mt = this.match.params.mapType;
-
-      if (mt === MAP_TYPE.BOOK || mt === MAP_TYPE.COMP || mt === MAP_TYPE.LOCN) {
-        this.mapType = mt;
-      }
-
-      if (this.match.params.id !== undefined) {
-        const re = /([A-Z]{3})(\d{2}(?=\d{2,}|$|\D*$)|\d{1})?(.*)/;
-        this.paramMatches = re.exec(this.match.params.id);
-      } else {
-        this.paramMatches = undefined;
-      }
-
-      // Right now ref is only used for book reference numbers.
-      if (this.match.params.ref !== undefined && this.mapType === MAP_TYPE.BOOK) {
-        const ref = this.match.params.ref;
-        if (ref.charAt(0) === 'b') {
-          await loadData('books/' + ref).then((b: BookDetails) => {
-            this._bookData = this.extraDetails = b;
-          });
+    return new Promise(async resolve => {
+      // Check if parameters have changed.
+      if (this.match && this.match.params) {
+        if (this.oldParams.mapType === this.match.params.mapType &&
+            this.oldParams.id === this.match.params.id &&
+            this.oldParams.ref === this.match.params.ref) {
+              // Parameters unchanged, no need to process further.
+              resolve();
+              return;
         } else {
-          // Invalid record number
+          this.oldParams = this.match.params;
         }
       }
-    }
+      if (this.match && this.match.params) {
+        const mt = this.match.params.mapType;
 
-    // Update enabled buildings / floors and elements according to the new
-    // state.
+        if (mt === MAP_TYPE.BOOK || mt === MAP_TYPE.COMP || mt === MAP_TYPE.LOCN) {
+          this.mapType = mt;
+        }
 
-    const blds = Object.values(this._buildingData);
-    let flrs = Object.values(this._floorData);
+        if (this.match.params.id !== undefined) {
+          const re = /([A-Z]{3})(\d{2}(?=\d{2,}|$|\D*$)|\d{1})?(.*)/;
+          this.paramMatches = re.exec(this.match.params.id);
+        } else {
+          this.paramMatches = undefined;
+        }
 
-    blds.forEach((b: Building) => {
-      b.enabled = (this.mapType === MAP_TYPE.LOCN || b.code === 'LIB');
-    });
-
-    // Set the active building to the one that is enabled and matches the
-    // building code, otherwise, pick the first one that is simply enabled.
-    const matchedBld = blds.find((b: Building) => this.paramMatches && b.code === this.paramMatches[1]);
-    this.activeBuildingId = blds.find((b: Building) =>
-      b.enabled && (!matchedBld || matchedBld.id === b.id)
-    ).id;
-
-    this._building = this._buildingData[this.activeBuildingId];
-
-    flrs = flrs.filter((f: Floor) => f.buildingId === this.activeBuildingId);
-    flrs.forEach((f: Floor) => {
-      f.enabled = (this.mapType === MAP_TYPE.LOCN ||
-        (this.mapType === MAP_TYPE.BOOK && this._bookData &&
-          this._bookData.locations.indexOf(f.name) !== -1)) ||
-        (this.mapType === MAP_TYPE.COMP && this.floorHasComps(f));
-    });
-
-    let matchedFlr = flrs.find((f: Floor) => this.paramMatches && f.number === Number(this.paramMatches[2]));
-    matchedFlr = flrs.find((f: Floor) =>
-      f.enabled && (!matchedFlr || f.number === matchedFlr.number)
-    );
-
-    if (matchedFlr) {
-      this.activeFloorId = matchedFlr.id;
-    } else {
-      // No floor matched.
-      if (this.mapType === MAP_TYPE.BOOK) {
-        // Redirect to book search page.
-        console.log('Invalid book, redirect home');
-        this.history.replace(`${BASE_URL}${ROUTES.HOME}`, { error: 'Invalid book reference number, please search for a different book.' });
-        return;
+        // Right now ref is only used for book ISBN numbers.
+        if (this.match.params.ref !== undefined && this.mapType === MAP_TYPE.BOOK) {
+          const ref = this.match.params.ref;
+          if (ref.length === 13) {
+            await loadData('books/' + ref).then((b: BookDetails) => {
+              this._bookData = this.extraDetails = b;
+            });
+          } else {
+            this._bookData = undefined;
+            // Invalid record number
+          }
+        }
       }
-    }
 
-    this._floor = this._building.floors[this.activeFloorId];
-    this._floorplan = this._floor.floorplan;
+      // Update enabled buildings / floors and elements according to the new
+      // state.
 
-    this.activeElementId = undefined;
+      const blds = Object.values(this._buildingData);
+      let flrs = Object.values(this._floorData);
 
-    Object.values(this._elementData).forEach((e: MapElementData) => {
-      Object.values(e.details).forEach((d: MapElementDetail) => {
-        if (this.paramMatches && d.code === this.paramMatches[0] &&
-          (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP) &&
-          !this.activeElementId) {
-          this.activeElementId = d.elementId;
+      blds.forEach((b: Building) => {
+        b.enabled = (this.mapType === MAP_TYPE.LOCN || b.code === 'LIB');
+      });
+
+      // Set the active building to the one that is enabled and matches the
+      // building code, otherwise, pick the first one that is simply enabled.
+      const matchedBld = blds.find((b: Building) => this.paramMatches && b.code === this.paramMatches[1]);
+      this.activeBuildingId = blds.find((b: Building) =>
+        b.enabled && (!matchedBld || matchedBld.id === b.id)
+      ).id;
+
+      this._building = this._buildingData[this.activeBuildingId];
+
+      flrs = flrs.filter((f: Floor) => f.buildingId === this.activeBuildingId);
+      flrs.forEach((f: Floor) => {
+        f.enabled = (this.mapType === MAP_TYPE.LOCN ||
+          (this.mapType === MAP_TYPE.BOOK && this.floorHasBook(f)) ||
+          (this.mapType === MAP_TYPE.COMP && this.floorHasComps(f)));
+      });
+
+      let matchedFlr = flrs.find((f: Floor) => this.paramMatches && f.number === Number(this.paramMatches[2]));
+      matchedFlr = flrs.find((f: Floor) =>
+        f.enabled && (!matchedFlr || f.number === matchedFlr.number)
+      );
+
+      if (matchedFlr) {
+        this.activeFloorId = matchedFlr.id;
+      } else {
+        // No floor matched.
+        if (this.mapType === MAP_TYPE.BOOK) {
+          // Redirect to book search page.
+          console.log('Invalid book, redirect home');
+          this.history.replace(`${BASE_URL}${ROUTES.HOME}`, { error: 'Invalid book reference number, please search for a different book.' });
+          resolve();
+        }
+      }
+
+      this._floor = this._building.floors[this.activeFloorId];
+      this._floorplan = this._floor.floorplan;
+
+      if (this.paramMatches && this.paramMatches[3] === '') {
+        this.activeElementId = undefined;
+      }
+
+      Object.values(this._elementData).forEach((e: MapElementData) => {
+        e.enabled = (this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
+        (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e) || e.category === 5));
+
+        Object.values(e.details).forEach((d: MapElementDetail) => {
+          if (this.paramMatches && d.code === this.paramMatches[0] &&
+            (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP) &&
+            !this.activeElementId) {
+            this.activeElementId = d.elementId;
+          }
+
+          if (this.mapType === MAP_TYPE.BOOK && this.elementHasBook(d)) {
+            e.enabled = true;
+          }
+        });
+
+        if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElementId) {
+          this.activeElementId = e.id;
+        }
+
+        if (e.icon && typeof e.icon === 'string') {
+          fetchIMG(e.icon);
         }
       });
 
-      e.enabled = (this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
-        (this.mapType === MAP_TYPE.BOOK && this._bookData &&
-          this.bookOnShelf(this._bookData.callNo, e)) ||
-        (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e) || e.category === 5));
-
-      if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElementId) {
-        this.activeElementId = e.id;
+      this._element = this.activeElementId ? this._floor.elements[this.activeElementId] : undefined;
+      if (this.mapType !== MAP_TYPE.BOOK) {
+        this.extraDetails = {};
       }
 
-      if (e.icon && typeof e.icon === 'string') {
-        fetchIMG(e.icon);
+      const labs = Object.values(this._compLabs);
+      if (this._element !== undefined && this.mapType === MAP_TYPE.COMP && labs.length > 0) {
+        // An element is selected, see if it is a lab and get the availability.
+        const lab: ComputerLab | undefined = labs.find((l: ComputerLab) => this._element && l.locName === Object.values(this._element.details)[0].code);
+        if (lab) {
+          this.extraDetails = { available: lab.compAvail, total: lab.compTotal };
+        }
       }
+
+      /**
+       * If `paramMatches` is undefined, the URL is empty and doesn't match the
+       * active building/floor.  Replace the current
+       */
+      if (!this.paramMatches || (this.paramMatches &&
+        (this.paramMatches[1] !== this._building.code ||
+          Number(this.paramMatches[2]) !== this._floor.number ||
+          (this.paramMatches[3] !== '' && !this.activeElementId)))) {
+        // TODO: Display toast notifying user that entry was invalid or doesn't exist.
+        console.log('Trying to rectify route');
+        this.history.replace(`${BASE_URL}${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`);
+        resolve();
+      }
+
+      resolve();
     });
-
-    this._element = this.activeElementId ? this._floor.elements[this.activeElementId] : undefined;
-    this.extraDetails = {};
-
-    const labs = Object.values(this._compLabs);
-    if (this._element !== undefined && this.mapType === MAP_TYPE.COMP && labs.length > 0) {
-      // An element is selected, see if it is a lab and get the availability.
-      const lab: ComputerLab | undefined = labs.find((l: ComputerLab) => this._element && l.locName === Object.values(this._element.details)[0].code);
-      if (lab) {
-        this.extraDetails = { available: lab.compAvail, total: lab.compTotal };
-      }
-    }
-
-    /**
-     * If `paramMatches` is undefined, the URL is empty and doesn't match the
-     * active building/floor.  Replace the current
-     */
-    if (!this.paramMatches || (this.paramMatches &&
-      (this.paramMatches[1] !== this._building.code ||
-        Number(this.paramMatches[2]) !== this._floor.number ||
-        (this.paramMatches[3] !== '' && !this.activeElementId)))) {
-      // TODO: Display toast notifying user that entry was invalid or doesn't exist.
-      console.log('Trying to rectify route');
-      this.history.replace(`${BASE_URL}${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`);
-    }
   }
 
   private _loadData() {
@@ -357,41 +381,57 @@ export class ViewMap {
     return hasComps;
   }
 
-  bookOnShelf(callNo: string, shelf: MapElementData) {
-    let found = false;
-    if (shelf.details) {
-      Object.values(shelf.details).forEach((d: MapElementDetail) => {
-        const startCompare = compareLCCN(d.callStart, callNo);
-        const endCompare = compareLCCN(callNo, d.callEnd);
-        if (startCompare && startCompare >= 0 && endCompare && endCompare >= 0) {
-          found = true;
-        }
+  floorHasBook(floor: Floor) {
+    let hasBook = false;
+
+    if (this._bookData) {
+      this._bookData.availability.map((a: BookAvailability) => {
+        hasBook = a.location === floor.name;
       });
     }
 
-    return found;
+    return hasBook;
+  }
+
+  elementHasBook(det: MapElementDetail) {
+    let hasBook = false;
+
+    if (this._bookData) {
+      this._bookData.availability.map((a: BookAvailability) => {
+        hasBook = a.shelf === det.code;
+      });
+    }
+
+    return hasBook;
   }
 
   render() {
-    const { _buildingData, loaded, _element, extraDetails } = this;
+    const { _buildingData, _building, loaded, _element, extraDetails } = this;
     const detail: MapElementDetail = _element && Object.values(_element.details)[0];
 
-    if (loaded && _buildingData) {
-      const { _building, _floorplan } = this;
+    if (loaded && _buildingData && _building) {
+      const { _floorplan } = this;
       const subtitle = this.activeElementId ? detail.code : `${_building.code}${this._floor.number}`;
 
       return (
         <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
-          <stencil-route-title pageTitle={`${subtitle} | Directory`} />,
+          <stencil-route-title pageTitle={`${subtitle} | Directory`} />
           <rl-map
             class="rl-map"
             elements={this._floor.elements}
             mapImage={_floorplan}
             onElementSelected={e => {
               const elCode = Object.values(e.detail.details as MapElementDetailMap)[0].code;
-              this.history.push(`/${ROUTES.MAP}/${this.mapType}/${elCode}`);
+              let route = `${BASE_URL}${ROUTES.MAP}/${this.mapType}/${elCode}`;
+              route = this._bookData ? `${route}/${this._bookData.iSBN[0]}` : route;
+
+              this.history.push(route);
             }}
-            onElementDeselected={() => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`)}
+            onElementDeselected={() => {
+              if (!this._bookData) {
+                this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`);
+              }
+            }}
             activeElementId={this.activeElementId}
           >
           </rl-map>
@@ -436,6 +476,10 @@ export class ViewMap {
       );
     }
 
-    return (<div>Loading...</div>);
+    return (
+      <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
+        <div>Loading...</div>
+      </Host>
+    );
   }
 }
