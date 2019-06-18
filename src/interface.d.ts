@@ -168,6 +168,7 @@ export interface BookDetails {
   author: string[],
   availability: BookAvailability[],
   iSBN: string[],
+  mapLink: string,
   publicationYear: string,
   thumbnail_m: string,
   title: string,

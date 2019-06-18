@@ -68,12 +68,13 @@ export class Cluster {
             {this.data.map(b => {
               return (
                 <rl-card
-                  cardTitle={b.Title[0]}
+                  cardTitle={b.title}
                   cardData={b}
                   titleInMedia
                   noContent
                   hasPrimaryAction
-                  cardMedia={b.thumbnail_m ? b.thumbnail_m[0] : undefined}
+                  primaryLink={b.mapLink}
+                  cardMedia={b.thumbnail_m}
                   >
                 </rl-card>
               );
@@ -84,7 +85,7 @@ export class Cluster {
         return ([
           <div class="rl-lane__content">
             {this.data.map(s =>
-              <rl-card cardData={s.value} hasPrimaryAction>
+              <rl-card cardData={s.value} hasPrimaryAction primaryLink={`${BASE_URL}${ROUTES.SEARCH}/${s.value}`}>
                 <div slot="primary">{s.value}</div>
               </rl-card>
             )}

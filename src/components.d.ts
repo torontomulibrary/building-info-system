@@ -77,10 +77,12 @@ export namespace Components {
     'cardMedia': string;
     'cardTitle': string;
     'hasPrimaryAction': boolean;
-    'icons'?: Array<{name: string}>;
+    'history'?: RouterHistory;
+    'icons'?: Array<{name: string, link: string}>;
     'mediaSize': 'contain' | 'cover';
     'noContent': boolean;
     'noMedia': boolean;
+    'primaryLink': string;
     'titleInMedia': boolean;
     'wideMediaAspect': boolean;
   }
@@ -416,11 +418,12 @@ declare namespace LocalJSX {
     'cardMedia'?: string;
     'cardTitle'?: string;
     'hasPrimaryAction'?: boolean;
-    'icons'?: Array<{name: string}>;
+    'history'?: RouterHistory;
+    'icons'?: Array<{name: string, link: string}>;
     'mediaSize'?: 'contain' | 'cover';
     'noContent'?: boolean;
     'noMedia'?: boolean;
-    'onCardClicked'?: (event: CustomEvent<any>) => void;
+    'primaryLink'?: string;
     'titleInMedia'?: boolean;
     'wideMediaAspect'?: boolean;
   }

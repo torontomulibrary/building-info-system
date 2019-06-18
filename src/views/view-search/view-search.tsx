@@ -2,8 +2,9 @@ import { Component, Element, Host, Listen, Prop, State, Watch, h } from '@stenci
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
+import { BookDetails } from '../../../dist/types/interface';
 import { BASE_URL, SEARCH_URL } from '../../global/config';
-import { ROUTES } from '../../global/constants';
+import { MAP_TYPE, ROUTES } from '../../global/constants';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -113,7 +114,15 @@ export class ViewSearch {
 
   _renderBooks() {
     const books = this.searchResults && this.searchResults['books'];
+
     if (books) {
+      books.forEach((b: BookDetails) => {
+        if (b.availability && b.availability.length > 0) {
+          const av = b.availability[0];
+          b.mapLink = `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.BOOK}/${av.shelf}/${b.iSBN[0]}`;
+        }
+      });
+
       return (
         <rl-cluster
           heading="Books"

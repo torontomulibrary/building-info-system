@@ -1,14 +1,13 @@
 import {
   Component,
   Element,
-  Event,
-  EventEmitter,
   Host,
   Prop,
   State,
   Watch,
   h,
 } from '@stencil/core';
+import { RouterHistory, injectHistory } from '@stencil/router';
 
 import { Color } from '../../utils/color';
 
@@ -25,7 +24,7 @@ export class Card {
   @State() textColors = [new Color(255, 255, 255), new Color(0, 0, 0)];
 
   @Prop() buttons?: Array<{name: string, link: string}>;
-  @Prop() icons?: Array<{name: string}>;
+  @Prop() icons?: Array<{name: string, link: string}>;
 
   @Prop() cardMedia = '';
   @Prop() cardData: { [keys: string]: string[] } | string = {};
@@ -34,9 +33,12 @@ export class Card {
   @Prop() titleInMedia = false;
 
   @Prop() hasPrimaryAction = false;
+  @Prop() primaryLink = '';
 
   @Prop() noContent = false;
   @Prop() noMedia = false;
+
+  @Prop() history?: RouterHistory;
 
   @Prop() mediaSize: 'contain' | 'cover' = 'cover';
   @Prop() wideMediaAspect = false;
@@ -48,7 +50,7 @@ export class Card {
     this.protectionFadeColor.setAlpha(0.5);
   }
 
-  @Event() cardClicked!: EventEmitter;
+  // @Event() cardClicked!: EventEmitter;
 
   componentWillLoad() {
     this.onColorChange();
@@ -64,23 +66,24 @@ export class Card {
         {this.buttons ?
           <div class="mdc-card__action-buttons">
             {this.buttons.map(b =>
-              <stencil-route-link url={b.link}>
-                <button class="mdc-button">
-                  {b.name}
-                  {/* <a href={b.link}>{b.name}</a> */}
-                </button>
-              </stencil-route-link>
+              <button
+                class="mdc-button"
+                onClick={() => this.history && this.history.push(b.link)}
+              >
+                {b.name}
+              </button>
             )}
           </div> : undefined
         }
         {this.icons ?
           <div class="mdc-card__action-icons">
             {this.icons.map(i =>
-              // <stencil-route-link>
-                <button class="mdc-icon-button">
-                  <i class="material-icons mdc-icon-button__icon">{i.name}</i>
-                </button>
-              // </stencil-route-link>
+              <button
+                class="mdc-icon-button"
+                onClick={() => this.history && this.history.push(i.link)}
+              >
+                <i class="material-icons mdc-icon-button__icon">{i.name}</i>
+              </button>
             )}
           </div> : undefined
         }
@@ -129,7 +132,7 @@ export class Card {
       <Host class="rl-card">
         {this.hasPrimaryAction ?
           <div class="mdc-card__primary-action"
-              onClick={() => this.cardClicked.emit(this)}>
+              onClick={() => this.history && this.history.push(this.primaryLink)}>
             {this._renderCard()}
           </div> :
           this._renderCard()}
@@ -138,3 +141,5 @@ export class Card {
     );
   }
 }
+
+injectHistory(Card);
