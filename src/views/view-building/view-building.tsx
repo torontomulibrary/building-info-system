@@ -127,6 +127,14 @@ export class ViewBuilding {
       );
     }
 
-    return (<div>Loading...</div>);
+    return (
+      <Host class={{
+        'rl-view': true,
+        'rl-view--buildings': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
+      }}>
+        <div>Loading...</div>
+      </Host>
+    );
   }
 }

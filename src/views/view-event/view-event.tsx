@@ -206,7 +206,13 @@ export class ViewEvent {
     }
 
     return (
-      <h2 class="rl-view__heading mdc-typography--headline2">No events currently available.</h2>
+      <Host class={{
+        'rl-view': true,
+        'rl-view--events': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
+      }}>
+        <h2 class="rl-view__heading mdc-typography--headline2">No events currently available.</h2>
+      </Host>
     );
   }
 }

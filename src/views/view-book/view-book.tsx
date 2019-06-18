@@ -101,6 +101,16 @@ export class ViewBooks {
       );
     }
 
-    return (<div>Loading...</div>);
+    return (
+      <Host style={{
+        opacity: (this.loaded && this.appLoaded) ? '1' : '0',
+      }} class={{
+        'rl-view': true,
+        'rl-view--book': true,
+        'rl-view--transition': this.inDom,
+      }}>
+        <div>Loading...</div>
+      </Host>
+    );
   }
 }

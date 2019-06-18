@@ -169,6 +169,14 @@ export class ViewFaq {
       );
     }
 
-    return (<div>Loading...</div>);
+    return (
+      <Host class={{
+        'rl-view': true,
+        'rl-view--faq': true,
+        'rl-view--loaded': this.loaded && this.appLoaded,
+      }}>
+        <div>Loading...</div>
+      </Host>
+    );
   }
 }
