@@ -11,15 +11,15 @@ import {
   RouterHistory,
 } from '@stencil/router';
 import {
+  CardData,
+  SearchResultItem,
+} from './interface';
+import {
   Color,
 } from './utils/color';
 import {
   CLUSTER_TYPE,
 } from './global/constants';
-import {
-  CardData,
-  SearchResultItem,
-} from './interface';
 import {
   BuildingMap,
   FloorMap,
@@ -85,7 +85,7 @@ export namespace Components {
   interface RlCard {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor': Color;
-    'cardData': { [keys: string]: string[] } | string;
+    'cardData'?: CardData;
     'cardMedia': string;
     'cardTitle': string;
     'hasPrimaryAction': boolean;
@@ -115,10 +115,6 @@ export namespace Components {
     'close': () => Promise<void>;
     'index': number;
     'open': () => Promise<void>;
-  }
-  interface RlLane {
-    'columns': number;
-    'data'?: CardData[];
   }
   interface RlLoadProgress {}
   interface RlMapNav {
@@ -271,12 +267,6 @@ declare global {
     new (): HTMLRlExpansionPanelElement;
   };
 
-  interface HTMLRlLaneElement extends Components.RlLane, HTMLStencilElement {}
-  var HTMLRlLaneElement: {
-    prototype: HTMLRlLaneElement;
-    new (): HTMLRlLaneElement;
-  };
-
   interface HTMLRlLoadProgressElement extends Components.RlLoadProgress, HTMLStencilElement {}
   var HTMLRlLoadProgressElement: {
     prototype: HTMLRlLoadProgressElement;
@@ -357,7 +347,6 @@ declare global {
     'rl-cluster': HTMLRlClusterElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
-    'rl-lane': HTMLRlLaneElement;
     'rl-load-progress': HTMLRlLoadProgressElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;
@@ -442,7 +431,7 @@ declare namespace LocalJSX {
   interface RlCard extends JSXBase.HTMLAttributes<HTMLRlCardElement> {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor'?: Color;
-    'cardData'?: { [keys: string]: string[] } | string;
+    'cardData'?: CardData;
     'cardMedia'?: string;
     'cardTitle'?: string;
     'hasPrimaryAction'?: boolean;
@@ -475,10 +464,6 @@ declare namespace LocalJSX {
   interface RlExpansionPanel extends JSXBase.HTMLAttributes<HTMLRlExpansionPanelElement> {
     'index'?: number;
     'onToggled'?: (event: CustomEvent<any>) => void;
-  }
-  interface RlLane extends JSXBase.HTMLAttributes<HTMLRlLaneElement> {
-    'columns'?: number;
-    'data'?: CardData[];
   }
   interface RlLoadProgress extends JSXBase.HTMLAttributes<HTMLRlLoadProgressElement> {}
   interface RlMapNav extends JSXBase.HTMLAttributes<HTMLRlMapNavElement> {
@@ -609,7 +594,6 @@ declare namespace LocalJSX {
     'rl-cluster': RlCluster;
     'rl-drawer': RlDrawer;
     'rl-expansion-panel': RlExpansionPanel;
-    'rl-lane': RlLane;
     'rl-load-progress': RlLoadProgress;
     'rl-map-nav': RlMapNav;
     'rl-search-box': RlSearchBox;

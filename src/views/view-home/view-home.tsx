@@ -2,8 +2,9 @@ import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core'
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
-import { APP_DATA, CLUSTER_TYPE } from '../../global/constants';
-import { ComputerLab, SearchHistory } from '../../interface';
+import { BASE_URL } from '../../global/config';
+import { APP_DATA, CLUSTER_TYPE, ROUTES } from '../../global/constants';
+import { CardData, ComputerLab, SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
 @Component({
@@ -64,6 +65,15 @@ export class ViewHome {
       return;
     }
 
+    // Convert search history into standardized CardData for displaying.
+    const recent: CardData[] = this.searches.recent.map(r => {
+      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: '', subTitle: '' };
+    });
+
+    const popular: CardData[] = this.searches.popular.map(r => {
+      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: '', subTitle: '' };
+    });
+
     return (
       <Host class={{
         'rl-view': true,
@@ -75,13 +85,13 @@ export class ViewHome {
           heading="Recent Books"
           type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
-          data={this.searches.recent}>
+          data={recent}>
         </rl-cluster>
         <rl-cluster
           heading="Popular Books"
           type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
-          data={this.searches.popular}>
+          data={popular}>
         </rl-cluster>
         <rl-cluster
           heading="Computer Availability"

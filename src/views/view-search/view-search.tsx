@@ -4,7 +4,7 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/config';
 import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
-import { BookDetails } from '../../interface';
+import { BookDetails, CardData } from '../../interface';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -70,8 +70,6 @@ export class ViewSearch {
 
   @Prop() appLoaded = false;
 
-  // @Prop() appData!: AppData;
-
   /**
    * The component lifecycle function called when the component is being
    * loaded but before DOM is created and displayed.
@@ -113,14 +111,15 @@ export class ViewSearch {
   }
 
   _renderBooks() {
-    const books = this.searchResults && this.searchResults['books'];
-
-    if (books) {
-      books.forEach((b: BookDetails) => {
-        if (b.availability && b.availability.length > 0) {
-          const av = b.availability[0];
-          b.mapLink = `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.BOOK}/${av.shelf}/${b.iSBN[0]}`;
-        }
+    if (this.searchResults) {
+      const books: CardData = this.searchResults['books'].map((b: BookDetails) => {
+        const av = b.availability ? b.availability[0] : undefined;
+        return {
+          title: b.title,
+          subTitle: av ? av.statusMessage : 'Unknown Availability',
+          link: av ? `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.BOOK}/${av.shelf}/${b.iSBN[0]}` : '',
+          media: b.thumbnail_m ? b.thumbnail_m : undefined,
+        };
       });
 
       return (

@@ -9,6 +9,7 @@ import {
 } from '@stencil/core';
 import { RouterHistory, injectHistory } from '@stencil/router';
 
+import { CardData } from '../../interface';
 import { Color } from '../../utils/color';
 
 @Component({
@@ -27,7 +28,7 @@ export class Card {
   @Prop() icons?: Array<{name: string, link: string}>;
 
   @Prop() cardMedia = '';
-  @Prop() cardData: { [keys: string]: string[] } | string = {};
+  @Prop() cardData?: CardData;
 
   @Prop() cardTitle = '';
   @Prop() titleInMedia = false;
