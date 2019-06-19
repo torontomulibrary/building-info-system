@@ -113,14 +113,18 @@ export class ViewSearch {
   _renderBooks() {
     if (this.searchResults) {
       const books: CardData = this.searchResults['books'].map((b: BookDetails) => {
-        const av = b.availability ? b.availability[0] : undefined;
-        return {
-          title: b.title,
-          subTitle: av ? av.statusMessage : 'Unknown Availability',
-          link: av ? `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.BOOK}/${av.shelf}/${b.iSBN[0]}` : '',
-          media: b.thumbnail_m ? b.thumbnail_m : undefined,
-        };
-      });
+        if (b.iSBN) {
+          const av = b.availability ? b.availability[0] : undefined;
+          return {
+            title: b.title,
+            subTitle: av ? av.statusMessage : 'Unknown Availability',
+            link: av ? `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.BOOK}/${av.shelf}/${b.iSBN[0]}` : '',
+            media: b.thumbnail_m ? b.thumbnail_m : undefined,
+          };
+        }
+
+        return undefined;
+      }).filter((b: CardData) => b !== undefined);
 
       return (
         <rl-cluster
