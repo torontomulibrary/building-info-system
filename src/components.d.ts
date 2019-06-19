@@ -11,10 +11,6 @@ import {
   RouterHistory,
 } from '@stencil/router';
 import {
-  CardData,
-  SearchResultItem,
-} from './interface';
-import {
   Color,
 } from './utils/color';
 import {
@@ -27,6 +23,9 @@ import {
 import {
   Search,
 } from './utils/search';
+import {
+  SearchResultItem,
+} from './interface';
 
 export namespace Components {
   interface RlAccordion {
@@ -85,7 +84,6 @@ export namespace Components {
   interface RlCard {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor': Color;
-    'cardData'?: CardData;
     'cardMedia': string;
     'cardTitle': string;
     'hasPrimaryAction': boolean;
@@ -432,7 +430,6 @@ declare namespace LocalJSX {
   interface RlCard extends JSXBase.HTMLAttributes<HTMLRlCardElement> {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor'?: Color;
-    'cardData'?: CardData;
     'cardMedia'?: string;
     'cardTitle'?: string;
     'hasPrimaryAction'?: boolean;

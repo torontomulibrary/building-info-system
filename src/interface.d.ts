@@ -185,13 +185,6 @@ export interface SearchResultItem {
   detail?: string,
 }
 
-export interface CardData {
-  title: string;
-  subTitle: string;
-  link: string;
-  media: string;
-}
-
 export * from './components';
 // export * from './components/map/map-interface';
 export * from './components/search-box/search-box-interface';

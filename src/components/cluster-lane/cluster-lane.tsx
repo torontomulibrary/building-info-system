@@ -1,13 +1,14 @@
 import { FunctionalComponent, h } from '@stencil/core';
 
-import { CardData } from '../../interface';
+// import { CardData } from '../../interface';
+import * as d from '../../declarations';
 import { getAncestorByClass } from '../../utils/dom';
 
 interface ClusterLaneProps {
   /**
    * An array of CardData objects that will be used to populate the lane with.
    */
-  data: CardData[];
+  data: d.CardData[];
   /**
    * The number of columns currently visible in the lane.
    */
@@ -69,7 +70,6 @@ export const ClusterLane: FunctionalComponent<ClusterLaneProps> = ({
         return (
           <rl-card
             cardTitle={item.title}
-            cardData={item}
             titleInMedia
             noContent
             hasPrimaryAction

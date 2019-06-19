@@ -2,9 +2,10 @@ import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core'
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
+import * as d from '../../declarations';
 import { BASE_URL } from '../../global/config';
 import { APP_DATA, CLUSTER_TYPE, ROUTES } from '../../global/constants';
-import { CardData, ComputerLab, SearchHistory } from '../../interface';
+import { ComputerLab, SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
 @Component({
@@ -41,7 +42,12 @@ export class ViewHome {
 
   updateWidth() {
     const width = this.root.clientWidth - 128;
-    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
+    this.clusterColumns =
+      700 > width ? 3 :
+      928 > width ? 4 :
+      1160 > width ? 5 :
+      1392 > width ? 6 :
+      1624 > width ? 7 : 8;
   }
 
   @Listen('resize', { target: 'window' })
@@ -66,11 +72,11 @@ export class ViewHome {
     }
 
     // Convert search history into standardized CardData for displaying.
-    const recent: CardData[] = this.searches.recent.map(r => {
+    const recent: d.CardData[] = this.searches.recent.map(r => {
       return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' };
     });
 
-    const popular: CardData[] = this.searches.popular.map(r => {
+    const popular: d.CardData[] = this.searches.popular.map(r => {
       return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' };
     });
 

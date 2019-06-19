@@ -2,9 +2,10 @@ import { Component, Element, Host, Listen, Prop, State, Watch, h } from '@stenci
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
+import * as d from '../../declarations';
 import { BASE_URL, SEARCH_URL } from '../../global/config';
 import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
-import { BookDetails, CardData } from '../../interface';
+import { BookDetails } from '../../interface';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -112,7 +113,7 @@ export class ViewSearch {
 
   _renderBooks() {
     if (this.searchResults) {
-      const books: CardData = this.searchResults['books'].map((b: BookDetails) => {
+      const books: d.CardData = this.searchResults['books'].map((b: BookDetails) => {
         if (b.iSBN) {
           const av = b.availability ? b.availability[0] : undefined;
           return {
@@ -124,7 +125,7 @@ export class ViewSearch {
         }
 
         return undefined;
-      }).filter((b: CardData) => b !== undefined);
+      }).filter((b: d.CardData) => b !== undefined);
 
       return (
         <rl-cluster
