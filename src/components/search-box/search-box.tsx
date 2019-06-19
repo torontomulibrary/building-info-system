@@ -10,10 +10,11 @@ import {
   State,
   h,
 } from '@stencil/core';
+import { RouterHistory, injectHistory } from '@stencil/router';
 
-import {
-  SearchResultItem,
-} from '../../interface';
+import { BASE_URL } from '../../global/config';
+import { ROUTES } from '../../global/constants';
+import { SearchResultItem } from '../../interface';
 import { Search } from '../../utils/search';
 
 @Component({
@@ -45,6 +46,8 @@ export class SearchBox {
   @State() searchResults: SearchResultItem[] = [];
 
   @Prop() docSearch!: Search;
+
+  @Prop() history?: RouterHistory;
 
   @Event() iconClick!: EventEmitter;
 
@@ -95,6 +98,12 @@ export class SearchBox {
       this.focused = false;
       if (this.searchInput) {
         this.searchInput.value = '';
+      }
+    } else if (key === 'Enter') {
+      // Submit the search query as-is.
+      this.focused = false;
+      if (this.history && this.searchInput) {
+        this.history.push(`${BASE_URL}${ROUTES.SEARCH}/${this.searchInput.value}`);
       }
     }
   }
@@ -161,3 +170,5 @@ export class SearchBox {
     );
   }
 }
+
+injectHistory(SearchBox);
