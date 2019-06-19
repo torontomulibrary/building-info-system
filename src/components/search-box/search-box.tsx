@@ -12,8 +12,8 @@ import {
 } from '@stencil/core';
 import { RouterHistory, injectHistory } from '@stencil/router';
 
-import { BASE_URL } from '../../global/config';
-import { ROUTES } from '../../global/constants';
+import { BASE_URL, API_URL } from '../../global/config';
+import { ROUTES, APP_DATA } from '../../global/constants';
 import { SearchResultItem } from '../../interface';
 import { Search } from '../../utils/search';
 
@@ -103,7 +103,15 @@ export class SearchBox {
       // Submit the search query as-is.
       this.focused = false;
       if (this.history && this.searchInput) {
-        this.history.push(`${BASE_URL}${ROUTES.SEARCH}/${this.searchInput.value}`);
+        const val = this.searchInput.value;
+        fetch(`${API_URL}${APP_DATA.HISTORY}`, {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+          body: 'term=' + val,
+        });
+        this.history.push(`${BASE_URL}${ROUTES.SEARCH}/${val}`);
       }
     }
   }
