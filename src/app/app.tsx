@@ -89,6 +89,8 @@ export class RLApp {
 
   private _locationData: MapElementDetailMap = {};
   private _faqData: FaqMap = {};
+  private searchEl?: HTMLRlSearchBoxElement;
+
   @State() searchQuery = '';
   @State() resultHeight = 0;
 
@@ -159,6 +161,13 @@ export class RLApp {
     }
   }
 
+  @Listen('hashchange', { target: 'window' })
+  handleHashChanged() {
+    if (this.searchEl) {
+      this.searchEl.clearInput();
+    }
+  }
+
   /**
    * Listen for a `searchLocationClicked` event from the search bar. This occurs
    * when the user selects one of the locations from the search box.  The event
@@ -222,6 +231,7 @@ export class RLApp {
             >
             {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
             <rl-search-box
+              ref={el => { this.searchEl = el; }}
               slot="centerSection"
               showMenu={this.appWidth < 500}
               placeholder={this.appWidth < 500 ? APP_TITLE : undefined}
