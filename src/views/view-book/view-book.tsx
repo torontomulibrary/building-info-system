@@ -4,7 +4,7 @@ import { RouterHistory } from '@stencil/router';
 
 import { Card } from '../../components/card/card';
 import { BASE_URL } from '../../global/config';
-import { APP_DATA, ROUTES } from '../../global/constants';
+import { APP_DATA, CLUSTER_TYPE, ROUTES } from '../../global/constants';
 import { SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
@@ -87,13 +87,13 @@ export class ViewBooks {
           </div>
           <rl-cluster
             heading="Recent Books"
-            type="search"
+            type={CLUSTER_TYPE.CARD}
             columns={this.clusterColumns}
             data={this.searches.recent}>
           </rl-cluster>
           <rl-cluster
             heading="Popular Books"
-            type="search"
+            type={CLUSTER_TYPE.CARD}
             columns={this.clusterColumns}
             data={this.searches.popular}>
           </rl-cluster>

@@ -94,3 +94,8 @@ export enum EVENTS {
   DATA_LOADED = 'ds:loaded',
   ALL_DATA_LOADED = 'ds:allLoaded',
 }
+
+export enum CLUSTER_TYPE {
+  CARD = 'card',
+  LIST = 'list',
+}

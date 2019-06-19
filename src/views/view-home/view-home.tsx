@@ -2,7 +2,7 @@ import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core'
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
-import { APP_DATA } from '../../global/constants';
+import { APP_DATA, CLUSTER_TYPE } from '../../global/constants';
 import { ComputerLab, SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
@@ -73,19 +73,19 @@ export class ViewHome {
         <stencil-route-title pageTitle="Home" />
         <rl-cluster
           heading="Recent Books"
-          type="search"
+          type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
           data={this.searches.recent}>
         </rl-cluster>
         <rl-cluster
           heading="Popular Books"
-          type="search"
+          type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
           data={this.searches.popular}>
         </rl-cluster>
         <rl-cluster
           heading="Computer Availability"
-          type="computer"
+          type={CLUSTER_TYPE.LIST}
           columns={this.clusterColumns}
           data={this.labs}>
         </rl-cluster>

@@ -3,7 +3,7 @@ import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL, SEARCH_URL } from '../../global/config';
-import { MAP_TYPE, ROUTES } from '../../global/constants';
+import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
 import { BookDetails } from '../../interface';
 import { fetchJSON } from '../../utils/fetch';
 
@@ -126,7 +126,7 @@ export class ViewSearch {
       return (
         <rl-cluster
           heading="Books"
-          type="books"
+          type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
           data={books}>
         </rl-cluster>
