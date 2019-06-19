@@ -147,9 +147,8 @@ export class ViewSearch {
         'rl-view--search': true,
         'rl-view--loaded': this.loaded && this.appLoaded,
       }}>
-        <stencil-route-title title="Search" />
+        <stencil-route-title pageTitle="Search Results | " />
         <div>
-          Welcome to the search results.
           {this._renderBooks()}
         </div>
       </Host>

@@ -409,14 +409,17 @@ export class ViewMap {
   render() {
     const { _buildingData, _building, loaded, _element, extraDetails } = this;
     const detail: MapElementDetail = _element && Object.values(_element.details)[0];
+    const pageTitle =
+      this.mapType === MAP_TYPE.COMP ? 'Computer Labs' :
+      this.mapType === MAP_TYPE.BOOK ? 'Books' : 'Directory';
 
     if (loaded && _buildingData && _building) {
       const { _floorplan } = this;
-      const subtitle = this.activeElementId ? detail.code : `${_building.code}${this._floor.number}`;
+      const subtitle = this.activeElementId ? detail.code : `${this._floor.name}, ${_building.name}`;
 
       return (
         <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
-          <stencil-route-title pageTitle={`${subtitle} | Directory`} />
+          <stencil-route-title pageTitle={`${subtitle} | ${pageTitle} | `} />
           <rl-map
             class="rl-map"
             elements={this._floor.elements}
@@ -479,6 +482,7 @@ export class ViewMap {
 
     return (
       <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
+        <stencil-route-title pageTitle={`${pageTitle} | `} />
         <div>Loading...</div>
       </Host>
     );

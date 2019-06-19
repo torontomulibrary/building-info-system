@@ -268,7 +268,7 @@ export class RLApp {
           </rl-drawer>
 
           <main class="rl-main-content">
-            <stencil-router id="router" titleSuffix={` | ${APP_TITLE}`} historyType="hash">
+            <stencil-router id="router" titleSuffix={APP_TITLE} historyType="hash">
               <stencil-route-switch>
                 {appRoutes.map(route =>
                   <stencil-route component={route.component}

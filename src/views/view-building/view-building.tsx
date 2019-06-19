@@ -85,7 +85,7 @@ export class ViewBuilding {
           'rl-view--buildings': true,
           'rl-view--loaded': this.loaded && this.appLoaded,
         }}>
-          <stencil-route-title pageTitle="Buildings" />
+          <stencil-route-title pageTitle="Buildings | " />
           <h2 class="rl-view__heading">Building Information</h2>
           <div class="rl-view__container mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
@@ -133,6 +133,7 @@ export class ViewBuilding {
         'rl-view--buildings': true,
         'rl-view--loaded': this.loaded && this.appLoaded,
       }}>
+        <stencil-route-title pageTitle="Buildings | " />
         <div>Loading...</div>
       </Host>
     );

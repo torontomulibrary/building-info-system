@@ -140,7 +140,7 @@ export class ViewFaq {
    */
   render() {
     if (this.faqs) {
-      const title = (this.selectedFaq ? `${this.faqs[this.selectedFaq].question} | ` : '') + 'FAQs';
+      const title = (this.selectedFaq ? `${this.faqs[this.selectedFaq].question} | ` : '') + 'FAQs | ';
 
       return (
         <Host class={{
@@ -175,6 +175,7 @@ export class ViewFaq {
         'rl-view--faq': true,
         'rl-view--loaded': this.loaded && this.appLoaded,
       }}>
+        <stencil-route-title pageTitle="FAQs | " />
         <div>Loading...</div>
       </Host>
     );

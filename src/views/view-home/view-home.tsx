@@ -14,7 +14,7 @@ import { dataService } from '../../utils/data-service';
 })
 
 export class ViewHome {
-  @Element() root!: HTMLElement;
+  @Element() root!: HTMLViewHomeElement;
 
   @State() loaded = false;
   @State() searches?: SearchHistory;
@@ -86,7 +86,7 @@ export class ViewHome {
         'rl-view--home': true,
         'rl-view--loaded': this.loaded && this.appLoaded,
       }}>
-        <stencil-route-title pageTitle="Home" />
+        <stencil-route-title pageTitle="Home | " />
         <rl-cluster
           heading="Recent Books"
           type={CLUSTER_TYPE.CARD}

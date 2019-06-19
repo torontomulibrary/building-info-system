@@ -166,7 +166,7 @@ export class ViewEvent {
           'rl-view--events': true,
           'rl-view--loaded': this.loaded && this.appLoaded,
         }}>
-          <stencil-route-title pageTitle="Events" />
+          <stencil-route-title pageTitle="Events | " />
           <h2 class="rl-view__heading">Upcoming events</h2>
           <div class="rl-view__container mdc-layout-grid">
             <div class="mdc-layout-grid__inner" role="list">
@@ -211,6 +211,7 @@ export class ViewEvent {
         'rl-view--events': true,
         'rl-view--loaded': this.loaded && this.appLoaded,
       }}>
+        <stencil-route-title pageTitle="Events | " />
         <h2 class="rl-view__heading mdc-typography--headline2">No events currently available.</h2>
       </Host>
     );
