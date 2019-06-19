@@ -67,11 +67,11 @@ export class ViewHome {
 
     // Convert search history into standardized CardData for displaying.
     const recent: CardData[] = this.searches.recent.map(r => {
-      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: '', subTitle: '' };
+      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' };
     });
 
     const popular: CardData[] = this.searches.popular.map(r => {
-      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: '', subTitle: '' };
+      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' };
     });
 
     return (

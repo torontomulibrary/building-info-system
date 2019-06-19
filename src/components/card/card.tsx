@@ -9,6 +9,7 @@ import {
 } from '@stencil/core';
 import { RouterHistory, injectHistory } from '@stencil/router';
 
+import { BASE_URL } from '../../global/config';
 import { CardData } from '../../interface';
 import { Color } from '../../utils/color';
 
@@ -92,7 +93,7 @@ export class Card {
 
   _renderMedia() {
     const mediaFile =
-        `url("${this.cardMedia ? this.cardMedia : '/assets/img/no_img.png'}")`;
+        `url("${this.cardMedia ? this.cardMedia : `${BASE_URL}assets/img/no_img.png`}")`;
 
     return (
       <div class={`mdc-card__media mdc-card__media--${this.wideMediaAspect ? '16-9' : 'square'}`}

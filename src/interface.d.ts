@@ -131,14 +131,16 @@ export interface SearchHistory {
   popular: Array<{
     count: number,
     id: number,
+    image: string,
     lastUsed: string,
     value: string
   }>,
   recent: Array<{
     count: number,
     id: number,
+    image: string,
     lastUsed: string,
-    value: string
+    value: string,
   }>,
 }
 
