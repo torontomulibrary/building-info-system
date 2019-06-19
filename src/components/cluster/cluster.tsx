@@ -1,7 +1,7 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 
 import { BASE_URL } from '../../global/config';
-import { CLUSTER_TYPE, ROUTES } from '../../global/constants';
+import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
 import { Lane } from '../lane/lane';
 
 @Component({
@@ -41,9 +41,9 @@ export class Cluster {
       case CLUSTER_TYPE.LIST:
       default:
         return (
-          <div class="mdc-list">
+          <div class="mdc-list" role="list">
             {this.data.map(lab =>
-              <stencil-route-link url={`${BASE_URL}${ROUTES.COMPUTERS}/${lab.locName}`}>
+              <stencil-route-link anchorClass="mdc-list-item" role="listitem" url={`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.COMP}/${lab.locName}`}>
                 <div>{lab.compAvail} available in {lab.locName}</div>
               </stencil-route-link>
             )}
@@ -61,7 +61,7 @@ export class Cluster {
       }}>
         <div class="rl-cluster__header">
           <div class="rl-cluster__header--inner">
-            <h2 class="rl-cluster__title">{this.heading}</h2>
+            <h2 class="rl-cluster__title mdc-typography--headline5">{this.heading}</h2>
           </div>
           {this.hasMore ? <button class="mdc-button">See More</button> : undefined}
         </div>
