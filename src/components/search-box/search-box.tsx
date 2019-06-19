@@ -54,6 +54,7 @@ export class SearchBox {
   @Method()
   async clearInput() {
     if (this.searchInput) {
+      this.searchValue = '';
       this.searchInput.value = '';
     }
   }
