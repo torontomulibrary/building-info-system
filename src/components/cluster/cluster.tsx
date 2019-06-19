@@ -2,7 +2,7 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 
 import { BASE_URL } from '../../global/config';
 import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
-import { Lane } from '../lane/lane';
+import { ClusterLane } from '../cluster-lane/cluster-lane';
 
 @Component({
   tag: 'rl-cluster',
@@ -30,13 +30,12 @@ export class Cluster {
     switch (this.type) {
       case CLUSTER_TYPE.CARD:
         return (
-          <Lane
+          <ClusterLane
             data={this.data}
             columns={this.columns}
-            firstVisible={0}
             firstVisibleChanged={fv => { this.firstVisible = fv; }}
           >
-          </Lane>
+          </ClusterLane>
         );
       case CLUSTER_TYPE.LIST:
       default:
