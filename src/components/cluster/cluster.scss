@@ -66,7 +66,9 @@
 
   &:hover {
     &.has-prev .rl-lane__button.prev .icon,
-    &.has-next .rl-lane__button.next .icon { display: inline-block; }
+    &.has-next .rl-lane__button.next .icon {
+      display: inline-block;
+    }
   }
 
   &.has-prev:hover .rl-lane__button.prev,
@@ -75,7 +77,7 @@
   }
 }
 
-@for $i from 3 through 8 {
+@for $i from 2 through 8 {
   .rl-cluster[columns="#{$i}"] .rl-card {
     width: calc((100% / #{$i}) - 16px);
   }

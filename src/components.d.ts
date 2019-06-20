@@ -14,8 +14,9 @@ import {
   Color,
 } from './utils/color';
 import {
-  CLUSTER_TYPE,
-} from './global/constants';
+  ClusterData,
+  SearchResultItem,
+} from './interface';
 import {
   BuildingMap,
   FloorMap,
@@ -23,9 +24,6 @@ import {
 import {
   Search,
 } from './utils/search';
-import {
-  SearchResultItem,
-} from './interface';
 
 export namespace Components {
   interface RlAccordion {
@@ -98,10 +96,11 @@ export namespace Components {
   }
   interface RlCluster {
     'columns': number;
-    'data': any;
+    'data'?: ClusterData[];
     'hasMore': boolean;
     'heading': string;
-    'type'?: CLUSTER_TYPE;
+    'isMobile': boolean;
+    'parentEl'?: HTMLElement;
   }
   interface RlDrawer {
     /**
@@ -150,10 +149,6 @@ export namespace Components {
   interface RlSideSheet {
     'open': boolean;
   }
-  interface ViewBook {
-    'appLoaded': boolean;
-    'history': RouterHistory;
-  }
   interface ViewBuilding {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
@@ -192,6 +187,7 @@ export namespace Components {
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
     'history': RouterHistory;
+    'isMobile': boolean;
   }
   interface ViewMap {
     /**
@@ -296,12 +292,6 @@ declare global {
     new (): HTMLRlSideSheetElement;
   };
 
-  interface HTMLViewBookElement extends Components.ViewBook, HTMLStencilElement {}
-  var HTMLViewBookElement: {
-    prototype: HTMLViewBookElement;
-    new (): HTMLViewBookElement;
-  };
-
   interface HTMLViewBuildingElement extends Components.ViewBuilding, HTMLStencilElement {}
   var HTMLViewBuildingElement: {
     prototype: HTMLViewBuildingElement;
@@ -351,7 +341,6 @@ declare global {
     'rl-search-box': HTMLRlSearchBoxElement;
     'rl-search-suggestions': HTMLRlSearchSuggestionsElement;
     'rl-side-sheet': HTMLRlSideSheetElement;
-    'view-book': HTMLViewBookElement;
     'view-building': HTMLViewBuildingElement;
     'view-event': HTMLViewEventElement;
     'view-faq': HTMLViewFaqElement;
@@ -444,10 +433,11 @@ declare namespace LocalJSX {
   }
   interface RlCluster extends JSXBase.HTMLAttributes<HTMLRlClusterElement> {
     'columns'?: number;
-    'data'?: any;
+    'data'?: ClusterData[];
     'hasMore'?: boolean;
     'heading'?: string;
-    'type'?: CLUSTER_TYPE;
+    'isMobile'?: boolean;
+    'parentEl'?: HTMLElement;
   }
   interface RlDrawer extends JSXBase.HTMLAttributes<HTMLRlDrawerElement> {
     /**
@@ -517,10 +507,6 @@ declare namespace LocalJSX {
     'onOpened'?: (event: CustomEvent<any>) => void;
     'open'?: boolean;
   }
-  interface ViewBook extends JSXBase.HTMLAttributes<HTMLViewBookElement> {
-    'appLoaded'?: boolean;
-    'history': RouterHistory;
-  }
   interface ViewBuilding extends JSXBase.HTMLAttributes<HTMLViewBuildingElement> {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
@@ -558,6 +544,7 @@ declare namespace LocalJSX {
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
     'history': RouterHistory;
+    'isMobile'?: boolean;
   }
   interface ViewMap extends JSXBase.HTMLAttributes<HTMLViewMapElement> {
     /**
@@ -598,7 +585,6 @@ declare namespace LocalJSX {
     'rl-search-box': RlSearchBox;
     'rl-search-suggestions': RlSearchSuggestions;
     'rl-side-sheet': RlSideSheet;
-    'view-book': ViewBook;
     'view-building': ViewBuilding;
     'view-event': ViewEvent;
     'view-faq': ViewFaq;

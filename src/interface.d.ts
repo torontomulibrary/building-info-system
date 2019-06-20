@@ -185,6 +185,21 @@ export interface SearchResultItem {
   detail?: string,
 }
 
+export type ClusterDataType = 'card' | 'list';
+
+/**
+ * Data for a single item within a cluster component.
+ */
+export interface ClusterData {
+  /** The type of data. */
+  type: ClusterDataType;
+  title: string;
+  subTitle: string;
+  link: string;
+  media?: string;
+  icon?: string;
+}
+
 export * from './components';
 // export * from './components/map/map-interface';
 export * from './components/search-box/search-box-interface';

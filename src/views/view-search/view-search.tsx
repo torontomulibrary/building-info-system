@@ -2,10 +2,10 @@ import { Component, Element, Host, Listen, Prop, State, Watch, h } from '@stenci
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
-import * as d from '../../declarations';
+// import * as d from '../../declarations';
 import { BASE_URL, SEARCH_URL } from '../../global/config';
-import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
-import { BookDetails } from '../../interface';
+import { MAP_TYPE, ROUTES } from '../../global/constants';
+import { BookDetails, ClusterData } from '../../interface';
 import { fetchJSON } from '../../utils/fetch';
 
 @Component({
@@ -25,7 +25,7 @@ export class ViewSearch {
   @State() searchQuery?: string;
   @Watch('searchQuery')
   onSearchQueryChanged(newQuery: string) {
-    if (newQuery && SEARCH_URL) {
+    // if (newQuery !== undefined) {
       const results = fetchJSON(SEARCH_URL, {
         method: 'POST',
         headers: {
@@ -40,7 +40,7 @@ export class ViewSearch {
           this.loaded = true;
         })
         .catch(e => console.error(e.message));
-    }
+    // }
   }
 
   @State() searchResults?: object;
@@ -113,24 +113,24 @@ export class ViewSearch {
 
   _renderBooks() {
     if (this.searchResults) {
-      const books: d.CardData = this.searchResults['books'].map((b: BookDetails) => {
+      const books: ClusterData[] = this.searchResults['books'].map((b: BookDetails) => {
         if (b.iSBN) {
           const av = b.availability ? b.availability[0] : undefined;
           return {
+            type: 'card',
             title: b.title,
             subTitle: av ? av.statusMessage : 'Unknown Availability',
             link: av ? `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.BOOK}/${av.shelf}/${b.iSBN[0]}` : '',
             media: b.thumbnail_m ? b.thumbnail_m : undefined,
-          };
+          } as ClusterData;
         }
 
         return undefined;
-      }).filter((b: d.CardData) => b !== undefined);
+      }).filter((b: ClusterData) => b !== undefined);
 
       return (
         <rl-cluster
           heading="Books"
-          type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
           data={books}>
         </rl-cluster>

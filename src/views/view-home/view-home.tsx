@@ -1,11 +1,11 @@
-import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
-import * as d from '../../declarations';
+// import * as d from '../../declarations';
 import { BASE_URL } from '../../global/config';
-import { APP_DATA, CLUSTER_TYPE, ROUTES } from '../../global/constants';
-import { ComputerLab, SearchHistory } from '../../interface';
+import { APP_DATA, MAP_TYPE, ROUTES } from '../../global/constants';
+import { ClusterData, ComputerLab, SearchHistory } from '../../interface';
 import { dataService } from '../../utils/data-service';
 
 @Component({
@@ -19,9 +19,10 @@ export class ViewHome {
   @State() loaded = false;
   @State() searches?: SearchHistory;
   @State() labs?: ComputerLab[] = [];
-  @State() clusterColumns = 5;
+  @State() clusterColumns = 2;
 
   @Prop() appLoaded = false;
+  @Prop() isMobile = false;
 
   /**
    * Reference to the stencil-router history object. Used to programmatically
@@ -40,21 +41,6 @@ export class ViewHome {
     this.checkSize();
   }
 
-  updateWidth() {
-    const width = this.root.clientWidth - 128;
-    this.clusterColumns =
-      700 > width ? 3 :
-      928 > width ? 4 :
-      1160 > width ? 5 :
-      1392 > width ? 6 :
-      1624 > width ? 7 : 8;
-  }
-
-  @Listen('resize', { target: 'window' })
-  onresize() {
-    this.updateWidth();
-  }
-
   checkSize() {
     if (this.root.offsetHeight === 0) {
       this.queue.write(() => {
@@ -62,7 +48,6 @@ export class ViewHome {
       });
     } else {
       this.loaded = true;
-      this.updateWidth();
     }
   }
 
@@ -72,12 +57,21 @@ export class ViewHome {
     }
 
     // Convert search history into standardized CardData for displaying.
-    const recent: d.CardData[] = this.searches.recent.map(r => {
-      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' };
+    const recent: ClusterData[] = this.searches.recent.map(r => {
+      return { type: 'card', title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' } as ClusterData;
     });
 
-    const popular: d.CardData[] = this.searches.popular.map(r => {
-      return { title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' };
+    const popular: ClusterData[] = this.searches.popular.map(r => {
+      return { type: 'card', title: r.value, link: `${BASE_URL}${ROUTES.SEARCH}/${r.value}`, media: r.image, subTitle: '' } as ClusterData;
+    });
+
+    const labs: ClusterData[] = this.labs.map(l => {
+      return {
+        type: 'list',
+        title: l.locName,
+        subTitle: `${l.compAvail} of ${l.compTotal} computer available`,
+        link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.COMP}/${l.locName}`,
+      } as ClusterData;
     });
 
     return (
@@ -89,21 +83,24 @@ export class ViewHome {
         <stencil-route-title pageTitle="Home | " />
         <rl-cluster
           heading="Recent Books"
-          type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
-          data={recent}>
+          data={recent}
+          isMobile={this.isMobile}
+          parentEl={this.root}>
         </rl-cluster>
         <rl-cluster
           heading="Popular Books"
-          type={CLUSTER_TYPE.CARD}
           columns={this.clusterColumns}
-          data={popular}>
+          data={popular}
+          isMobile={this.isMobile}
+          parentEl={this.root}>
         </rl-cluster>
         <rl-cluster
           heading="Computer Availability"
-          type={CLUSTER_TYPE.LIST}
           columns={this.clusterColumns}
-          data={this.labs}>
+          data={labs}
+          isMobile={this.isMobile}
+          parentEl={this.root}>
         </rl-cluster>
       </Host>
     );

@@ -1,14 +1,14 @@
 import { FunctionalComponent, h } from '@stencil/core';
 
-// import { CardData } from '../../interface';
-import * as d from '../../declarations';
+// import * as d from '../../declarations';
+import { ClusterData } from '../../interface';
 import { getAncestorByClass } from '../../utils/dom';
 
 interface ClusterLaneProps {
   /**
    * An array of CardData objects that will be used to populate the lane with.
    */
-  data: d.CardData[];
+  data: ClusterData[];
   /**
    * The number of columns currently visible in the lane.
    */

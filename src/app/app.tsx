@@ -3,6 +3,7 @@ import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core'
 import '@stencil/router';
 // tslint:disable-next-line:no-duplicate-imports
 import { RouterHistory, injectHistory } from '@stencil/router';
+import { UAParser } from 'ua-parser-js';
 
 import { BASE_URL } from '../global/config';
 import {
@@ -28,6 +29,8 @@ import { Search } from '../utils/search';
 })
 
 export class RLApp {
+  private isMobile = false;
+
   /**
    * Object containing all the pages used for the nav menu of the App.
    */
@@ -126,6 +129,9 @@ export class RLApp {
    * Lifecycle event fired after the component has rendered the first time.
    */
   componentWillLoad() {
+    const dev = new UAParser().getDevice();
+    this.isMobile = dev.type !== undefined && dev.type === 'mobile';
+
     dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
       this._faqData = dataService.getData(APP_DATA.FAQS);
 
@@ -227,14 +233,14 @@ export class RLApp {
           <rl-app-bar
               type="fixed"
               onMenuClicked={_ => { this.drawerOpen = true; }}
-              singleSection={this.appWidth < 500}
+              singleSection={this.isMobile}
             >
-            {this.appWidth < 500 ? undefined : (<div slot="title">{APP_TITLE}</div>)}
+            {this.isMobile ? undefined : (<div slot="title">{APP_TITLE}</div>)}
             <rl-search-box
               ref={el => { this.searchEl = el; }}
               slot="centerSection"
-              showMenu={this.appWidth < 500}
-              placeholder={this.appWidth < 500 ? APP_TITLE : undefined}
+              showMenu={this.isMobile}
+              placeholder={this.isMobile ? APP_TITLE : undefined}
               resultHeight={this.resultHeight}
               onIconClick={() => { this.drawerOpen = true; }}
               searchValue={this.searchQuery}

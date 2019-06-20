@@ -1,7 +1,7 @@
-import { Component, Element, Host, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core';
 
-import { BASE_URL } from '../../global/config';
-import { CLUSTER_TYPE, MAP_TYPE, ROUTES } from '../../global/constants';
+import { ClusterData } from '../../interface';
+import { ClusterGrid } from '../cluster-grid/cluster-grid';
 import { ClusterLane } from '../cluster-lane/cluster-lane';
 
 @Component({
@@ -14,11 +14,12 @@ export class Cluster {
   @State() firstVisible = 0;
   @State() maxColumns = 8;
 
-  @Prop() type?: CLUSTER_TYPE;
   @Prop() heading = '';
-  @Prop() data: any;
-  @Prop({ reflectToAttr: true }) columns = 5;
+  @Prop() data?: ClusterData[];
+  @Prop({ reflectToAttr: true }) columns = 2;
   @Prop() hasMore = false;
+  @Prop() parentEl?: HTMLElement;
+  @Prop() isMobile = false;
 
   componentWillLoad() {
     if (this.data) {
@@ -26,28 +27,64 @@ export class Cluster {
     }
   }
 
+  componentDidLoad() {
+    this.updateWidth();
+  }
+
+  updateWidth() {
+    if (this.parentEl) {
+      const width = this.parentEl.clientWidth - 128;
+      this.columns =
+        this.isMobile ? 2 :
+        700 > width ? 3 :
+        928 > width ? 4 :
+        1160 > width ? 5 :
+        1392 > width ? 6 :
+        1624 > width ? 7 : 8;
+    }
+  }
+
+  @Listen('resize', { target: 'window' })
+  onresize() {
+    this.updateWidth();
+  }
+
   renderContent() {
-    switch (this.type) {
-      case CLUSTER_TYPE.CARD:
-        return (
-          <ClusterLane
-            data={this.data}
-            columns={this.columns}
-            firstVisibleChanged={fv => { this.firstVisible = fv; }}
-          >
-          </ClusterLane>
-        );
-      case CLUSTER_TYPE.LIST:
-      default:
-        return (
-          <div class="mdc-list" role="list">
-            {this.data.map(lab =>
-              <stencil-route-link anchorClass="mdc-list-item" role="listitem" url={`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.COMP}/${lab.locName}`}>
-                <div>{lab.compAvail} available in {lab.locName}</div>
-              </stencil-route-link>
-            )}
-          </div>
-        );
+    if (this.data) {
+      switch (this.data[0].type) {
+        case 'card':
+          if (this.isMobile) {
+            return (
+              <ClusterGrid
+                data={this.data.slice(0, 4)}
+              >
+              </ClusterGrid>
+            );
+          } else {
+            return (
+              <ClusterLane
+                data={this.data}
+                columns={this.columns}
+                firstVisibleChanged={fv => { this.firstVisible = fv; }}
+              >
+              </ClusterLane>
+            );
+          }
+        case 'list':
+        default:
+          return (
+            <div class="mdc-list mdc-list--two-line" role="list">
+              {this.data.map(d =>
+                <stencil-route-link anchorClass="mdc-list-item" role="listitem" url={d.link}>
+                  <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">{d.title}</span>
+                    <span class="mdc-list-item__secondary-text">{d.subTitle}</span>
+                  </span>
+                </stencil-route-link>
+              )}
+            </div>
+          );
+      }
     }
   }
 
@@ -55,8 +92,8 @@ export class Cluster {
     return (
       <Host class={{
         'rl-cluster': true,
-        'has-prev': this.firstVisible > 0 && this.columns < this.data.length,
-        'has-next': (this.firstVisible + this.columns) < this.data.length,
+        'has-prev': this.data ? this.firstVisible > 0 && this.columns < this.data.length : false,
+        'has-next': this.data ? (this.firstVisible + this.columns) < this.data.length : false,
       }}>
         <div class="rl-cluster__header">
           <div class="rl-cluster__header--inner">
