@@ -21,6 +21,8 @@
 @import "@material/layout-grid/mixins";
 @import "@material/elevation/mixins";
 
+@import "rl-view";
+
 .rl-bis.hydrated {
   .rl-main-content {
     position: relative;
