@@ -19,9 +19,9 @@ export class ViewHome {
   @State() loaded = false;
   @State() searches?: SearchHistory;
   @State() labs?: ComputerLab[] = [];
-  @State() clusterColumns = 2;
 
   @Prop() appLoaded = false;
+  @Prop() clusterColumns = 2;
   @Prop() isMobile = false;
 
   /**
@@ -82,14 +82,14 @@ export class ViewHome {
       }}>
         <stencil-route-title pageTitle="Home | " />
         <rl-cluster
-          heading="Recent Books"
+          heading="Recent Book Searches"
           columns={this.clusterColumns}
           data={recent}
           isMobile={this.isMobile}
           parentEl={this.root}>
         </rl-cluster>
         <rl-cluster
-          heading="Popular Books"
+          heading="Popular Book Searches"
           columns={this.clusterColumns}
           data={popular}
           isMobile={this.isMobile}

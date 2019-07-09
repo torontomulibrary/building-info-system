@@ -1,4 +1,4 @@
-import { Component, Element, Host, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
@@ -17,7 +17,6 @@ export class ViewSearch {
   @Element() root!: HTMLViewSearchElement;
 
   @State() loaded = false;
-  @State() clusterColumns = 5;
 
   /**
    * The query currently being searched for.
@@ -25,22 +24,20 @@ export class ViewSearch {
   @State() searchQuery?: string;
   @Watch('searchQuery')
   onSearchQueryChanged(newQuery: string) {
-    // if (newQuery !== undefined) {
-      const results = fetchJSON(SEARCH_URL, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        mode: 'cors',
-        body: 's_q=' + newQuery,
-      });
-      results
-        .then(res => {
-          this.searchResults = res;
-          this.loaded = true;
-        })
-        .catch(e => console.error(e.message));
-    // }
+    const results = fetchJSON(SEARCH_URL, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      mode: 'cors',
+      body: 's_q=' + newQuery,
+    });
+    results
+      .then(res => {
+        this.searchResults = res;
+        this.loaded = true;
+      })
+      .catch(e => console.error(e.message));
   }
 
   @State() searchResults?: object;
@@ -50,7 +47,7 @@ export class ViewSearch {
   @Prop() match!: MatchResults;
   @Watch('match')
   onMatchChanged(newMatch: MatchResults) {
-    if (newMatch && newMatch.params && newMatch.params.query) {
+    if (newMatch.params && newMatch.params.query) {
       this.searchQuery = newMatch.params.query;
     } else {
       // If no search query is provided, redirect to the home page.  There is
@@ -59,17 +56,11 @@ export class ViewSearch {
     }
   }
 
-  @Prop({ context: 'queue' }) queue!: QueueApi;
-
-  @Listen('resize', { target: 'window' })
-  onresize() {
-    const width = this.root.clientWidth - 128;
-    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
-  }
-
-  @Prop() searchUrl?: string;
-
   @Prop() appLoaded = false;
+  @Prop() clusterColumns = 2;
+  @Prop() isMobile = false;
+  @Prop() searchUrl?: string;
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   /**
    * The component lifecycle function called when the component is being
@@ -85,11 +76,6 @@ export class ViewSearch {
     this.checkSize();
   }
 
-  updateWidth() {
-    const width = this.root.clientWidth - 128;
-    this.clusterColumns = 700 > width ? 3 : 928 > width ? 4 : 1160 > width ? 5 : 1392 > width ? 6 : 1624 > width ? 7 : 8;
-  }
-
   checkSize() {
     if (this.root.offsetHeight === 0) {
       this.queue.write(() => {
@@ -97,7 +83,6 @@ export class ViewSearch {
       });
     } else {
       this.loaded = true;
-      this.updateWidth();
     }
   }
 

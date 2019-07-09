@@ -1,4 +1,4 @@
-import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 
 import { ClusterData } from '../../interface';
 import { ClusterGrid } from '../cluster-grid/cluster-grid';
@@ -9,6 +9,8 @@ import { ClusterLane } from '../cluster-lane/cluster-lane';
   styleUrl: 'cluster.scss',
 })
 export class Cluster {
+  // private sizeElement?: HTMLElement;
+
   @Element() root!: HTMLRlClusterElement;
 
   @State() firstVisible = 0;
@@ -16,7 +18,7 @@ export class Cluster {
 
   @Prop() heading = '';
   @Prop() data?: ClusterData[];
-  @Prop({ reflectToAttr: true }) columns = 2;
+  @Prop({ reflectToAttr: true}) columns = 2;
   @Prop() hasMore = false;
   @Prop() parentEl?: HTMLElement;
   @Prop() isMobile = false;
@@ -25,28 +27,6 @@ export class Cluster {
     if (this.data) {
       this.maxColumns = Math.min(this.data.length, this.maxColumns);
     }
-  }
-
-  componentDidLoad() {
-    this.updateWidth();
-  }
-
-  updateWidth() {
-    if (this.parentEl) {
-      const width = this.parentEl.clientWidth - 128;
-      this.columns =
-        this.isMobile ? 2 :
-        700 > width ? 3 :
-        928 > width ? 4 :
-        1160 > width ? 5 :
-        1392 > width ? 6 :
-        1624 > width ? 7 : 8;
-    }
-  }
-
-  @Listen('resize', { target: 'window' })
-  onresize() {
-    this.updateWidth();
   }
 
   renderContent() {

@@ -100,7 +100,7 @@ export class RLApp {
   /**
    * Root element of this component.
    */
-  @Element() root!: HTMLRlBisElement;
+  @Element() root?: HTMLRlBisElement;
 
   @State() searchResults: SearchResultItem[] = [];
 
@@ -117,6 +117,8 @@ export class RLApp {
    * Flag indicating if the side drawer is open.
    */
   @State() drawerOpen!: boolean;
+
+  @State() clusterColumns = 2;
 
   /**
    * Global flag indicating if the whole application has loaded.
@@ -148,6 +150,7 @@ export class RLApp {
       this.loaded = true;
     });
     dataService.initialize();
+    this._updateClusterColumns();
   }
 
   /**
@@ -155,7 +158,18 @@ export class RLApp {
    */
   @Listen('resize', { target: 'window' })
   handleResize() {
-    this.appWidth = window.innerWidth;
+    this._updateClusterColumns();
+  }
+
+  _updateClusterColumns() {
+    const width = window.innerWidth - 128;
+    this.clusterColumns =
+      this.isMobile ? 2 :
+      700 > width ? 3 :
+      928 > width ? 4 :
+      1160 > width ? 5 :
+      1392 > width ? 6 :
+      1624 > width ? 7 : 8;
   }
 
   _onSearchChange(e: Event) {
@@ -273,13 +287,17 @@ export class RLApp {
             </nav>
           </rl-drawer>
 
-          <main class="rl-main-content">
+          <main id="main" class="rl-main-content">
             <stencil-router id="router" titleSuffix={APP_TITLE} historyType="hash">
               <stencil-route-switch>
                 {appRoutes.map(route =>
                   <stencil-route component={route.component}
                     url={route.urls}
-                    componentProps={{ appLoaded: loaded }}
+                    componentProps={{
+                      appLoaded: loaded,
+                      isMobile: this.isMobile,
+                      clusterColumns: this.clusterColumns,
+                    }}
                   >
                   </stencil-route>
                 )}

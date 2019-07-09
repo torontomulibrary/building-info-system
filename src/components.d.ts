@@ -183,6 +183,7 @@ export namespace Components {
   }
   interface ViewHome {
     'appLoaded': boolean;
+    'clusterColumns': number;
     /**
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
@@ -205,7 +206,9 @@ export namespace Components {
   }
   interface ViewSearch {
     'appLoaded': boolean;
+    'clusterColumns': number;
     'history': RouterHistory;
+    'isMobile': boolean;
     'match': MatchResults;
     'searchUrl'?: string;
   }
@@ -540,6 +543,7 @@ declare namespace LocalJSX {
   }
   interface ViewHome extends JSXBase.HTMLAttributes<HTMLViewHomeElement> {
     'appLoaded'?: boolean;
+    'clusterColumns'?: number;
     /**
     * Reference to the stencil-router history object. Used to programmatically change the browser history when the selected FAQ changes.
     */
@@ -566,7 +570,9 @@ declare namespace LocalJSX {
   }
   interface ViewSearch extends JSXBase.HTMLAttributes<HTMLViewSearchElement> {
     'appLoaded'?: boolean;
+    'clusterColumns'?: number;
     'history': RouterHistory;
+    'isMobile'?: boolean;
     'match': MatchResults;
     'searchUrl'?: string;
   }
