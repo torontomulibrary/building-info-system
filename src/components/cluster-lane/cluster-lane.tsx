@@ -1,6 +1,5 @@
 import { FunctionalComponent, h } from '@stencil/core';
 
-// import * as d from '../../declarations';
 import { ClusterData } from '../../interface';
 import { getAncestorByClass } from '../../utils/dom';
 
@@ -69,13 +68,15 @@ export const ClusterLane: FunctionalComponent<ClusterLaneProps> = ({
       {data && data.map(item => {
         return (
           <rl-card
-            cardTitle={item.title}
-            titleInMedia
-            noContent
             hasPrimaryAction
             primaryLink={item.link}
             cardMedia={item.media}
           >
+            <div slot="primary" class="rl-card__detail-inner">
+              <a href="" class="rl-card__title rl-card__fade-out" title={item.title}>
+                {item.title}
+              </a>
+            </div>
           </rl-card>
         );
       })}

@@ -65,4 +65,31 @@
       visibility: visible;
     }
   }
+
+  &__detail-inner {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    display: block;
+    outline: none;
+    color: var(--mdc-theme-text-on-surface, #000);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  &__fade-out::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    content: "";
+  }
 }
