@@ -52,7 +52,23 @@ class DataService extends Listenable {
                 return end.valueOf() > now;
               });
 
-              // Convert date strings to Date objects.
+              /**
+               * If there are not enough events because old ones were filtered
+               * out, load more.
+               */
+              if (events.length < 20) {
+                const start = events.length > 0 ? events[events.length - 1].endTime : new Date();
+                const evts = await this.fetchCalendarEvents((30 - events.length), start);
+                const newEvents = union(events, evts);
+
+                set(val, newEvents).catch(err => {
+                  console.error(`Error setting value in localStorage - ${err}`);
+                });
+
+                // this._data.set(val, newEvents);
+              }
+
+              // Convert any date strings to Date objects.
               events.forEach((evt: CalEvent) => {
                 evt.endTime = new Date(evt.endTime);
                 evt.startTime = new Date(evt.startTime);
@@ -60,19 +76,6 @@ class DataService extends Listenable {
 
               // Store updated events.
               this._data.set(val, events);
-
-              // Load additional events if the cached ones are depleted.
-              if (events.length < 20) {
-                const start = events[events.length - 1].endTime;
-                const evts = await this.fetchCalendarEvents(10, start);
-                const newEvents = union(events, evts);
-
-                set(val, newEvents).catch(err => {
-                  console.error(`Error setting value in localStorage - ${err}`);
-                });
-
-                this._data.set(val, newEvents);
-              }
 
               this._loadedData++;
               this._completeLoad();
