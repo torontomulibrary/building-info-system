@@ -1,18 +1,13 @@
 :root {
-  --rl-map-element-font-size: 48px;
+  --rl-svg__text-size: 48px;
 }
 
-.rl-view .rl-svg__symbol {
-  &--computer {
-    fill: #800;
-    stroke: #300;
-    fill-rule: evenodd;
-
-    &-alt {
-      fill: #080;
-      stroke: #030;
-    }
-  }
+// Define colours for the computer symbol.
+.rl-svg__symbol--computer {
+  --rl-svg__symbol-fill: #800;
+  --rl-svg__symbol-stroke: #300;
+  --rl-svg__symbol-fill--alt: #080;
+  --rl-svg__symbol-stroke--alt: #030;
 }
 
 .rl-view.rl-view--map {
