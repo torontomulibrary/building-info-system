@@ -20,7 +20,7 @@ export function loadData(type: string, key?: string) {
   if (key !== undefined) {
     return get(key).then(res => {
       if (res !== undefined) {
-        return Promise.resolve(res);
+        return Promise.resolve(res as any);
       } else {
         return fetchWrapper(type, key);
       }

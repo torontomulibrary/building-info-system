@@ -40,18 +40,43 @@ export class EventParser {
   }
 
   fetchICAL(url: string) {
-    return fetch(url, {
-      credentials: 'same-origin',
-      mode: 'cors',
-      redirect: 'follow',
-      referrer: 'no-referrer',
-    }).then(res => {
-      if (res.ok) {
-        return res.text();
+    return new Promise<Response>((resolve, reject) => {
+      let didTimeout = false;
+      const timeout = setTimeout(() => {
+        didTimeout = true;
+        reject({
+          timeout: true,
+          error: new Error('iCal request timed out'),
+        });
+      }, 5000);
+
+      fetch(url, {
+        credentials: 'same-origin',
+        mode: 'cors',
+        redirect: 'follow',
+        referrer: 'no-referrer',
+      }).then(res => {
+        if (res.ok) {
+          clearTimeout(timeout);
+          if (!didTimeout) {
+            resolve(res);
+          }
+        }
+      }).catch(err => {
+        if (didTimeout) {
+          return;
+        }
+
+        reject(err);
+      });
+    }).then((result: Response) => {
+      if (result.ok) {
+        return result.text();
       }
-      throw new Error('Network response was not OK.');
+
+      throw new Error('Network response was not okay when fetching iCal');
     }).catch(err => {
-      throw new Error('Fetch ICAL error: ' + err.message);
+      return err;
     });
   }
 
@@ -244,10 +269,14 @@ export class EventParser {
    * @param url The URL to load the ICAL file from
    */
   loadIcal(url: string) {
-    this.fetchICAL(url).then(res => {
-      this.onICalLoad(res);
-    }, reason => {
-      throw new Error(`Unable to fetch ICAL. ${reason}`);
+    this.fetchICAL(url).then(
+    res => {
+      if (!res.timeout) {
+        this.onICalLoad(res);
+      }
+    },
+    error => {
+      throw new Error(`Unable to fetch ICAL. ${error}`);
     });
   }
 
