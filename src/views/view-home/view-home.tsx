@@ -68,9 +68,9 @@ export class ViewHome {
     const labs: ClusterData[] = this.labs.map(l => {
       return {
         type: 'list',
-        title: l.locName,
-        subTitle: `${l.compAvail} of ${l.compTotal} computer available`,
-        link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.COMP}/${l.locName}`,
+        title: l.code,
+        subTitle: `${l.computerAvailable} of ${l.computerTotal} computer available`,
+        link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.COMP}/${l.code}`,
       } as ClusterData;
     });
 

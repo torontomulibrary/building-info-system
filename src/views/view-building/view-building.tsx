@@ -53,7 +53,7 @@ export class ViewBuilding {
 
     Object.values(this.buildings).forEach((b: Building) => {
       b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
-        if (f.buildingId === b.id) ob[f.id] = f;
+        if (f.building === b.code) ob[f.id] = f;
         return ob;
       }, {} as Floor);
     });

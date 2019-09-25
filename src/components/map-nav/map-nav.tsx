@@ -46,12 +46,12 @@ export class MapNav {
   /**
    * The `id` of the currently active building.
    */
-  @Prop() activeBuildingId!: number;
+  @Prop() activeBuilding!: Building;
 
   /**
    * The `id` of the currently active floor.
    */
-  @Prop() activeFloorId!: number;
+  @Prop() activeFloor!: Floor;
 
   /**
    * An id-indexed map of the buildings.
@@ -132,7 +132,7 @@ export class MapNav {
           <select class="mdc-select__native-control">
             {buildings.map((b: Building) =>
               <option value={b.code} disabled={!b.enabled}
-                selected={this.activeBuildingId === b.id}>
+                selected={this.activeBuilding.code === b.code}>
                 {b.name}
               </option>
             )}
@@ -148,12 +148,12 @@ export class MapNav {
               <div class="mdc-tab-scroller__scroll-content">
                 {floors.map((f: Floor) =>
                   <button role="tab" disabled={!f.enabled}
-                    tabindex={f.id === this.activeFloorId ? '0' : '-1'}
-                    class={`mdc-tab ${f.id === this.activeFloorId ? 'mdc-tab--active' : ''}`}>
+                    tabindex={f.code === this.activeFloor.code ? '0' : '-1'}
+                    class={`mdc-tab ${f.code === this.activeFloor.code ? 'mdc-tab--active' : ''}`}>
                     <span class="mdc-tab__content">
                       <span>{f.name}</span>
                     </span>
-                    <span class={`mdc-tab-indicator ${f.id === this.activeFloorId ? 'mdc-tab-indicator--active' : ''}`}>
+                    <span class={`mdc-tab-indicator ${f.code === this.activeFloor.code ? 'mdc-tab-indicator--active' : ''}`}>
                       <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                     </span>
                     <span class="mdc-tab__ripple"></span>
@@ -167,7 +167,7 @@ export class MapNav {
           <select class="mdc-select__native-control">
             {floors.reverse().map((f: Floor) =>
               <option value={f.number} disabled={!f.enabled}
-                selected={this.activeFloorId === f.id}>
+                selected={f.code === this.activeFloor.code}>
                 {f.name}
               </option>
             )}

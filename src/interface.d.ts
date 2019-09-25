@@ -44,7 +44,8 @@ export interface CalEvent {
 }
 
 export interface Floor extends DescribedObject {
-  buildingId: number;
+  code: string;
+  building: string;
   floorplan: string;
   floorplanImg: string;
   number: number;
@@ -52,7 +53,7 @@ export interface Floor extends DescribedObject {
   image: string;
   function: string;
   icon: string;
-  elements: MapElementDataMap;
+  elements: MapElementData[];
   enabled: boolean;
   hasComputers: boolean;
 }
@@ -66,23 +67,26 @@ export interface Building extends DescribedObject {
 }
 
 export interface MapElementData extends DescribedObject {
-  details: MapElementDetailMap;
+  details: MapElementDetail[];
   clickable?: boolean;
-  floorId: number;
-  icon: string;
+  floor: string;
+  icon?: string | null;
   points: string;
   enabled: boolean;
   category: number;
-  available?: boolean;
+  alt?: boolean;
   symbol?: string;
 }
 
 export interface MapElementDetail extends DescribedObject {
   elementId: number;
   detailTypeId: number;
+  floor: string;
   code: string;
   callStart: string;
   callEnd: string;
+  category: string;
+  categoryName: string;
   type: MapElementDetailType;
 }
 
@@ -101,15 +105,19 @@ export interface MapElementDetailType extends DescribedObject {
 // }
 
 export interface ComputerAvailability {
-  avail: boolean,
   name: string,
+  available: boolean,
 }
 
 export interface ComputerLab {
-  compAvail: number,
-  compTotal: number,
-  locName: string,
-  comps: ComputerAvailability[],
+  elementId: number;
+  floor?: string,
+  description?: string,
+  altText?: string,
+  computerAvailable: number,
+  computerTotal: number,
+  code: string,
+  computers?: ComputerAvailability[],
 }
 
 export interface BuildingMap extends NumberMap<Building> {}

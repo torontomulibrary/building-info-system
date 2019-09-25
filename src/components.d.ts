@@ -18,7 +18,9 @@ import {
   SearchResultItem,
 } from './interface';
 import {
+  Building,
   BuildingMap,
+  Floor,
   FloorMap,
 } from './interface.js';
 import {
@@ -118,11 +120,11 @@ export namespace Components {
     /**
     * The `id` of the currently active building.
     */
-    'activeBuildingId': number;
+    'activeBuilding': Building;
     /**
     * The `id` of the currently active floor.
     */
-    'activeFloorId': number;
+    'activeFloor': Floor;
     /**
     * An id-indexed map of the buildings.
     */
@@ -461,11 +463,11 @@ declare namespace LocalJSX {
     /**
     * The `id` of the currently active building.
     */
-    'activeBuildingId': number;
+    'activeBuilding': Building;
     /**
     * The `id` of the currently active floor.
     */
-    'activeFloorId': number;
+    'activeFloor': Floor;
     /**
     * An id-indexed map of the buildings.
     */

@@ -21,16 +21,16 @@ import {
   BookAvailability,
   BookDetails,
   Building,
-  BuildingMap,
+  // BuildingMap,
   ComputerAvailability,
   ComputerLab,
-  ComputerLabMap,
+  // ComputerLabMap,
   Floor,
-  FloorMap,
+  // FloorMap,
   MapElementData,
-  MapElementDataMap,
+  // MapElementDataMap,
   MapElementDetail,
-  MapElementDetailMap,
+  // MapElementDetailMap,
 } from '../../interface';
 import { dataService } from '../../utils/data-service';
 import { fetchIMG } from '../../utils/fetch';
@@ -42,17 +42,17 @@ import { loadData } from '../../utils/load-data';
 })
 
 export class ViewMap {
-  private _buildingData!: BuildingMap;
-  private _floorData!: FloorMap;
-  private _elementData!: MapElementDataMap;
-  private _detailData!: MapElementDetailMap;
+  private _buildingData!: Building[];
+  private _floorData!: Floor[];
+  private _elementData!: MapElementData[];
+  private _detailData!: MapElementDetail[];
   private _bookData?: BookDetails;
-  private _compLabs!: ComputerLabMap;
+  private _compLabs!: ComputerLab[];
 
-  private _building!: Building;
-  private _element?: MapElementData;
-  private _floor!: Floor;
-  private _floorplan = '';
+  // private _building!: Building;
+  // private _element?: MapElementData;
+  // private _floor!: Floor;
+  // private _floorplan = '';
 
   private extraDetails: {} = {};
 
@@ -75,9 +75,9 @@ export class ViewMap {
    */
   @State() query = '';
 
-  private activeBuildingId!: number;
-  private activeFloorId!: number;
-  private activeElementId?: number;
+  private activeBuilding!: Building;
+  private activeFloor!: Floor;
+  private activeElement?: MapElementData;
 
   /**
    * A global flag passed in to indicate if the application has loaded as well.
@@ -179,8 +179,8 @@ export class ViewMap {
       // Update enabled buildings / floors and elements according to the new
       // state.
 
-      const blds = Object.values(this._buildingData);
-      let flrs = Object.values(this._floorData);
+      const blds = this._buildingData;
+      let flrs = this._floorData;
 
       blds.forEach((b: Building) => {
         b.enabled = (this.mapType === MAP_TYPE.LOCN || b.code === 'LIB');
@@ -189,26 +189,27 @@ export class ViewMap {
       // Set the active building to the one that is enabled and matches the
       // building code, otherwise, pick the first one that is simply enabled.
       const matchedBld = blds.find((b: Building) => this.paramMatches && b.code === this.paramMatches[1]);
-      this.activeBuildingId = blds.find((b: Building) =>
-        b.enabled && (!matchedBld || matchedBld.id === b.id)
-      ).id;
+      this.activeBuilding = matchedBld ? matchedBld : blds[0];
+      // this.activeBuilding = blds.find((b: Building) =>
+      //   b.enabled && (!matchedBld || matchedBld.id === b.id)
+      // ).id;
 
-      this._building = this._buildingData[this.activeBuildingId];
+      // this._building = this._buildingData[this.activeBuilding];
 
-      flrs = flrs.filter((f: Floor) => f.buildingId === this.activeBuildingId);
+      flrs = flrs.filter((f: Floor) => f.building === this.activeBuilding.code);
       flrs.forEach((f: Floor) => {
         f.enabled = (this.mapType === MAP_TYPE.LOCN ||
           (this.mapType === MAP_TYPE.BOOK && this.floorHasBook(f)) ||
           (this.mapType === MAP_TYPE.COMP && this.floorHasComps(f)));
       });
 
-      let matchedFlr = flrs.find((f: Floor) => this.paramMatches && f.number === Number(this.paramMatches[2]));
+      let matchedFlr = flrs.find((f: Floor) => this.paramMatches && f.code === (this.paramMatches[1] + this.paramMatches[2]));
       matchedFlr = flrs.find((f: Floor) =>
-        f.enabled && (!matchedFlr || f.number === matchedFlr.number)
+        f.enabled && (!matchedFlr || f.code === matchedFlr.code)
       );
 
       if (matchedFlr) {
-        this.activeFloorId = matchedFlr.id;
+        this.activeFloor = matchedFlr;
       } else {
         // No floor matched.
         if (this.mapType === MAP_TYPE.BOOK) {
@@ -220,49 +221,50 @@ export class ViewMap {
         }
       }
 
-      this._floor = this._building.floors[this.activeFloorId];
-      this._floorplan = this._floor.floorplan;
-
       if (this.paramMatches && this.paramMatches[3] === '') {
-        this.activeElementId = undefined;
+        this.activeElement = undefined;
       }
 
-      Object.values(this._elementData).forEach((e: MapElementData) => {
-        e.enabled = (this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
-        (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e) || e.category === 5));
+      this._elementData.forEach((e: MapElementData) => {
+        // e.enabled = (this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
+        // (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e) || e.category === 5));
 
-        Object.values(e.details).forEach((d: MapElementDetail) => {
+        e.details.forEach((d: MapElementDetail) => {
+          e.enabled =
+            (this.mapType === MAP_TYPE.LOCN && d.category !== 'comp') ||
+            (this.mapType === MAP_TYPE.COMP && (d.category === 'lab' || d.category === 'comp')) ||
+            (this.mapType === MAP_TYPE.BOOK && d.category === 'stack' && this.elementHasBook(d));
+
           if (this.paramMatches && d.code === this.paramMatches[0] &&
-            (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP) &&
-            !this.activeElementId) {
-            this.activeElementId = d.elementId;
+            (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP)) {
+            this.activeElement = e;
           }
 
-          if (this.mapType === MAP_TYPE.BOOK && this.elementHasBook(d)) {
-            e.enabled = true;
-          }
+          // if (this.mapType === MAP_TYPE.BOOK && this.elementHasBook(d)) {
+          //   e.enabled = true;
+          // }
         });
 
-        if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElementId) {
-          this.activeElementId = e.id;
+        if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElement) {
+          this.activeElement = e;
         }
 
-        if (e.icon && typeof e.icon === 'string') {
-          fetchIMG(e.icon);
+        if (e.icon !== undefined && e.icon !== null) {
+          fetchIMG(e.icon).catch(reason => console.error(`Failed to load icon. [${reason}]`));
         }
       });
 
-      this._element = this.activeElementId ? this._floor.elements[this.activeElementId] : undefined;
+      // this._element = this.activeElement ? this._floor.elements[this.activeElement] : undefined;
       if (this.mapType !== MAP_TYPE.BOOK) {
         this.extraDetails = {};
       }
 
       const labs = Object.values(this._compLabs);
-      if (this._element !== undefined && this.mapType === MAP_TYPE.COMP && labs.length > 0) {
+      if (this.activeElement !== undefined && this.mapType === MAP_TYPE.COMP && labs.length > 0) {
         // An element is selected, see if it is a lab and get the availability.
-        const lab: ComputerLab | undefined = labs.find((l: ComputerLab) => this._element && l.locName === Object.values(this._element.details)[0].code);
+        const lab: ComputerLab | undefined = labs.find((l: ComputerLab) => this.activeElement && this.activeElement.id === l.elementId);
         if (lab) {
-          this.extraDetails = { available: lab.compAvail, total: lab.compTotal };
+          this.extraDetails = { available: lab.computerAvailable, total: lab.computerTotal };
         }
       }
 
@@ -271,12 +273,12 @@ export class ViewMap {
        * active building/floor.  Replace the current
        */
       if (!this.paramMatches || (this.paramMatches &&
-        (this.paramMatches[1] !== this._building.code ||
-          Number(this.paramMatches[2]) !== this._floor.number ||
-          (this.paramMatches[3] !== '' && !this.activeElementId)))) {
+        (this.paramMatches[1] !== this.activeBuilding.code ||
+          (this.paramMatches[1] + this.paramMatches[2]) !== this.activeFloor.code ||
+          (this.paramMatches[3] !== '' && !this.activeElement)))) {
         // TODO: Display toast notifying user that entry was invalid or doesn't exist.
         console.log('Trying to rectify route');
-        this.history.replace(`${BASE_URL}${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`);
+        this.history.replace(`${BASE_URL}${ROUTES.MAP}/${this.mapType}/${this.activeBuilding.code}${this.activeFloor.number}`);
         resolve();
       }
 
@@ -290,79 +292,67 @@ export class ViewMap {
     this._floorData = dataService.getData(APP_DATA.FLOORS);
     this._elementData = dataService.getData(APP_DATA.ELEMENTS);
     this._detailData = dataService.getData(APP_DATA.DETAILS);
-    this._compLabs = {};
+    this._compLabs = [];
     let compLabs: ComputerLab[] = [];
     compLabs = dataService.getData(APP_DATA.COMPUTERS);
 
     // Add references to the floors for each building.
-    Object.values(this._buildingData).forEach((b: Building) => {
-      b.floors = Object.values(this._floorData || {}).reduce((ob: FloorMap, f: Floor) => {
-        if (f.buildingId === b.id) ob[f.id] = f;
-        return ob;
-      }, {} as Floor);
+    this._buildingData.forEach((b: Building) => {
+      b.floors = (this._floorData || []).filter((f: Floor) => {
+        return f.building === b.code;
+      });
     });
 
     // Add references to the elemetns of each floor.
-    Object.values(this._floorData).forEach((f: Floor) => {
-      f.elements = Object.values(this._elementData || {}).reduce((ob, e) => {
-        if (e.floorId === f.id) ob[e.id] = e;
-        return ob;
+    this._floorData.forEach((f: Floor) => {
+      f.elements = (this._elementData || []).filter((e: MapElementData) => {
+        return e.floor === f.code;
       }, {} as MapElementData);
+      fetchIMG(f.floorplan).catch(reason => console.error(`Failed to load floorplan. [${reason}]`));
     });
 
-    Object.values(this._floorData).forEach((f: Floor) => {
-      if (f.floorplan && f.id !== this.activeFloorId) {
-        fetchIMG(f.floorplan);
-      }
-    });
+    // this._floorData.forEach((f: Floor) => {
+    //   if (f.floorplan && f.id !== this.activeFloor) {
+    //     fetchIMG(f.floorplan);
+    //   }
+    // });
 
     // Add references to the details of each element.
-    Object.values(this._elementData).forEach((e: MapElementData) => {
-      e.details = Object.values(this._detailData || {}).reduce((ob, d: MapElementDetail) => {
-        if (d.elementId === e.id) ob[d.id] = d;
-
-        compLabs.forEach((lab: ComputerLab) => {
-          if (d.code === lab.locName) {
-            this._compLabs[d.elementId] = lab;
-          }
-        });
-
-        return ob;
-      }, {} as MapElementDetail);
-
-      compLabs.forEach((lab: ComputerLab) => {
-        const comps = lab.comps;
-        comps.forEach((comp: ComputerAvailability) => {
-          if (e.name === comp.name) {
-            e.available = comp.avail;
-            e.clickable = false;
-          }
-        });
+    this._elementData.forEach((e: MapElementData) => {
+      e.details = (this._detailData || []).filter((d: MapElementDetail) => {
+        return d.elementId === e.id;
       });
 
-      if (e.icon && typeof e.icon === 'string') {
-        fetchIMG(e.icon);
+      compLabs.forEach((lab: ComputerLab) => {
+        const comps = lab.computers;
+        if (comps !== undefined) {
+          comps.forEach((comp: ComputerAvailability) => {
+            if (e.name === comp.name) {
+              e.alt = comp.available;
+              e.clickable = false;
+            }
+          });
+        }
+      });
+
+      if (typeof e.icon === 'string') {
+        fetchIMG(e.icon).catch(reason => console.error(`Failed to load icon. [${reason}]`));
       }
+    });
+
+    this._detailData.forEach((d: MapElementDetail) => {
+      compLabs.forEach((lab: ComputerLab) => {
+        if (d.code === lab.code) {
+          this._compLabs.push(lab);
+        }
+      });
     });
   }
 
   floorHasComps(floor: Floor) {
-    const labs = Object.values(this._compLabs);
-    let hasComps = false;
-
-    for (const lab of labs) {
-      if (lab.locName.indexOf(this._buildingData[floor.buildingId].code) === -1) {
-        hasComps = false;
-        break;
-      }
-
-      if (Number(lab.locName.charAt(3)) === floor.number) {
-        hasComps = true;
-        break;
-      }
-    }
-
-    return hasComps;
+    return this._compLabs.filter((lab: ComputerLab) => {
+      return lab.floor === floor.code;
+    }).length > 0;
   }
 
   elementHasComps(el: MapElementData) {
@@ -372,7 +362,7 @@ export class ViewMap {
     if (el.category === 4) {
       labs.forEach((lab: ComputerLab) => {
         Object.values(el.details).forEach((d: MapElementDetail) => {
-          if (lab.locName === d.code) {
+          if (lab.code === d.code) {
             hasComps = true;
           }
         });
@@ -407,25 +397,25 @@ export class ViewMap {
   }
 
   render() {
-    const { _buildingData, _building, loaded, _element, extraDetails } = this;
-    const detail: MapElementDetail = _element && Object.values(_element.details)[0];
+    const { _buildingData, activeBuilding, activeFloor, loaded, activeElement, extraDetails } = this;
+    const detail = activeElement && activeElement.details[0];
     const pageTitle =
       this.mapType === MAP_TYPE.COMP ? 'Computer Labs' :
       this.mapType === MAP_TYPE.BOOK ? 'Books' : 'Directory';
 
-    if (loaded && _buildingData && _building) {
-      const { _floorplan } = this;
-      const subtitle = this.activeElementId ? detail.code : `${this._floor.name}, ${_building.name}`;
+    if (loaded && _buildingData && activeBuilding && activeFloor) {
+      const floorplan = activeFloor.floorplan;
+      const subtitle = detail ? detail.code : `${this.activeFloor.name}, ${activeBuilding.name}`;
 
       return (
         <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
           <stencil-route-title pageTitle={`${subtitle} | ${pageTitle} | `} />
           <rl-map
             class="rl-map"
-            elements={this._floor.elements}
-            mapImage={_floorplan}
+            elements={this.activeFloor.elements}
+            mapImage={floorplan}
             onElementSelected={e => {
-              const elCode = Object.values(e.detail.details as MapElementDetailMap)[0].code;
+              const elCode = (e.detail.details as MapElementDetail[])[0].code;
               let route = `${BASE_URL}${ROUTES.MAP}/${this.mapType}/${elCode}`;
               route = this._bookData ? `${route}/${this._bookData.iSBN[0]}` : route;
 
@@ -433,14 +423,14 @@ export class ViewMap {
             }}
             onElementDeselected={() => {
               if (!this._bookData) {
-                this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${this._floor.number}`);
+                this.history.push(`/${ROUTES.MAP}/${this.mapType}/${activeBuilding.code}${activeFloor.number}`);
               }
             }}
-            activeElementId={this.activeElementId}
+            activeElementId={this.activeElement !== undefined && this.activeElement.id}
           >
           </rl-map>
 
-          <rl-side-sheet open={this.activeElementId !== undefined}>
+          <rl-side-sheet open={this.activeElement !== undefined}>
             <header class="rl-side-sheet__header">
               <span class="rl-side-sheet__title">
                 <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
@@ -449,7 +439,7 @@ export class ViewMap {
               <button
                 class="material-icons rl-side-sheet__close"
                 aria-label="Close detail panel."
-                tabindex={_element ? '0' : '-1'}>
+                tabindex={activeElement ? '0' : '-1'}>
                 close
               </button>
             </header>
@@ -468,12 +458,12 @@ export class ViewMap {
           </rl-side-sheet>
 
           <rl-map-nav
-            activeBuildingId={this.activeBuildingId}
-            activeFloorId={this.activeFloorId}
+            activeBuilding={activeBuilding}
+            activeFloor={this.activeFloor}
             buildings={this._buildingData}
-            floors={_building.floors}
+            floors={activeBuilding.floors}
             onBuildingChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${ev.detail}`)}
-            onFloorChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${this._building.code}${ev.detail}`)}
+            onFloorChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${activeBuilding.code}${ev.detail}`)}
           >
           </rl-map-nav>
         </Host>
