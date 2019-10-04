@@ -27,6 +27,7 @@
 
 - stencil-route-title
 - rl-pan-zoom
+- [rl-floorplan](../../components/floorplan)
 - [rl-side-sheet](../../components/side-sheet)
 - [rl-map-nav](../../components/map-nav)
 
@@ -35,6 +36,7 @@
 graph TD;
   view-map --> stencil-route-title
   view-map --> rl-pan-zoom
+  view-map --> rl-floorplan
   view-map --> rl-side-sheet
   view-map --> rl-map-nav
   style view-map fill:#f9f,stroke:#333,stroke-width:4px
