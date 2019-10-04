@@ -1,3 +1,58 @@
+# [0.6.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.5.0...v0.6.0) (2019-10-04)
+
+
+### Bug Fixes
+
+* **app:** `rl-cluster` component now used everywhere for card arrays ([bcb83e7](https://github.com/ryersonlibrary/building-info-system/commit/bcb83e7))
+* **app:** Cluster columns now calculated and updated from app ([fb0cc6e](https://github.com/ryersonlibrary/building-info-system/commit/fb0cc6e))
+* **app:** revert how search item click is handled ([da68010](https://github.com/ryersonlibrary/building-info-system/commit/da68010))
+* **app:** search page route corrected ([37d68e5](https://github.com/ryersonlibrary/building-info-system/commit/37d68e5)), closes [#21](https://github.com/ryersonlibrary/building-info-system/issues/21)
+* **data-service:** Loads more events properly when all cahced events in the past. ([71fff3d](https://github.com/ryersonlibrary/building-info-system/commit/71fff3d))
+* **event-parser:** better use of Promises ([d47473c](https://github.com/ryersonlibrary/building-info-system/commit/d47473c))
+* **faq:** accordion item emits click event rather than using route-link ([05ced7c](https://github.com/ryersonlibrary/building-info-system/commit/05ced7c))
+* **faq:** separate URLs for all `faqs` and a single `faq` ([0c14653](https://github.com/ryersonlibrary/building-info-system/commit/0c14653))
+* **pageTitle:** fix page title to properly work with new hash locations ([b9354c2](https://github.com/ryersonlibrary/building-info-system/commit/b9354c2))
+* **search:** ignore results with no ISBN number ([0b0114a](https://github.com/ryersonlibrary/building-info-system/commit/0b0114a))
+* **search-box:** clear internal value when input cleared ([6aaa1fa](https://github.com/ryersonlibrary/building-info-system/commit/6aaa1fa))
+* **search-box:** isDescendant now handles when `node` is falsy, not just `null` ([29ce5d9](https://github.com/ryersonlibrary/building-info-system/commit/29ce5d9))
+* **search-box:** remove unused and colliding `id` property ([208128c](https://github.com/ryersonlibrary/building-info-system/commit/208128c))
+* all components properly use Host functional component ([d13ab16](https://github.com/ryersonlibrary/building-info-system/commit/d13ab16)), closes [#22](https://github.com/ryersonlibrary/building-info-system/issues/22)
+* **view-search:** properly import BookDetails interface ([e7792d0](https://github.com/ryersonlibrary/building-info-system/commit/e7792d0))
+* fix issues raised by linting ([9295979](https://github.com/ryersonlibrary/building-info-system/commit/9295979))
+* **util:** getAncestorByClass now handles nodes without `className` (SVG) ([f9175a9](https://github.com/ryersonlibrary/building-info-system/commit/f9175a9))
+* stop elements from being loaded ([ed38df7](https://github.com/ryersonlibrary/building-info-system/commit/ed38df7))
+* **view-building:** remove duplicate card styles from building view ([935bf66](https://github.com/ryersonlibrary/building-info-system/commit/935bf66))
+* **view-map:** increase computer symbol specificity ([e7d972e](https://github.com/ryersonlibrary/building-info-system/commit/e7d972e))
+* **view-map:** Now use `rl-floorplan` component to render maps. ([14073ef](https://github.com/ryersonlibrary/building-info-system/commit/14073ef))
+* **view-map:** return early if no book matched ([d652802](https://github.com/ryersonlibrary/building-info-system/commit/d652802))
+* **view-styles:** remove duplication of rl-view sass import ([ae2a2bc](https://github.com/ryersonlibrary/building-info-system/commit/ae2a2bc))
+* **views:** add Host component around loading placeholder to properly inject styles ([8d4a94a](https://github.com/ryersonlibrary/building-info-system/commit/8d4a94a))
+
+
+### Features
+
+* **app:** Change and simplify application routes ([3b1800b](https://github.com/ryersonlibrary/building-info-system/commit/3b1800b))
+* **app:** Change to using hashHistory from browserHistory ([cd45a0a](https://github.com/ryersonlibrary/building-info-system/commit/cd45a0a))
+* **app:** change to using new `Host` component over `hostData` method ([18be291](https://github.com/ryersonlibrary/building-info-system/commit/18be291))
+* **app:** clear search bar on page change ([a3a3f79](https://github.com/ryersonlibrary/building-info-system/commit/a3a3f79))
+* **card:** search history now includes tiled thumbnails ([466972e](https://github.com/ryersonlibrary/building-info-system/commit/466972e))
+* **cluster:** use mdc-typo for header and add list styles to list type ([aa31cd1](https://github.com/ryersonlibrary/building-info-system/commit/aa31cd1))
+* **cluster/cards:** Take card title out of media area ([26feb9b](https://github.com/ryersonlibrary/building-info-system/commit/26feb9b))
+* **floorplan:** New `rl-floorplan` component ([31d4f24](https://github.com/ryersonlibrary/building-info-system/commit/31d4f24))
+* **search:** search results now properly link to books using ISBN not record numbers ([fdff6dd](https://github.com/ryersonlibrary/building-info-system/commit/fdff6dd))
+* **search-box:** Search-box directs to search results on enter ([19084ae](https://github.com/ryersonlibrary/building-info-system/commit/19084ae))
+* **search-box:** searches made now post query to server for logging ([b563a9c](https://github.com/ryersonlibrary/building-info-system/commit/b563a9c))
+* **view-map:** displaying books now uses new API data and uses hash history ([ba59d61](https://github.com/ryersonlibrary/building-info-system/commit/ba59d61))
+* **view-map:** map view works completely with hasHistory ([a075664](https://github.com/ryersonlibrary/building-info-system/commit/a075664))
+
+
+### BREAKING CHANGES
+
+* **view-map:** Breaking changes galore.  Interfaces for MapElement changed.  No longer uses
+Elements and Details, just Details (and they're now called Elements for clarity).
+
+
+
 # [0.5.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.4.0...v0.5.0) (2019-06-05)
 
 
