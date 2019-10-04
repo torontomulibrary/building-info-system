@@ -53,7 +53,8 @@ export interface Floor extends DescribedObject {
   image: string;
   function: string;
   icon: string;
-  elements: MapElementData[];
+  // elements: MapElementData[];
+  details: MapElement[];
   enabled: boolean;
   hasComputers: boolean;
 }
@@ -66,19 +67,19 @@ export interface Building extends DescribedObject {
   enabled: boolean;
 }
 
-export interface MapElementData extends DescribedObject {
-  details: MapElementDetail[];
-  clickable?: boolean;
-  floor: string;
-  icon?: string | null;
-  points: string;
-  enabled: boolean;
-  category: number;
-  alt?: boolean;
-  symbol?: string;
-}
+// export interface MapElementData extends DescribedObject {
+//   details: MapElementDetail[];
+//   clickable?: boolean;
+//   floor: string;
+//   icon?: string | null;
+//   points: string;
+//   enabled: boolean;
+//   category: number;
+//   alt?: boolean;
+//   symbol?: string;
+// }
 
-export interface MapElementDetail extends DescribedObject {
+export interface MapElement extends DescribedObject {
   elementId: number;
   detailTypeId: number;
   floor: string;
@@ -87,10 +88,10 @@ export interface MapElementDetail extends DescribedObject {
   callEnd: string;
   category: string;
   categoryName: string;
-  type: MapElementDetailType;
+  type: MapElementType;
 }
 
-export interface MapElementDetailType extends DescribedObject {
+export interface MapElementType extends DescribedObject {
   category: number;
   icon: string;
   cataloguePattern: string;
@@ -122,17 +123,17 @@ export interface ComputerLab {
 
 export interface BuildingMap extends NumberMap<Building> {}
 export interface FloorMap extends NumberMap<Floor> {}
-export interface MapElementDataMap extends NumberMap<MapElementData> {}
-export interface MapElementDetailMap extends NumberMap<MapElementDetail> {}
-export interface MapElementDetailTypeMap extends NumberMap<MapElementDetailType> {}
+// export interface MapElementDataMap extends NumberMap<MapElementData> {}
+export interface MapElementMap extends NumberMap<MapElement> {}
+export interface MapElementTypeMap extends NumberMap<MapElementType> {}
 export interface ComputerLabMap extends NumberMap<ComputerLab> {}
 // export interface DetailTypeMap extends NumberMap<DetailType> {}
 
 export interface MapData {
   buildings: BuildingMap,
   floors: FloorMap,
-  elements: MapElementDataMap,
-  details: MapElementDetailMap,
+  // elements: MapElementDataMap,
+  details: MapElementMap,
 }
 
 export interface SearchHistory {
@@ -157,8 +158,8 @@ export interface AppData {
   // baseUrl: string,
   bookDetails?: BookDetails,
   buildings: BuildingMap,
-  details: MapElementDetailMap,
-  elements: MapElementDataMap,
+  // details: MapElementDetailMap,
+  elements: MapElementMap,
   events: CalEvent[],
   // eventUrl: string,
   faqs: FaqMap,

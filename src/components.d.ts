@@ -115,6 +115,41 @@ export namespace Components {
     'index': number;
     'open': () => Promise<void>;
   }
+  interface RlFloorplan {
+    /**
+    * The ID of the active (selected) element.
+    */
+    'activeId': string;
+    'extraElementData'?: {[key: string]: { [key: string]: string }};
+    /**
+    * The ID of the floorplan to display.
+    */
+    'floorId'?: string;
+    /**
+    * The height for the SVG element.
+    */
+    'height': string;
+    /**
+    * Setting to use the orthographic variant of the floorplan.
+    */
+    'useOrtho': boolean;
+    /**
+    * Setting to true adds a viewbox attribute to the SVG element.
+    */
+    'useViewbox': boolean;
+    /**
+    * The width of the SVG viewbox.
+    */
+    'vbHeight': string;
+    /**
+    * The height of the SVG viewbox.
+    */
+    'vbWidth': string;
+    /**
+    * The width for the SVG element.
+    */
+    'width': string;
+  }
   interface RlLoadProgress {}
   interface RlMapNav {
     /**
@@ -267,6 +302,12 @@ declare global {
     new (): HTMLRlExpansionPanelElement;
   };
 
+  interface HTMLRlFloorplanElement extends Components.RlFloorplan, HTMLStencilElement {}
+  var HTMLRlFloorplanElement: {
+    prototype: HTMLRlFloorplanElement;
+    new (): HTMLRlFloorplanElement;
+  };
+
   interface HTMLRlLoadProgressElement extends Components.RlLoadProgress, HTMLStencilElement {}
   var HTMLRlLoadProgressElement: {
     prototype: HTMLRlLoadProgressElement;
@@ -341,6 +382,7 @@ declare global {
     'rl-cluster': HTMLRlClusterElement;
     'rl-drawer': HTMLRlDrawerElement;
     'rl-expansion-panel': HTMLRlExpansionPanelElement;
+    'rl-floorplan': HTMLRlFloorplanElement;
     'rl-load-progress': HTMLRlLoadProgressElement;
     'rl-map-nav': HTMLRlMapNavElement;
     'rl-search-box': HTMLRlSearchBoxElement;
@@ -457,6 +499,49 @@ declare namespace LocalJSX {
   interface RlExpansionPanel extends JSXBase.HTMLAttributes<HTMLRlExpansionPanelElement> {
     'index'?: number;
     'onToggled'?: (event: CustomEvent<any>) => void;
+  }
+  interface RlFloorplan extends JSXBase.HTMLAttributes<HTMLRlFloorplanElement> {
+    /**
+    * The ID of the active (selected) element.
+    */
+    'activeId'?: string;
+    'extraElementData'?: {[key: string]: { [key: string]: string }};
+    /**
+    * The ID of the floorplan to display.
+    */
+    'floorId'?: string;
+    /**
+    * The height for the SVG element.
+    */
+    'height'?: string;
+    /**
+    * Event fired when the SVG is clicked but no specific element is targeted, that is, the active element is cleared.
+    */
+    'onRlElementCleared'?: (event: CustomEvent<void>) => void;
+    /**
+    * Event fired when an element in the SVG is clicked (if it is clickable). Details will be the `id` of the clicked element.
+    */
+    'onRlElementClicked'?: (event: CustomEvent<string>) => void;
+    /**
+    * Setting to use the orthographic variant of the floorplan.
+    */
+    'useOrtho'?: boolean;
+    /**
+    * Setting to true adds a viewbox attribute to the SVG element.
+    */
+    'useViewbox'?: boolean;
+    /**
+    * The width of the SVG viewbox.
+    */
+    'vbHeight'?: string;
+    /**
+    * The height of the SVG viewbox.
+    */
+    'vbWidth'?: string;
+    /**
+    * The width for the SVG element.
+    */
+    'width'?: string;
   }
   interface RlLoadProgress extends JSXBase.HTMLAttributes<HTMLRlLoadProgressElement> {}
   interface RlMapNav extends JSXBase.HTMLAttributes<HTMLRlMapNavElement> {
@@ -588,6 +673,7 @@ declare namespace LocalJSX {
     'rl-cluster': RlCluster;
     'rl-drawer': RlDrawer;
     'rl-expansion-panel': RlExpansionPanel;
+    'rl-floorplan': RlFloorplan;
     'rl-load-progress': RlLoadProgress;
     'rl-map-nav': RlMapNav;
     'rl-search-box': RlSearchBox;

@@ -19,7 +19,7 @@ export class MapNav {
    * Event handler for when the `MDCTabBar:activated` event fires.
    */
   private handleTabActivated = e => this.floorChanged.emit(
-    Object.values(this.floors)[e.detail.index].number);
+    Object.values(this.floors)[e.detail.index].code);
 
   /**
    * The MDCSelect component used to pick and display the current Building.
@@ -109,7 +109,9 @@ export class MapNav {
         this.floorSelect = new MDCSelect(floorSelectRoot);
       }
       this.floorSelect.listen('change', _ => {
-        this.floorChanged.emit(Number(this.floorSelect.value));
+        this.floorChanged.emit(
+          Object.values(this.floors)[this.floorSelect.value].code);
+        // this.floorChanged.emit(Number(this.floorSelect.value));
       });
     }
 

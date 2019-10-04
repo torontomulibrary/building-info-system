@@ -16,8 +16,8 @@ import {
 import {
   Faq,
   FaqMap,
-  MapElementDetail,
-  MapElementDetailMap,
+  MapElement,
+  MapElementMap,
   SearchResultItem,
 } from '../interface';
 import { dataService } from '../utils/data-service';
@@ -90,7 +90,7 @@ export class RLApp {
 
   private docSearch = new Search();
 
-  private _locationData: MapElementDetailMap = {};
+  private _locationData: MapElementMap = {};
   private _faqData: FaqMap = {};
   private searchEl?: HTMLRlSearchBoxElement;
 
@@ -143,7 +143,7 @@ export class RLApp {
 
       this._locationData = dataService.getData(APP_DATA.DETAILS);
 
-      Object.values(this._locationData).forEach((d: MapElementDetail) => {
+      Object.values(this._locationData).forEach((d: MapElement) => {
         this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
       });
 

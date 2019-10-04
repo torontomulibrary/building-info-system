@@ -22,18 +22,18 @@ import {
   BookDetails,
   Building,
   // BuildingMap,
-  ComputerAvailability,
+  // ComputerAvailability,
   ComputerLab,
   // ComputerLabMap,
   Floor,
   // FloorMap,
-  MapElementData,
+  // MapElementData,
   // MapElementDataMap,
-  MapElementDetail,
+  MapElement,
   // MapElementDetailMap,
 } from '../../interface';
 import { dataService } from '../../utils/data-service';
-import { fetchIMG } from '../../utils/fetch';
+// import { fetchIMG } from '../../utils/fetch';
 import { loadData } from '../../utils/load-data';
 
 @Component({
@@ -44,8 +44,8 @@ import { loadData } from '../../utils/load-data';
 export class ViewMap {
   private _buildingData!: Building[];
   private _floorData!: Floor[];
-  private _elementData!: MapElementData[];
-  private _detailData!: MapElementDetail[];
+  // private _elementData!: MapElementData[];
+  private _detailData!: MapElement[];
   private _bookData?: BookDetails;
   private _compLabs!: ComputerLab[];
 
@@ -60,7 +60,10 @@ export class ViewMap {
   /**
    * Any URL matches for determining pre-selected building, floor and element.
    */
-  private paramMatches?: RegExpExecArray | null;
+  // private paramMatches?: RegExpExecArray | null;
+  private paramMatches?: string[];
+
+  @State() computerAvailability = {};
 
   /**
    * Root element of this component.
@@ -77,7 +80,7 @@ export class ViewMap {
 
   private activeBuilding!: Building;
   private activeFloor!: Floor;
-  private activeElement?: MapElementData;
+  private activeElement?: MapElement;
 
   /**
    * A global flag passed in to indicate if the application has loaded as well.
@@ -119,6 +122,23 @@ export class ViewMap {
     return this._parseParameters();
   }
 
+  componentDidUpdate() {
+    this.computerAvailability = {};
+    const cLabs = this.floorComputerLabs(this.activeFloor);
+    if (cLabs !== undefined) {
+      cLabs.forEach(l => {
+        const comps = l.computers;
+        if (comps !== undefined) {
+          comps.forEach(av => {
+            this.computerAvailability[av.name] = {
+              fill: av.available ? 'green' : 'red',
+            };
+          });
+        }
+      });
+    }
+  }
+
   checkSize() {
     if (this.root.offsetHeight === 0) {
       this.queue.write(() => {
@@ -131,50 +151,51 @@ export class ViewMap {
 
   private _parseParameters() {
     // Check the URL value to see if any Building, Floor and or Location was
-    // provided.  Must be in the form BLD[FLR][RM].
+    // provided.  Must be in the form BLD[-FLR][-RM].
     // Where BLD is the three letter building code, FLR is the floor number,
     // and RM is the 'room number'.  The `room number` is actually the full
     // location code (e.g. SLC508)
     return new Promise(async resolve => {
       // Check if parameters have changed.
-      if (this.match && this.match.params) {
-        if (this.oldParams.mapType === this.match.params.mapType &&
-            this.oldParams.id === this.match.params.id &&
-            this.oldParams.ref === this.match.params.ref) {
-              // Parameters unchanged, no need to process further.
-              resolve();
-              return;
+      // if (this.match.params) {
+      if (this.oldParams.mapType === this.match.params.mapType &&
+          this.oldParams.id === this.match.params.id &&
+          this.oldParams.ref === this.match.params.ref) {
+            // Parameters unchanged, no need to process further.
+            resolve();
+            return;
+      } else {
+        this.oldParams = this.match.params;
+      }
+      // }
+      // if (this.match && this.match.params) {
+      const mt = this.match.params.mapType;
+
+      if (mt === MAP_TYPE.BOOK || mt === MAP_TYPE.COMP || mt === MAP_TYPE.LOCN) {
+        this.mapType = mt;
+      }
+
+      // if (this.match.params.id !== undefined) {
+      this.paramMatches = this.match.params.id !== undefined ? this.match.params.id.split('-') : undefined;
+        // const re = /([A-Z]{3})(\d{2}(?=\d{2,}|$|\D*$)|\d{1})?(.*)/;
+        // this.paramMatches = re.exec(this.match.params.id);
+      // } else {
+      //   this.paramMatches = undefined;
+      // }
+
+      // Right now ref is only used for book ISBN numbers.
+      if (this.match.params.ref !== undefined && this.mapType === MAP_TYPE.BOOK) {
+        const ref = this.match.params.ref;
+        if (ref.length === 13) {
+          await loadData('books/' + ref).then((b: BookDetails) => {
+            this._bookData = this.extraDetails = b;
+          });
         } else {
-          this.oldParams = this.match.params;
+          this._bookData = undefined;
+          // Invalid record number
         }
       }
-      if (this.match && this.match.params) {
-        const mt = this.match.params.mapType;
-
-        if (mt === MAP_TYPE.BOOK || mt === MAP_TYPE.COMP || mt === MAP_TYPE.LOCN) {
-          this.mapType = mt;
-        }
-
-        if (this.match.params.id !== undefined) {
-          const re = /([A-Z]{3})(\d{2}(?=\d{2,}|$|\D*$)|\d{1})?(.*)/;
-          this.paramMatches = re.exec(this.match.params.id);
-        } else {
-          this.paramMatches = undefined;
-        }
-
-        // Right now ref is only used for book ISBN numbers.
-        if (this.match.params.ref !== undefined && this.mapType === MAP_TYPE.BOOK) {
-          const ref = this.match.params.ref;
-          if (ref.length === 13) {
-            await loadData('books/' + ref).then((b: BookDetails) => {
-              this._bookData = this.extraDetails = b;
-            });
-          } else {
-            this._bookData = undefined;
-            // Invalid record number
-          }
-        }
-      }
+      // }
 
       // Update enabled buildings / floors and elements according to the new
       // state.
@@ -188,7 +209,7 @@ export class ViewMap {
 
       // Set the active building to the one that is enabled and matches the
       // building code, otherwise, pick the first one that is simply enabled.
-      const matchedBld = blds.find((b: Building) => this.paramMatches && b.code === this.paramMatches[1]);
+      const matchedBld = blds.find((b: Building) => this.paramMatches && b.code === this.paramMatches[0]);
       this.activeBuilding = matchedBld ? matchedBld : blds[0];
       // this.activeBuilding = blds.find((b: Building) =>
       //   b.enabled && (!matchedBld || matchedBld.id === b.id)
@@ -203,7 +224,7 @@ export class ViewMap {
           (this.mapType === MAP_TYPE.COMP && this.floorHasComps(f)));
       });
 
-      let matchedFlr = flrs.find((f: Floor) => this.paramMatches && f.code === (this.paramMatches[1] + this.paramMatches[2]));
+      let matchedFlr = flrs.find((f: Floor) => this.paramMatches && f.code === `${this.paramMatches[0]}-${this.paramMatches[1]}`);
       matchedFlr = flrs.find((f: Floor) =>
         f.enabled && (!matchedFlr || f.code === matchedFlr.code)
       );
@@ -221,38 +242,48 @@ export class ViewMap {
         }
       }
 
-      if (this.paramMatches && this.paramMatches[3] === '') {
+      if (this.paramMatches && this.paramMatches.length < 3) {
         this.activeElement = undefined;
       }
 
-      this._elementData.forEach((e: MapElementData) => {
+      this._detailData.forEach((e: MapElement) => {
         // e.enabled = (this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
-        // (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e) || e.category === 5));
-
-        e.details.forEach((d: MapElementDetail) => {
-          e.enabled =
-            (this.mapType === MAP_TYPE.LOCN && d.category !== 'comp') ||
-            (this.mapType === MAP_TYPE.COMP && (d.category === 'lab' || d.category === 'comp')) ||
-            (this.mapType === MAP_TYPE.BOOK && d.category === 'stack' && this.elementHasBook(d));
-
-          if (this.paramMatches && d.code === this.paramMatches[0] &&
-            (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP)) {
-            this.activeElement = e;
-          }
-
-          // if (this.mapType === MAP_TYPE.BOOK && this.elementHasBook(d)) {
-          //   e.enabled = true;
-          // }
-        });
-
-        if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElement) {
+        if (this.paramMatches && e.code === this.paramMatches.join('-') &&
+          (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP)) {
           this.activeElement = e;
         }
-
-        if (e.icon !== undefined && e.icon !== null) {
-          fetchIMG(e.icon).catch(reason => console.error(`Failed to load icon. [${reason}]`));
-        }
+        // if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElement) {
+        //   this.activeElement = e;
+        // }
       });
+      // this._elementData.forEach((e: MapElementData) => {
+      //   // e.enabled = (this.mapType === MAP_TYPE.LOCN && e.category !== 5) ||
+      //   // (this.mapType === MAP_TYPE.COMP && (this.elementHasComps(e) || e.category === 5));
+
+      //   e.details.forEach((d: MapElementDetail) => {
+      //     e.enabled =
+      //       (this.mapType === MAP_TYPE.LOCN && d.category !== 'comp') ||
+      //       (this.mapType === MAP_TYPE.COMP && (d.category === 'lab' || d.category === 'comp')) ||
+      //       (this.mapType === MAP_TYPE.BOOK && d.category === 'stack' && this.elementHasBook(d));
+
+      //     if (this.paramMatches && d.code === this.paramMatches[0] &&
+      //       (this.mapType === MAP_TYPE.LOCN || this.mapType === MAP_TYPE.COMP)) {
+      //       this.activeElement = e;
+      //     }
+
+      //     // if (this.mapType === MAP_TYPE.BOOK && this.elementHasBook(d)) {
+      //     //   e.enabled = true;
+      //     // }
+      //   });
+
+      //   if (e.enabled && this.mapType === MAP_TYPE.BOOK && !this.activeElement) {
+      //     this.activeElement = e;
+      //   }
+
+      //   // if (e.icon !== undefined && e.icon !== null) {
+      //   //   fetchIMG(e.icon).catch(reason => console.error(`Failed to load icon. [${reason}]`));
+      //   // }
+      // });
 
       // this._element = this.activeElement ? this._floor.elements[this.activeElement] : undefined;
       if (this.mapType !== MAP_TYPE.BOOK) {
@@ -268,19 +299,31 @@ export class ViewMap {
         }
       }
 
+      // this._compLabs.forEach((lab: ComputerLab) => {
+      //   const comps = lab.computers;
+      //   if (comps !== undefined) {
+      //     comps.forEach((comp: ComputerAvailability) => {
+      //       if (e.name === comp.name) {
+      //         e.alt = comp.available;
+      //         e.clickable = false;
+      //       }
+      //     });
+      //   }
+      // });
+
       /**
        * If `paramMatches` is undefined, the URL is empty and doesn't match the
        * active building/floor.  Replace the current
        */
-      if (!this.paramMatches || (this.paramMatches &&
-        (this.paramMatches[1] !== this.activeBuilding.code ||
-          (this.paramMatches[1] + this.paramMatches[2]) !== this.activeFloor.code ||
-          (this.paramMatches[3] !== '' && !this.activeElement)))) {
-        // TODO: Display toast notifying user that entry was invalid or doesn't exist.
-        console.log('Trying to rectify route');
-        this.history.replace(`${BASE_URL}${ROUTES.MAP}/${this.mapType}/${this.activeBuilding.code}${this.activeFloor.number}`);
-        resolve();
-      }
+      // if (!this.paramMatches || (this.paramMatches &&
+      //   (this.paramMatches[0] !== this.activeBuilding.code ||
+      //     (this.paramMatches.slice(0, 2).join('-')) !== this.activeFloor.code ||
+      //     (this.paramMatches.join('-') !== '' && !this.activeElement)))) {
+      //   // TODO: Display toast notifying user that entry was invalid or doesn't exist.
+      //   console.log('Trying to rectify route');
+      //   this.history.replace(`${BASE_URL}${ROUTES.MAP}/${this.mapType}/${this.activeFloor.code}`);
+      //   resolve();
+      // }
 
       resolve();
     });
@@ -290,7 +333,7 @@ export class ViewMap {
     // Load Data.
     this._buildingData = dataService.getData(APP_DATA.BUILDING);
     this._floorData = dataService.getData(APP_DATA.FLOORS);
-    this._elementData = dataService.getData(APP_DATA.ELEMENTS);
+    // this._elementData = dataService.getData(APP_DATA.ELEMENTS);
     this._detailData = dataService.getData(APP_DATA.DETAILS);
     this._compLabs = [];
     let compLabs: ComputerLab[] = [];
@@ -305,10 +348,13 @@ export class ViewMap {
 
     // Add references to the elemetns of each floor.
     this._floorData.forEach((f: Floor) => {
-      f.elements = (this._elementData || []).filter((e: MapElementData) => {
-        return e.floor === f.code;
-      }, {} as MapElementData);
-      fetchIMG(f.floorplan).catch(reason => console.error(`Failed to load floorplan. [${reason}]`));
+      f.details = (this._detailData || []).filter((d: MapElement) => {
+        return d.floor === f.code;
+      });
+      // f.elements = (this._elementData || []).filter((e: MapElementData) => {
+      //   return e.floor === f.code;
+      // }, {} as MapElementData);
+      // fetchIMG(f.floorplan).catch(reason => console.error(`Failed to load floorplan. [${reason}]`));
     });
 
     // this._floorData.forEach((f: Floor) => {
@@ -318,29 +364,17 @@ export class ViewMap {
     // });
 
     // Add references to the details of each element.
-    this._elementData.forEach((e: MapElementData) => {
-      e.details = (this._detailData || []).filter((d: MapElementDetail) => {
-        return d.elementId === e.id;
-      });
+    // this._elementData.forEach((e: MapElementData) => {
+    //   e.details = (this._detailData || []).filter((d: MapElement) => {
+    //     return d.floor === e.id;
+    //   });
 
-      compLabs.forEach((lab: ComputerLab) => {
-        const comps = lab.computers;
-        if (comps !== undefined) {
-          comps.forEach((comp: ComputerAvailability) => {
-            if (e.name === comp.name) {
-              e.alt = comp.available;
-              e.clickable = false;
-            }
-          });
-        }
-      });
+    //   // if (typeof e.icon === 'string') {
+    //   //   fetchIMG(e.icon).catch(reason => console.error(`Failed to load icon. [${reason}]`));
+    //   // }
+    // });
 
-      if (typeof e.icon === 'string') {
-        fetchIMG(e.icon).catch(reason => console.error(`Failed to load icon. [${reason}]`));
-      }
-    });
-
-    this._detailData.forEach((d: MapElementDetail) => {
+    this._detailData.forEach((d: MapElement) => {
       compLabs.forEach((lab: ComputerLab) => {
         if (d.code === lab.code) {
           this._compLabs.push(lab);
@@ -349,28 +383,35 @@ export class ViewMap {
     });
   }
 
+  floorComputerLabs(floor?: Floor) {
+    if (floor === undefined) return;
+    return this._compLabs.filter((lab: ComputerLab) => {
+      return lab.code.substr(0, 6) === floor.code;
+    });
+  }
+
   floorHasComps(floor: Floor) {
     return this._compLabs.filter((lab: ComputerLab) => {
-      return lab.floor === floor.code;
+      return lab.code.substr(0, 6) === floor.code;
     }).length > 0;
   }
 
-  elementHasComps(el: MapElementData) {
-    const labs = Object.values(this._compLabs);
-    let hasComps = false;
+  // elementHasComps(el: MapElement) {
+  //   const labs = Object.values(this._compLabs);
+  //   let hasComps = false;
 
-    if (el.category === 4) {
-      labs.forEach((lab: ComputerLab) => {
-        Object.values(el.details).forEach((d: MapElementDetail) => {
-          if (lab.code === d.code) {
-            hasComps = true;
-          }
-        });
-      });
-    }
+  //   if (el.category === 4) {
+  //     labs.forEach((lab: ComputerLab) => {
+  //       Object.values(el.details).forEach((d: MapElement) => {
+  //         if (lab.code === d.code) {
+  //           hasComps = true;
+  //         }
+  //       });
+  //     });
+  //   }
 
-    return hasComps;
-  }
+  //   return hasComps;
+  // }
 
   floorHasBook(floor: Floor) {
     let hasBook = false;
@@ -384,7 +425,7 @@ export class ViewMap {
     return hasBook;
   }
 
-  elementHasBook(det: MapElementDetail) {
+  elementHasBook(det: MapElement) {
     let hasBook = false;
 
     if (this._bookData) {
@@ -398,19 +439,19 @@ export class ViewMap {
 
   render() {
     const { _buildingData, activeBuilding, activeFloor, loaded, activeElement, extraDetails } = this;
-    const detail = activeElement && activeElement.details[0];
+    const detail = activeElement && activeElement;
     const pageTitle =
       this.mapType === MAP_TYPE.COMP ? 'Computer Labs' :
       this.mapType === MAP_TYPE.BOOK ? 'Books' : 'Directory';
 
     if (loaded && _buildingData && activeBuilding && activeFloor) {
-      const floorplan = activeFloor.floorplan;
+      // const floorplan = activeFloor.floorplan;
       const subtitle = detail ? detail.code : `${this.activeFloor.name}, ${activeBuilding.name}`;
 
       return (
         <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
           <stencil-route-title pageTitle={`${subtitle} | ${pageTitle} | `} />
-          <rl-map
+          {/* <rl-map
             class="rl-map"
             elements={this.activeFloor.elements}
             mapImage={floorplan}
@@ -428,9 +469,30 @@ export class ViewMap {
             }}
             activeElementId={this.activeElement !== undefined && this.activeElement.id}
           >
-          </rl-map>
+          </rl-map> */}
+          <rl-pan-zoom scaled>
+            <rl-floorplan
+              useOrtho={true}
+              floorId={activeFloor.code}
+              slot="pz-content"
+              activeId={activeElement !== undefined ? activeElement.code : ''}
+              onRlElementClicked={e => {
+                const elCode = e.detail;
+                let route = `${BASE_URL}${ROUTES.MAP}/${this.mapType}/${elCode}`;
+                route = this._bookData ? `${route}/${this._bookData.iSBN[0]}` : route;
 
-          <rl-side-sheet open={this.activeElement !== undefined}>
+                this.history.push(route);
+              }}
+              onRlElementCleared={() => {
+                this.activeElement = undefined;
+                this.history.push(`/${ROUTES.MAP}/${this.mapType}/${activeFloor.code}`);
+              }}
+              extraElementData={this.computerAvailability}
+            >
+            </rl-floorplan>
+          </rl-pan-zoom>
+
+          <rl-side-sheet open={activeElement !== undefined}>
             <header class="rl-side-sheet__header">
               <span class="rl-side-sheet__title">
                 <div class="mdc-typography--body2">{detail && detail.code || ''}</div>
@@ -459,11 +521,11 @@ export class ViewMap {
 
           <rl-map-nav
             activeBuilding={activeBuilding}
-            activeFloor={this.activeFloor}
-            buildings={this._buildingData}
+            activeFloor={activeFloor}
+            buildings={_buildingData}
             floors={activeBuilding.floors}
             onBuildingChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${ev.detail}`)}
-            onFloorChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${activeBuilding.code}${ev.detail}`)}
+            onFloorChanged={ev => this.history.push(`/${ROUTES.MAP}/${this.mapType}/${ev.detail}`)}
           >
           </rl-map-nav>
         </Host>
