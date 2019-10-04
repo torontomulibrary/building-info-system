@@ -26,7 +26,7 @@
 ### Depends on
 
 - stencil-route-title
-- rl-map
+- rl-pan-zoom
 - [rl-side-sheet](../../components/side-sheet)
 - [rl-map-nav](../../components/map-nav)
 
@@ -34,7 +34,7 @@
 ```mermaid
 graph TD;
   view-map --> stencil-route-title
-  view-map --> rl-map
+  view-map --> rl-pan-zoom
   view-map --> rl-side-sheet
   view-map --> rl-map-nav
   style view-map fill:#f9f,stroke:#333,stroke-width:4px

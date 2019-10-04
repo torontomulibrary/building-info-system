@@ -11,7 +11,6 @@
 | ------------------ | -------------------- | ----------- | ------------------------------------------------ | -------------------------- |
 | `buttons`          | --                   |             | `undefined \| { name: string; link: string; }[]` | `undefined`                |
 | `cardColor`        | --                   |             | `Color`                                          | `new Color(255, 255, 255)` |
-| `cardData`         | `card-data`          |             | `string \| { [keys: string]: string[]; }`        | `{}`                       |
 | `cardMedia`        | `card-media`         |             | `string`                                         | `''`                       |
 | `cardTitle`        | `card-title`         |             | `string`                                         | `''`                       |
 | `hasPrimaryAction` | `has-primary-action` |             | `boolean`                                        | `false`                    |

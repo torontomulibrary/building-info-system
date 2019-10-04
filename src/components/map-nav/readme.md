@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property                        | Attribute            | Description                                | Type          | Default     |
-| ------------------------------- | -------------------- | ------------------------------------------ | ------------- | ----------- |
-| `activeBuildingId` _(required)_ | `active-building-id` | The `id` of the currently active building. | `number`      | `undefined` |
-| `activeFloorId` _(required)_    | `active-floor-id`    | The `id` of the currently active floor.    | `number`      | `undefined` |
-| `buildings` _(required)_        | --                   | An id-indexed map of the buildings.        | `BuildingMap` | `undefined` |
-| `floors` _(required)_           | --                   | An id-indexed map of floors.               | `FloorMap`    | `undefined` |
+| Property                      | Attribute | Description                                | Type          | Default     |
+| ----------------------------- | --------- | ------------------------------------------ | ------------- | ----------- |
+| `activeBuilding` _(required)_ | --        | The `id` of the currently active building. | `Building`    | `undefined` |
+| `activeFloor` _(required)_    | --        | The `id` of the currently active floor.    | `Floor`       | `undefined` |
+| `buildings` _(required)_      | --        | An id-indexed map of the buildings.        | `BuildingMap` | `undefined` |
+| `floors` _(required)_         | --        | An id-indexed map of floors.               | `FloorMap`    | `undefined` |
 
 
 ## Events
