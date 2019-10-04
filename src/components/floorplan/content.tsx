@@ -34,6 +34,11 @@ export const SVGContent: FunctionalComponent<SVGContentProps> = ({ elements, ext
   return elements.map(el => {
     let attrs = el.attrs;
 
+    if (attrs['xlink:href'] !== undefined) {
+      attrs['xlinkHref'] = attrs['xlink:href'];
+      delete attrs['xlink:href'];
+    }
+
     if (extra !== undefined && extra[el.attrs.id] !== undefined) {
       attrs = { ...attrs, ...extra[el.attrs.id] };
     }
@@ -45,7 +50,7 @@ export const SVGContent: FunctionalComponent<SVGContentProps> = ({ elements, ext
     return (
       <el.elem {...attrs}>
         {el.content ?
-          el.content.map(content => (<text>{content.text}</text>)) : undefined}
+          el.content.map(content => (content.text)) : undefined}
       </el.elem>
     );
   });
