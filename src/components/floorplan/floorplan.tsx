@@ -124,7 +124,7 @@ export class LibraryFloorplan {
   }
 
   render() {
-    const elements = this.floorId !== undefined
+    const elements = this.floorId !== undefined && this.data[this.floorId] !== undefined
         ? this.data[this.floorId][this.useOrtho ? 'ortho' : 'flat']
         : [{
             'elem': 'text',
