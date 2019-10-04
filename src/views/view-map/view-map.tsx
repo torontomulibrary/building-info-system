@@ -345,7 +345,7 @@ export class ViewMap {
       return (
         <Host class={{ 'rl-view': true, 'rl-view--map': true, 'rl-view--loaded': this.loaded && this.appLoaded }}>
           <stencil-route-title pageTitle={`${subtitle} | ${pageTitle} | `} />
-          <rl-pan-zoom scaled>
+          <rl-pan-zoom class="rl-pan-zoom" scaled>
             <rl-floorplan
               useOrtho={true}
               floorId={activeFloor.code}

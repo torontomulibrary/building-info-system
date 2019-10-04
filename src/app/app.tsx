@@ -182,9 +182,9 @@ export class RLApp {
   }
 
   @Listen('hashchange', { target: 'window' })
-  handleHashChanged() {
+  async handleHashChanged() {
     if (this.searchEl) {
-      this.searchEl.clearInput();
+      await this.searchEl.clearInput();
     }
   }
 
