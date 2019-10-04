@@ -5,7 +5,7 @@ interface SVGEl {
   prefix: string;
   local: string;
   attrs: { [key: string]: string };
-  content: Array<{ text: string }>;
+  content?: Array<{ text: string }>;
 }
 
 interface SVGContentProps {
@@ -42,6 +42,11 @@ export const SVGContent: FunctionalComponent<SVGContentProps> = ({ elements, ext
       attrs.style = parseStyles(attrs.style);
     }
 
-    return (<el.elem {...attrs}></el.elem>);
+    return (
+      <el.elem {...attrs}>
+        {el.content ?
+          el.content.map(content => (<text>{content.text}</text>)) : undefined}
+      </el.elem>
+    );
   });
 };
