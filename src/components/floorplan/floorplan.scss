@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  position: absolute;
+  user-select: none;
+}
+
+:host(:not([show-computers])) .rl-svg__g--computers {
+  visibility: hidden;
+}
+
+:host(:not([show-shelves])) .rl-svg__g--shelves {
+  visibility: hidden;
+}
+
+:host[show-computers] .rl-svg__g--computers,
+:host[show-shelves] .rl-svg__g-shelves {
+  visibility: visible;
+}
+
+.rl-floorplan__svg {
+  background-color: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.rl-svg__el--selected {
+  fill: var(--mdc-theme-secondary, #ffdc00);
+}
