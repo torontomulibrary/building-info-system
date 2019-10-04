@@ -63,7 +63,7 @@ export enum APP_DATA {
   BUILDING = 'buildings',
   COMPUTERS = 'computers',
   DETAILS = 'details',
-  ELEMENTS = 'elements',
+  // ELEMENTS = 'elements',
   EVENTS = 'events',
   FAQS = 'faqs',
   FLOORS = 'floors',
