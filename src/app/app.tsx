@@ -120,11 +120,6 @@ export class RLApp {
 
   @State() clusterColumns = 2;
 
-  /**
-   * Global flag indicating if the whole application has loaded.
-   */
-  @State() loaded = false;
-
   @Prop() history?: RouterHistory;
 
   /**
@@ -147,7 +142,7 @@ export class RLApp {
         this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
       });
 
-      this.loaded = true;
+      // this.loaded = true;
     });
     dataService.initialize();
     this._updateClusterColumns();
@@ -165,11 +160,11 @@ export class RLApp {
     const width = window.innerWidth - 128;
     this.clusterColumns =
       this.isMobile ? 2 :
-      700 > width ? 3 :
-      928 > width ? 4 :
-      1160 > width ? 5 :
-      1392 > width ? 6 :
-      1624 > width ? 7 : 8;
+        700 > width ? 3 :
+          928 > width ? 4 :
+            1160 > width ? 5 :
+              1392 > width ? 6 :
+                1624 > width ? 7 : 8;
   }
 
   _onSearchChange(e: Event) {
@@ -219,7 +214,7 @@ export class RLApp {
   @Listen('suggestionClicked')
   async onSuggestionClicked(e: CustomEvent) {
     const resultID = e.detail.id as string;
-    const [ type, id ] = resultID.split('-');
+    const [type, id] = resultID.split('-');
 
     switch (type) {
       case 'd':
@@ -239,81 +234,81 @@ export class RLApp {
    * Component render function.
    */
   render() {
-    const { appLinks, appRoutes, loaded } = this;
+    const { appLinks, appRoutes } = this;
 
-    if (loaded) {
-      return (
-        <Host class={{ 'rl-bis': true, 'rl-bis--loaded': this.loaded }}>
-          <rl-app-bar
-              type="fixed"
-              onMenuClicked={_ => { this.drawerOpen = true; }}
-              singleSection={this.isMobile}
-            >
-            {this.isMobile ? undefined : (<div slot="title">{APP_TITLE}</div>)}
-            <rl-search-box
-              ref={el => { this.searchEl = el; }}
-              slot="centerSection"
-              showMenu={this.isMobile}
-              placeholder={this.isMobile ? APP_TITLE : undefined}
-              resultHeight={this.resultHeight}
-              onIconClick={() => { this.drawerOpen = true; }}
-              searchValue={this.searchQuery}
-              docSearch={this.docSearch}
-            >
-            </rl-search-box>
-          </rl-app-bar>
+    // if (loaded) {
+    return (
+      <Host class={{ 'rl-bis': true }}>
+        <rl-app-bar
+          type="fixed"
+          onMenuClicked={_ => { this.drawerOpen = true; }}
+          singleSection={this.isMobile}
+        >
+          {this.isMobile ? undefined : (<div slot="title">{APP_TITLE}</div>)}
+          <rl-search-box
+            ref={el => { this.searchEl = el; }}
+            slot="centerSection"
+            showMenu={this.isMobile}
+            placeholder={this.isMobile ? APP_TITLE : undefined}
+            resultHeight={this.resultHeight}
+            onIconClick={() => { this.drawerOpen = true; }}
+            searchValue={this.searchQuery}
+            docSearch={this.docSearch}
+          >
+          </rl-search-box>
+        </rl-app-bar>
 
-          <rl-drawer
-              open={this.drawerOpen}
-              onDrawerClose={_ => { this.drawerOpen = false; }}>
-            <header class="rl-drawer__header">
-              <div class="rl-drawer__header-content">
-                <button class="material-icons mdc-top-app-bar__navigation-icon"
-                  aria-label="Close navigation menu.">close</button>
-                <span class="mdc-top-app-bar__title">{APP_TITLE}</span>
-              </div>
-            </header>
-            <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
-              {appLinks.map(link =>
-                <stencil-route-link activeClass="mdc-list-item--activated"
-                    anchorClass="mdc-list-item" anchorTabIndex="0"
-                    url={`${BASE_URL}${link.url}`} exact={link.exact}>
-                  <i class="material-icons mdc-list-item__graphic" aria-hidden="true">
-                    {link.icon}
-                  </i>
-                  {link.title}
-                </stencil-route-link>
-              )}
-            </nav>
-          </rl-drawer>
+        <rl-drawer
+          open={this.drawerOpen}
+          onDrawerClose={_ => { this.drawerOpen = false; }}>
+          <header class="rl-drawer__header">
+            <div class="rl-drawer__header-content">
+              <button class="material-icons mdc-top-app-bar__navigation-icon"
+                aria-label="Close navigation menu.">close</button>
+              <span class="mdc-top-app-bar__title">{APP_TITLE}</span>
+            </div>
+          </header>
+          <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
+            {appLinks.map(link =>
+              <stencil-route-link activeClass="mdc-list-item--activated"
+                anchorClass="mdc-list-item" anchorTabIndex="0"
+                url={`${BASE_URL}${link.url}`} exact={link.exact}>
+                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">
+                  {link.icon}
+                </i>
+                {link.title}
+              </stencil-route-link>
+            )}
+          </nav>
+        </rl-drawer>
 
-          <main id="main" class="rl-main-content">
-            <stencil-router id="router" titleSuffix={APP_TITLE} historyType="hash">
-              <stencil-route-switch>
-                {appRoutes.map(route =>
-                  <stencil-route component={route.component}
-                    url={route.urls}
-                    componentProps={{
-                      appLoaded: loaded,
-                      isMobile: this.isMobile,
-                      clusterColumns: this.clusterColumns,
-                    }}
-                  >
-                  </stencil-route>
-                )}
-                <stencil-route routeRender={() => ([
-                  <span>Undefined route</span>,
-                  <stencil-router-redirect url={`${BASE_URL}${ROUTES.HOME}`} />,
-                ])}>
+        <main id="main" class="rl-main-content">
+          <stencil-router id="router" titleSuffix={APP_TITLE}>
+            <stencil-route-switch>
+              {appRoutes.map(route =>
+                <stencil-route component={route.component}
+                  url={route.urls}
+                  componentProps={{
+                    appLoaded: true,
+                    isMobile: this.isMobile,
+                    clusterColumns: this.clusterColumns,
+                  }}
+                >
                 </stencil-route>
-              </stencil-route-switch>
-            </stencil-router>
-          </main>
-        </Host>
-      );
-    } else {
-      return (<Host class={{ 'rl-bis': true, 'rl-bis--loaded': this.loaded }} />);
-    }
+              )}
+              <stencil-route routeRender={() => ([
+                <span>Undefined route</span>,
+                <stencil-router-redirect url={`${BASE_URL}${ROUTES.HOME}`} />,
+              ])}>
+              </stencil-route>
+            </stencil-route-switch>
+          </stencil-router>
+        </main>
+      </Host>
+    );
+    // } else {
+    //   return (<Host class={{ 'rl-bis': true, 'rl-bis--loaded': this.loaded }} />);
+    // }
   }
 }
 
