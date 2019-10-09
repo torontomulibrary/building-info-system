@@ -43,8 +43,8 @@ function getAncestor(element: Element, matcher: (el: Element) => boolean, includ
  */
 export function getAncestorByClass(element: Element, cName: string, maxSearchSteps?: number) {
   return getAncestor(element, node =>
-      // node.className !== undefined &&
-      // typeof node.className.split === 'function' &&
+      // tslint:disable-next-line: strict-type-predicates
+      node.className !== undefined && typeof node.className.split === 'function' &&
       node.className.split(/\s+/).indexOf(cName) >= 0,
     true, maxSearchSteps);
 }
