@@ -30,7 +30,7 @@ export class Cluster {
   }
 
   renderContent() {
-    if (this.data) {
+    if (this.data !== undefined && this.data.length > 0) {
       switch (this.data[0].type) {
         case 'card':
           if (this.isMobile) {

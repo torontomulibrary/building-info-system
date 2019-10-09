@@ -111,10 +111,10 @@ export interface ComputerAvailability {
 }
 
 export interface ComputerLab {
-  elementId: number;
-  floor?: string,
-  description?: string,
-  altText?: string,
+  // elementId: number;
+  // floor?: string,
+  // description?: string,
+  // altText?: string,
   computerAvailable: number,
   computerTotal: number,
   code: string,

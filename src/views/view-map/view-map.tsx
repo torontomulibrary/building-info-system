@@ -13,7 +13,7 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../../global/config';
 import {
-  APP_DATA,
+  // APP_DATA,
   MAP_TYPE,
   ROUTES,
 } from '../../global/constants';
@@ -25,8 +25,10 @@ import {
   Floor,
   MapElement,
 } from '../../interface';
-import { dataService } from '../../utils/data-service';
+// import { dataService } from '../../utils/data-service';
+import { dataStore } from '../../utils/app-data';
 import { loadData } from '../../utils/load-data';
+// import { dataStore } from '../../utils/app-data';
 
 @Component({
   tag: 'view-map',
@@ -93,9 +95,11 @@ export class ViewMap {
   @Prop({ context: 'queue' }) queue!: QueueApi;
 
   componentWillLoad() {
-    this._loadData();
+    return this._loadData().then(_ => {
+      return this._parseParameters();
+    });
 
-    return this._parseParameters();
+    // return this._parseParameters();
     // this.loaded = true;
   }
 
@@ -238,7 +242,7 @@ export class ViewMap {
       const labs = Object.values(this._compLabs);
       if (this.activeElement !== undefined && this.mapType === MAP_TYPE.COMP && labs.length > 0) {
         // An element is selected, see if it is a lab and get the availability.
-        const lab: ComputerLab | undefined = labs.find((l: ComputerLab) => this.activeElement && this.activeElement.id === l.elementId);
+        const lab: ComputerLab | undefined = labs.find((l: ComputerLab) => this.activeElement && this.activeElement.code === l.code);
         if (lab) {
           this.extraDetails = { available: lab.computerAvailable, total: lab.computerTotal };
         }
@@ -263,36 +267,77 @@ export class ViewMap {
   }
 
   private _loadData() {
+    return new Promise((res, rej) => {
+      Promise.all([
+        dataStore.getData('buildings'),
+        dataStore.getData('floors'),
+        dataStore.getData('details'),
+        dataStore.getData('computers'),
+      ]).then(results => {
+        this._buildingData = results[0];
+        this._floorData = results[1];
+        this._detailData = results[2];
+        const compLabs = results[3];
+        this._compLabs = [];
+
+        this._buildingData.forEach((b: Building) => {
+          b.floors = (this._floorData || []).filter((f: Floor) => {
+            return f.building === b.code;
+          });
+        });
+
+        // Add references to the elemetns of each floor.
+        this._floorData.forEach((f: Floor) => {
+          f.details = (this._detailData || []).filter((d: MapElement) => {
+            return d.floor === f.code;
+          });
+        });
+
+        this._detailData.forEach((d: MapElement) => {
+          compLabs.forEach((lab: ComputerLab) => {
+            if (d.code === lab.code) {
+              this._compLabs.push(lab);
+            }
+          });
+        });
+
+        res();
+      }).catch(e => {
+        console.error('Error loading view-map data ' + e);
+        rej();
+      });
+    });
+
     // Load Data.
-    this._buildingData = dataService.getData(APP_DATA.BUILDING);
-    this._floorData = dataService.getData(APP_DATA.FLOORS);
-    // this._elementData = dataService.getData(APP_DATA.ELEMENTS);
-    this._detailData = dataService.getData(APP_DATA.DETAILS);
-    this._compLabs = [];
-    let compLabs: ComputerLab[] = [];
-    compLabs = dataService.getData(APP_DATA.COMPUTERS);
+    // this._buildingData = dataService.getData(APP_DATA.BUILDING);
+    // this._floorData = dataService.getData(APP_DATA.FLOORS);
+    // // this._elementData = dataService.getData(APP_DATA.ELEMENTS);
+    // this._detailData = dataService.getData(APP_DATA.DETAILS);
+    // this._compLabs = [];
+    // let compLabs: ComputerLab[] = [];
+    // compLabs = dataService.getData(APP_DATA.COMPUTERS);
 
-    // Add references to the floors for each building.
-    this._buildingData.forEach((b: Building) => {
-      b.floors = (this._floorData || []).filter((f: Floor) => {
-        return f.building === b.code;
-      });
-    });
+    // // Add references to the floors for each building.
+    // this._buildingData.forEach((b: Building) => {
+    //   b.floors = (this._floorData || []).filter((f: Floor) => {
+    //     return f.building === b.code;
+    //   });
+    // });
 
-    // Add references to the elemetns of each floor.
-    this._floorData.forEach((f: Floor) => {
-      f.details = (this._detailData || []).filter((d: MapElement) => {
-        return d.floor === f.code;
-      });
-    });
+    // // Add references to the elemetns of each floor.
+    // this._floorData.forEach((f: Floor) => {
+    //   f.details = (this._detailData || []).filter((d: MapElement) => {
+    //     return d.floor === f.code;
+    //   });
+    // });
 
-    this._detailData.forEach((d: MapElement) => {
-      compLabs.forEach((lab: ComputerLab) => {
-        if (d.code === lab.code) {
-          this._compLabs.push(lab);
-        }
-      });
-    });
+    // this._detailData.forEach((d: MapElement) => {
+    //   compLabs.forEach((lab: ComputerLab) => {
+    //     if (d.code === lab.code) {
+    //       this._compLabs.push(lab);
+    //     }
+    //   });
+    // });
   }
 
   floorComputerLabs(floor?: Floor) {

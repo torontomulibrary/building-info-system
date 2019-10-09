@@ -3,9 +3,10 @@ import { QueueApi } from '@stencil/core/dist/declarations';
 import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../../global/config';
-import { APP_DATA, ROUTES } from '../../global/constants';
+import { ROUTES } from '../../global/constants';
 import { Faq, FaqMap } from '../../interface';
-import { dataService } from '../../utils/data-service';
+// import { dataService } from '../../utils/data-service';
+import { dataStore } from '../../utils/app-data';
 import { sanitize } from '../../utils/sanitize';
 
 @Component({
@@ -59,7 +60,11 @@ export class ViewFaq {
    * yet in the DOM.
    */
   componentWillLoad() {
-    this.faqs = dataService.getData(APP_DATA.FAQS);
+    dataStore.getData('faqs').then(faqs => {
+      this.faqs = faqs;
+    }).catch(e => console.error('Error loading faqs in view-faq ' + e));
+
+    // this.faqs = dataService.getData(APP_DATA.FAQS);
   }
 
   /**

@@ -7,20 +7,22 @@ import { UAParser } from 'ua-parser-js';
 
 import { BASE_URL } from '../global/config';
 import {
-  APP_DATA,
+  // APP_DATA,
   APP_TITLE,
-  EVENTS,
+  // EVENTS,
   MAP_TYPE,
   ROUTES,
 } from '../global/constants';
 import {
   Faq,
-  FaqMap,
+  // FaqMap,
   MapElement,
   MapElementMap,
   SearchResultItem,
 } from '../interface';
-import { dataService } from '../utils/data-service';
+import { dataStore } from '../utils/app-data';
+// import { RLDatabase } from '../utils/database';
+// import { dataService } from '../utils/data-service';
 import { Search } from '../utils/search';
 
 @Component({
@@ -91,8 +93,11 @@ export class RLApp {
   private docSearch = new Search();
 
   private _locationData: MapElementMap = {};
-  private _faqData: FaqMap = {};
+  // private _faqData: FaqMap = {};
   private searchEl?: HTMLRlSearchBoxElement;
+
+  // private _db?: RLDatabase;
+  // private _data?: AppData;
 
   @State() searchQuery = '';
   @State() resultHeight = 0;
@@ -129,22 +134,44 @@ export class RLApp {
     const dev = new UAParser().getDevice();
     this.isMobile = dev.type !== undefined && dev.type === 'mobile';
 
-    dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
-      this._faqData = dataService.getData(APP_DATA.FAQS);
+    // dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
+    //   this._faqData = dataService.getData(APP_DATA.FAQS);
 
-      Object.values(this._faqData).forEach((f: Faq) => {
+    //   Object.values(this._faqData).forEach((f: Faq) => {
+        // this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
+    //   });
+
+    //   this._locationData = dataService.getData(APP_DATA.DETAILS);
+
+    //   Object.values(this._locationData).forEach((d: MapElement) => {
+        // this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
+    //   });
+
+    //   // this.loaded = true;
+    // });
+    // dataService.initialize();
+    // this._db = new RLDatabase();
+    // this._db.init().then(() => {
+    //   console.log('Database initialized');
+    // }, () => {
+    //   console.error('Failed to open database');
+    // });
+    dataStore.getData('faqs').then(faqs => {
+      faqs.forEach((f: Faq) => {
         this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
       });
-
-      this._locationData = dataService.getData(APP_DATA.DETAILS);
-
-      Object.values(this._locationData).forEach((d: MapElement) => {
-        this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
-      });
-
-      // this.loaded = true;
+    }).catch(e => {
+      console.error('Error loading FAQs ' + e);
     });
-    dataService.initialize();
+
+    dataStore.getData('details').then(elements => {
+      elements.forEach((e: MapElement) => {
+        this.docSearch.addDocument(`d-${e.id}`, 'location_on', `[${e.code}] ${e.name}`);
+      });
+    }).catch(e => {
+      console.error('Error loading MapElements ' + e);
+    });
+
     this._updateClusterColumns();
   }
 

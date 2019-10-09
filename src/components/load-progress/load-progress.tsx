@@ -1,8 +1,8 @@
 import { MDCLinearProgress } from '@material/linear-progress/index';
 import { Component, Element, Host, State, h } from '@stencil/core';
 
-import { APP_DATA, EVENTS } from '../../global/constants';
-import { dataService } from '../../utils/data-service';
+// import { APP_DATA, EVENTS } from '../../global/constants';
+// import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'rl-load-progress',
@@ -13,24 +13,24 @@ export class LoadProgress {
   private _pb?: MDCLinearProgress;
   private _pbEl!: HTMLElement;
 
-  private _max = Object.keys(APP_DATA).length;
-  private _progress = 0;
+  // private _max = Object.keys(APP_DATA).length;
+  // private _progress = 0;
 
   @Element() root!: HTMLElement;
 
   @State() done = false;
 
   componentWillLoad() {
-    dataService.listen(EVENTS.DATA_LOADED, () => {
-      this._progress++;
-      if (this._pb) {
-        this._pb.progress = this._progress / this._max;
-      }
-    });
+    // dataService.listen(EVENTS.DATA_LOADED, () => {
+    //   this._progress++;
+    //   if (this._pb) {
+    //     this._pb.progress = this._progress / this._max;
+    //   }
+    // });
 
-    dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
-      this.done = true;
-    });
+    // dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
+    //   this.done = true;
+    // });
   }
 
   componentDidLoad() {

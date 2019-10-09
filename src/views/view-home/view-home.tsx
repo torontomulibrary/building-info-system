@@ -4,9 +4,10 @@ import { RouterHistory } from '@stencil/router';
 
 // import * as d from '../../declarations';
 import { BASE_URL } from '../../global/config';
-import { APP_DATA, MAP_TYPE, ROUTES } from '../../global/constants';
+import { MAP_TYPE, ROUTES } from '../../global/constants';
 import { ClusterData, ComputerLab, SearchHistory } from '../../interface';
-import { dataService } from '../../utils/data-service';
+import { dataStore } from '../../utils/app-data';
+// import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-home',
@@ -33,8 +34,15 @@ export class ViewHome {
   @Prop({ context: 'queue' }) queue!: QueueApi;
 
   componentWillLoad() {
-    this.searches = dataService.getData(APP_DATA.HISTORY);
-    this.labs = dataService.getData(APP_DATA.COMPUTERS);
+    dataStore.getData('computers').then(comps => {
+      this.labs = comps;
+    }).catch(e => console.error('Error loading computer in view-home ' + e));
+
+    dataStore.getData('history').then(history => {
+      this.searches = history;
+    }).catch(e => console.error('Error loading search in view-home ' + e));
+    // this.searches = dataService.getData(APP_DATA.HISTORY);
+    // this.labs = dataService.getData(APP_DATA.COMPUTERS);
   }
 
   componentDidLoad() {

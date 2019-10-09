@@ -4,12 +4,13 @@ import { RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../../global/config';
 import {
-  APP_DATA,
+  // APP_DATA,
   MAP_TYPE,
   ROUTES,
 } from '../../global/constants';
-import { Building, BuildingMap, Floor, FloorMap } from '../../interface';
-import { dataService } from '../../utils/data-service';
+import { Building, Floor } from '../../interface';
+import { dataStore } from '../../utils/app-data';
+// import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-building',
@@ -22,7 +23,7 @@ export class ViewBuilding {
   /**
    * Internal list of Buildings to display.
    */
-  @State() buildings!: BuildingMap;
+  @State() buildings: Building[] = [];
 
   /**
    * A flag indicating if this view loaded all the data needed to display.
@@ -48,15 +49,25 @@ export class ViewBuilding {
    * yet in the DOM.
    */
   async componentWillLoad() {
-    this.buildings = dataService.getData(APP_DATA.BUILDING);
-    const floors: FloorMap = dataService.getData(APP_DATA.FLOORS);
+    Promise.all([
+      dataStore.getData('buildings'),
+      dataStore.getData('floors'),
+    ]).then(results => {
+      this.buildings = results[0];
+      this.buildings.forEach((b: Building) => {
+        b.floors = results[1].filter((f: Floor) => f.building === b.code);
+      });
+    }).catch(e => console.error('Error loading view-building data ' + e));
 
-    Object.values(this.buildings).forEach((b: Building) => {
-      b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
-        if (f.building === b.code) ob[f.id] = f;
-        return ob;
-      }, {} as Floor);
-    });
+    // this.buildings = dataService.getData(APP_DATA.BUILDING);
+    // const floors: FloorMap = dataService.getData(APP_DATA.FLOORS);
+
+    // Object.values(this.buildings).forEach((b: Building) => {
+    //   b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
+    //     if (f.building === b.code) ob[f.id] = f;
+    //     return ob;
+    //   }, {} as Floor);
+    // });
   }
 
   componentDidLoad() {
@@ -77,55 +88,7 @@ export class ViewBuilding {
    * Component render function.
    */
   render() {
-    if (this.buildings) {
-
-      return (
-        <Host class={{
-          'rl-view': true,
-          'rl-view--buildings': true,
-          'rl-view--loaded': this.loaded && this.appLoaded,
-        }}>
-          <stencil-route-title pageTitle="Buildings | " />
-          <h2 class="rl-view__heading">Building Information</h2>
-          <div class="rl-view__container mdc-layout-grid">
-            <div class="mdc-layout-grid__inner">
-              {Object.values(this.buildings).map((building: Building) =>
-                <rl-card
-                  class="rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"
-                  titleInMedia={true}
-                  cardTitle={building.name}
-                  cardMedia={building.image}
-                  mediaSize="cover"
-                  hasPrimaryAction={true}
-                  buttons={[
-                    { name: 'Map It!', link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${building.code}` },
-                  ]}
-                  >
-                  <div slot="primary">
-                    <rl-expansion-panel index={1}>
-                      <div slot="header">{building.description}</div>
-                      <div slot="content">
-                        {Object.keys(building.floors).map(id => {
-                          const floor = building.floors[id];
-                          return (
-                          <rl-expansion-panel index={floor.id}>
-                            <div slot="header">{floor.name}</div>
-                            <div slot="content">
-                              <div>{floor.description}</div>
-                            </div>
-                          </rl-expansion-panel>
-                          );
-                        })}
-                      </div>
-                    </rl-expansion-panel>
-                  </div>
-                </rl-card>
-              )}
-            </div>
-          </div>
-        </Host>
-      );
-    }
+    // if (this.buildings) {
 
     return (
       <Host class={{
@@ -134,8 +97,55 @@ export class ViewBuilding {
         'rl-view--loaded': this.loaded && this.appLoaded,
       }}>
         <stencil-route-title pageTitle="Buildings | " />
-        <div>Loading...</div>
+        <h2 class="rl-view__heading">Building Information</h2>
+        <div class="rl-view__container mdc-layout-grid">
+          <div class="mdc-layout-grid__inner">
+            {Object.values(this.buildings).map((building: Building) =>
+              <rl-card
+                class="rl-card--building mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"
+                titleInMedia={true}
+                cardTitle={building.name}
+                cardMedia={building.image}
+                mediaSize="cover"
+                hasPrimaryAction={true}
+                buttons={[
+                  { name: 'Map It!', link: `${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${building.code}` },
+                ]}
+                >
+                <div slot="primary">
+                  <rl-expansion-panel index={1}>
+                    <div slot="header">{building.description}</div>
+                    <div slot="content">
+                      {Object.keys(building.floors).map(id => {
+                        const floor = building.floors[id];
+                        return (
+                        <rl-expansion-panel index={floor.id}>
+                          <div slot="header">{floor.name}</div>
+                          <div slot="content">
+                            <div>{floor.description}</div>
+                          </div>
+                        </rl-expansion-panel>
+                        );
+                      })}
+                    </div>
+                  </rl-expansion-panel>
+                </div>
+              </rl-card>
+            )}
+          </div>
+        </div>
       </Host>
     );
   }
+
+    // return (
+    //   <Host class={{
+    //     'rl-view': true,
+    //     'rl-view--buildings': true,
+    //     'rl-view--loaded': this.loaded && this.appLoaded,
+    //   }}>
+    //     <stencil-route-title pageTitle="Buildings | " />
+    //     <div>Loading...</div>
+    //   </Host>
+    // );
 }

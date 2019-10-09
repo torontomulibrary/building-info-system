@@ -398,7 +398,7 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface RlAccordion extends JSXBase.HTMLAttributes<HTMLRlAccordionElement> {
+  interface RlAccordion {
     /**
     * Flag indicating if multiple `accordion-item`s can be open at once. Defaults to true.
     */
@@ -408,7 +408,7 @@ declare namespace LocalJSX {
     */
     'items'?: Array<{ [key: string]: string }>;
   }
-  interface RlAccordionItem extends JSXBase.HTMLAttributes<HTMLRlAccordionItemElement> {
+  interface RlAccordionItem {
     /**
     * A delay used to fade-in this item a specific amount of time after the component is rendered.
     */
@@ -438,7 +438,7 @@ declare namespace LocalJSX {
     */
     'onOpened'?: (event: CustomEvent<any>) => void;
   }
-  interface RlAppBar extends JSXBase.HTMLAttributes<HTMLRlAppBarElement> {
+  interface RlAppBar {
     /**
     * Center the title within the `app-bar`.
     */
@@ -460,10 +460,10 @@ declare namespace LocalJSX {
     */
     'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
-  interface RlBis extends JSXBase.HTMLAttributes<HTMLRlBisElement> {
+  interface RlBis {
     'history'?: RouterHistory;
   }
-  interface RlCard extends JSXBase.HTMLAttributes<HTMLRlCardElement> {
+  interface RlCard {
     'buttons'?: Array<{name: string, link: string}>;
     'cardColor'?: Color;
     'cardMedia'?: string;
@@ -478,7 +478,7 @@ declare namespace LocalJSX {
     'titleInMedia'?: boolean;
     'wideMediaAspect'?: boolean;
   }
-  interface RlCluster extends JSXBase.HTMLAttributes<HTMLRlClusterElement> {
+  interface RlCluster {
     'columns'?: number;
     'data'?: ClusterData[];
     'hasMore'?: boolean;
@@ -486,7 +486,7 @@ declare namespace LocalJSX {
     'isMobile'?: boolean;
     'parentEl'?: HTMLElement;
   }
-  interface RlDrawer extends JSXBase.HTMLAttributes<HTMLRlDrawerElement> {
+  interface RlDrawer {
     /**
     * An event emitted when this drawer closes.
     */
@@ -496,11 +496,11 @@ declare namespace LocalJSX {
     */
     'open': boolean;
   }
-  interface RlExpansionPanel extends JSXBase.HTMLAttributes<HTMLRlExpansionPanelElement> {
+  interface RlExpansionPanel {
     'index'?: number;
     'onToggled'?: (event: CustomEvent<any>) => void;
   }
-  interface RlFloorplan extends JSXBase.HTMLAttributes<HTMLRlFloorplanElement> {
+  interface RlFloorplan {
     /**
     * The ID of the active (selected) element.
     */
@@ -543,8 +543,8 @@ declare namespace LocalJSX {
     */
     'width'?: string;
   }
-  interface RlLoadProgress extends JSXBase.HTMLAttributes<HTMLRlLoadProgressElement> {}
-  interface RlMapNav extends JSXBase.HTMLAttributes<HTMLRlMapNavElement> {
+  interface RlLoadProgress {}
+  interface RlMapNav {
     /**
     * The `id` of the currently active building.
     */
@@ -570,7 +570,7 @@ declare namespace LocalJSX {
     */
     'onFloorChanged'?: (event: CustomEvent<any>) => void;
   }
-  interface RlSearchBox extends JSXBase.HTMLAttributes<HTMLRlSearchBoxElement> {
+  interface RlSearchBox {
     'docSearch': Search;
     'history'?: RouterHistory;
     'onIconClick'?: (event: CustomEvent<any>) => void;
@@ -580,13 +580,13 @@ declare namespace LocalJSX {
     'searchValue'?: string;
     'showMenu'?: boolean;
   }
-  interface RlSearchSuggestions extends JSXBase.HTMLAttributes<HTMLRlSearchSuggestionsElement> {
+  interface RlSearchSuggestions {
     'activeResult'?: number;
     'isEmptySearch'?: boolean;
     'onSuggestionClicked'?: (event: CustomEvent<any>) => void;
     'suggestions'?: SearchResultItem[];
   }
-  interface RlSideSheet extends JSXBase.HTMLAttributes<HTMLRlSideSheetElement> {
+  interface RlSideSheet {
     /**
     * Event fired when the `side-sheet` has finished closing.
     */
@@ -597,7 +597,7 @@ declare namespace LocalJSX {
     'onOpened'?: (event: CustomEvent<any>) => void;
     'open'?: boolean;
   }
-  interface ViewBuilding extends JSXBase.HTMLAttributes<HTMLViewBuildingElement> {
+  interface ViewBuilding {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
@@ -607,14 +607,14 @@ declare namespace LocalJSX {
     */
     'history': RouterHistory;
   }
-  interface ViewEvent extends JSXBase.HTMLAttributes<HTMLViewEventElement> {
+  interface ViewEvent {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
     'appLoaded'?: boolean;
     'history': RouterHistory;
   }
-  interface ViewFaq extends JSXBase.HTMLAttributes<HTMLViewFaqElement> {
+  interface ViewFaq {
     /**
     * Global flag indicating if the whole application has loaded.  If not, this view should not display either.
     */
@@ -628,7 +628,7 @@ declare namespace LocalJSX {
     */
     'match': MatchResults;
   }
-  interface ViewHome extends JSXBase.HTMLAttributes<HTMLViewHomeElement> {
+  interface ViewHome {
     'appLoaded'?: boolean;
     'clusterColumns'?: number;
     /**
@@ -637,7 +637,7 @@ declare namespace LocalJSX {
     'history': RouterHistory;
     'isMobile'?: boolean;
   }
-  interface ViewMap extends JSXBase.HTMLAttributes<HTMLViewMapElement> {
+  interface ViewMap {
     /**
     * A global flag passed in to indicate if the application has loaded as well.
     */
@@ -655,7 +655,7 @@ declare namespace LocalJSX {
     */
     'onDataLoaded'?: (event: CustomEvent<any>) => void;
   }
-  interface ViewSearch extends JSXBase.HTMLAttributes<HTMLViewSearchElement> {
+  interface ViewSearch {
     'appLoaded'?: boolean;
     'clusterColumns'?: number;
     'history': RouterHistory;
@@ -693,7 +693,28 @@ export { LocalJSX as JSX };
 
 declare module "@stencil/core" {
   export namespace JSX {
-    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+    interface IntrinsicElements {
+      'rl-accordion': LocalJSX.RlAccordion & JSXBase.HTMLAttributes<HTMLRlAccordionElement>;
+      'rl-accordion-item': LocalJSX.RlAccordionItem & JSXBase.HTMLAttributes<HTMLRlAccordionItemElement>;
+      'rl-app-bar': LocalJSX.RlAppBar & JSXBase.HTMLAttributes<HTMLRlAppBarElement>;
+      'rl-bis': LocalJSX.RlBis & JSXBase.HTMLAttributes<HTMLRlBisElement>;
+      'rl-card': LocalJSX.RlCard & JSXBase.HTMLAttributes<HTMLRlCardElement>;
+      'rl-cluster': LocalJSX.RlCluster & JSXBase.HTMLAttributes<HTMLRlClusterElement>;
+      'rl-drawer': LocalJSX.RlDrawer & JSXBase.HTMLAttributes<HTMLRlDrawerElement>;
+      'rl-expansion-panel': LocalJSX.RlExpansionPanel & JSXBase.HTMLAttributes<HTMLRlExpansionPanelElement>;
+      'rl-floorplan': LocalJSX.RlFloorplan & JSXBase.HTMLAttributes<HTMLRlFloorplanElement>;
+      'rl-load-progress': LocalJSX.RlLoadProgress & JSXBase.HTMLAttributes<HTMLRlLoadProgressElement>;
+      'rl-map-nav': LocalJSX.RlMapNav & JSXBase.HTMLAttributes<HTMLRlMapNavElement>;
+      'rl-search-box': LocalJSX.RlSearchBox & JSXBase.HTMLAttributes<HTMLRlSearchBoxElement>;
+      'rl-search-suggestions': LocalJSX.RlSearchSuggestions & JSXBase.HTMLAttributes<HTMLRlSearchSuggestionsElement>;
+      'rl-side-sheet': LocalJSX.RlSideSheet & JSXBase.HTMLAttributes<HTMLRlSideSheetElement>;
+      'view-building': LocalJSX.ViewBuilding & JSXBase.HTMLAttributes<HTMLViewBuildingElement>;
+      'view-event': LocalJSX.ViewEvent & JSXBase.HTMLAttributes<HTMLViewEventElement>;
+      'view-faq': LocalJSX.ViewFaq & JSXBase.HTMLAttributes<HTMLViewFaqElement>;
+      'view-home': LocalJSX.ViewHome & JSXBase.HTMLAttributes<HTMLViewHomeElement>;
+      'view-map': LocalJSX.ViewMap & JSXBase.HTMLAttributes<HTMLViewMapElement>;
+      'view-search': LocalJSX.ViewSearch & JSXBase.HTMLAttributes<HTMLViewSearchElement>;
+    }
   }
 }
 
