@@ -1,3 +1,20 @@
+## [0.6.1](https://github.com/ryersonlibrary/building-info-system/compare/v0.6.0...v0.6.1) (2019-10-10)
+
+
+### Bug Fixes
+
+* **rl-floorplan:** display content subnodes (currently always handled as text). ([c041333](https://github.com/ryersonlibrary/building-info-system/commit/c041333))
+* **rl-floorplan:** display placeholder when invalid data index specified ([0880a46](https://github.com/ryersonlibrary/building-info-system/commit/0880a46))
+* **rl-floorplan:** text content displayed properly.  xlink ns attribute parsed correctly ([2556838](https://github.com/ryersonlibrary/building-info-system/commit/2556838))
+* **utils/dom:** className now checked (can be undefined or not string) ([dbab639](https://github.com/ryersonlibrary/building-info-system/commit/dbab639))
+
+
+### Features
+
+* **app:** Replace data-service with app-data ([e3bac78](https://github.com/ryersonlibrary/building-info-system/commit/e3bac78))
+
+
+
 # [0.6.0](https://github.com/ryersonlibrary/building-info-system/compare/v0.5.0...v0.6.0) (2019-10-04)
 
 
