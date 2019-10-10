@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type                         | Default     |
-| --------- | --------- | ----------- | ---------------------------- | ----------- |
-| `history` | --        |             | `RouterHistory \| undefined` | `undefined` |
+| Property  | Attribute | Description                                                                                            | Type                         | Default     |
+| --------- | --------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- | ----------- |
+| `history` | --        | Reference to the history object created by Stencil.  Used for making app navigations programmatically. | `RouterHistory \| undefined` | `undefined` |
 
 
 ## Dependencies
