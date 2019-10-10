@@ -7,22 +7,16 @@ import { UAParser } from 'ua-parser-js';
 
 import { BASE_URL } from '../global/config';
 import {
-  // APP_DATA,
   APP_TITLE,
-  // EVENTS,
   MAP_TYPE,
   ROUTES,
 } from '../global/constants';
 import {
   Faq,
-  // FaqMap,
   MapElement,
-  MapElementMap,
   SearchResultItem,
 } from '../interface';
 import { dataStore } from '../utils/app-data';
-// import { RLDatabase } from '../utils/database';
-// import { dataService } from '../utils/data-service';
 import { Search } from '../utils/search';
 
 @Component({
@@ -31,6 +25,9 @@ import { Search } from '../utils/search';
 })
 
 export class RLApp {
+  /**
+   * Flag indicating if the application is currently on a mobile device.
+   */
   private isMobile = false;
 
   /**
@@ -80,6 +77,9 @@ export class RLApp {
     },
   ];
 
+  /**
+   * The links that are displayed in the navigation drawer.
+   */
   private appLinks = [
     { title: 'Home', url: ROUTES.HOME, icon: 'home', exact: true },
     { title: 'Directory', url: `${ROUTES.MAP}/${MAP_TYPE.LOCN}`, icon: 'map' },
@@ -90,11 +90,20 @@ export class RLApp {
     { title: 'FAQs', url: ROUTES.FAQS, icon: 'question_answer' },
   ];
 
-  private docSearch = new Search();
+  /**
+   * Text search object.
+   */
+  private _docSearch = new Search();
 
-  private _locationData: MapElementMap = {};
+  /**
+   * Map
+   */
+  private _mapElements: MapElement[] = [];
   // private _faqData: FaqMap = {};
-  private searchEl?: HTMLRlSearchBoxElement;
+  /**
+   * Reference to the search box.
+   */
+  private _searchBoxEl?: HTMLRlSearchBoxElement;
 
   // private _db?: RLDatabase;
   // private _data?: AppData;
@@ -134,31 +143,9 @@ export class RLApp {
     const dev = new UAParser().getDevice();
     this.isMobile = dev.type !== undefined && dev.type === 'mobile';
 
-    // dataService.listen(EVENTS.ALL_DATA_LOADED, () => {
-    //   this._faqData = dataService.getData(APP_DATA.FAQS);
-
-    //   Object.values(this._faqData).forEach((f: Faq) => {
-        // this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
-    //   });
-
-    //   this._locationData = dataService.getData(APP_DATA.DETAILS);
-
-    //   Object.values(this._locationData).forEach((d: MapElement) => {
-        // this.docSearch.addDocument(`d-${d.id}`, 'location_on', `[${d.code}] ${d.name}`);
-    //   });
-
-    //   // this.loaded = true;
-    // });
-    // dataService.initialize();
-    // this._db = new RLDatabase();
-    // this._db.init().then(() => {
-    //   console.log('Database initialized');
-    // }, () => {
-    //   console.error('Failed to open database');
-    // });
     dataStore.getData('faqs').then(faqs => {
       faqs.forEach((f: Faq) => {
-        this.docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
+        this._docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
       });
     }).catch(e => {
       console.error('Error loading FAQs ' + e);
@@ -166,7 +153,7 @@ export class RLApp {
 
     dataStore.getData('details').then(elements => {
       elements.forEach((e: MapElement) => {
-        this.docSearch.addDocument(`d-${e.id}`, 'location_on', `[${e.code}] ${e.name}`);
+        this._docSearch.addDocument(`d-${e.id}`, 'location_on', `[${e.code}] ${e.name}`);
       });
     }).catch(e => {
       console.error('Error loading MapElements ' + e);
@@ -199,14 +186,14 @@ export class RLApp {
 
     if (t !== null && t instanceof HTMLInputElement) {
       this.searchQuery = t.value;
-      this.searchResults = this.docSearch.search(this.searchQuery, 6);
+      this.searchResults = this._docSearch.search(this.searchQuery, 6);
     }
   }
 
   @Listen('hashchange', { target: 'window' })
   async handleHashChanged() {
-    if (this.searchEl) {
-      await this.searchEl.clearInput();
+    if (this._searchBoxEl) {
+      await this._searchBoxEl.clearInput();
     }
   }
 
@@ -218,7 +205,7 @@ export class RLApp {
    * @param e The triggering event
    */
   async _onSearchLocationClicked(resultId) {
-    const loc = this._locationData[resultId];
+    const loc = this._mapElements[resultId];
 
     if (this.history !== undefined) {
       this.history.push(`${BASE_URL}${ROUTES.MAP}/${MAP_TYPE.LOCN}/${loc.code}`);
@@ -273,14 +260,14 @@ export class RLApp {
         >
           {this.isMobile ? undefined : (<div slot="title">{APP_TITLE}</div>)}
           <rl-search-box
-            ref={el => { this.searchEl = el; }}
+            ref={el => { this._searchBoxEl = el; }}
             slot="centerSection"
             showMenu={this.isMobile}
             placeholder={this.isMobile ? APP_TITLE : undefined}
             resultHeight={this.resultHeight}
             onIconClick={() => { this.drawerOpen = true; }}
             searchValue={this.searchQuery}
-            docSearch={this.docSearch}
+            docSearch={this._docSearch}
           >
           </rl-search-box>
         </rl-app-bar>
