@@ -6,14 +6,12 @@ import {
   BASE_URL,
 } from '../../global/config';
 import {
-  // APP_DATA,
   FULL_MONTHS,
   MAP_TYPE,
   MONTHS,
   ROUTES,
 } from '../../global/constants';
 import { CalEvent } from '../../interface';
-// import { dataService } from '../../utils/data-service';
 import { dataStore } from '../../utils/app-data';
 import { formatTime } from '../../utils/event-parser';
 import { sanitize } from '../../utils/sanitize';
@@ -54,7 +52,6 @@ export class ViewEvent {
     dataStore.getData('events').then(events => {
       this.events = events;
     }).catch(e => console.error('Error loading events in view-faq ' + e));
-    // this.events = dataService.getData(APP_DATA.EVENTS);
   }
 
   componentDidLoad() {

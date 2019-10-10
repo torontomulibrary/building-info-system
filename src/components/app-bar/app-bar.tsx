@@ -10,6 +10,9 @@ export class AppBar {
    * @emits resultSelected
    */
 
+   /**
+    * Reference to the MDC App Bar object.
+    */
   private mdcAppBar!: MDCTopAppBar;
 
   @Element() root!: HTMLRlAppBarElement;

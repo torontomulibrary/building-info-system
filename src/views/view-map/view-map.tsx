@@ -13,7 +13,6 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../../global/config';
 import {
-  // APP_DATA,
   MAP_TYPE,
   ROUTES,
 } from '../../global/constants';

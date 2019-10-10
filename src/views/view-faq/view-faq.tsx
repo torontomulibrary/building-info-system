@@ -5,7 +5,6 @@ import { MatchResults, RouterHistory } from '@stencil/router';
 import { BASE_URL } from '../../global/config';
 import { ROUTES } from '../../global/constants';
 import { Faq, FaqMap } from '../../interface';
-// import { dataService } from '../../utils/data-service';
 import { dataStore } from '../../utils/app-data';
 import { sanitize } from '../../utils/sanitize';
 
@@ -63,8 +62,6 @@ export class ViewFaq {
     dataStore.getData('faqs').then(faqs => {
       this.faqs = faqs;
     }).catch(e => console.error('Error loading faqs in view-faq ' + e));
-
-    // this.faqs = dataService.getData(APP_DATA.FAQS);
   }
 
   /**

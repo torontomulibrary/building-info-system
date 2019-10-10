@@ -1,6 +1,5 @@
 import {
   Component,
-  Element,
   Host,
   Prop,
   State,
@@ -18,30 +17,88 @@ import { Color } from '../../utils/color';
 })
 
 export class Card {
-  @Element() root!: HTMLRlCardElement;
-
+  /**
+   * Transition colour for the text protection
+   */
   @State() protectionFadeColor = new Color(255, 255, 255, 0.2);
+
+  /**
+   * Base color for the text protextion.
+   */
   @State() protectionColor = new Color(255, 255, 255, 0.8);
+
+  /**
+   * Possible colours to use for text.
+   */
   @State() textColors = [new Color(255, 255, 255), new Color(0, 0, 0)];
 
+  /**
+   * The action buttons displayed at the bottom-left of the card
+   */
   @Prop() buttons?: Array<{name: string, link: string}>;
+
+  /**
+   * The action icons displayed at the bottom-right of the card.
+   */
   @Prop() icons?: Array<{name: string, link: string}>;
 
+  /**
+   * URL of an image to display as the media.  If no media is specified a
+   * placeholder will be used.
+   */
   @Prop() cardMedia = '';
 
+  /**
+   * The title of the card
+   */
   @Prop() cardTitle = '';
+
+  /**
+   * Flag indicating if the title is displayed over top of the media (with
+   * text protection for legibility), or underneath the media on its own line.
+   */
   @Prop() titleInMedia = false;
 
+  /**
+   * Flag indicating if the entire card is a clickable element.  This does not
+   * include any buttons or icons.
+   */
   @Prop() hasPrimaryAction = false;
+
+  /**
+   * The link to use for the primary card action.
+   */
   @Prop() primaryLink = '';
 
+  /**
+   * Flag indicating if the card does not have any content.
+   */
   @Prop() noContent = false;
+
+  /**
+   * Flag indicating if the card does not use media.  This means no media or
+   * media placeholder should be displayed.
+   */
   @Prop() noMedia = false;
 
+  /**
+   * The Stencil history object, used to programmatically navigate.
+   */
   @Prop() history?: RouterHistory;
 
+  /**
+   * Media sizing rule.
+   */
   @Prop() mediaSize: 'contain' | 'cover' = 'cover';
+
+  /**
+   * Use a wide or square aspect ratio for the media.
+   */
   @Prop() wideMediaAspect = false;
+
+  /**
+   * The color of the card.
+   */
   @Prop() cardColor: Color = new Color(255, 255, 255);
   @Watch('cardColor')
   onColorChange() {
@@ -50,10 +107,16 @@ export class Card {
     this.protectionFadeColor.setAlpha(0.5);
   }
 
+  /**
+   * Component lifecycle event.
+   */
   componentWillLoad() {
     this.onColorChange();
   }
 
+  /**
+   * Render any action buttons or icons.
+   */
   _renderActions() {
     // Render nothing if no buttons and icons are defined.
     if (!(this.buttons || this.icons)) return;
@@ -89,6 +152,9 @@ export class Card {
     );
   }
 
+  /**
+   * Render the media section of the card.
+   */
   _renderMedia() {
     const mediaFile =
         `url("${this.cardMedia ? this.cardMedia : `${BASE_URL}assets/img/no_img.png`}")`;
@@ -111,6 +177,9 @@ export class Card {
     );
   }
 
+  /**
+   * Render the card itself.
+   */
   _renderCard() {
     return ([
       this.noMedia ? undefined : this._renderMedia(),
@@ -140,4 +209,5 @@ export class Card {
   }
 }
 
+// Connect the component with Stencil History object.
 injectHistory(Card);

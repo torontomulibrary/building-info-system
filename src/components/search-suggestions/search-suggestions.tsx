@@ -17,42 +17,56 @@ import {
   tag: 'rl-search-suggestions',
   styleUrl: 'search-suggestions.scss',
 })
-
 export class SearchSuggestions {
+  /**
+   * Object to map detail type to display names.
+   */
+  private detailStrings = {
+    'business': 'Building',
+    'book': 'Book',
+    'question_answer': 'FAQ',
+    'location_on': 'Location',
+    'event': 'Event',
+  };
 
+  /**
+   * Reference to the root element.
+   */
   @Element() _root!: HTMLElement;
 
-  @Prop() activeResult?: number;
-  @State() activeItem?: HTMLLIElement;
-
+  /**
+   * The height required to display all the suggestions.
+   */
   @State() totalHeight = 0;
 
+  /**
+   * The currently active/highlighted/focused search suggestion.
+   */
+  @Prop() activeResult?: number;
+
+  /**
+   * Flag indicating if there are no search suggestions (even though there
+   * is a search query).
+   */
   @Prop() isEmptySearch = true;
 
+  /**
+   * The list of search suggestions.
+   */
   @Prop() suggestions: SearchResultItem[] = [];
 
-  @Event() suggestionClicked!: EventEmitter;
+  /**
+   * Event fired when the user selects one of the search suggestions.
+   */
+  @Event() suggestionClicked!: EventEmitter<SearchResultItem>;
 
+  /**
+   * Component lifecylce event fired once the component has rendered after each
+   * update.
+   */
   componentDidUpdate() {
     const el = this._root.firstElementChild as HTMLElement;
     this.totalHeight = el && el.offsetHeight || 0;
-  }
-
-  detailText(detail) {
-    switch (detail) {
-      case 'business':
-        return 'Building';
-      case 'book':
-        return 'Book';
-      case 'question_answer':
-        return 'FAQ';
-      case 'location_on':
-        return 'Location';
-      case 'event':
-        return 'Event';
-      default:
-        return '';
-    }
   }
 
   render() {
@@ -79,7 +93,7 @@ export class SearchSuggestions {
                       {detail.value}
                     </span>
                     <span class="mdc-list-item__secondary-text">
-                      {this.detailText(detail.type)}
+                      {this.detailStrings[detail.type]}
                     </span>
                   </span>
                 </li>

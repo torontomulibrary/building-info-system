@@ -2,12 +2,10 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { RouterHistory } from '@stencil/router';
 
-// import * as d from '../../declarations';
 import { BASE_URL } from '../../global/config';
 import { MAP_TYPE, ROUTES } from '../../global/constants';
 import { ClusterData, ComputerLab, SearchHistory } from '../../interface';
 import { dataStore } from '../../utils/app-data';
-// import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-home',
@@ -41,8 +39,6 @@ export class ViewHome {
     dataStore.getData('history').then(history => {
       this.searches = history;
     }).catch(e => console.error('Error loading search in view-home ' + e));
-    // this.searches = dataService.getData(APP_DATA.HISTORY);
-    // this.labs = dataService.getData(APP_DATA.COMPUTERS);
   }
 
   componentDidLoad() {
@@ -93,22 +89,19 @@ export class ViewHome {
           heading="Recent Book Searches"
           columns={this.clusterColumns}
           data={recent}
-          isMobile={this.isMobile}
-          parentEl={this.root}>
+          isMobile={this.isMobile}>
         </rl-cluster>
         <rl-cluster
           heading="Popular Book Searches"
           columns={this.clusterColumns}
           data={popular}
-          isMobile={this.isMobile}
-          parentEl={this.root}>
+          isMobile={this.isMobile}>
         </rl-cluster>
         <rl-cluster
           heading="Computer Availability"
           columns={this.clusterColumns}
           data={labs}
-          isMobile={this.isMobile}
-          parentEl={this.root}>
+          isMobile={this.isMobile}>
         </rl-cluster>
       </Host>
     );

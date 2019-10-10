@@ -79,30 +79,86 @@ export namespace Components {
     'type': 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
   interface RlBis {
+    /**
+    * Reference to the history object created by Stencil.  Used for making app navigations programmatically.
+    */
     'history'?: RouterHistory;
   }
   interface RlCard {
+    /**
+    * The action buttons displayed at the bottom-left of the card
+    */
     'buttons'?: Array<{name: string, link: string}>;
+    /**
+    * The color of the card.
+    */
     'cardColor': Color;
+    /**
+    * URL of an image to display as the media.  If no media is specified a placeholder will be used.
+    */
     'cardMedia': string;
+    /**
+    * The title of the card
+    */
     'cardTitle': string;
+    /**
+    * Flag indicating if the entire card is a clickable element.  This does not include any buttons or icons.
+    */
     'hasPrimaryAction': boolean;
+    /**
+    * The Stencil history object, used to programmatically navigate.
+    */
     'history'?: RouterHistory;
+    /**
+    * The action icons displayed at the bottom-right of the card.
+    */
     'icons'?: Array<{name: string, link: string}>;
+    /**
+    * Media sizing rule.
+    */
     'mediaSize': 'contain' | 'cover';
+    /**
+    * Flag indicating if the card does not have any content.
+    */
     'noContent': boolean;
+    /**
+    * Flag indicating if the card does not use media.  This means no media or media placeholder should be displayed.
+    */
     'noMedia': boolean;
+    /**
+    * The link to use for the primary card action.
+    */
     'primaryLink': string;
+    /**
+    * Flag indicating if the title is displayed over top of the media (with text protection for legibility), or underneath the media on its own line.
+    */
     'titleInMedia': boolean;
+    /**
+    * Use a wide or square aspect ratio for the media.
+    */
     'wideMediaAspect': boolean;
   }
   interface RlCluster {
+    /**
+    * The number of columns the cluster has.  This only effects lane and grid clusters.
+    */
     'columns': number;
+    /**
+    * The array of data displayed in the cluster.
+    */
     'data'?: ClusterData[];
+    /**
+    * A flag indicating if a 'See All' button should be displayed, taking the user to a list of all rleated items as the cluster is used to only show an abbreviated list.
+    */
     'hasMore': boolean;
+    /**
+    * The title of the cluster.
+    */
     'heading': string;
+    /**
+    * Flag indicating if the cluster is displayed on mobile device or not.
+    */
     'isMobile': boolean;
-    'parentEl'?: HTMLElement;
   }
   interface RlDrawer {
     /**
@@ -170,17 +226,43 @@ export namespace Components {
     'floors': FloorMap;
   }
   interface RlSearchBox {
+    /**
+    * Clear the current input value.
+    */
     'clearInput': () => Promise<void>;
+    /**
+    * The object used to perform text searches.
+    */
     'docSearch': Search;
+    /**
+    * Reference to the Stencil history object.
+    */
     'history'?: RouterHistory;
+    /**
+    * Placeholder text for when the input is empty.
+    */
     'placeholder': string;
-    'resultHeight': number;
+    /**
+    * The current value of the search input.
+    */
     'searchValue': string;
+    /**
+    * Flag indicating if the menu icon should be displayed instead of the search icon.  This is needed when the search box extends the entire app bar and there is no room for the drawer icon.
+    */
     'showMenu': boolean;
   }
   interface RlSearchSuggestions {
+    /**
+    * The currently active/highlighted/focused search suggestion.
+    */
     'activeResult'?: number;
+    /**
+    * Flag indicating if there are no search suggestions (even though there is a search query).
+    */
     'isEmptySearch': boolean;
+    /**
+    * The list of search suggestions.
+    */
     'suggestions': SearchResultItem[];
   }
   interface RlSideSheet {
@@ -461,30 +543,86 @@ declare namespace LocalJSX {
     'type'?: 'fixed' | 'prominent' | 'short' | 'shortCollapsed' | 'prominentFixed' | '';
   }
   interface RlBis {
+    /**
+    * Reference to the history object created by Stencil.  Used for making app navigations programmatically.
+    */
     'history'?: RouterHistory;
   }
   interface RlCard {
+    /**
+    * The action buttons displayed at the bottom-left of the card
+    */
     'buttons'?: Array<{name: string, link: string}>;
+    /**
+    * The color of the card.
+    */
     'cardColor'?: Color;
+    /**
+    * URL of an image to display as the media.  If no media is specified a placeholder will be used.
+    */
     'cardMedia'?: string;
+    /**
+    * The title of the card
+    */
     'cardTitle'?: string;
+    /**
+    * Flag indicating if the entire card is a clickable element.  This does not include any buttons or icons.
+    */
     'hasPrimaryAction'?: boolean;
+    /**
+    * The Stencil history object, used to programmatically navigate.
+    */
     'history'?: RouterHistory;
+    /**
+    * The action icons displayed at the bottom-right of the card.
+    */
     'icons'?: Array<{name: string, link: string}>;
+    /**
+    * Media sizing rule.
+    */
     'mediaSize'?: 'contain' | 'cover';
+    /**
+    * Flag indicating if the card does not have any content.
+    */
     'noContent'?: boolean;
+    /**
+    * Flag indicating if the card does not use media.  This means no media or media placeholder should be displayed.
+    */
     'noMedia'?: boolean;
+    /**
+    * The link to use for the primary card action.
+    */
     'primaryLink'?: string;
+    /**
+    * Flag indicating if the title is displayed over top of the media (with text protection for legibility), or underneath the media on its own line.
+    */
     'titleInMedia'?: boolean;
+    /**
+    * Use a wide or square aspect ratio for the media.
+    */
     'wideMediaAspect'?: boolean;
   }
   interface RlCluster {
+    /**
+    * The number of columns the cluster has.  This only effects lane and grid clusters.
+    */
     'columns'?: number;
+    /**
+    * The array of data displayed in the cluster.
+    */
     'data'?: ClusterData[];
+    /**
+    * A flag indicating if a 'See All' button should be displayed, taking the user to a list of all rleated items as the cluster is used to only show an abbreviated list.
+    */
     'hasMore'?: boolean;
+    /**
+    * The title of the cluster.
+    */
     'heading'?: string;
+    /**
+    * Flag indicating if the cluster is displayed on mobile device or not.
+    */
     'isMobile'?: boolean;
-    'parentEl'?: HTMLElement;
   }
   interface RlDrawer {
     /**
@@ -571,19 +709,51 @@ declare namespace LocalJSX {
     'onFloorChanged'?: (event: CustomEvent<any>) => void;
   }
   interface RlSearchBox {
+    /**
+    * The object used to perform text searches.
+    */
     'docSearch': Search;
+    /**
+    * Reference to the Stencil history object.
+    */
     'history'?: RouterHistory;
+    /**
+    * Event fired when the user clicks the search/menu icon.  This is needed to allow the menu to open the drawer.
+    */
     'onIconClick'?: (event: CustomEvent<any>) => void;
+    /**
+    * Event fired when the text input is changed.
+    */
     'onSearchChange'?: (event: CustomEvent<any>) => void;
+    /**
+    * Placeholder text for when the input is empty.
+    */
     'placeholder'?: string;
-    'resultHeight'?: number;
+    /**
+    * The current value of the search input.
+    */
     'searchValue'?: string;
+    /**
+    * Flag indicating if the menu icon should be displayed instead of the search icon.  This is needed when the search box extends the entire app bar and there is no room for the drawer icon.
+    */
     'showMenu'?: boolean;
   }
   interface RlSearchSuggestions {
+    /**
+    * The currently active/highlighted/focused search suggestion.
+    */
     'activeResult'?: number;
+    /**
+    * Flag indicating if there are no search suggestions (even though there is a search query).
+    */
     'isEmptySearch'?: boolean;
-    'onSuggestionClicked'?: (event: CustomEvent<any>) => void;
+    /**
+    * Event fired when the user selects one of the search suggestions.
+    */
+    'onSuggestionClicked'?: (event: CustomEvent<SearchResultItem>) => void;
+    /**
+    * The list of search suggestions.
+    */
     'suggestions'?: SearchResultItem[];
   }
   interface RlSideSheet {

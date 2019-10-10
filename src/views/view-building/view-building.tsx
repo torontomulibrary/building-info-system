@@ -4,13 +4,11 @@ import { RouterHistory } from '@stencil/router';
 
 import { BASE_URL } from '../../global/config';
 import {
-  // APP_DATA,
   MAP_TYPE,
   ROUTES,
 } from '../../global/constants';
 import { Building, Floor } from '../../interface';
 import { dataStore } from '../../utils/app-data';
-// import { dataService } from '../../utils/data-service';
 
 @Component({
   tag: 'view-building',
@@ -58,16 +56,6 @@ export class ViewBuilding {
         b.floors = results[1].filter((f: Floor) => f.building === b.code);
       });
     }).catch(e => console.error('Error loading view-building data ' + e));
-
-    // this.buildings = dataService.getData(APP_DATA.BUILDING);
-    // const floors: FloorMap = dataService.getData(APP_DATA.FLOORS);
-
-    // Object.values(this.buildings).forEach((b: Building) => {
-    //   b.floors = Object.values(floors || {}).reduce((ob: FloorMap, f: Floor) => {
-    //     if (f.building === b.code) ob[f.id] = f;
-    //     return ob;
-    //   }, {} as Floor);
-    // });
   }
 
   componentDidLoad() {
@@ -88,8 +76,6 @@ export class ViewBuilding {
    * Component render function.
    */
   render() {
-    // if (this.buildings) {
-
     return (
       <Host class={{
         'rl-view': true,
@@ -137,15 +123,4 @@ export class ViewBuilding {
       </Host>
     );
   }
-
-    // return (
-    //   <Host class={{
-    //     'rl-view': true,
-    //     'rl-view--buildings': true,
-    //     'rl-view--loaded': this.loaded && this.appLoaded,
-    //   }}>
-    //     <stencil-route-title pageTitle="Buildings | " />
-    //     <div>Loading...</div>
-    //   </Host>
-    // );
 }

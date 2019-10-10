@@ -12,8 +12,8 @@ import {
 } from '@stencil/core';
 import { RouterHistory, injectHistory } from '@stencil/router';
 
-import { BASE_URL, API_URL } from '../../global/config';
-import { ROUTES, APP_DATA } from '../../global/constants';
+import { API_URL, BASE_URL } from '../../global/config';
+import { APP_DATA, ROUTES } from '../../global/constants';
 import { SearchResultItem } from '../../interface';
 import { Search } from '../../utils/search';
 
@@ -21,36 +21,82 @@ import { Search } from '../../utils/search';
   tag: 'rl-search-box',
   styleUrl: 'search-box.scss',
 })
-
 export class SearchBox {
   /**
    * @emits resultSelected
    */
 
+  /**
+   * Reference to the input element.
+   */
   private searchInput?: HTMLInputElement;
 
-  @Prop() resultHeight = 0;
+  /**
+   * Height of the search results list.
+   */
+  // @Prop() resultHeight = 0;
 
+  /**
+   * Reference to the root of this component.
+   */
   @Element() root!: HTMLElement;
 
+  /**
+   * Flag indicating if the search box or its descendant has focus.
+   */
   @State() focused = false;
+
+  /**
+   * The currently active/selected/highlighted search suggestion.
+   */
   @State() activeResult?: number;
 
-  @Prop() showMenu = false;
-
-  @Prop() placeholder = 'Search';
-
-  @Event() searchChange!: EventEmitter;
-  @Prop({ reflectToAttr: true, mutable: true }) searchValue = '';
-
+  /**
+   * The list of search suggestions.
+   */
   @State() searchResults: SearchResultItem[] = [];
 
+  /**
+   * Flag indicating if the menu icon should be displayed instead of the search
+   * icon.  This is needed when the search box extends the entire app bar and
+   * there is no room for the drawer icon.
+   */
+  @Prop() showMenu = false;
+
+  /**
+   * Placeholder text for when the input is empty.
+   */
+  @Prop() placeholder = 'Search';
+
+  /**
+   * The current value of the search input.
+   */
+  @Prop({ reflectToAttr: true, mutable: true }) searchValue = '';
+
+  /**
+   * The object used to perform text searches.
+   */
   @Prop() docSearch!: Search;
 
+  /**
+   * Reference to the Stencil history object.
+   */
   @Prop() history?: RouterHistory;
 
+  /**
+   * Event fired when the user clicks the search/menu icon.  This is needed to
+   * allow the menu to open the drawer.
+   */
   @Event() iconClick!: EventEmitter;
 
+  /**
+   * Event fired when the text input is changed.
+   */
+  @Event() searchChange!: EventEmitter;
+
+  /**
+   * Clear the current input value.
+   */
   @Method()
   async clearInput() {
     if (this.searchInput) {
@@ -59,6 +105,12 @@ export class SearchBox {
     }
   }
 
+  /**
+   * Handle any events that could potentially cause the search box to lose
+   * focus.
+   *
+   * @param e Triggering event
+   */
   @Listen('click', { target: 'window' })
   @Listen('focus', { capture: true, target: 'window' })
   _checkFocus(e: Event) {
@@ -117,12 +169,19 @@ export class SearchBox {
     }
   }
 
+  /**
+   * Handle when a search suggestion is clicked.
+   */
   @Listen('suggestionClicked')
   onSuggestionClicked() {
     this.focused = false;
     this.searchValue = '';
   }
 
+  /**
+   * Handle when the value of the input element changes.
+   * @param e The triggering event
+   */
   @Listen('input')
   onInput(e: Event) {
     e.stopImmediatePropagation();
@@ -135,6 +194,11 @@ export class SearchBox {
     }
   }
 
+  /**
+   * Checks if the given parent has the given child as a child.
+   * @param parent An element
+   * @param child An element
+   */
   _isDecendant(parent: Element, child: Element) {
     let node = child.parentNode;
 
@@ -180,4 +244,5 @@ export class SearchBox {
   }
 }
 
+// Connect the component with Stencil History object.
 injectHistory(SearchBox);

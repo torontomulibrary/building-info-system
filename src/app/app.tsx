@@ -97,26 +97,33 @@ export class RLApp {
   private _docSearch = new Search();
 
   /**
-   * Map
+   * Map elements
    */
   private _mapElements: MapElement[] = [];
-  // private _faqData: FaqMap = {};
+
   /**
    * Reference to the search box.
    */
   private _searchBoxEl?: HTMLRlSearchBoxElement;
-
-  // private _db?: RLDatabase;
-  // private _data?: AppData;
-
-  @State() searchQuery = '';
-  @State() resultHeight = 0;
 
   /**
    * Root element of this component.
    */
   @Element() root?: HTMLRlBisElement;
 
+  /**
+   * The current text in the serach box.
+   */
+  @State() searchQuery = '';
+
+  /**
+   * The height of the search results box.
+   */
+  // @State() resultHeight = 0;
+
+  /**
+   * List of search results.
+   */
   @State() searchResults: SearchResultItem[] = [];
 
   /**
@@ -133,8 +140,16 @@ export class RLApp {
    */
   @State() drawerOpen!: boolean;
 
+  /**
+   * The number of columns in a cluster object.  This is recalculated depending
+   * on the size (width) of the screen.
+   */
   @State() clusterColumns = 2;
 
+  /**
+   * Reference to the history object created by Stencil.  Used for making app
+   * navigations programmatically.
+   */
   @Prop() history?: RouterHistory;
 
   /**
@@ -174,6 +189,9 @@ export class RLApp {
     this._updateClusterColumns();
   }
 
+  /**
+   * Update the number of cluster columns depending on the window width.
+   */
   _updateClusterColumns() {
     const width = window.innerWidth - 128;
     this.clusterColumns =
@@ -185,6 +203,10 @@ export class RLApp {
                 1624 > width ? 7 : 8;
   }
 
+  /**
+   * Handle when the input value changes by updating the search results.
+   * @param e The input change event
+   */
   _onSearchChange(e: Event) {
     const t = e.target;
 
@@ -229,6 +251,10 @@ export class RLApp {
     }
   }
 
+  /**
+   * Handle when one of the search suggestions is clicked.
+   * @param e The triggering event
+   */
   @Listen('suggestionClicked')
   async onSuggestionClicked(e: CustomEvent) {
     const resultID = e.detail.id as string;
@@ -268,7 +294,7 @@ export class RLApp {
             slot="centerSection"
             showMenu={this.isMobile}
             placeholder={this.isMobile ? APP_TITLE : undefined}
-            resultHeight={this.resultHeight}
+            // resultHeight={this.resultHeight}
             onIconClick={() => { this.drawerOpen = true; }}
             searchValue={this.searchQuery}
             docSearch={this._docSearch}
@@ -324,10 +350,8 @@ export class RLApp {
         </main>
       </Host>
     );
-    // } else {
-    //   return (<Host class={{ 'rl-bis': true, 'rl-bis--loaded': this.loaded }} />);
-    // }
   }
 }
 
+// Connect the component with Stencil History object.
 injectHistory(RLApp);
