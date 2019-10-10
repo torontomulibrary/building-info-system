@@ -62,13 +62,7 @@ export class AppDataStore {
    */
   getData<K extends DataKeys>(name: K): DataValue<K> {
     if (!this.store.hasOwnProperty(name)) {
-      if (name === 'events') {
-        this.store[name] = this.fetchCalendarEvents();
-      } else {
-        // If the endpoint has not been fetched (and saved), load it and return
-        // a promise that resolves it.
-        this.store[name] = this.fetchJSON(API_URL + name);
-      }
+      this.store[name] = name === 'events' ? this.fetchCalendarEvents() : this.fetchJSON(API_URL + name);
     }
 
     // No return the endpoint.
