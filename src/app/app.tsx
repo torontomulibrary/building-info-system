@@ -12,6 +12,7 @@ import {
   ROUTES,
 } from '../global/constants';
 import {
+  Building,
   Faq,
   MapElement,
   SearchResultItem,
@@ -145,19 +146,22 @@ export class RLApp {
 
     dataStore.getData('faqs').then(faqs => {
       faqs.forEach((f: Faq) => {
-        this._docSearch.addDocument(`f-${f.id}`, 'question_answer', f.question);
+        this._docSearch.addDocument(`qa-${f.id}`, 'question_answer', f.question);
       });
-    }).catch(e => {
-      console.error('Error loading FAQs ' + e);
-    });
+    }).catch(e => { console.error('Error loading FAQs ' + e); });
+
+    dataStore.getData('buildings').then(buildings => {
+      buildings.forEach((b: Building, index) => {
+        this._docSearch.addDocument(`b-${index}`, 'business', `[${b.code}] ${b.name}`);
+      });
+    }).catch(e => { console.error('Error loading buildings ' + e); });
 
     dataStore.getData('details').then(elements => {
-      elements.forEach((e: MapElement) => {
-        this._docSearch.addDocument(`d-${e.id}`, 'location_on', `[${e.code}] ${e.name}`);
+      this._mapElements = elements;
+      elements.forEach((e: MapElement, index) => {
+        this._docSearch.addDocument(`d-${index}`, 'location_on', `[${e.code}] ${e.name}`, e.description ? e.description : '');
       });
-    }).catch(e => {
-      console.error('Error loading MapElements ' + e);
-    });
+    }).catch(e => { console.error('Error loading MapElements ' + e); });
 
     this._updateClusterColumns();
   }

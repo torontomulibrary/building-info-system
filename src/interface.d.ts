@@ -185,7 +185,7 @@ export interface BookDetails {
   title: string,
 }
 
-export type SearchResultType = 'question_answer' | 'event' | 'location_on' | 'book';
+export type SearchResultType = 'question_answer' | 'event' | 'location_on' | 'book' | 'business';
 
 export interface SearchResultItem {
   id: string,

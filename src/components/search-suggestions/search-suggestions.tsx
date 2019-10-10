@@ -38,6 +38,23 @@ export class SearchSuggestions {
     this.totalHeight = el && el.offsetHeight || 0;
   }
 
+  detailText(detail) {
+    switch (detail) {
+      case 'business':
+        return 'Building';
+      case 'book':
+        return 'Book';
+      case 'question_answer':
+        return 'FAQ';
+      case 'location_on':
+        return 'Location';
+      case 'event':
+        return 'Event';
+      default:
+        return '';
+    }
+  }
+
   render() {
     if (this.suggestions.length > 0) {
       // Render the suggestions as a single list.
@@ -62,7 +79,7 @@ export class SearchSuggestions {
                       {detail.value}
                     </span>
                     <span class="mdc-list-item__secondary-text">
-                      {detail.type}
+                      {this.detailText(detail.type)}
                     </span>
                   </span>
                 </li>
