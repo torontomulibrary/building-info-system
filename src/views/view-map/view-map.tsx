@@ -20,14 +20,13 @@ import {
   BookAvailability,
   BookDetails,
   Building,
+  ComputerAvailability,
   ComputerLab,
   Floor,
   MapElement,
 } from '../../interface';
-// import { dataService } from '../../utils/data-service';
 import { dataStore } from '../../utils/app-data';
 import { loadData } from '../../utils/load-data';
-// import { dataStore } from '../../utils/app-data';
 
 @Component({
   tag: 'view-map',
@@ -49,7 +48,9 @@ export class ViewMap {
    */
   private paramMatches?: string[];
 
-  @State() computerAvailability = {};
+  // @State() computerAvailability = {};
+
+  private extraElementAttributes = {};
 
   /**
    * Root element of this component.
@@ -107,24 +108,47 @@ export class ViewMap {
   }
 
   componentWillUpdate() {
-    return this._parseParameters();
-  }
+    return this._parseParameters().then(() => {
+      // Update details
+      this.extraElementAttributes = {};
+      const floorDetails = this._detailData.filter((d: MapElement) => d.floor === this.activeFloor.code);
 
-  componentDidUpdate() {
-    this.computerAvailability = {};
-    const cLabs = this.floorComputerLabs(this.activeFloor);
-    if (cLabs !== undefined) {
-      cLabs.forEach(l => {
-        const comps = l.computers;
-        if (comps !== undefined) {
-          comps.forEach(av => {
-            this.computerAvailability[av.name] = {
-              fill: av.available ? 'green' : 'red',
-            };
-          });
+      const labs = this.floorComputerLabs(this.activeFloor);
+      let computers: ComputerAvailability[] = [];
+
+      if (labs !== undefined && labs.length > 0) {
+        labs.forEach(l => {
+          if (l.computers !== undefined) {
+            computers = computers.concat(l.computers);
+          }
+        });
+      }
+
+      floorDetails.forEach((d: MapElement) => {
+        let attributes = {};
+
+        // if (this.mapType === 'book') {
+
+        // }
+
+        if (this.mapType === 'lab') {
+          const comp = computers.find((c: ComputerAvailability) => c.name === d.code);
+          if (comp !== undefined) {
+            attributes = { ...attributes, fill: comp.available ? 'green' : 'red'};
+          }
         }
+
+        // if (this.mapType === 'location') {
+
+        // }
+
+        if (this.activeElement !== undefined && this.activeElement.code === d.code) {
+          attributes = { ...attributes, class: 'rl-svg__el--selected' };
+        }
+
+        this.extraElementAttributes[d.code] = attributes;
       });
-    }
+    }) ;
   }
 
   checkSize() {
@@ -394,7 +418,6 @@ export class ViewMap {
               useOrtho={true}
               floorId={activeFloor.code}
               slot="pz-content"
-              activeId={activeElement !== undefined ? activeElement.code : ''}
               onRlElementClicked={e => {
                 const elCode = e.detail;
                 let route = `${BASE_URL}${ROUTES.MAP}/${this.mapType}/${elCode}`;
@@ -403,10 +426,12 @@ export class ViewMap {
                 this.history.push(route);
               }}
               onRlElementCleared={() => {
-                this.activeElement = undefined;
-                this.history.push(`/${ROUTES.MAP}/${this.mapType}/${activeFloor.code}`);
+                if (this.activeElement !== undefined) {
+                  this.activeElement = undefined;
+                  this.history.push(`/${ROUTES.MAP}/${this.mapType}/${activeFloor.code}`);
+                }
               }}
-              extraElementData={this.computerAvailability}
+              extraElementData={this.extraElementAttributes}
             >
             </rl-floorplan>
           </rl-pan-zoom>

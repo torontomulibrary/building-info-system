@@ -18,7 +18,7 @@ import {
   LIB10Flat,
   LIB10Ortho,
 } from '@ryersonlibrary/floorplans';
-import { Component, Event, EventEmitter, Host, Prop, Watch, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 
 import { SVGContent } from './content';
 import { SVGDefs } from './defs';
@@ -40,13 +40,6 @@ export class LibraryFloorplan {
     'LIB-09' : { 'flat': LIB09Flat, 'ortho': LIB09Ortho },
     'LIB-10' : { 'flat': LIB10Flat, 'ortho': LIB10Ortho },
   };
-
-  /**
-   * Reference to the `SVG` node used to display the flooplans.
-   */
-  private svgRoot!: SVGSVGElement;
-
-  // @Element() root!: HTMLRlSvgFloorplanElement;
 
   /**
    * Event fired when an element in the SVG is clicked (if it is clickable).
@@ -95,33 +88,11 @@ export class LibraryFloorplan {
    */
   @Prop() useOrtho = false;
 
-  @Prop() extraElementData?: {[key: string]: { [key: string]: string }};
-
   /**
-   * The ID of the active (selected) element.
+   * An array of extra attributes that will be assigned to each element based
+   * on the element's code.
    */
-  @Prop() activeId = '';
-  @Watch('activeId')
-  onActiveIdChange(newVal: string, oldVal: string) {
-    if (newVal !== oldVal) {
-      const selected = this.svgRoot.querySelector('.rl-svg__el--selected');
-
-      if (selected !== null) {
-        selected.classList.remove('rl-svg__el--selected');
-      }
-
-      if (newVal !== '') {
-        const active = this.svgRoot.querySelector(`#${newVal}`);
-        if (active !== null) {
-          active.classList.add('rl-svg__el--selected');
-        }
-      }
-    }
-  }
-
-  componentDidLoad() {
-    this.onActiveIdChange(this.activeId, '');
-  }
+  @Prop() extraElementData?: {[key: string]: { [key: string]: string }};
 
   render() {
     const elements = this.floorId !== undefined && this.data[this.floorId] !== undefined
@@ -147,7 +118,6 @@ export class LibraryFloorplan {
           height={this.height}
           viewBox={this.useViewbox ? `0 0 ${this.vbWidth} ${this.vbHeight}` : undefined}
           class="rl-floorplan__svg"
-          ref={e => this.svgRoot = e as SVGSVGElement}
           onClick={(e: MouseEvent) => {
             if (e.target instanceof SVGElement && e.target.classList.contains('rl-clickable')) {
               this.rlElementClicked.emit(e.target.id);

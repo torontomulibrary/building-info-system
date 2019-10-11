@@ -173,9 +173,8 @@ export namespace Components {
   }
   interface RlFloorplan {
     /**
-    * The ID of the active (selected) element.
+    * An array of extra attributes that will be assigned to each element based on the element's code.
     */
-    'activeId': string;
     'extraElementData'?: {[key: string]: { [key: string]: string }};
     /**
     * The ID of the floorplan to display.
@@ -640,9 +639,8 @@ declare namespace LocalJSX {
   }
   interface RlFloorplan {
     /**
-    * The ID of the active (selected) element.
+    * An array of extra attributes that will be assigned to each element based on the element's code.
     */
-    'activeId'?: string;
     'extraElementData'?: {[key: string]: { [key: string]: string }};
     /**
     * The ID of the floorplan to display.

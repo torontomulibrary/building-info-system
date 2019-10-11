@@ -1,11 +1,17 @@
 import { FunctionalComponent, h } from '@stencil/core';
+import merge from 'lodash/merge';
 
 interface SVGEl {
   elem: string;
   prefix: string;
   local: string;
-  attrs: { [key: string]: string };
+  attrs: {
+    [key: string]: string | { [key: string]: string },
+    id: string,
+    style: string | { [key: string]: string },
+  };
   content?: Array<{ text: string }>;
+  type: string;
 }
 
 interface SVGContentProps {
@@ -13,7 +19,7 @@ interface SVGContentProps {
   extra?: {
     [key: string]: {
       [key: string]: string,
-    }
+    };
   };
 }
 
@@ -32,18 +38,22 @@ const parseStyles = styles => styles
 // tslint:disable-next-line: variable-name
 export const SVGContent: FunctionalComponent<SVGContentProps> = ({ elements, extra }) => {
   return elements.map(el => {
-    let attrs = el.attrs;
+    // Copy attributes, since they're going to be modified.  If the original
+    // attributes are referenced, then any modifications are lasting.
+    let attrs = { ...el.attrs };
 
-    if (attrs['xlink:href'] !== undefined) {
+    if (attrs.hasOwnProperty('xlink:href')) {
       attrs['xlinkHref'] = attrs['xlink:href'];
       delete attrs['xlink:href'];
     }
 
-    if (extra !== undefined && extra[el.attrs.id] !== undefined) {
-      attrs = { ...attrs, ...extra[el.attrs.id] };
+    if (extra !== undefined && extra.hasOwnProperty(el.attrs.id)) {
+      // Attrs can have properties that are objects (class and style), so do
+      // a deep merge when adding any extra attributes.
+      attrs = merge(attrs, extra[el.attrs.id]);
     }
 
-    if (attrs.style !== undefined && typeof attrs.style === 'string') {
+    if (attrs.hasOwnProperty('style') && typeof attrs.style === 'string') {
       attrs.style = parseStyles(attrs.style);
     }
 
